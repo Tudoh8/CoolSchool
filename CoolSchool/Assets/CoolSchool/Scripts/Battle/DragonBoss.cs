@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using CoolSchool.Audio;
+using CoolSchool.Characters;
 using CoolSchool.Player;
 using UnityEngine;
 
@@ -76,6 +77,10 @@ namespace CoolSchool.Battle
         {
             if (hittable == null) hittable = GetComponent<Hittable>();
             if (animator == null) animator = GetComponentInChildren<Animator>(true);
+
+            // The walk and fly clips also move the model's own root bone forward; this pins it in place (we move the
+            // transform) and matches the walk stride to walkSpeed.
+            DragonRootLock.Ensure(animator, walkSpeed);
         }
 
         void OnEnable()

@@ -553,7 +553,7 @@ namespace CoolSchool.EditorTools
         /// Removes the vendor's demo scripts (they would fight DragonBoss) and any missing-script components from
         /// the model and all its children. MonoBehaviours in a CoolSchool namespace and all other components stay.
         /// </summary>
-        static void StripForeignScripts(GameObject model)
+        internal static void StripForeignScripts(GameObject model)
         {
             // Components of a prefab instance can't be removed reliably, so unpack it first.
             if (PrefabUtility.IsPartOfPrefabInstance(model))
@@ -583,7 +583,7 @@ namespace CoolSchool.EditorTools
         }
 
         /// <summary>The jaw bone if the model has one, else the head bone (mesh nodes ending in _LP are skipped).</summary>
-        static Transform FindMouthBone(GameObject model)
+        internal static Transform FindMouthBone(GameObject model)
         {
             Transform[] all = model.GetComponentsInChildren<Transform>(true)
                 .Where(t => !t.name.EndsWith("_LP") && t.GetComponent<Renderer>() == null).ToArray();
@@ -592,7 +592,7 @@ namespace CoolSchool.EditorTools
         }
 
         /// <summary>If the head sits behind the middle of the model, the model faces -Z: turn it half a circle.</summary>
-        static void FaceModelForward(GameObject model, Transform mouthBone)
+        internal static void FaceModelForward(GameObject model, Transform mouthBone)
         {
             if (mouthBone == null || !TryGetBounds(model, out Bounds bounds)) return;
 

@@ -25,6 +25,10 @@ namespace CoolSchool.Rewards
         // A power-up won in a lesson that the next game uses up, e.g. golden_sword.
         public string pendingPowerUp = "";
 
+        // The ice cream shop: how big the orders are (1 to 3), and whether the how-to line has been heard once.
+        public int shopLevel = 1;
+        public bool shopHowtoHeard;
+
         public bool IsUnlocked(string id)
         {
             return unlockedItems != null && unlockedItems.Contains(id);

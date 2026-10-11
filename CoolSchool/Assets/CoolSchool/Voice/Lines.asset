@@ -622,3 +622,262 @@ MonoBehaviour:
     english: Your golden sword is still waiting at the castle!
     dutchClip: {fileID: 8300000, guid: d70e440ce9441aa40903ed8057416347, type: 3}
     englishClip: {fileID: 0}
+  - key: invite.shop.1
+    group: invite.shop
+    speaker: 0
+    dutch: Wie wil er ijsjes verkopen? Kom naar de ijswinkel!
+    english: Who wants to sell ice cream? Come to the ice cream shop!
+    dutchClip: {fileID: 8300000, guid: fa2494e1379a4334da4538a3b6c1dedd, type: 3}
+    englishClip: {fileID: 0}
+  - key: invite.shop.2
+    group: invite.shop
+    speaker: 0
+    dutch: Mmm, ijs! Kom jij in de ijswinkel helpen?
+    english: Mmm, ice cream! Will you help in the ice cream shop?
+    dutchClip: {fileID: 8300000, guid: d5eca635df39f7848a4c5d0052012b7c, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.start.1
+    group: shop.start
+    speaker: 3
+    dutch: Jij bent de ijsverkoper! Daar komt je eerste klant.
+    english: You're the ice cream seller! Here comes your first customer.
+    dutchClip: {fileID: 8300000, guid: 47e344af5e44e294cb3e6c8650f97191, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.howto.1
+    group: shop.howto
+    speaker: 3
+    dutch: Pak een bolletje uit de bak en zet het op het hoorntje!
+    english: Take a scoop from the tub and put it on the cone!
+    dutchClip: {fileID: 8300000, guid: ad3df0290ca4ddd4b826e00fdd83596a, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.hello.kid.1
+    group: shop.hello.kid
+    speaker: 1
+    dutch: Hallo! Mag ik een ijsje, alsjeblieft?
+    english: Hello! Can I have an ice cream, please?
+    dutchClip: {fileID: 8300000, guid: 81e00add29490d545ad03d9b5720b554, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.hello.kid.2
+    group: shop.hello.kid
+    speaker: 1
+    dutch: Hoi! Ik heb zin in ijs!
+    english: Hi! I'd love an ice cream!
+    dutchClip: {fileID: 8300000, guid: e270f020c45ff7947a79edf651b611fe, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.hello.knight.1
+    group: shop.hello.knight
+    speaker: 1
+    dutch: Hallo ijsverkoper! Een ijsje voor een dappere ridder!
+    english: Hello ice cream seller! An ice cream for a brave knight!
+    dutchClip: {fileID: 8300000, guid: 7aa74702170bf384cab5d00a033b2d75, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.hello.alien.1
+    group: shop.hello.alien
+    speaker: 4
+    dutch: Bliep bloep! Ijsje, alsjeblieft!
+    english: Bleep bloop! Ice cream, please!
+    dutchClip: {fileID: 8300000, guid: edf6158381b80624182999c2de4433fa, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.dragon_arrives.1
+    group: shop.dragon_arrives
+    speaker: 3
+    dutch: Wie komt daar aan? De draak wil ook een ijsje!
+    english: Who's coming? The dragon wants an ice cream too!
+    dutchClip: {fileID: 8300000, guid: 3e82becd698ecc241ae58d32e71b1099, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.hello.dragon.1
+    group: shop.hello.dragon
+    speaker: 2
+    dutch: Grrroaar! Ijsje! Een groot ijsje!
+    english: Grrroar! Ice cream! A big ice cream!
+    dutchClip: {fileID: 8300000, guid: 384df64b60de9a047a58a0d17050dd7f, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.order.1.pink.1
+    group: shop.order.1.pink
+    speaker: 3
+    dutch: "E\xE9n roze bolletje."
+    english: One pink scoop.
+    dutchClip: {fileID: 8300000, guid: 91dff384284c3be4ba47c4d9b644b61e, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.order.2.pink.1
+    group: shop.order.2.pink
+    speaker: 3
+    dutch: Twee roze bolletjes.
+    english: Two pink scoops.
+    dutchClip: {fileID: 8300000, guid: 3094beacfdb83e9458d429ba61b7492d, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.order.3.pink.1
+    group: shop.order.3.pink
+    speaker: 3
+    dutch: Drie roze bolletjes.
+    english: Three pink scoops.
+    dutchClip: {fileID: 8300000, guid: 26b3dc1c8078cbb4aa00f7506bda2424, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.order.1.brown.1
+    group: shop.order.1.brown
+    speaker: 3
+    dutch: "E\xE9n bruin bolletje."
+    english: One brown scoop.
+    dutchClip: {fileID: 8300000, guid: 3f47e9f1d99682b46b16e2ef6683d6b8, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.order.2.brown.1
+    group: shop.order.2.brown
+    speaker: 3
+    dutch: Twee bruine bolletjes.
+    english: Two brown scoops.
+    dutchClip: {fileID: 8300000, guid: b3d8e48910915bb4da5380f328d378a8, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.order.3.brown.1
+    group: shop.order.3.brown
+    speaker: 3
+    dutch: Drie bruine bolletjes.
+    english: Three brown scoops.
+    dutchClip: {fileID: 8300000, guid: 29584d49ab55eba449aafefc81b4079c, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.order.1.yellow.1
+    group: shop.order.1.yellow
+    speaker: 3
+    dutch: "E\xE9n geel bolletje."
+    english: One yellow scoop.
+    dutchClip: {fileID: 8300000, guid: 5d863fdad6af9b54dbcd002681b38c65, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.order.2.yellow.1
+    group: shop.order.2.yellow
+    speaker: 3
+    dutch: Twee gele bolletjes.
+    english: Two yellow scoops.
+    dutchClip: {fileID: 8300000, guid: 05b4d41ff5a53984fbf307fe3fdaafab, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.order.3.yellow.1
+    group: shop.order.3.yellow
+    speaker: 3
+    dutch: Drie gele bolletjes.
+    english: Three yellow scoops.
+    dutchClip: {fileID: 8300000, guid: 2f996bc9d19b29c4a94f8ee41cf3a6a6, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.order.1.green.1
+    group: shop.order.1.green
+    speaker: 3
+    dutch: "E\xE9n groen bolletje."
+    english: One green scoop.
+    dutchClip: {fileID: 8300000, guid: 70f9549cd047e2f4c9d48025daa84262, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.order.2.green.1
+    group: shop.order.2.green
+    speaker: 3
+    dutch: Twee groene bolletjes.
+    english: Two green scoops.
+    dutchClip: {fileID: 8300000, guid: 73b2628e29ffc9f4285b278015d3a79a, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.order.3.green.1
+    group: shop.order.3.green
+    speaker: 3
+    dutch: Drie groene bolletjes.
+    english: Three green scoops.
+    dutchClip: {fileID: 8300000, guid: 7956579c1e98e5540868e5d7a11a0c1e, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.wrong_colour.1
+    group: shop.wrong_colour
+    speaker: 3
+    dutch: Oeps, die kleur niet! Kijk maar naar het plaatje.
+    english: Oops, not that colour! Look at the picture.
+    dutchClip: {fileID: 8300000, guid: 1b6e9b2b897137f45acadfb0439e47c7, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.wrong_colour.2
+    group: shop.wrong_colour
+    speaker: 3
+    dutch: Hmm, welke kleur wil de klant?
+    english: Hmm, which colour does the customer want?
+    dutchClip: {fileID: 8300000, guid: 783f276baf6a0634eba0feae1fd2388c, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.done.1
+    group: shop.done
+    speaker: 3
+    dutch: Klaar! Tel maar mee.
+    english: Done! Let's count.
+    dutchClip: {fileID: 8300000, guid: 1bb6799e2fae1404294e06ca1ab13928, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.serve.1
+    group: shop.serve
+    speaker: 1
+    dutch: Alsjeblieft!
+    english: Here you go!
+    dutchClip: {fileID: 8300000, guid: 168435b9765a2c544ad97db679cffe95, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.thanks.kid.1
+    group: shop.thanks.kid
+    speaker: 1
+    dutch: Mmm, lekker! Dankjewel!
+    english: Mmm, yummy! Thank you!
+    dutchClip: {fileID: 8300000, guid: dc80b7d9af8cc60409017de31f9e6d46, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.thanks.kid.2
+    group: shop.thanks.kid
+    speaker: 1
+    dutch: Jammie! Dankjewel!
+    english: Yummy! Thank you!
+    dutchClip: {fileID: 8300000, guid: 9582c20e3a202584690e1d7a708ea5ce, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.thanks.knight.1
+    group: shop.thanks.knight
+    speaker: 1
+    dutch: Lekker! Nu ben ik nog sterker!
+    english: Yummy! Now I'm even stronger!
+    dutchClip: {fileID: 8300000, guid: 70f87000d3626d0469e6c02b413a7825, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.thanks.alien.1
+    group: shop.thanks.alien
+    speaker: 4
+    dutch: Bliep! Lekker koud! Dankjewel!
+    english: Bleep! Nice and cold! Thank you!
+    dutchClip: {fileID: 8300000, guid: a0f0f375078a69b46944da1fb07c1874, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.thanks.dragon.1
+    group: shop.thanks.dragon
+    speaker: 2
+    dutch: Mmmm! Brrr, koud! Dankjewel!
+    english: Mmmm! Brrr, cold! Thank you!
+    dutchClip: {fileID: 8300000, guid: 620265b2f718df94dacf01aba36455cb, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.pay.1
+    group: shop.pay
+    speaker: 3
+    dutch: Nu betalen! Tik op de muntjes en tel mee.
+    english: Time to pay! Tap the coins and count along.
+    dutchClip: {fileID: 8300000, guid: a4e753ea0968bdf478452bbb129fc278, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.paid.1
+    group: shop.paid
+    speaker: 3
+    dutch: Ka-ching! Goed geteld!
+    english: Ka-ching! Well counted!
+    dutchClip: {fileID: 8300000, guid: 71a6e0172b156e146b3f8b215adfc5ec, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.paid.2
+    group: shop.paid
+    speaker: 3
+    dutch: Alle muntjes zitten in de kassa!
+    english: All the coins are in the register!
+    dutchClip: {fileID: 8300000, guid: 38d059c843a777a4b82ceb3393755360, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.next.1
+    group: shop.next
+    speaker: 3
+    dutch: Daar komt de volgende klant!
+    english: Here comes the next customer!
+    dutchClip: {fileID: 8300000, guid: a47864f42ca9e5b47bd7d8454e10de10, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.hint.1
+    group: shop.hint
+    speaker: 3
+    dutch: Kijk naar het plaatje boven de klant.
+    english: Look at the picture above the customer.
+    dutchClip: {fileID: 8300000, guid: c68485cf6d5721849a81179869ee9b6e, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.end.1
+    group: shop.end
+    speaker: 0
+    dutch: Wat ben jij een goede ijsverkoper! Hier zijn je sterren.
+    english: What a good ice cream seller you are! Here are your stars.
+    dutchClip: {fileID: 8300000, guid: 63f446f64e79e2549b7e082a3c5b9efb, type: 3}
+    englishClip: {fileID: 0}

@@ -325,3 +325,63 @@ MonoBehaviour:
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 0
     cooldown: 0
+  - cue: shop.bell
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: shop.scoop
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: shop.plop
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: shop.bounce
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: shop.cone_pop
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: shop.slurp
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: shop.coin_drop
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: shop.coin_tap
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: shop.register
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: music.shop
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 0
+    cooldown: 0

@@ -91,7 +91,19 @@ namespace CoolSchool.EditorTools
             { "aliens.jump_pad", new[] { "jump", "pad", "spring", "boing", "bounce", "trampoline" } },
             { "aliens.rescue", new[] { "rescue", "save", "hooray", "success", "cheer", "win" } },
 
+            // Ice cream shop
+            { "shop.bell", new[] { "bell", "doorbell", "ring", "ding", "chime", "shop" } },
+            { "shop.scoop", new[] { "scoop", "dig", "spoon", "scrape", "squish", "shovel" } },
+            { "shop.plop", new[] { "plop", "drop", "blob", "thud", "bloop", "splat" } },
+            { "shop.bounce", new[] { "bounce", "boing", "spring", "rubber", "bonk" } },
+            { "shop.cone_pop", new[] { "pop", "appear", "bubble", "bloop", "spawn" } },
+            { "shop.slurp", new[] { "slurp", "lick", "eat", "munch", "yum", "chew", "bite", "crunch" } },
+            { "shop.coin_drop", new[] { "coin", "drop", "clink", "cash", "jingle", "money" } },
+            { "shop.coin_tap", new[] { "coin", "collect", "pickup", "ding", "tap", "gold" } },
+            { "shop.register", new[] { "register", "kaching", "ka-ching", "cha-ching", "ching", "cash", "till", "money" } },
+
             // Music
+            { "music.shop", new[] { "shop", "store", "market", "ukulele", "bouncy", "cheerful", "happy" } },
             { "music.playground", new[] { "playground", "happy", "cheerful", "playful", "fun", "bright", "kids" } },
             { "music.knights", new[] { "knight", "medieval", "adventure", "castle", "heroic", "epic" } },
             { "music.aliens", new[] { "alien", "space", "sci-fi", "scifi", "cosmic", "galaxy" } },

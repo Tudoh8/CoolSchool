@@ -58,8 +58,12 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
   - Voices per speaker are set in `Assets/CoolSchool/Voice/VoiceGenerationSettings.asset`: Teacher/Narrator Lily, Kid/Alien Freya, Goblin Clyde.
   - At runtime the pitch is raised per speaker (Kid 1.22, Goblin 1.35, Alien 1.5).
   - To redo a line, delete its mp3 and re-run.
-  - Quota used so far: about 2,554 characters.
+  - Quota used so far: about 3,695 characters.
 - **Batch logs:** `Logs/batch-<Method>.log`.
+- **Shop preview pictures** (editor closed): builds and saves the scene, then renders the shop camera (kid and dragon, 16:9 and 4:3) and the follow-camera view of the stall to `Logs/shop-preview/*.png`, and logs where key points land on screen (`ShopPreview:` lines). The staging is not saved.
+  ```
+  powershell -ExecutionPolicy Bypass -File Tools/unity-batch.ps1 -Method CoolSchool.EditorTools.ShopPreviewCapture.BuildAndCaptureFromCommandLine
+  ```
 
 ## Architecture in brief
 - **Generated world.** Everything is created by editor builders. `PlaygroundPrototypeBuilder.RunBuild()` orchestrates it:
@@ -87,6 +91,7 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
   - `KnightsGame`: goblin waves, then a confetti dragon. Tap swings the sword (auto-aim); hold raises the shield.
   - `NumbersLesson`: in the classroom; four exercise types and adaptive levels 1–5, stored in progress.
   - `AlienLanding`: ray gun zaps aliens into dancing friends; slime; trampoline rescue of the baby alien; a counting moment; then a party.
+  - `IceCreamShop` (`Scripts/Shop`, contract `Docs/specs/ice-cream-shop-contract.md`): stall in the NW of the playground facing south; five customers (kid, knight, kid, alien, small dragon) order with picture bubbles; he drags or taps scoops from four colour tubs onto the cone (counting + colours), serves it, then taps the coins into the register; adaptive `shopLevel` 1–3.
 - **Battle system** (`Scripts/Battle`): `Hittable` (team, hits, stun, block), `SwordFighter`, `PlayerBattleInput`, `WeaponHolder` (bone attachments), `BattleOpponentAI`, `KnightAllyAI`, `DragonBoss`, `BattleEffects` (particle prefabs), `ImaginationEffect` (subtle "pretend" sparkle).
 - **Characters.** Synty kids use a humanoid rig.
   - `KidAnimator` drives `Kid.controller` with Speed, Jump, Cheer, Attack(+Variant), Hit, Tumble, Laugh, Blocking, BlockHit, Shoot, Throw, Dance/Dancing/DanceVariant, and an "UpperBody" layer.
@@ -120,6 +125,7 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
     - the carried baby plays a run animation
     - counting close-up (`CountCameraHeight/Back/Pitch` in `AlienFieldBuilder`); the baby waits at `BabyWaitPoint` behind that camera and is not counted
   - **Golden sword reward (untested):** size, height and orientation above the lesson table (`GoldenSwordHeight` in `NumbersLesson`, `displayLength` on `GoldenSwordReward`)
+  - **Ice cream shop (untested):** shop camera pose and framing (the dragon is 2.8 m tall), Synty prop facing (counter, sign, register may need a 180° turn), cone-in-hand offsets (`ShopCustomerBuilder`), drag/drop radii (`IceCreamShop.Touch.cs`), order bubble size. Customers have no talk/lick clips (procedural nods).
   - **Knights:** sword and shield hand offsets are constants at the top of `PlaygroundPrototypeBuilder`; trees may stand close to the castle wall ends.
   - **Teacher:** stands angled beside the board, but turns toward the player at runtime.
   - **Lesson UI:** check that the number cards don't cover the toys.
@@ -138,7 +144,7 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
 ## Roadmap and next options
 The user chose and ordered the play-section focus as: pretend battles plus create & role-play first; racing and other things later.
 - **Battles:** Knights done; Aliens & superheroes built but untested; **Pirates** next (playground ship, sword duels, cannon at balloons, treasure map).
-- **Create & role-play (chosen):** **Shopkeeper** (ice cream, bakery or pizza: friends order with picture bubbles, coins), **Builder** (build the cardboard castle, then defend it), **Band & dress-up** (instruments, costume parade, photos).
+- **Create & role-play (chosen):** **Shopkeeper** (ice cream shop built, untested; bakery or pizza could follow), **Builder** (build the cardboard castle, then defend it), **Band & dress-up** (instruments, costume parade, photos).
 - **Learning:** letters (starting with his name, which is not known yet), colours and shapes, then first words and sums. Reuse the lesson framework in `Scripts/Lessons`.
 - **Character creator and parent area:** he builds his own kid and the teacher says his name. A locked parent area holds language, an optional time limit, progress, and volume.
 - **Tablet:** install Android Build Support through Unity Hub, prepare a batch APK build, and test touch and performance on his tablet.

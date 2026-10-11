@@ -153,7 +153,19 @@ namespace CoolSchool.EditorTools
 
             public KnightsArenaBuilder.ArenaLayout Arena;
             public AlienFieldBuilder.FieldLayout AlienField;
+            public IceCreamShopBuilder.StallLayout Shop;
             public SchoolResult School;
+        }
+
+        /// <summary>Ground (x, z rectangles) that benches, bins and trees keep clear of, e.g. the ice cream stall. Cleared at the start of each build.</summary>
+        internal static readonly List<Rect> ReservedAreas = new List<Rect>();
+
+        static bool IsReserved(Vector3 point)
+        {
+            var flat = new Vector2(point.x, point.z);
+            foreach (Rect area in ReservedAreas)
+                if (area.Contains(flat)) return true;
+            return false;
         }
 
         [MenuItem("CoolSchool/Build Playground Prototype")]
@@ -247,6 +259,13 @@ namespace CoolSchool.EditorTools
                     KidsLayer = kidsLayer,
                     Player = player.GetComponent<PlayerController>(),
                     ActionButton = jumpButton,
+                    Imagination = imagination,
+                });
+
+                ShowProgress("Building ice cream shop", 0.97f);
+                IceCreamShopBuilder.Build(environment.Shop, new IceCreamShopBuilder.ShopInputs
+                {
+                    Player = player.GetComponent<PlayerController>(),
                     Imagination = imagination,
                 });
 
@@ -351,6 +370,7 @@ namespace CoolSchool.EditorTools
         static EnvironmentInfo BuildEnvironment()
         {
             var info = new EnvironmentInfo();
+            ReservedAreas.Clear();
             Transform root = new GameObject("Environment").transform;
             Transform equipmentGroup = NewGroup("Equipment", root);
             Transform groundGroup = NewGroup("Ground", root);
@@ -399,6 +419,9 @@ namespace CoolSchool.EditorTools
             BuildTileGrid(LoadPrefab(GrassPrefab), groundGroup, grass.min.x, grass.max.x, grass.min.z, grass.max.z, 0f, rubberCover);
 
             BuildFence(LoadPrefab(FencePrefab), fenceGroup, info, SchoolDirection, SchoolBuilder.FenceGapWidth);
+
+            // The ice cream stall in the north-west corner. It reserves its ground, so the benches and trees below keep clear.
+            info.Shop = IceCreamShopBuilder.BuildStall(root, info);
 
             // Nothing may stand on the player's start.
             var occupied = new List<Vector3> { info.PlayerSpawn };
@@ -697,6 +720,7 @@ namespace CoolSchool.EditorTools
             foreach (Vector3 direction in directions)
             {
                 Vector3 point = direction * distance;
+                if (IsReserved(point)) continue;
                 Vector3 toCentre = -direction;
                 Vector3 binSide = Vector3.Cross(Vector3.up, toCentre);
 
@@ -772,6 +796,7 @@ namespace CoolSchool.EditorTools
                 if (Vector3.Dot(point, AlienFieldDirection) > info.FenceHalf - 2f && Mathf.Abs(Vector3.Dot(point, fieldAcross)) < arenaClearHalf) continue;
                 // Keep the way from the playground to the school door clear.
                 if (Vector3.Dot(point, SchoolDirection) > 0f && Mathf.Abs(Vector3.Dot(point, schoolAcross)) < SchoolBuilder.CorridorHalfWidth) continue;
+                if (IsReserved(point)) continue;
                 if (occupied.Any(o => (o - point).sqrMagnitude < spacing * spacing)) continue;
 
                 GameObject item = Spawn(prefabs[placed % prefabs.Length], parent);

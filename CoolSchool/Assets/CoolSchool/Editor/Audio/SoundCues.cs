@@ -25,8 +25,11 @@ namespace CoolSchool.EditorTools
             // Aliens
             "aliens.rocket_land", "aliens.rocket_takeoff", "aliens.zap", "aliens.zap_hit", "aliens.slime_throw",
             "aliens.slime_splat", "aliens.dance_party", "aliens.jump_pad", "aliens.rescue",
+            // Ice cream shop
+            "shop.bell", "shop.scoop", "shop.plop", "shop.bounce", "shop.cone_pop", "shop.slurp",
+            "shop.coin_drop", "shop.coin_tap", "shop.register",
             // Music
-            "music.playground", "music.knights", "music.aliens", "music.classroom", "music.victory",
+            "music.playground", "music.knights", "music.aliens", "music.classroom", "music.victory", "music.shop",
         };
 
         public static bool IsMusic(string cue) => cue.StartsWith("music.");
