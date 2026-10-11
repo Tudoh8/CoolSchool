@@ -601,3 +601,24 @@ MonoBehaviour:
     english: Come quickly! Aliens have landed!
     dutchClip: {fileID: 8300000, guid: 3b8783f7ecc293b4fbe00660c260c9fd, type: 3}
     englishClip: {fileID: 0}
+  - key: knights.golden_sword.1
+    group: knights.golden_sword
+    speaker: 0
+    dutch: Kijk! Je gouden zwaard! Daarmee ben je extra sterk!
+    english: Look! Your golden sword! It makes you extra strong!
+    dutchClip: {fileID: 8300000, guid: efd8c5380a222e146bead456c0a3d536, type: 3}
+    englishClip: {fileID: 0}
+  - key: invite.knights.golden.1
+    group: invite.knights.golden
+    speaker: 0
+    dutch: Je gouden zwaard wacht op je bij het kasteel!
+    english: Your golden sword is waiting for you at the castle!
+    dutchClip: {fileID: 8300000, guid: 2ec3ef66511f17f449919bb9d15adf98, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.powerup_waiting.1
+    group: lesson.powerup_waiting
+    speaker: 0
+    dutch: Je gouden zwaard ligt nog klaar bij het kasteel!
+    english: Your golden sword is still waiting at the castle!
+    dutchClip: {fileID: 8300000, guid: d70e440ce9441aa40903ed8057416347, type: 3}
+    englishClip: {fileID: 0}

@@ -23,6 +23,7 @@ namespace CoolSchool.EditorTools
 
         const float JarSize = 200f;
         const float JarMargin = 150f;
+        const float BadgeSize = 130f;
         const float PresentSize = 600f;
         const float RevealSize = 820f;
         const float RaysSize = 1100f;
@@ -50,6 +51,7 @@ namespace CoolSchool.EditorTools
                 Sprite star = FindSprite("Star", "Stars/Star");
                 Sprite gift = FindSprite("Gift", "Icons/Gift");
                 hud = BuildStarJar(canvas.transform, star);
+                BuildGoldenSwordBadge(canvas.transform);
                 popup = BuildPresentPopup(canvas.transform, gift, star, stage);
             }
             else
@@ -58,6 +60,7 @@ namespace CoolSchool.EditorTools
             }
 
             BuildRewardSystem(catalog, hud, popup);
+            BuildGoldenSwordReward();
 
             if (player != null)
             {
@@ -174,6 +177,44 @@ namespace CoolSchool.EditorTools
             PlaygroundPrototypeBuilder.SetObject(hud, "target", root);
             PlaygroundPrototypeBuilder.SetObject(hud, "flyingStarSprite", star);
             return hud;
+        }
+
+        /// <summary>
+        /// A small golden sword left of the star jar, shown while a golden sword is waiting for the castle.
+        /// The component sits on an always-active object; only its "Icon" child is switched on and off.
+        /// </summary>
+        static void BuildGoldenSwordBadge(Transform canvas)
+        {
+            Sprite sword = ActivityBeaconBuilder.FindSprite(new[] { "Sword" });
+            Sprite round = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
+            if (sword == null) Debug.LogWarning("CoolSchool: sword sprite not found; the golden sword badge will be a plain gold square.");
+
+            RectTransform root = NewRect("GoldenSwordBadge", canvas);
+            SetAnchored(root, new Vector2(1f, 1f), new Vector2(-JarMargin - JarSize * 0.5f - BadgeSize * 0.5f - 20f, -JarMargin), new Vector2(BadgeSize, BadgeSize));
+
+            RectTransform icon = NewStretched("Icon", root);
+            AddImage(NewStretched("Backdrop", icon), round, new Color(0.2f, 0.12f, 0.35f, 0.6f));
+
+            RectTransform swordRect = NewStretched("Sword", icon);
+            swordRect.offsetMin = Vector2.one * (BadgeSize * 0.1f);
+            swordRect.offsetMax = Vector2.one * (-BadgeSize * 0.1f);
+            AddImage(swordRect, sword, new Color(1f, 0.82f, 0.15f, 1f));
+
+            icon.gameObject.SetActive(false);
+
+            var badge = root.gameObject.AddComponent<GoldenSwordBadge>();
+            PlaygroundPrototypeBuilder.SetObject(badge, "icon", icon.gameObject);
+        }
+
+        /// <summary>The big sword of the "you won a golden sword" moment. It uses the same model as the knights' sword.</summary>
+        static void BuildGoldenSwordReward()
+        {
+            GameObject prefab = PlaygroundPrototypeBuilder.LoadPrefab(PlaygroundPrototypeBuilder.Kids("SM_Wep_Sword_Foam_01"));
+            if (prefab == null) Debug.LogWarning("CoolSchool: the foam sword model was not found, so the golden sword reward has nothing to show.");
+
+            var rewardObject = new GameObject("GoldenSwordReward");
+            var reward = rewardObject.AddComponent<GoldenSwordReward>();
+            PlaygroundPrototypeBuilder.SetObject(reward, "swordPrefab", prefab);
         }
 
         /// <summary>

@@ -46,6 +46,7 @@ namespace CoolSchool.EditorTools
             new Seed("tag.round_finished.1", Speaker.Teacher, "Wat een goed spel! Even uitrusten.", "What a great game! Time for a little rest."),
 
             new Seed("knights.start.1", Speaker.Teacher, "Ridders! Bescherm het kasteel! Tik op de knop om met je zwaard te zwaaien.", "Knights! Protect the castle! Tap the button to swing your sword."),
+            new Seed("knights.golden_sword.1", Speaker.Teacher, "Kijk! Je gouden zwaard! Daarmee ben je extra sterk!", "Look! Your golden sword! It makes you extra strong!"),
             new Seed("knights.shield_hint.1", Speaker.Teacher, "Houd de knop ingedrukt, dan pak je je schild!", "Hold the button down to raise your shield!"),
             new Seed("knights.wave.1", Speaker.Kid, "Daar komen de kobolden!", "Here come the goblins!"),
             new Seed("knights.wave_more.1", Speaker.Kid, "Nog meer kobolden!", "Even more goblins!"),
@@ -60,6 +61,7 @@ namespace CoolSchool.EditorTools
             new Seed("invite.tag.1", Speaker.Teacher, "Kom, we gaan tikkertje spelen! Volg de sterretjes!", "Come on, let's play tag! Follow the stars!"),
             new Seed("invite.knights.1", Speaker.Teacher, "Kom, we gaan ridders spelen bij het kasteel! Volg de sterretjes!", "Come on, let's play knights at the castle! Follow the stars!"),
             new Seed("invite.knights.2", Speaker.Teacher, "Zie je dat zwaard daar? Daar is het kasteel!", "See that sword over there? That's the castle!"),
+            new Seed("invite.knights.golden.1", Speaker.Teacher, "Je gouden zwaard wacht op je bij het kasteel!", "Your golden sword is waiting for you at the castle!"),
 
             // The alien landing (superhero ray gun game).
             new Seed("aliens.start.1", Speaker.Teacher, "Kijk! Er landt een raket! Er komen aliens uit! Jij bent de superheld!", "Look! A rocket is landing! Aliens are coming out! You're the superhero!"),
@@ -104,6 +106,7 @@ namespace CoolSchool.EditorTools
             new Seed("lesson.find_number.1", Speaker.Teacher, "Waar is het getal…", "Where is the number…"),
             new Seed("lesson.outro.1", Speaker.Teacher, "Wat heb jij goed geteld! Hier zijn je sterren.", "You counted so well! Here are your stars."),
             new Seed("lesson.powerup.1", Speaker.Teacher, "En je krijgt een gouden zwaard voor bij het kasteel!", "And you get a golden sword for the castle!"),
+            new Seed("lesson.powerup_waiting.1", Speaker.Teacher, "Je gouden zwaard ligt nog klaar bij het kasteel!", "Your golden sword is still waiting at the castle!"),
 
             // What the toys on the table are called: count them, ask how many, and put some in the basket.
             new Seed("lesson.count.duck.1", Speaker.Teacher, "Tel de eendjes! Tik op elk eendje.", "Count the ducks! Tap each duck."),

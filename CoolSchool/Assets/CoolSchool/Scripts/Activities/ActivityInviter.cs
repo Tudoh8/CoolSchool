@@ -1,6 +1,8 @@
 using CoolSchool.Audio;
 using CoolSchool.Battle;
+using CoolSchool.Lessons;
 using CoolSchool.Player;
+using CoolSchool.Rewards;
 using CoolSchool.Voice;
 using UnityEngine;
 
@@ -79,13 +81,21 @@ namespace CoolSchool.Activities
                 lastInvited = index;
                 Sfx.Play("zone.invite_chime");
                 if (inviteGroups != null && index < inviteGroups.Length && !string.IsNullOrEmpty(inviteGroups[index]))
-                    VoicePlayer.Say(inviteGroups[index]);
+                    VoicePlayer.Say(InviteGroupFor(inviteGroups[index]));
 
                 trailZone = zones[index];
                 trailEndTime = Time.time + trailSeconds;
                 nextTrailTime = 0f;
                 return;
             }
+        }
+
+        /// <summary>With a golden sword waiting, the castle invitation talks about it instead.</summary>
+        static string InviteGroupFor(string group)
+        {
+            if (group == "invite.knights" && ProgressStore.Current.pendingPowerUp == PowerUps.GoldenSword)
+                return "invite.knights.golden";
+            return group;
         }
 
         /// <summary>Sparkles every few metres along the straight line from the player toward the zone.</summary>

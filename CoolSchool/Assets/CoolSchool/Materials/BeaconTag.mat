@@ -111,7 +111,7 @@ Material:
     - _TintColor: {r: 0.4393531, g: 0.3890229, b: 0.31204724, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &12621889117665637
+--- !u!114 &2740267924204070468
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Editor::UnityEditor.Rendering.Universal.AssetVersion
   version: 10
---- !u!114 &7042039610755082194
+--- !u!114 &4041927308294961738
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

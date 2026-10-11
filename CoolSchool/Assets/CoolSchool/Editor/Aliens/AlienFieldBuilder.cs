@@ -58,6 +58,14 @@ namespace CoolSchool.EditorTools
         const float PartyAcross = 12f;
         const float PartySpacing = 1.4f;
 
+        // The counting close-up (camera FOV is 50 degrees): 4.5 m back and 2.2 m up, pitched 21 degrees down, puts a row of
+        // four aliens (4.2 m between the outer two) in the upper part of the screen, clear of the number cards along the bottom.
+        // The baby waits 7.5 m south of the row, i.e. 3 m behind that camera.
+        const float CountCameraHeight = 2.2f;
+        const float CountCameraBack = 4.5f;
+        const float CountCameraPitch = 21f;
+        const float BabyWaitBack = 7.5f;
+
         const int AlienCount = 4;
         const float PadRadius = 1f;
 
@@ -308,6 +316,7 @@ namespace CoolSchool.EditorTools
             ImaginationEffect imagination = CreateImagination(inputs.Imagination);
 
             WireLanding(landing, field, inputs, rayGun, imagination, pad, baby, aliens);
+            WireCountShot(landing, field);
 
             Material ringMaterial = KnightsArenaBuilder.CreateGlowMaterial(ZoneRingMaterialPath, new Color(0.7f, 0.35f, 1f), 0.4f);
             ActivityZone zone = KnightsArenaBuilder.CreateActivityZone("AlienZone", root, field.ZonePosition, ZoneRadius, landing,
@@ -523,6 +532,31 @@ namespace CoolSchool.EditorTools
             SetObjectArray(landing, "partyLinePoints", field.PartyPoints);
             // Optional: the number cards are only there if the lesson was built.
             SetObject(landing, "lessonUI", Object.FindFirstObjectByType<LessonUI>());
+        }
+
+        /// <summary>
+        /// The close-up for the counting question: a camera point in front of (south of) the four alien party spots, looking
+        /// north and a little down so the aliens fill the upper two thirds of the screen above the number cards. And the
+        /// baby's waiting spot behind that camera, which is never in the shot. The baby's own party slot (the fifth) is not
+        /// framed on purpose: it only has to be out of sight while the aliens are counted.
+        /// </summary>
+        static void WireCountShot(AlienLanding landing, FieldLayout field)
+        {
+            Vector3 center = Vector3.zero;
+            for (int i = 0; i < AlienCount; i++) center += field.PartyPoints[i].position;
+            center /= AlienCount;
+
+            Transform group = NewGroup("CountShot", field.Root);
+            Vector3 cameraPosition = center + new Vector3(0f, CountCameraHeight, -CountCameraBack);
+            Transform camera = NewPoint("CountCamera", group, cameraPosition);
+            camera.rotation = Quaternion.Euler(CountCameraPitch, 0f, 0f);
+
+            Transform wait = NewPoint("BabyWaitPoint", group, SnapToNavMesh(center + Vector3.back * BabyWaitBack));
+            wait.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.up);
+
+            SetObject(landing, "countCameraPoint", camera);
+            SetObject(landing, "babyWaitPoint", wait);
+            SetObject(landing, "cameraRig", landing.gameObject.AddComponent<LessonCameraRig>());
         }
 
         /// <summary>Adds the alien zone at the END of the inviter's turns, with its own invite line. Skips quietly if there is no inviter.</summary>

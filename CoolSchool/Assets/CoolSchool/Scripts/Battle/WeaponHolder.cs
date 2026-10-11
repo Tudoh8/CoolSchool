@@ -19,6 +19,12 @@ namespace CoolSchool.Battle
 
         static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
         static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+        static readonly int BaseMapId = Shader.PropertyToID("_BaseMap");
+        static readonly int MainTexId = Shader.PropertyToID("_MainTex");
+        static readonly int EmissionMapId = Shader.PropertyToID("_EmissionMap");
+        static readonly int MetallicId = Shader.PropertyToID("_Metallic");
+        static readonly int SmoothnessId = Shader.PropertyToID("_Smoothness");
+        static readonly Color GoldColor = new Color(1f, 0.78f, 0.16f, 1f);
 
         GameObject sword;
         GameObject shield;
@@ -103,22 +109,33 @@ namespace CoolSchool.Battle
             return instance;
         }
 
-        /// <summary>Emission plus a warm tint on every material copy of the sword.</summary>
-        static void ApplyGlow(GameObject weapon, Color color)
+        /// <summary>Where the sword is right now (for sparkles). Near the kid's hand height if it is not out.</summary>
+        public Vector3 SwordPosition => sword != null ? sword.transform.position : transform.position + Vector3.up * 1f;
+
+        /// <summary>
+        /// Turns every material copy of a weapon solid shining gold. The Synty kid materials have a texture atlas
+        /// and an emission MASK, so changing only the colours would barely show: the textures are swapped for plain
+        /// white ones so the whole weapon turns gold and glows. Public so the lesson's reward sword looks the same.
+        /// </summary>
+        public static void ApplyGlow(GameObject weapon, Color color)
         {
             foreach (Renderer renderer in weapon.GetComponentsInChildren<Renderer>(true))
             {
                 // Reading .materials makes copies, so the shared material assets stay untouched.
                 foreach (Material material in renderer.materials)
                 {
+                    if (material.HasProperty(BaseMapId)) material.SetTexture(BaseMapId, Texture2D.whiteTexture);
+                    if (material.HasProperty(MainTexId)) material.SetTexture(MainTexId, Texture2D.whiteTexture);
+                    if (material.HasProperty(BaseColorId)) material.SetColor(BaseColorId, GoldColor);
+                    if (material.HasProperty(MetallicId)) material.SetFloat(MetallicId, 0.3f);
+                    if (material.HasProperty(SmoothnessId)) material.SetFloat(SmoothnessId, 0.75f);
+
                     if (material.HasProperty(EmissionColorId))
                     {
                         material.EnableKeyword("_EMISSION");
-                        material.SetColor(EmissionColorId, color);
+                        if (material.HasProperty(EmissionMapId)) material.SetTexture(EmissionMapId, Texture2D.whiteTexture);
+                        material.SetColor(EmissionColorId, color * 0.55f);
                     }
-
-                    if (material.HasProperty(BaseColorId))
-                        material.SetColor(BaseColorId, Color.Lerp(material.GetColor(BaseColorId), color, 0.6f));
                 }
             }
         }

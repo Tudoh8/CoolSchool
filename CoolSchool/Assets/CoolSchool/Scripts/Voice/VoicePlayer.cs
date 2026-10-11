@@ -34,6 +34,9 @@ namespace CoolSchool.Voice
         /// <summary>True while a line is playing (or its debug subtitle is showing).</summary>
         public bool IsSpeaking => current != null;
 
+        /// <summary>True while a line is playing or waiting in the queue.</summary>
+        public bool IsBusy => current != null || waiting.Count > 0;
+
         /// <summary>Who says the line that is playing now. Teacher when nothing is playing (check IsSpeaking first).</summary>
         public Speaker CurrentSpeaker => current != null ? current.speaker : Speaker.Teacher;
 

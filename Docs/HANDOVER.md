@@ -58,7 +58,7 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
   - Voices per speaker are set in `Assets/CoolSchool/Voice/VoiceGenerationSettings.asset`: Teacher/Narrator Lily, Kid/Alien Freya, Goblin Clyde.
   - At runtime the pitch is raised per speaker (Kid 1.22, Goblin 1.35, Alien 1.5).
   - To redo a line, delete its mp3 and re-run.
-  - Quota used so far: about 2,410 characters.
+  - Quota used so far: about 2,554 characters.
 - **Batch logs:** `Logs/batch-<Method>.log`.
 
 ## Architecture in brief
@@ -102,7 +102,8 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
 - **Rewards** (`Scripts/Rewards`): `ProgressStore` saves to `persistentDataPath/progress.json`.
   - Stars fill the jar; 10 stars give a present, which opens in a popup with a 3D reveal; items come from the `RewardCatalog` in order.
   - The equipped sword is applied automatically.
-  - The `pendingPowerUp` "golden_sword" is earned in a lesson and consumed in the next knights game (double hits, gold glow).
+  - The `pendingPowerUp` "golden_sword" is earned in a lesson (a gold sword pops up above the table and flies to a badge left of the star jar: `GoldenSwordReward`, `GoldenSwordBadge`) and consumed in the next knights game (solid-gold sword, double hits, sparkle fanfare, `knights.golden_sword` line).
+  - `AddStars(count, pos, announce)`: the "Een ster!" line only plays when the voice queue is idle; the lesson passes `announce: false`.
   - Debug menu items: **Give 10 Stars (test)** and **Reset Progress**.
 
 ## Current state
@@ -117,6 +118,8 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
     - `JumpPad.launchSpeed`
     - camera framing of the party line
     - the carried baby plays a run animation
+    - counting close-up (`CountCameraHeight/Back/Pitch` in `AlienFieldBuilder`); the baby waits at `BabyWaitPoint` behind that camera and is not counted
+  - **Golden sword reward (untested):** size, height and orientation above the lesson table (`GoldenSwordHeight` in `NumbersLesson`, `displayLength` on `GoldenSwordReward`)
   - **Knights:** sword and shield hand offsets are constants at the top of `PlaygroundPrototypeBuilder`; trees may stand close to the castle wall ends.
   - **Teacher:** stands angled beside the board, but turns toward the player at runtime.
   - **Lesson UI:** check that the number cards don't cover the toys.

@@ -43,9 +43,9 @@ namespace CoolSchool.Rewards
         bool presentRoutineRunning;
 
         /// <summary>Flies stars from this spot in the world to the star jar, one after the other.</summary>
-        public static void AddStars(int count, Vector3 worldPosition)
+        public static void AddStars(int count, Vector3 worldPosition, bool announce = true)
         {
-            if (instance != null) instance.GiveStars(count, worldPosition);
+            if (instance != null) instance.GiveStars(count, worldPosition, announce);
         }
 
         void OnEnable()
@@ -97,19 +97,19 @@ namespace CoolSchool.Rewards
             GiveStars(count, PlayerPosition());
         }
 
-        void GiveStars(int count, Vector3 worldPosition)
+        void GiveStars(int count, Vector3 worldPosition, bool announce = true)
         {
             if (count <= 0) return;
 
-            StartCoroutine(FlyStars(count, ScreenPointOf(worldPosition)));
+            StartCoroutine(FlyStars(count, ScreenPointOf(worldPosition), announce));
         }
 
-        IEnumerator FlyStars(int count, Vector2 screenPoint)
+        IEnumerator FlyStars(int count, Vector2 screenPoint, bool announce)
         {
             for (int i = 0; i < count; i++)
             {
                 starsInFlight++;
-                bool first = i == 0;
+                bool first = announce && i == 0;
                 if (hud != null) hud.FlyStar(screenPoint, () => OnStarLanded(first));
                 else OnStarLanded(first);
 
@@ -122,7 +122,8 @@ namespace CoolSchool.Rewards
             starsInFlight = Mathf.Max(0, starsInFlight - 1);
             ProgressStore.AddStar();
 
-            if (firstOfBatch) RewardVoice.Say("reward.star");
+            // Only when nobody is talking: a queued "star" would come out late, unrelated to the stars.
+            if (firstOfBatch && !RewardVoice.IsBusy()) RewardVoice.Say("reward.star");
             if (ProgressStore.Current.starsInJar >= jarCapacity) StartPresentRoutine();
         }
 

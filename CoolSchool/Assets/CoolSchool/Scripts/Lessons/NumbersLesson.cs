@@ -51,6 +51,9 @@ namespace CoolSchool.Lessons
         const float BetweenExercisesSeconds = 0.5f;
         const float MaxSpeechWaitSeconds = 10f;
         const float StarsLandSeconds = 3f;
+        // The golden sword floats this high above the table top, and flying away never takes longer than this.
+        const float GoldenSwordHeight = 0.9f;
+        const float MaxSwordFlightSeconds = 3f;
         const float TapRayRadius = 0.08f;
         const float TapSlopFraction = 0.12f;
 
@@ -110,6 +113,7 @@ namespace CoolSchool.Lessons
             }
 
             tapHandler = null;
+            GoldenSwordReward.Finish();
             RemoveToys();
             SetBasketActive(false);
 
@@ -232,14 +236,25 @@ namespace CoolSchool.Lessons
             yield return WaitForSpeech();
 
             int stars = Mathf.Max(minStars, firstTryCorrect * starsPerCorrect);
-            RewardSystem.AddStars(stars, stage.TableSurface.position);
+            RewardSystem.AddStars(stars, stage.TableSurface.position, announce: false);
             float starsGivenAt = Time.time;
             yield return new WaitForSeconds(0.6f);
 
-            ProgressStore.Current.pendingPowerUp = PowerUps.GoldenSword;
-            ProgressStore.Save();
-            Say("lesson.powerup");
+            // The golden sword is shown big above the table while the teacher talks, then flies into the badge by the star jar.
+            // A sword that is still waiting from an earlier lesson is not promised twice.
+            bool alreadyPending = ProgressStore.Current.pendingPowerUp == PowerUps.GoldenSword;
+            GoldenSwordReward.Begin(stage.TableSurface.position + Vector3.up * GoldenSwordHeight, !alreadyPending);
+            if (!alreadyPending)
+            {
+                ProgressStore.Current.pendingPowerUp = PowerUps.GoldenSword;
+                ProgressStore.Save();
+            }
+            Say(alreadyPending ? "lesson.powerup_waiting" : "lesson.powerup");
             yield return WaitForSpeech();
+
+            GoldenSwordReward.Finish();
+            float swordGiveUp = Time.time + MaxSwordFlightSeconds;
+            while (GoldenSwordReward.IsPlaying && Time.time < swordGiveUp) yield return null;
 
             // Leave only when the stars have landed in the jar.
             float wait = starsGivenAt + StarsLandSeconds - Time.time;

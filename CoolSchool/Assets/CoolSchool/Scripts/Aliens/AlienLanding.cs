@@ -43,8 +43,15 @@ namespace CoolSchool.Aliens
         [Tooltip("The party line in front of the camera: one point for each alien, then one for the baby.")]
         [SerializeField] Transform[] partyLinePoints;
 
+        [Tooltip("Where the baby waits while the aliens are counted: behind the counting camera, so it is never in the shot.")]
+        [SerializeField] Transform babyWaitPoint;
+
         [Header("Counting (skipped when there is no lesson UI)")]
         [SerializeField] LessonUI lessonUI;
+        [Tooltip("The close-up shot of the dancing aliens during the question (the baby is not in it). Optional.")]
+        [SerializeField] Transform countCameraPoint;
+        [Tooltip("Glides the camera to the close-up and back. Added automatically when it is missing.")]
+        [SerializeField] LessonCameraRig cameraRig;
 
         [Header("Timing")]
         [SerializeField] float descentSeconds = 3f;
@@ -127,6 +134,9 @@ namespace CoolSchool.Aliens
             }
             pickedCard = -1;
 
+            // The close-up camera goes back to the follow camera, even when the game ends in the middle of the question.
+            if (cameraRig != null) cameraRig.RestoreNow();
+
             if (hudHidden && lessonUI != null) lessonUI.SetGameplayHudVisible(true);
             hudHidden = false;
             if (lessonUI != null) lessonUI.HideCards();
@@ -176,6 +186,7 @@ namespace CoolSchool.Aliens
             yield return RunWave();
             yield return RunRescue();
             yield return RunCount();
+            yield return RunBabyJoinsParty();
             yield return RunParty();
 
             flowRoutine = null;
@@ -424,8 +435,42 @@ namespace CoolSchool.Aliens
             BattleEffects.Confetti(babyAlien.transform.position + Vector3.up * 1f);
             onRescue?.Invoke();
 
+            float arriveBy = Time.time + 8f;
+            if (BabyWaitsForCount)
+            {
+                // The question is only about the aliens: the baby watches from behind the camera, out of the shot,
+                // and joins the dance party after the counting.
+                babyAlien.WalkTo(babyWaitPoint.position, PartySpot(0));
+                yield return new WaitForSeconds(1.5f);
+                while (!babyAlien.HasArrived && Time.time < arriveBy)
+                    yield return null;
+            }
+            else
+            {
+                // Nothing to count: straight to its place in the party line.
+                SendBabyToParty();
+                yield return new WaitForSeconds(1.5f);
+                while (!babyAlien.IsDancing && Time.time < arriveBy)
+                    yield return null;
+            }
+        }
+
+        /// <summary>True when there is a question to ask, so the baby waits out of the shot until it is answered.</summary>
+        bool BabyWaitsForCount => lessonUI != null && babyWaitPoint != null;
+
+        /// <summary>The baby runs to the last party slot (the one after the aliens) and dances.</summary>
+        void SendBabyToParty()
+        {
             int babySlot = aliens != null ? aliens.Length : 0;
             babyAlien.RunTo(PartySpot(babySlot), PartySpot(babySlot) + CameraSide * 5f, 1);
+        }
+
+        /// <summary>After the counting the baby comes running in from behind the camera and joins the party line.</summary>
+        IEnumerator RunBabyJoinsParty()
+        {
+            if (babyAlien == null || !babyAlien.IsRescued || babyAlien.IsDancing) yield break;
+
+            SendBabyToParty();
 
             float arriveBy = Time.time + 8f;
             yield return new WaitForSeconds(1.5f);
@@ -463,7 +508,9 @@ namespace CoolSchool.Aliens
             lessonUI.SetGameplayHudVisible(false);
             hudHidden = true;
 
+            // The camera glides in on the dancing aliens (the baby waits behind it) while the question is asked.
             VoicePlayer.Say("aliens.count", true);
+            yield return EnterCountShot();
             yield return WaitForVoice();
 
             int correct = DancerCount();
@@ -498,6 +545,22 @@ namespace CoolSchool.Aliens
             lessonUI.HideCards();
             lessonUI.SetGameplayHudVisible(true);
             hudHidden = false;
+
+            // Back to the normal follow camera.
+            if (cameraRig != null) yield return cameraRig.ExitLesson();
+        }
+
+        /// <summary>Glides the camera to the close-up of the aliens. Does nothing when there is no shot placed.</summary>
+        IEnumerator EnterCountShot()
+        {
+            if (countCameraPoint == null) yield break;
+
+            if (cameraRig == null)
+            {
+                cameraRig = GetComponent<LessonCameraRig>();
+                if (cameraRig == null) cameraRig = gameObject.AddComponent<LessonCameraRig>();
+            }
+            yield return cameraRig.EnterLesson(countCameraPoint);
         }
 
         void OnCardPicked(int number)
@@ -505,7 +568,7 @@ namespace CoolSchool.Aliens
             pickedCard = number;
         }
 
-        /// <summary>Each dancer hops while its number is said out loud.</summary>
+        /// <summary>Each alien hops while its number is said out loud. The baby is not part of the count.</summary>
         IEnumerator CountAlong(int count)
         {
             for (int k = 1; k <= count; k++)
@@ -518,25 +581,17 @@ namespace CoolSchool.Aliens
 
         void HopDancer(int index)
         {
-            int alienCount = aliens != null ? aliens.Length : 0;
-            if (index < alienCount)
-            {
-                if (aliens[index] != null) aliens[index].Hop();
-            }
-            else if (babyAlien != null)
-            {
-                babyAlien.Hop();
-            }
+            if (aliens != null && index < aliens.Length && aliens[index] != null)
+                aliens[index].Hop();
         }
 
-        /// <summary>The number of dancing friends: all the aliens, plus the baby when it was rescued.</summary>
+        /// <summary>The number of dancing aliens in the shot. The baby is out of the shot and does not count.</summary>
         int DancerCount()
         {
             int count = 0;
             if (aliens != null)
                 foreach (AlienKidAI alien in aliens)
                     if (alien != null) count++;
-            if (babyAlien != null) count++;
             return Mathf.Max(1, count);
         }
 

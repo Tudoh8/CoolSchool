@@ -7,6 +7,7 @@ using CoolSchool.Input;
 using CoolSchool.Lessons;
 using CoolSchool.Player;
 using CoolSchool.Tag;
+using CoolSchool.Voice;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -55,6 +56,8 @@ namespace CoolSchool.Battle
         public UnityEvent onDragonArrived;
         public UnityEvent onVictory;
 
+        const int GoldenBursts = 5;
+        const float GoldenBurstGapSeconds = 0.3f;
         const float IntroSeconds = 1.5f;
         const float SpawnGapSeconds = 0.6f;
         const float WaveRestSeconds = 2.5f;
@@ -63,6 +66,7 @@ namespace CoolSchool.Battle
         const float WaveTimeoutSeconds = 120f;
 
         Coroutine flowRoutine;
+        Coroutine goldenRoutine;
         bool dragonFlewAway;
         bool quitting;
         DragonBoss subscribedDragon;
@@ -74,8 +78,15 @@ namespace CoolSchool.Battle
             if (player != null) player.JumpEnabled = false;
             if (playerInput != null) playerInput.enabled = true;
             if (actionButton != null) actionButton.SetIcon(swordIcon);
-            if (PowerUps.TryConsume(PowerUps.GoldenSword)) SetGoldenSword(true);
+            bool goldenSword = PowerUps.TryConsume(PowerUps.GoldenSword);
+            if (goldenSword) SetGoldenSword(true);
             SetWeapons(true);
+            if (goldenSword)
+            {
+                // Said before the normal start line (which comes right after OnBegin), so the voice queue plays them in order.
+                VoicePlayer.Say("knights.golden_sword");
+                goldenRoutine = StartCoroutine(GoldenSwordFanfare());
+            }
             if (imagination != null) imagination.Play(true);
             Sfx.PlayMusic("music.knights");
 
@@ -94,6 +105,11 @@ namespace CoolSchool.Battle
                 flowRoutine = null;
             }
             UnsubscribeDragon();
+            if (goldenRoutine != null)
+            {
+                StopCoroutine(goldenRoutine);
+                goldenRoutine = null;
+            }
 
             if (player != null) player.JumpEnabled = true;
             if (playerInput != null) playerInput.enabled = false;
@@ -272,6 +288,22 @@ namespace CoolSchool.Battle
 
             var holder = player.GetComponent<WeaponHolder>();
             if (holder != null) holder.SetGlow(on ? goldenSwordGlow : (Color?)null);
+        }
+
+        /// <summary>Gold sparkles and confetti bursting off the player's new golden sword, so the child sees what he got.</summary>
+        IEnumerator GoldenSwordFanfare()
+        {
+            var holder = player != null ? player.GetComponent<WeaponHolder>() : null;
+            Sfx.Play("reward.item_reveal");
+
+            for (int burst = 0; burst < GoldenBursts; burst++)
+            {
+                Vector3 spot = holder != null ? holder.SwordPosition : PlayerPosition() + Vector3.up * 1f;
+                BattleEffects.Sparkle(spot);
+                if (burst % 2 == 0) BattleEffects.Confetti(spot, new Color(1f, 0.82f, 0.2f));
+                yield return new WaitForSeconds(GoldenBurstGapSeconds);
+            }
+            goldenRoutine = null;
         }
 
         /// <summary>Knights fight (their tag brain sleeps); afterwards they go back to playing tag.</summary>

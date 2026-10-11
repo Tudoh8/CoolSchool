@@ -39,6 +39,9 @@ namespace CoolSchool.Aliens
 
         public bool IsDancing { get; private set; }
 
+        /// <summary>True once the baby has reached the spot of its last RunTo or WalkTo.</summary>
+        public bool HasArrived { get; private set; }
+
         void Awake() => CacheReferences();
 
         /// <summary>The baby starts switched off, so ShowAt may run before Awake. This is safe to call twice.</summary>
@@ -141,11 +144,28 @@ namespace CoolSchool.Aliens
 
             danceVariant = dance;
             if (routine != null) StopCoroutine(routine);
-            routine = StartCoroutine(RunRoutine(spot, lookAt));
+            routine = StartCoroutine(RunRoutine(spot, lookAt, true));
         }
 
-        IEnumerator RunRoutine(Vector3 spot, Vector3 lookAt)
+        /// <summary>Runs to a spot and turns to look at a point, but does not dance. HasArrived is true once it is there.</summary>
+        public void WalkTo(Vector3 spot, Vector3 lookAt)
         {
+            if (!isActiveAndEnabled) return;
+
+            if (routine != null) StopCoroutine(routine);
+            routine = StartCoroutine(RunRoutine(spot, lookAt, false));
+        }
+
+        IEnumerator RunRoutine(Vector3 spot, Vector3 lookAt, bool dance)
+        {
+            HasArrived = false;
+            // Walking on from a dance (the baby waited, then joins the party): stop dancing first.
+            if (IsDancing)
+            {
+                IsDancing = false;
+                if (kidAnimator != null) kidAnimator.SetDancing(false);
+            }
+
             if (kidAnimator != null) kidAnimator.PlayCheer();
             yield return new WaitForSeconds(0.6f);
 
@@ -176,8 +196,12 @@ namespace CoolSchool.Aliens
                 }
             }
 
-            IsDancing = true;
-            if (kidAnimator != null) kidAnimator.SetDancing(true, danceVariant);
+            HasArrived = true;
+            if (dance)
+            {
+                IsDancing = true;
+                if (kidAnimator != null) kidAnimator.SetDancing(true, danceVariant);
+            }
             routine = null;
         }
 
@@ -228,6 +252,7 @@ namespace CoolSchool.Aliens
 
             if (kidAnimator != null && IsDancing) kidAnimator.SetDancing(false);
             IsDancing = false;
+            HasArrived = false;
             IsCarried = false;
             IsStuck = false;
             IsRescued = false;
