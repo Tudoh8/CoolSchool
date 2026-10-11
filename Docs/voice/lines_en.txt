@@ -1,0 +1,77 @@
+=== TEACHER: use a warm female Multi voice ===
+
+en_general_welcome_1
+Hi! So nice to see you. Come on, let's play!
+
+en_tag_start_1
+Tag! You're it. Go and tag the other kids!
+
+en_tag_round_finished_1
+What a great game! Time for a little rest.
+
+en_knights_start_1
+Knights! Protect the castle! Tap the button to swing your sword.
+
+en_knights_shield_hint_1
+Hold the button down to raise your shield!
+
+en_knights_dragon_1
+Look! A dragon! He just wants to play. Watch out for his confetti fire!
+
+en_knights_victory_1
+Hooray! You saved the castle!
+
+en_reward_jar_full_1
+The jar is full! You get a present!
+
+en_reward_present_tap_1
+Tap the present!
+
+en_reward_present_open_1
+Wow! Look what's inside!
+
+=== KID: use a young voice ===
+
+en_tag_tagged_someone_1
+Oh no, you got me!
+
+en_tag_tagged_someone_2
+Haha, you're fast!
+
+en_tag_tagged_someone_3
+Okay, now I'm it!
+
+en_tag_became_it_1
+Hehe, now you're it!
+
+en_tag_became_it_2
+Tagged! You're it!
+
+en_knights_wave_1
+Here come the goblins!
+
+en_knights_wave_more_1
+Even more goblins!
+
+en_knights_fire_warning_1
+Shields up!
+
+en_knights_fire_warning_2
+Watch out, fire!
+
+=== GOBLIN: use a silly voice ===
+
+en_knights_goblin_down_1
+Hehehe, you got me!
+
+en_knights_goblin_down_2
+Whoops, I'm falling over!
+
+en_knights_goblin_down_3
+Haha, you're strong!
+
+=== NARRATOR: use a clear, friendly voice ===
+
+en_reward_star_1
+A star!
+

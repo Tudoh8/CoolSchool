@@ -1,0 +1,526 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e2ac7d7808755a4f94b76b97ea6f80b, type: 3}
+  m_Name: Lines
+  m_EditorClassIdentifier: Assembly-CSharp::CoolSchool.Voice.LineTable
+  lines:
+  - key: general.welcome.1
+    group: general.welcome
+    speaker: 0
+    dutch: Hoi! Wat fijn dat je er bent. Kom, we gaan spelen!
+    english: Hi! So nice to see you. Come on, let's play!
+    dutchClip: {fileID: 8300000, guid: e896d6acc3e64d64e99d62ab8752f341, type: 3}
+    englishClip: {fileID: 0}
+  - key: tag.start.1
+    group: tag.start
+    speaker: 0
+    dutch: Tikkertje! Jij bent hem. Tik de andere kinderen!
+    english: Tag! You're it. Go and tag the other kids!
+    dutchClip: {fileID: 8300000, guid: c4fb98c408bb18c48ad89faf5f3321d5, type: 3}
+    englishClip: {fileID: 0}
+  - key: tag.tagged_someone.1
+    group: tag.tagged_someone
+    speaker: 1
+    dutch: Oh nee, getikt!
+    english: Oh no, you got me!
+    dutchClip: {fileID: 8300000, guid: 6066d6798af10e643bd13434d46a1ac6, type: 3}
+    englishClip: {fileID: 0}
+  - key: tag.tagged_someone.2
+    group: tag.tagged_someone
+    speaker: 1
+    dutch: Haha, jij bent snel!
+    english: Haha, you're fast!
+    dutchClip: {fileID: 8300000, guid: dc3e8ff29aefc5e46a105870763d22ef, type: 3}
+    englishClip: {fileID: 0}
+  - key: tag.tagged_someone.3
+    group: tag.tagged_someone
+    speaker: 1
+    dutch: "Ok\xE9, nu ben ik hem!"
+    english: Okay, now I'm it!
+    dutchClip: {fileID: 8300000, guid: 05caa4ad3b0773244ac14c3667d90e90, type: 3}
+    englishClip: {fileID: 0}
+  - key: tag.became_it.1
+    group: tag.became_it
+    speaker: 1
+    dutch: Hihi, nu ben jij hem!
+    english: Hehe, now you're it!
+    dutchClip: {fileID: 8300000, guid: 665d729a9da1ca747b8e3244fa0345d9, type: 3}
+    englishClip: {fileID: 0}
+  - key: tag.became_it.2
+    group: tag.became_it
+    speaker: 1
+    dutch: Getikt! Jij bent hem!
+    english: Tagged! You're it!
+    dutchClip: {fileID: 8300000, guid: 5a5aa85a31939dc48b7d55ae3295f46e, type: 3}
+    englishClip: {fileID: 0}
+  - key: tag.round_finished.1
+    group: tag.round_finished
+    speaker: 0
+    dutch: Wat een goed spel! Even uitrusten.
+    english: What a great game! Time for a little rest.
+    dutchClip: {fileID: 8300000, guid: c26141b25d27cc444b696e61e13e59f1, type: 3}
+    englishClip: {fileID: 0}
+  - key: knights.start.1
+    group: knights.start
+    speaker: 0
+    dutch: Ridders! Bescherm het kasteel! Tik op de knop om met je zwaard te zwaaien.
+    english: Knights! Protect the castle! Tap the button to swing your sword.
+    dutchClip: {fileID: 8300000, guid: 61d267b59e8124448b54561c9df6370e, type: 3}
+    englishClip: {fileID: 0}
+  - key: knights.shield_hint.1
+    group: knights.shield_hint
+    speaker: 0
+    dutch: Houd de knop ingedrukt, dan pak je je schild!
+    english: Hold the button down to raise your shield!
+    dutchClip: {fileID: 8300000, guid: 30f54307655942943b6b3526bb9dbfdb, type: 3}
+    englishClip: {fileID: 0}
+  - key: knights.wave.1
+    group: knights.wave
+    speaker: 1
+    dutch: Daar komen de kobolden!
+    english: Here come the goblins!
+    dutchClip: {fileID: 8300000, guid: 490d9caf438ee8f41b1c485b6af60418, type: 3}
+    englishClip: {fileID: 0}
+  - key: knights.wave_more.1
+    group: knights.wave_more
+    speaker: 1
+    dutch: Nog meer kobolden!
+    english: Even more goblins!
+    dutchClip: {fileID: 8300000, guid: c5027b4def3c66b40b92bcd98239cb17, type: 3}
+    englishClip: {fileID: 0}
+  - key: knights.goblin_down.1
+    group: knights.goblin_down
+    speaker: 2
+    dutch: Hihihi, je hebt me!
+    english: Hehehe, you got me!
+    dutchClip: {fileID: 8300000, guid: 3c93792ebfdb12047a0b8fe93c6ec308, type: 3}
+    englishClip: {fileID: 0}
+  - key: knights.goblin_down.2
+    group: knights.goblin_down
+    speaker: 2
+    dutch: Oei, ik val om!
+    english: Whoops, I'm falling over!
+    dutchClip: {fileID: 8300000, guid: 440cd45ff01dc914e99ca910372a4c6d, type: 3}
+    englishClip: {fileID: 0}
+  - key: knights.goblin_down.3
+    group: knights.goblin_down
+    speaker: 2
+    dutch: Haha, jij bent sterk!
+    english: Haha, you're strong!
+    dutchClip: {fileID: 8300000, guid: 20167c59c14102247a4b067dde60a10d, type: 3}
+    englishClip: {fileID: 0}
+  - key: knights.dragon.1
+    group: knights.dragon
+    speaker: 0
+    dutch: Kijk! Een draak! Hij wil alleen spelen. Pas op voor zijn confettivuur!
+    english: Look! A dragon! He just wants to play. Watch out for his confetti fire!
+    dutchClip: {fileID: 8300000, guid: 98e9784cc6651ea43ab08b5d5e1e1246, type: 3}
+    englishClip: {fileID: 0}
+  - key: knights.fire_warning.1
+    group: knights.fire_warning
+    speaker: 1
+    dutch: Schild omhoog!
+    english: Shields up!
+    dutchClip: {fileID: 8300000, guid: bf20463105d46bc46b74b48892ca8522, type: 3}
+    englishClip: {fileID: 0}
+  - key: knights.fire_warning.2
+    group: knights.fire_warning
+    speaker: 1
+    dutch: Pas op, vuur!
+    english: Watch out, fire!
+    dutchClip: {fileID: 8300000, guid: 1e6408e190b817344af2f870edd46b8b, type: 3}
+    englishClip: {fileID: 0}
+  - key: knights.victory.1
+    group: knights.victory
+    speaker: 0
+    dutch: Hoera! Jullie hebben het kasteel gered!
+    english: Hooray! You saved the castle!
+    dutchClip: {fileID: 8300000, guid: 27e1aaba590422b46abcc57720a39a72, type: 3}
+    englishClip: {fileID: 0}
+  - key: reward.star.1
+    group: reward.star
+    speaker: 3
+    dutch: Een ster!
+    english: A star!
+    dutchClip: {fileID: 8300000, guid: 8faae5b0ca343bf49beafb30bdb6ca98, type: 3}
+    englishClip: {fileID: 0}
+  - key: reward.jar_full.1
+    group: reward.jar_full
+    speaker: 0
+    dutch: De pot is vol! Je krijgt een cadeautje!
+    english: The jar is full! You get a present!
+    dutchClip: {fileID: 8300000, guid: c9c036d1e85c8ca4ab894a1050c4453e, type: 3}
+    englishClip: {fileID: 0}
+  - key: reward.present_tap.1
+    group: reward.present_tap
+    speaker: 0
+    dutch: Tik op het cadeau!
+    english: Tap the present!
+    dutchClip: {fileID: 8300000, guid: 056d132f5e228524baeeaa77230e9a56, type: 3}
+    englishClip: {fileID: 0}
+  - key: reward.present_open.1
+    group: reward.present_open
+    speaker: 0
+    dutch: Wauw! Kijk eens wat erin zit!
+    english: Wow! Look what's inside!
+    dutchClip: {fileID: 8300000, guid: d396c257c73051d4caa34dbe39e8c62c, type: 3}
+    englishClip: {fileID: 0}
+  - key: invite.tag.1
+    group: invite.tag
+    speaker: 0
+    dutch: Kom, we gaan tikkertje spelen! Volg de sterretjes!
+    english: Come on, let's play tag! Follow the stars!
+    dutchClip: {fileID: 8300000, guid: 13a80647929acb1469e43e1cfd8ff5d8, type: 3}
+    englishClip: {fileID: 0}
+  - key: invite.knights.1
+    group: invite.knights
+    speaker: 0
+    dutch: Kom, we gaan ridders spelen bij het kasteel! Volg de sterretjes!
+    english: Come on, let's play knights at the castle! Follow the stars!
+    dutchClip: {fileID: 8300000, guid: 2e9c7b9000c1d5449a81b6e63d2da1f5, type: 3}
+    englishClip: {fileID: 0}
+  - key: invite.knights.2
+    group: invite.knights
+    speaker: 0
+    dutch: Zie je dat zwaard daar? Daar is het kasteel!
+    english: See that sword over there? That's the castle!
+    dutchClip: {fileID: 8300000, guid: f933ceacd75e92c4d87095a29bd6c6d7, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.1.1
+    group: number.1
+    speaker: 0
+    dutch: "E\xE9n"
+    english: One
+    dutchClip: {fileID: 8300000, guid: e897acf2c4ce8954483090c1619fb8a1, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.2.1
+    group: number.2
+    speaker: 0
+    dutch: Twee
+    english: Two
+    dutchClip: {fileID: 8300000, guid: 0f93e4eec1a301e4784fc6107ffe41f8, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.3.1
+    group: number.3
+    speaker: 0
+    dutch: Drie
+    english: Three
+    dutchClip: {fileID: 8300000, guid: 89396cd0dedca964ab523b75f7bd14a3, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.4.1
+    group: number.4
+    speaker: 0
+    dutch: Vier
+    english: Four
+    dutchClip: {fileID: 8300000, guid: b223627a9bb31c34cbde51ac2ad3749f, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.5.1
+    group: number.5
+    speaker: 0
+    dutch: Vijf
+    english: Five
+    dutchClip: {fileID: 8300000, guid: 177c92cb52b4ec64790b6f8c14a0a11a, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.6.1
+    group: number.6
+    speaker: 0
+    dutch: Zes
+    english: Six
+    dutchClip: {fileID: 8300000, guid: 8b2369487c88bae41bb09f6c39f98387, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.7.1
+    group: number.7
+    speaker: 0
+    dutch: Zeven
+    english: Seven
+    dutchClip: {fileID: 8300000, guid: 72be53c27e76eb34ca650d7736fb4142, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.8.1
+    group: number.8
+    speaker: 0
+    dutch: Acht
+    english: Eight
+    dutchClip: {fileID: 8300000, guid: 0ca6107937396c940b3e72273349bbed, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.9.1
+    group: number.9
+    speaker: 0
+    dutch: Negen
+    english: Nine
+    dutchClip: {fileID: 8300000, guid: 49581c6edf3c4e1469a946844ca231fe, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.10.1
+    group: number.10
+    speaker: 0
+    dutch: Tien
+    english: Ten
+    dutchClip: {fileID: 8300000, guid: b8a7009840b2ca148a584c391ed446be, type: 3}
+    englishClip: {fileID: 0}
+  - key: invite.lesson.1
+    group: invite.lesson
+    speaker: 0
+    dutch: De bel gaat! Kom maar naar de klas!
+    english: There's the bell! Come to class!
+    dutchClip: {fileID: 8300000, guid: 88e904c6ab1ee8e49a4e123ae6efc0b2, type: 3}
+    englishClip: {fileID: 0}
+  - key: invite.lesson.2
+    group: invite.lesson
+    speaker: 0
+    dutch: Kom, we gaan tellen in de klas! Volg de sterretjes!
+    english: Come on, let's count in class! Follow the stars!
+    dutchClip: {fileID: 8300000, guid: 5b707c5b2e34a464aa048f0678c72daf, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.intro.1
+    group: lesson.intro
+    speaker: 0
+    dutch: Welkom in de klas! Vandaag gaan we tellen.
+    english: Welcome to class! Today we're going to count.
+    dutchClip: {fileID: 8300000, guid: 13f38bf4cd799c945af1cfeb49faed48, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.total.1
+    group: lesson.total
+    speaker: 0
+    dutch: "Het zijn er\u2026"
+    english: "There are\u2026"
+    dutchClip: {fileID: 8300000, guid: e0966ce7d803af849b5c711d1e281255, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.correct.1
+    group: lesson.correct
+    speaker: 0
+    dutch: Goed zo!
+    english: Well done!
+    dutchClip: {fileID: 8300000, guid: 4e6c2f1282b9ddb42aa961af00ea2a18, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.correct.2
+    group: lesson.correct
+    speaker: 0
+    dutch: Heel knap!
+    english: Very clever!
+    dutchClip: {fileID: 8300000, guid: 1df7800681c977542be8bb34bd3f0684, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.correct.3
+    group: lesson.correct
+    speaker: 0
+    dutch: Ja, dat klopt!
+    english: Yes, that's right!
+    dutchClip: {fileID: 8300000, guid: 40893ddbd3b51264586723aba7e3cb70, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.try_again.1
+    group: lesson.try_again
+    speaker: 0
+    dutch: Bijna! Probeer het nog eens.
+    english: Almost! Try again.
+    dutchClip: {fileID: 8300000, guid: 3537ff2d5a7d53d4b9f32aeb5eafcfaa, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.hint.1
+    group: lesson.hint
+    speaker: 0
+    dutch: Tel maar mee!
+    english: Let's count together!
+    dutchClip: {fileID: 8300000, guid: 11f793e12adb96440b2e2746f3198feb, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.find_number.1
+    group: lesson.find_number
+    speaker: 0
+    dutch: "Waar is het getal\u2026"
+    english: "Where is the number\u2026"
+    dutchClip: {fileID: 8300000, guid: 4bd08cc61ce98764ab4e6d3e0e62c32b, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.outro.1
+    group: lesson.outro
+    speaker: 0
+    dutch: Wat heb jij goed geteld! Hier zijn je sterren.
+    english: You counted so well! Here are your stars.
+    dutchClip: {fileID: 8300000, guid: c7b47b92dfc082c46848fdf5164acda6, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.powerup.1
+    group: lesson.powerup
+    speaker: 0
+    dutch: En je krijgt een gouden zwaard voor bij het kasteel!
+    english: And you get a golden sword for the castle!
+    dutchClip: {fileID: 8300000, guid: 89a05a9a1ef679b469be5ccfc3d6a012, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count.duck.1
+    group: lesson.count.duck
+    speaker: 0
+    dutch: Tel de eendjes! Tik op elk eendje.
+    english: Count the ducks! Tap each duck.
+    dutchClip: {fileID: 8300000, guid: 32c97de89d95b5f4e978ce40a84110e3, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count.duck.2
+    group: lesson.count.duck
+    speaker: 0
+    dutch: Kun jij de eendjes tellen? Tik ze maar aan!
+    english: Can you count the ducks? Tap them!
+    dutchClip: {fileID: 8300000, guid: 1a2ce046e10b6144ba14dbeb6320936e, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.howmany.duck.1
+    group: lesson.howmany.duck
+    speaker: 0
+    dutch: Hoeveel eendjes zie je?
+    english: How many ducks can you see?
+    dutchClip: {fileID: 8300000, guid: 21cdf7cf29992984f92615661ada4a2e, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.howmany.duck.2
+    group: lesson.howmany.duck
+    speaker: 0
+    dutch: Tel de eendjes. Hoeveel zijn het?
+    english: Count the ducks. How many are there?
+    dutchClip: {fileID: 8300000, guid: d05f28910f80d3546872081d3424b7c7, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.giveme.duck.1
+    group: lesson.giveme.duck
+    speaker: 0
+    dutch: 'Doe zoveel eendjes in de mand:'
+    english: 'Put this many ducks in the basket:'
+    dutchClip: {fileID: 8300000, guid: 5d49792e8781a5a4b82d8f1205631fa7, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count.ball.1
+    group: lesson.count.ball
+    speaker: 0
+    dutch: Tel de ballen! Tik op elke bal.
+    english: Count the balls! Tap each ball.
+    dutchClip: {fileID: 8300000, guid: 0c99b6b31e0406740b798bd0d0bdb46e, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count.ball.2
+    group: lesson.count.ball
+    speaker: 0
+    dutch: Kun jij de ballen tellen? Tik ze maar aan!
+    english: Can you count the balls? Tap them!
+    dutchClip: {fileID: 8300000, guid: 51a3a7bf86276bc45812faaf6e1ae477, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.howmany.ball.1
+    group: lesson.howmany.ball
+    speaker: 0
+    dutch: Hoeveel ballen zie je?
+    english: How many balls can you see?
+    dutchClip: {fileID: 8300000, guid: 09c6ae5f405c64c44b7bf0123533e825, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.howmany.ball.2
+    group: lesson.howmany.ball
+    speaker: 0
+    dutch: Tel de ballen. Hoeveel zijn het?
+    english: Count the balls. How many are there?
+    dutchClip: {fileID: 8300000, guid: 33d5678187e470d4a94b14b1ffe9294e, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.giveme.ball.1
+    group: lesson.giveme.ball
+    speaker: 0
+    dutch: 'Doe zoveel ballen in de mand:'
+    english: 'Put this many balls in the basket:'
+    dutchClip: {fileID: 8300000, guid: 4c420ef1a4b33de46b6c69c89a12b0ed, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count.bear.1
+    group: lesson.count.bear
+    speaker: 0
+    dutch: Tel de beertjes! Tik op elk beertje.
+    english: Count the teddy bears! Tap each bear.
+    dutchClip: {fileID: 8300000, guid: 35a7215f6e2ea2049acfa79836c025ab, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count.bear.2
+    group: lesson.count.bear
+    speaker: 0
+    dutch: Kun jij de beertjes tellen? Tik ze maar aan!
+    english: Can you count the teddy bears? Tap them!
+    dutchClip: {fileID: 8300000, guid: 003790044078d6047b6b59609ec26e04, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.howmany.bear.1
+    group: lesson.howmany.bear
+    speaker: 0
+    dutch: Hoeveel beertjes zie je?
+    english: How many teddy bears can you see?
+    dutchClip: {fileID: 8300000, guid: 7a40be253403e1d49924deff70e2d840, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.howmany.bear.2
+    group: lesson.howmany.bear
+    speaker: 0
+    dutch: Tel de beertjes. Hoeveel zijn het?
+    english: Count the teddy bears. How many are there?
+    dutchClip: {fileID: 8300000, guid: e5d9dad0a79903b4b8458f187f47fdd3, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.giveme.bear.1
+    group: lesson.giveme.bear
+    speaker: 0
+    dutch: 'Doe zoveel beertjes in de mand:'
+    english: 'Put this many teddy bears in the basket:'
+    dutchClip: {fileID: 8300000, guid: a6acdb746dfb76d40ad05a77b3709a5b, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count.block.1
+    group: lesson.count.block
+    speaker: 0
+    dutch: Tel de blokken! Tik op elk blok.
+    english: Count the blocks! Tap each block.
+    dutchClip: {fileID: 8300000, guid: b0d711855355581479e803fa8a3aaa2c, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count.block.2
+    group: lesson.count.block
+    speaker: 0
+    dutch: Kun jij de blokken tellen? Tik ze maar aan!
+    english: Can you count the blocks? Tap them!
+    dutchClip: {fileID: 8300000, guid: 87a26802d3aff084990f1523c8401e93, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.howmany.block.1
+    group: lesson.howmany.block
+    speaker: 0
+    dutch: Hoeveel blokken zie je?
+    english: How many blocks can you see?
+    dutchClip: {fileID: 8300000, guid: a1aea2c67f02e5e4a8b800c0990b7db3, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.howmany.block.2
+    group: lesson.howmany.block
+    speaker: 0
+    dutch: Tel de blokken. Hoeveel zijn het?
+    english: Count the blocks. How many are there?
+    dutchClip: {fileID: 8300000, guid: 3bb06ec535cb55b4b888050aa76644f8, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.giveme.block.1
+    group: lesson.giveme.block
+    speaker: 0
+    dutch: 'Doe zoveel blokken in de mand:'
+    english: 'Put this many blocks in the basket:'
+    dutchClip: {fileID: 8300000, guid: dd909dea11fd62d489752ce21fffe3f6, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count.dino.1
+    group: lesson.count.dino
+    speaker: 0
+    dutch: Tel de dino's! Tik op elke dino.
+    english: Count the dinos! Tap each dino.
+    dutchClip: {fileID: 8300000, guid: 891708be143097541a964fdf12fb8f0e, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count.dino.2
+    group: lesson.count.dino
+    speaker: 0
+    dutch: Kun jij de dino's tellen? Tik ze maar aan!
+    english: Can you count the dinos? Tap them!
+    dutchClip: {fileID: 8300000, guid: 9f6e77ba05627784fb4f6436831ddf03, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.howmany.dino.1
+    group: lesson.howmany.dino
+    speaker: 0
+    dutch: Hoeveel dino's zie je?
+    english: How many dinos can you see?
+    dutchClip: {fileID: 8300000, guid: de9ebe7971975c349a338db111eb4dfd, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.howmany.dino.2
+    group: lesson.howmany.dino
+    speaker: 0
+    dutch: Tel de dino's. Hoeveel zijn het?
+    english: Count the dinos. How many are there?
+    dutchClip: {fileID: 8300000, guid: c2f384458cc6e9946873e4882607bb40, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.giveme.dino.1
+    group: lesson.giveme.dino
+    speaker: 0
+    dutch: 'Doe zoveel dino''s in de mand:'
+    english: 'Put this many dinos in the basket:'
+    dutchClip: {fileID: 8300000, guid: e5c6eac93278535428d34b674fe2c3e5, type: 3}
+    englishClip: {fileID: 0}

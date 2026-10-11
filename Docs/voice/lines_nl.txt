@@ -1,0 +1,77 @@
+=== TEACHER: use a warm female Multi voice ===
+
+nl_general_welcome_1
+Hoi! Wat fijn dat je er bent. Kom, we gaan spelen!
+
+nl_tag_start_1
+Tikkertje! Jij bent hem. Tik de andere kinderen!
+
+nl_tag_round_finished_1
+Wat een goed spel! Even uitrusten.
+
+nl_knights_start_1
+Ridders! Bescherm het kasteel! Tik op de knop om met je zwaard te zwaaien.
+
+nl_knights_shield_hint_1
+Houd de knop ingedrukt, dan pak je je schild!
+
+nl_knights_dragon_1
+Kijk! Een draak! Hij wil alleen spelen. Pas op voor zijn confettivuur!
+
+nl_knights_victory_1
+Hoera! Jullie hebben het kasteel gered!
+
+nl_reward_jar_full_1
+De pot is vol! Je krijgt een cadeautje!
+
+nl_reward_present_tap_1
+Tik op het cadeau!
+
+nl_reward_present_open_1
+Wauw! Kijk eens wat erin zit!
+
+=== KID: use a young voice ===
+
+nl_tag_tagged_someone_1
+Oh nee, getikt!
+
+nl_tag_tagged_someone_2
+Haha, jij bent snel!
+
+nl_tag_tagged_someone_3
+Oké, nu ben ik hem!
+
+nl_tag_became_it_1
+Hihi, nu ben jij hem!
+
+nl_tag_became_it_2
+Getikt! Jij bent hem!
+
+nl_knights_wave_1
+Daar komen de kobolden!
+
+nl_knights_wave_more_1
+Nog meer kobolden!
+
+nl_knights_fire_warning_1
+Schild omhoog!
+
+nl_knights_fire_warning_2
+Pas op, vuur!
+
+=== GOBLIN: use a silly voice ===
+
+nl_knights_goblin_down_1
+Hihihi, je hebt me!
+
+nl_knights_goblin_down_2
+Oei, ik val om!
+
+nl_knights_goblin_down_3
+Haha, jij bent sterk!
+
+=== NARRATOR: use a clear, friendly voice ===
+
+nl_reward_star_1
+Een ster!
+

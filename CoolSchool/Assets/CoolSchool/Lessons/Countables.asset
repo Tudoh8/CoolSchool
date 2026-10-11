@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69161698b5be9b545bb9ca64f546c3d0, type: 3}
+  m_Name: Countables
+  m_EditorClassIdentifier: Assembly-CSharp::CoolSchool.Lessons.CountableSet
+  entries:
+  - id: duck
+    prefab: {fileID: 3650698360498758299, guid: 4f324f20ed15acc44bb7bc60a2716d07, type: 3}
+    scale: 2.626732
+    countPromptGroup: lesson.count.duck
+    howManyPromptGroup: lesson.howmany.duck
+    giveMePromptGroup: lesson.giveme.duck
+  - id: ball
+    prefab: {fileID: 3583622416182746407, guid: badb1670c226daf4c929ce679105dcc3, type: 3}
+    scale: 1.2474278
+    countPromptGroup: lesson.count.ball
+    howManyPromptGroup: lesson.howmany.ball
+    giveMePromptGroup: lesson.giveme.ball
+  - id: bear
+    prefab: {fileID: 6285028938098056976, guid: bbb1a5c01ffd5b34b84e6ee8d7e3f540, type: 3}
+    scale: 0.9311454
+    countPromptGroup: lesson.count.bear
+    howManyPromptGroup: lesson.howmany.bear
+    giveMePromptGroup: lesson.giveme.bear
+  - id: block
+    prefab: {fileID: 7727010186981223620, guid: 3ccbffc81f7cac848a98ee9b3c523f66, type: 3}
+    scale: 3.5000002
+    countPromptGroup: lesson.count.block
+    howManyPromptGroup: lesson.howmany.block
+    giveMePromptGroup: lesson.giveme.block
+  - id: dino
+    prefab: {fileID: 576831500808881760, guid: c1fb3cce51613414d9dc446f6f7d53af, type: 3}
+    scale: 0.85042334
+    countPromptGroup: lesson.count.dino
+    howManyPromptGroup: lesson.howmany.dino
+    giveMePromptGroup: lesson.giveme.dino

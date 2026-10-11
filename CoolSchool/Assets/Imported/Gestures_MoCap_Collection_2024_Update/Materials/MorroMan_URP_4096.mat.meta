@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ba024eba131f9f14eb3fff0368525336
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 122986
+  packageName: Gestures MoCap Collection
+  packageVersion: 1.2
+  assetPath: Assets/Gestures_MoCap_Collection_2024_Update/Materials/MorroMan_URP_4096.mat
+  uploadId: 658300

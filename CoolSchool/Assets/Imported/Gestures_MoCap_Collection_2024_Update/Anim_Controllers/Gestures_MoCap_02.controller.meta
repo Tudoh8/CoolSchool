@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ae6c393b9981f934abc8632220cf374c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 122986
+  packageName: Gestures MoCap Collection
+  packageVersion: 1.2
+  assetPath: Assets/Gestures_MoCap_Collection_2024_Update/Anim_Controllers/Gestures_MoCap_02.controller
+  uploadId: 658300

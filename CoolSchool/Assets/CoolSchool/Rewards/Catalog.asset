@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abee2f30b2f8d8b46b902fd4c19a31d1, type: 3}
+  m_Name: Catalog
+  m_EditorClassIdentifier: Assembly-CSharp::CoolSchool.Rewards.RewardCatalog
+  items:
+  - id: sword.plastic
+    kind: 0
+    prefab: {fileID: 2346174602533196880, guid: bca922903d80e904abd5a9e5e9b2b607, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+  - id: hat.knight_helmet
+    kind: 3
+    prefab: {fileID: 579896903341717117, guid: 4fbb600ef1480d246a0fe7c3819b6479, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+  - id: plush.dino
+    kind: 4
+    prefab: {fileID: 576831500808881760, guid: c1fb3cce51613414d9dc446f6f7d53af, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+  - id: sword.wood
+    kind: 0
+    prefab: {fileID: 3185189667651922555, guid: 6b374ed581a1a724d957249c7d3e7854, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+  - id: shield.round
+    kind: 1
+    prefab: {fileID: 3466557726058760119, guid: 018ac46aa02b90445bc455e3ce3af3af, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+  - id: plush.unicorn
+    kind: 4
+    prefab: {fileID: 342286626370472532, guid: 4cc2c406508a814468fcd83b7c77173a, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+  - id: hat.cap
+    kind: 3
+    prefab: {fileID: 3523754109741742598, guid: 09febf92b31c7d54ab3e5504c0e5b2a3, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+  - id: sword.foam_big
+    kind: 0
+    prefab: {fileID: 5293161329003066448, guid: 4d1ec1d1b0c07214e83480e49c98d0fd, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+  - id: plush.bear
+    kind: 4
+    prefab: {fileID: 6285028938098056976, guid: bbb1a5c01ffd5b34b84e6ee8d7e3f540, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+  - id: hat.pirate
+    kind: 3
+    prefab: {fileID: 6143756539287377912, guid: afce7dd8f017c9f4690b726aa021dd46, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
