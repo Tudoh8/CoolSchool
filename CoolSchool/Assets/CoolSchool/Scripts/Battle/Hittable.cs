@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CoolSchool.Audio;
 using UnityEngine;
 
 namespace CoolSchool.Battle
@@ -69,6 +70,7 @@ namespace CoolSchool.Battle
             if (IsBlocking && IsAttackerInFront(attackerPosition))
             {
                 BattleEffects.BlockSpark(AimPosition);
+                Sfx.Play("battle.shield_block", AimPosition);
                 Blocked?.Invoke(this);
                 return false;
             }
@@ -81,6 +83,8 @@ namespace CoolSchool.Battle
             if (defeated) IsDefeated = true;
 
             BattleEffects.Confetti(AimPosition);
+            Sfx.Play("battle.hit_confetti", AimPosition);
+            if (defeated) Sfx.Play("battle.tumble", AimPosition);
             Hit?.Invoke(this);
 
             if (defeated) Defeated?.Invoke(this);

@@ -1,4 +1,5 @@
 using System.Collections;
+using CoolSchool.Audio;
 using CoolSchool.Characters;
 using CoolSchool.Player;
 using UnityEngine;
@@ -248,6 +249,7 @@ namespace CoolSchool.Battle
             if (kidAnimator != null) kidAnimator.PlayTumble();
             yield return new WaitForSeconds(1.5f);
             if (kidAnimator != null) kidAnimator.PlayLaugh();
+            Sfx.Play("battle.giggle", transform.position);
             yield return new WaitForSeconds(0.8f);
 
             // Run off and hide behind the castle.

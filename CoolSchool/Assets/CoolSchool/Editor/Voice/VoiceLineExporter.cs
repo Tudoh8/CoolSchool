@@ -70,6 +70,7 @@ namespace CoolSchool.EditorTools
                 case Speaker.Teacher: return "use a warm female Multi voice";
                 case Speaker.Kid: return "use a young voice";
                 case Speaker.Goblin: return "use a silly voice";
+                case Speaker.Alien: return "use a young voice, sped up a little for a squeaky alien";
                 default: return "use a clear, friendly voice";
             }
         }

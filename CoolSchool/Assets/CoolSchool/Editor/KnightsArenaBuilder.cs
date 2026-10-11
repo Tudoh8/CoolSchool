@@ -668,7 +668,7 @@ namespace CoolSchool.EditorTools
         // ----- Materials -----------------------------------------------------------------------
 
         /// <summary>A transparent, emissive URP/Lit material for glowing floor discs.</summary>
-        static Material CreateGlowMaterial(string path, Color color, float alpha)
+        internal static Material CreateGlowMaterial(string path, Color color, float alpha)
         {
             Shader lit = Shader.Find("Universal Render Pipeline/Lit");
             if (lit == null)
@@ -690,7 +690,7 @@ namespace CoolSchool.EditorTools
         }
 
         /// <summary>An opaque, glowing URP/Lit material.</summary>
-        static Material CreateEmissiveMaterial(string path, Color color)
+        internal static Material CreateEmissiveMaterial(string path, Color color)
         {
             Shader lit = Shader.Find("Universal Render Pipeline/Lit");
             if (lit == null)

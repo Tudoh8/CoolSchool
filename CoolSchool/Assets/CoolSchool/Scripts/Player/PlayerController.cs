@@ -1,3 +1,4 @@
+using CoolSchool.Audio;
 using CoolSchool.Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -32,6 +33,15 @@ namespace CoolSchool.Player
         /// <summary>Turned off while the jump button is busy being something else, e.g. a sword button.</summary>
         public bool JumpEnabled { get; set; } = true;
 
+        /// <summary>The fastest the kid may fall, in metres per second. Lowered to float down like a parachute.</summary>
+        public float MaxFallSpeed { get; set; } = 100f;
+
+        /// <summary>True while standing on the ground.</summary>
+        public bool IsGrounded => controller != null && controller.isGrounded;
+
+        /// <summary>Up (positive) or down (negative) speed in metres per second.</summary>
+        public float VerticalVelocity => verticalVelocity;
+
         /// <summary>Raised when the kid leaves the ground, so the animator can play a jump.</summary>
         public event System.Action Jumped;
 
@@ -39,6 +49,15 @@ namespace CoolSchool.Player
         InputAction moveAction;
         InputAction jumpAction;
         float verticalVelocity;
+        Vector3 carryVelocity;
+        bool launchPending;
+        float airSeconds;
+        float nextStepTime;
+
+        // How fast a launch's sideways push fades, in metres per second per second.
+        const float CarryDecay = 5f;
+        const float LandSoundMinAirSeconds = 0.2f;
+        const float StepSeconds = 0.35f;
 
         void Awake()
         {
@@ -94,18 +113,65 @@ namespace CoolSchool.Player
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
             }
 
-            if (controller.isGrounded)
+            // A launch from a jump pad must not be wiped out by the "standing on the ground" reset below.
+            bool launched = launchPending;
+            launchPending = false;
+
+            if (controller.isGrounded && !launched)
             {
                 verticalVelocity = -2f;
+                carryVelocity = Vector3.zero;
                 if (InputEnabled && JumpEnabled && WantsToJump())
                 {
                     verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                    Sfx.Play("player.jump", transform.position);
                     Jumped?.Invoke();
                 }
             }
             verticalVelocity += gravity * Time.deltaTime;
+            verticalVelocity = Mathf.Max(verticalVelocity, -MaxFallSpeed);
+            carryVelocity = Vector3.MoveTowards(carryVelocity, Vector3.zero, CarryDecay * Time.deltaTime);
 
-            controller.Move((horizontal + Vector3.up * verticalVelocity) * Time.deltaTime);
+            controller.Move((horizontal + carryVelocity + Vector3.up * verticalVelocity) * Time.deltaTime);
+            PlayMovementSounds(horizontal.magnitude);
+        }
+
+        /// <summary>
+        /// Shoots the kid into the air, e.g. from a jump pad. The up part is the new vertical speed; the flat part is a
+        /// sideways push that fades away. Steering stays on the whole time.
+        /// </summary>
+        public void Launch(Vector3 velocity)
+        {
+            verticalVelocity = velocity.y;
+            carryVelocity = new Vector3(velocity.x, 0f, velocity.z);
+            launchPending = true;
+            Jumped?.Invoke();
+        }
+
+        /// <summary>Sets the up/down speed directly, e.g. to hang for a moment at the top of a jump.</summary>
+        public void SetVerticalVelocity(float value)
+        {
+            verticalVelocity = value;
+        }
+
+        /// <summary>A thump when landing after a real jump, and a footstep every 0.35 s while running.</summary>
+        void PlayMovementSounds(float horizontalSpeed)
+        {
+            if (!controller.isGrounded)
+            {
+                airSeconds += Time.deltaTime;
+                return;
+            }
+
+            if (airSeconds > LandSoundMinAirSeconds) Sfx.Play("player.land", transform.position);
+            airSeconds = 0f;
+
+            bool running = horizontalSpeed > walkSpeed * 1.25f;
+            if (running && Time.time >= nextStepTime)
+            {
+                nextStepTime = Time.time + StepSeconds;
+                Sfx.Play("player.step", transform.position);
+            }
         }
 
         Vector2 ReadMoveInput()

@@ -175,7 +175,7 @@ namespace CoolSchool.EditorTools
         /// The first name that has a sprite. Among sprites with that exact name, the Modular Game UI Kit's
         /// Icon-Symbols are preferred (Weapons-Tools/Sword.png over Icons/Sword.png).
         /// </summary>
-        static Sprite FindSprite(string[] names)
+        internal static Sprite FindSprite(string[] names)
         {
             foreach (string spriteName in names)
             {

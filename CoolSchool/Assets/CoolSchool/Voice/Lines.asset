@@ -524,3 +524,80 @@ MonoBehaviour:
     english: 'Put this many dinos in the basket:'
     dutchClip: {fileID: 8300000, guid: e5c6eac93278535428d34b674fe2c3e5, type: 3}
     englishClip: {fileID: 0}
+  - key: aliens.start.1
+    group: aliens.start
+    speaker: 0
+    dutch: Kijk! Er landt een raket! Er komen aliens uit! Jij bent de superheld!
+    english: Look! A rocket is landing! Aliens are coming out! You're the superhero!
+    dutchClip: {fileID: 8300000, guid: 21880483583a1bb43ba4020bced77a13, type: 3}
+    englishClip: {fileID: 0}
+  - key: aliens.zap_hint.1
+    group: aliens.zap_hint
+    speaker: 0
+    dutch: Tik op de knop, dan flits je met je straalpistool!
+    english: Tap the button to zap with your ray gun!
+    dutchClip: {fileID: 8300000, guid: d6502dc28ef5ed045bb8c9444145d067, type: 3}
+    englishClip: {fileID: 0}
+  - key: aliens.slime_warning.1
+    group: aliens.slime_warning
+    speaker: 1
+    dutch: Pas op, slijm!
+    english: Watch out, slime!
+    dutchClip: {fileID: 8300000, guid: e0154be0a7189284dacaa32c99202aba, type: 3}
+    englishClip: {fileID: 0}
+  - key: aliens.zapped.1
+    group: aliens.zapped
+    speaker: 4
+    dutch: Wiehoe! Ik wil dansen!
+    english: Wheee! I want to dance!
+    dutchClip: {fileID: 8300000, guid: 8cf43a594ae40784b8593b1268a40e56, type: 3}
+    englishClip: {fileID: 0}
+  - key: aliens.zapped.2
+    group: aliens.zapped
+    speaker: 4
+    dutch: Hihi, jij bent mijn vriend!
+    english: Hehe, you're my friend!
+    dutchClip: {fileID: 8300000, guid: ff66a0dfc3ce9914f9d3f2f412e98f36, type: 3}
+    englishClip: {fileID: 0}
+  - key: aliens.zapped.3
+    group: aliens.zapped
+    speaker: 4
+    dutch: Bliep bloep, wat leuk!
+    english: Bleep bloop, what fun!
+    dutchClip: {fileID: 8300000, guid: b220e956584423f4c8985c6f93a7563e, type: 3}
+    englishClip: {fileID: 0}
+  - key: aliens.rescue.1
+    group: aliens.rescue
+    speaker: 0
+    dutch: Help! De baby-alien zit vast in de boom! Spring op de trampoline!
+    english: Help! The baby alien is stuck in the tree! Jump on the trampoline!
+    dutchClip: {fileID: 8300000, guid: 277c62fce10020f4782bcd268a7f6229, type: 3}
+    englishClip: {fileID: 0}
+  - key: aliens.rescued.1
+    group: aliens.rescued
+    speaker: 0
+    dutch: Je hebt hem gered! Wat een held!
+    english: You saved him! What a hero!
+    dutchClip: {fileID: 8300000, guid: 3ecba28fce48ca947ba5c15a2a66c9a7, type: 3}
+    englishClip: {fileID: 0}
+  - key: aliens.count.1
+    group: aliens.count
+    speaker: 0
+    dutch: Hoeveel aliens dansen er?
+    english: How many aliens are dancing?
+    dutchClip: {fileID: 8300000, guid: 129417eb973921b4bad6d4999545f979, type: 3}
+    englishClip: {fileID: 0}
+  - key: aliens.victory.1
+    group: aliens.victory
+    speaker: 0
+    dutch: Hoera! Alle aliens zijn onze vrienden! Feest!
+    english: Hooray! All the aliens are our friends! Party!
+    dutchClip: {fileID: 8300000, guid: 5f945234e89890b4bbc59a65cfed4ddc, type: 3}
+    englishClip: {fileID: 0}
+  - key: invite.aliens.1
+    group: invite.aliens
+    speaker: 0
+    dutch: Kom snel! Er zijn aliens geland!
+    english: Come quickly! Aliens have landed!
+    dutchClip: {fileID: 8300000, guid: 3b8783f7ecc293b4fbe00660c260c9fd, type: 3}
+    englishClip: {fileID: 0}

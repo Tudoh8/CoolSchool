@@ -1,4 +1,5 @@
 using System;
+using CoolSchool.Audio;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -58,6 +59,7 @@ namespace CoolSchool.Input
             IsHeld = true;
             pressedFrame = Time.frameCount;
             transform.localScale = baseScale * pressedScale;
+            Sfx.Play("ui.button");
             Pressed?.Invoke();
         }
 

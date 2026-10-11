@@ -10,6 +10,7 @@ namespace CoolSchool.Voice
         Kid,
         Goblin,
         Narrator,
+        Alien,
     }
 
     /// <summary>One spoken sentence, in every language, with its recorded clips once they exist.</summary>

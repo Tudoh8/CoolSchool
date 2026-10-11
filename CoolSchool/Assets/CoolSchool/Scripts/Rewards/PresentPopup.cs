@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using CoolSchool.Audio;
 using CoolSchool.Battle;
 using CoolSchool.Player;
 using UnityEngine;
@@ -66,6 +67,7 @@ namespace CoolSchool.Rewards
             state = State.Appearing;
             player = FindAnyObjectByType<PlayerController>();
             gameObject.SetActive(true);
+            Sfx.Play("ui.popup_open");
             StartCoroutine(Flow());
         }
 
@@ -107,6 +109,7 @@ namespace CoolSchool.Rewards
             yield return new WaitForSecondsRealtime(TapLockSeconds);
             yield return WaitForTap(false);
 
+            Sfx.Play("ui.popup_close");
             yield return FadeDim(dimAlpha, 0f, FadeSeconds);
             gameObject.SetActive(false);
         }
@@ -131,6 +134,7 @@ namespace CoolSchool.Rewards
         IEnumerator Shake()
         {
             state = State.Shaking;
+            Sfx.Play("reward.present_shake");
             for (float elapsed = 0f; elapsed < shakeSeconds; elapsed += Time.unscaledDeltaTime)
             {
                 float k = elapsed / shakeSeconds;
@@ -145,6 +149,7 @@ namespace CoolSchool.Rewards
         {
             state = State.Opening;
             RewardVoice.Say("reward.present_open");
+            Sfx.Play("reward.present_open");
             ProgressStore.OpenPresent(item);
             SpawnConfetti();
 
@@ -155,6 +160,7 @@ namespace CoolSchool.Rewards
             if (hasReveal && revealImage != null)
             {
                 revealImage.gameObject.SetActive(true);
+                Sfx.Play("reward.item_reveal");
                 yield return Pop(revealImage.rectTransform, RevealPopSeconds);
             }
             else

@@ -1,3 +1,4 @@
+using CoolSchool.Audio;
 using CoolSchool.Battle;
 using CoolSchool.Player;
 using CoolSchool.Voice;
@@ -76,6 +77,7 @@ namespace CoolSchool.Activities
                 if (zones[index] == null) continue;
 
                 lastInvited = index;
+                Sfx.Play("zone.invite_chime");
                 if (inviteGroups != null && index < inviteGroups.Length && !string.IsNullOrEmpty(inviteGroups[index]))
                     VoicePlayer.Say(inviteGroups[index]);
 

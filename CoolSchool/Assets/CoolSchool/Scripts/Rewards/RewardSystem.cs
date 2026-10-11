@@ -1,4 +1,6 @@
 using System.Collections;
+using CoolSchool.Aliens;
+using CoolSchool.Audio;
 using CoolSchool.Battle;
 using CoolSchool.Player;
 using CoolSchool.Tag;
@@ -21,8 +23,10 @@ namespace CoolSchool.Rewards
         [Header("Games that give stars")]
         [SerializeField] TagGame tagGame;
         [SerializeField] KnightsGame knightsGame;
+        [SerializeField] AlienLanding alienLanding;
         [SerializeField] int starsForTagRound = 3;
         [SerializeField] int starsForKnightsVictory = 5;
+        [SerializeField] int starsForAlienVictory = 5;
         [Tooltip("Seconds to wait after a game's own victory moment before the stars appear.")]
         [SerializeField] float rewardDelaySeconds = 1.5f;
 
@@ -51,6 +55,7 @@ namespace CoolSchool.Rewards
 
             if (tagGame != null) tagGame.onRoundFinished.AddListener(OnTagRoundFinished);
             if (knightsGame != null) knightsGame.onVictory.AddListener(OnKnightsVictory);
+            if (alienLanding != null) alienLanding.onVictory.AddListener(OnAlienVictory);
             RefreshHud();
         }
 
@@ -61,6 +66,7 @@ namespace CoolSchool.Rewards
 
             if (tagGame != null) tagGame.onRoundFinished.RemoveListener(OnTagRoundFinished);
             if (knightsGame != null) knightsGame.onVictory.RemoveListener(OnKnightsVictory);
+            if (alienLanding != null) alienLanding.onVictory.RemoveListener(OnAlienVictory);
         }
 
         void Start()
@@ -77,6 +83,11 @@ namespace CoolSchool.Rewards
         void OnKnightsVictory()
         {
             StartCoroutine(GiveAfterDelay(starsForKnightsVictory));
+        }
+
+        void OnAlienVictory()
+        {
+            StartCoroutine(GiveAfterDelay(starsForAlienVictory));
         }
 
         /// <summary>The reward comes after the game's own cheering, and flies from wherever the player is by then.</summary>
@@ -135,6 +146,7 @@ namespace CoolSchool.Rewards
                 yield return new WaitForSeconds(JarFullPauseSeconds);
 
                 RewardVoice.Say("reward.jar_full");
+                Sfx.Play("reward.jar_full");
                 yield return WaitForVoice();
 
                 ProgressStore.EmptyJar(jarCapacity);

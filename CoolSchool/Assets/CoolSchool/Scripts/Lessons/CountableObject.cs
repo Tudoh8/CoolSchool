@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using CoolSchool.Audio;
 using CoolSchool.Battle;
 using UnityEngine;
 using UnityEngine.UI;
@@ -159,6 +160,7 @@ namespace CoolSchool.Lessons
         IEnumerator AppearRoutine(float delay)
         {
             if (delay > 0f) yield return new WaitForSeconds(delay);
+            Sfx.Play("lesson.toy_pop", transform.position);
 
             for (float elapsed = 0f; elapsed < AppearSeconds; elapsed += Time.deltaTime)
             {

@@ -20,6 +20,9 @@ namespace CoolSchool.Battle
 
         public static void Confetti(Vector3 position) => Spawn(instance != null ? instance.confettiPrefab : null, position);
 
+        /// <summary>The same confetti pop, all in one colour (the aliens' green slime splat and friendship confetti).</summary>
+        public static void Confetti(Vector3 position, Color tint) => Spawn(instance != null ? instance.confettiPrefab : null, position, tint);
+
         public static void BlockSpark(Vector3 position) => Spawn(instance != null ? instance.blockSparkPrefab : null, position);
 
         public static void Sparkle(Vector3 position) => Spawn(instance != null ? instance.sparklePrefab : null, position);
@@ -36,15 +39,22 @@ namespace CoolSchool.Battle
             if (instance == this) instance = null;
         }
 
-        static void Spawn(ParticleSystem prefab, Vector3 position)
+        static void Spawn(ParticleSystem prefab, Vector3 position, Color? tint = null)
         {
             if (prefab == null) return;
 
             ParticleSystem effect = Instantiate(prefab, position, Quaternion.identity);
             effect.gameObject.SetActive(true);
-            effect.Play();
 
             ParticleSystem.MainModule main = effect.main;
+            if (tint.HasValue)
+            {
+                // Two close shades of the colour, so it still looks like a handful of confetti.
+                Color color = tint.Value;
+                main.startColor = new ParticleSystem.MinMaxGradient(Color.Lerp(color, Color.white, 0.25f), Color.Lerp(color, Color.black, 0.2f));
+            }
+            effect.Play();
+
             float lifetime = main.duration + main.startLifetime.constantMax;
             Destroy(effect.gameObject, Mathf.Clamp(lifetime, 1f, MaxLifetime));
         }

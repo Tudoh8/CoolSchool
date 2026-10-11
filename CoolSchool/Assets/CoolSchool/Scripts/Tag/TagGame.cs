@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using CoolSchool.Activities;
+using CoolSchool.Audio;
 using CoolSchool.Characters;
 using CoolSchool.Player;
 using UnityEngine;
@@ -154,6 +155,7 @@ namespace CoolSchool.Tag
         void PassOn(TagParticipant tagger, TagParticipant tagged)
         {
             tagger.StopBeingIt(tagBackImmunity);
+            Sfx.Play("tag.tagged", tagged.transform.position);
             tagged.BecomeIt(tagged.IsPlayer ? playerFreezeSeconds : kidCountSeconds);
             It = tagged;
 

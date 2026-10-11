@@ -15,6 +15,11 @@ namespace CoolSchool.Characters
     {
         const string UpperBodyLayerName = "UpperBody";
 
+        const int DanceVariantCount = 3;
+        // How long the upper body layer stays on after a ray gun shot or a slime throw (their clips are about 0.8 s long).
+        const float ShootLayerSeconds = 0.85f;
+        const float ThrowLayerSeconds = 0.85f;
+
         static readonly int SpeedId = Animator.StringToHash("Speed");
         static readonly int JumpId = Animator.StringToHash("Jump");
         static readonly int CheerId = Animator.StringToHash("Cheer");
@@ -25,6 +30,11 @@ namespace CoolSchool.Characters
         static readonly int BlockingId = Animator.StringToHash("Blocking");
         static readonly int AttackVariantId = Animator.StringToHash("AttackVariant");
         static readonly int BlockHitId = Animator.StringToHash("BlockHit");
+        static readonly int ShootId = Animator.StringToHash("Shoot");
+        static readonly int ThrowId = Animator.StringToHash("Throw");
+        static readonly int DanceId = Animator.StringToHash("Dance");
+        static readonly int DancingId = Animator.StringToHash("Dancing");
+        static readonly int DanceVariantId = Animator.StringToHash("DanceVariant");
 
         [SerializeField] Animator animator;
         [SerializeField] float speedDamping = 0.1f;
@@ -98,6 +108,41 @@ namespace CoolSchool.Characters
         public void PlayTumble() => SetTrigger(TumbleId);
 
         public void PlayLaugh() => SetTrigger(LaughId);
+
+        /// <summary>Fire the ray gun: the pistol arm move on the upper body layer.</summary>
+        public void PlayShoot()
+        {
+            attackLayerUntil = Time.time + ShootLayerSeconds;
+            SetTrigger(ShootId);
+        }
+
+        /// <summary>Lob something with the right arm (the aliens' slime) on the upper body layer.</summary>
+        public void PlayThrow()
+        {
+            attackLayerUntil = Time.time + ThrowLayerSeconds;
+            SetTrigger(ThrowId);
+        }
+
+        /// <summary>
+        /// Start (true) or stop (false) a dance. The dance loops until it is stopped.
+        /// Variant 0, 1, 2 picks the chicken dance, the dance or the robot dance; below 0 picks one at random.
+        /// </summary>
+        public void SetDancing(bool dancing, int variant = -1)
+        {
+            if (dancing)
+            {
+                if (HasParameter(DanceVariantId))
+                    animator.SetInteger(DanceVariantId, variant >= 0 ? variant % DanceVariantCount : Random.Range(0, DanceVariantCount));
+                if (HasParameter(DancingId)) animator.SetBool(DancingId, true);
+                SetTrigger(DanceId);
+            }
+            else
+            {
+                if (HasParameter(DancingId)) animator.SetBool(DancingId, false);
+                // A trigger nobody used yet would start the dance again.
+                if (HasParameter(DanceId)) animator.ResetTrigger(DanceId);
+            }
+        }
 
         void SetTrigger(int id)
         {

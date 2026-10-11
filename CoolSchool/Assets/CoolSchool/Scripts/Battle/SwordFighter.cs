@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using CoolSchool.Audio;
 using CoolSchool.Characters;
 using UnityEngine;
 
@@ -87,6 +88,7 @@ namespace CoolSchool.Battle
             TurnToward(target, 360f);
             DealHits();
             BattleEffects.Swoosh(transform.position + transform.forward * 0.8f + Vector3.up * 0.9f);
+            Sfx.Play("battle.sword_swing", transform.position);
         }
 
         Hittable FindTarget()

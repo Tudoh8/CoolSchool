@@ -46,6 +46,19 @@ namespace CoolSchool.EditorTools
             "Mace-Attack-R1", "Mace-Attack-R2", "Mace-Attack-R3",
         };
 
+        /// <summary>The ray gun shot of the superhero, and the arm swing the aliens throw their slime with (both RPG pack).</summary>
+        public const string ShootClip = "Pistol-Attack-R1";
+        public const string ThrowClip = "Unarmed-Attack-R1";
+
+        /// <summary>
+        /// The dances, picked by DanceVariant 0, 1, 2: file names in the Gestures MoCap Collection.
+        /// That pack also has rude gestures. These three are the only taunts the game may ever use.
+        /// </summary>
+        public static readonly string[] DanceClips =
+        {
+            "Chicken_Dance_Taunt", "Dance_Taunt", "Robo_Taunt",
+        };
+
         public const string UpperMaskName = "Human Body Upper Mask";
         public const string UpperBodyLayerName = "UpperBody";
 
@@ -90,8 +103,20 @@ namespace CoolSchool.EditorTools
             if (block == null) missingClips.Add(ShieldBlockClip);
             if (blockHit == null) missingClips.Add(ShieldBlockHitClip);
 
+            AnimationClip shoot = FindCombatClip(ShootClip);
+            AnimationClip throwArm = FindCombatClip(ThrowClip);
+            if (shoot == null) missingClips.Add(ShootClip);
+            if (throwArm == null) missingClips.Add(ThrowClip);
+
+            var dances = new AnimationClip[DanceClips.Length];
+            for (int i = 0; i < dances.Length; i++)
+            {
+                dances[i] = FindGestureClip(DanceClips[i]);
+                if (dances[i] == null) missingClips.Add(DanceClips[i]);
+            }
+
             AvatarMask upperMask = FindAvatarMask(UpperMaskName);
-            bool wantUpperBody = attacks.Any(a => a != null) || block != null;
+            bool wantUpperBody = attacks.Any(a => a != null) || block != null || shoot != null || throwArm != null;
             if (wantUpperBody && upperMask == null) missingClips.Add(UpperMaskName);
 
             AssetDatabase.DeleteAsset(path);
@@ -106,6 +131,11 @@ namespace CoolSchool.EditorTools
             controller.AddParameter("Blocking", AnimatorControllerParameterType.Bool);
             controller.AddParameter("AttackVariant", AnimatorControllerParameterType.Int);
             controller.AddParameter("BlockHit", AnimatorControllerParameterType.Trigger);
+            controller.AddParameter("Shoot", AnimatorControllerParameterType.Trigger);
+            controller.AddParameter("Throw", AnimatorControllerParameterType.Trigger);
+            controller.AddParameter("Dance", AnimatorControllerParameterType.Trigger);
+            controller.AddParameter("Dancing", AnimatorControllerParameterType.Bool);
+            controller.AddParameter("DanceVariant", AnimatorControllerParameterType.Int);
 
             AnimatorStateMachine machine = controller.layers[0].stateMachine;
 
@@ -125,9 +155,10 @@ namespace CoolSchool.EditorTools
             if (hit != null) AddOneShot(machine, locomotion, "Hit", hit, exitTime: 0.85f);
             if (laugh != null) AddOneShot(machine, locomotion, "Laugh", laugh, exitTime: 0.9f);
             AddTumble(machine, locomotion, fall, ground, standUp);
+            AddDances(machine, locomotion, dances);
 
             if (wantUpperBody && upperMask != null)
-                AddUpperBodyLayer(controller, upperMask, attacks, block, blockHit);
+                AddUpperBodyLayer(controller, upperMask, attacks, block, blockHit, shoot, throwArm);
 
             AssetDatabase.SaveAssets();
             return controller;
@@ -194,7 +225,7 @@ namespace CoolSchool.EditorTools
         /// Block: Blocking true raises the shield; the BlockHit trigger plays a bump and returns to the guard.
         /// </summary>
         static void AddUpperBodyLayer(AnimatorController controller, AvatarMask mask, AnimationClip[] attacks,
-            AnimationClip block, AnimationClip blockHit)
+            AnimationClip block, AnimationClip blockHit, AnimationClip shoot, AnimationClip throwArm)
         {
             controller.AddLayer(UpperBodyLayerName);
 
@@ -231,6 +262,9 @@ namespace CoolSchool.EditorTools
                 back.exitTime = 0.85f;
                 back.duration = 0.1f;
             }
+
+            AddArmOneShot(machine, empty, "Shoot", shoot);
+            AddArmOneShot(machine, empty, "Throw", throwArm);
 
             if (block == null) return;
 
@@ -269,6 +303,87 @@ namespace CoolSchool.EditorTools
             recover.hasExitTime = true;
             recover.exitTime = 0.9f;
             recover.duration = 0.1f;
+        }
+
+        /// <summary>An upper-body one-shot (the ray gun shot, the slime throw): the trigger plays the clip, then it goes back to Empty.</summary>
+        static void AddArmOneShot(AnimatorStateMachine machine, AnimatorState empty, string trigger, AnimationClip clip)
+        {
+            if (clip == null) return;
+
+            AnimatorState state = machine.AddState(trigger);
+            state.motion = clip;
+            state.writeDefaultValues = false;
+
+            AnimatorStateTransition enter = empty.AddTransition(state);
+            enter.AddCondition(AnimatorConditionMode.If, 0f, trigger);
+            enter.hasExitTime = false;
+            enter.duration = 0.05f;
+
+            AnimatorStateTransition back = state.AddTransition(empty);
+            back.hasExitTime = true;
+            back.exitTime = 0.85f;
+            back.duration = 0.1f;
+        }
+
+        /// <summary>
+        /// Dance states in the base layer. The Dance trigger plus DanceVariant 0, 1, 2 starts one from anywhere;
+        /// it plays on (looping) until the Dancing bool is cleared, then blends back to locomotion.
+        /// </summary>
+        static void AddDances(AnimatorStateMachine machine, AnimatorState returnTo, AnimationClip[] dances)
+        {
+            for (int i = 0; i < dances.Length; i++)
+            {
+                if (dances[i] == null) continue;
+
+                AnimatorState dance = machine.AddState("Dance" + (i + 1));
+                dance.motion = dances[i];
+
+                AnimatorStateTransition enter = machine.AddAnyStateTransition(dance);
+                enter.AddCondition(AnimatorConditionMode.If, 0f, "Dance");
+                enter.AddCondition(AnimatorConditionMode.Equals, i, "DanceVariant");
+                enter.canTransitionToSelf = false;
+                enter.hasExitTime = false;
+                enter.duration = 0.15f;
+
+                AnimatorStateTransition stop = dance.AddTransition(returnTo);
+                stop.AddCondition(AnimatorConditionMode.IfNot, 0f, "Dancing");
+                stop.hasExitTime = false;
+                stop.duration = 0.2f;
+
+                // The mocap clips are set to loop. If one is not, restart it from its own end so the dance never freezes.
+                if (!dances[i].isLooping)
+                {
+                    AnimatorStateTransition again = dance.AddTransition(dance);
+                    again.hasExitTime = true;
+                    again.exitTime = 1f;
+                    again.duration = 0.1f;
+                }
+            }
+        }
+
+        /// <summary>
+        /// A clip from the Gestures MoCap Collection: the first clip of the FBX with this file name.
+        /// Only the dance clips named in DanceClips may be asked for; the pack has rude gestures that must never be used.
+        /// </summary>
+        static AnimationClip FindGestureClip(string fileName)
+        {
+            if (Array.IndexOf(DanceClips, fileName) < 0)
+            {
+                Debug.LogError($"CoolSchool: '{fileName}' is not an approved gesture clip and was not loaded.");
+                return null;
+            }
+
+            foreach (string guid in AssetDatabase.FindAssets(fileName + " t:Model"))
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                if (IsRootMotionOrNotFbx(path) || Path.GetFileNameWithoutExtension(path) != fileName) continue;
+
+                foreach (UnityEngine.Object asset in AssetDatabase.LoadAllAssetsAtPath(path))
+                {
+                    if (asset is AnimationClip clip && !clip.name.StartsWith("__preview__")) return clip;
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -359,7 +474,8 @@ namespace CoolSchool.EditorTools
         /// <summary>True for clip names that belong to the RPG Character Mecanim Animation Pack.</summary>
         public static bool IsCombatPackClip(string clipName)
         {
-            return clipName.StartsWith("Armed-Shield-") || clipName.StartsWith("Mace-");
+            return clipName.StartsWith("Armed-Shield-") || clipName.StartsWith("Mace-")
+                || clipName == ShootClip || clipName == ThrowClip;
         }
 
         static AvatarMask FindAvatarMask(string maskName)

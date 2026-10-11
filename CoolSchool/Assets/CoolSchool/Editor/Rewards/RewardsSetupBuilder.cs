@@ -1,3 +1,4 @@
+using CoolSchool.Aliens;
 using CoolSchool.Battle;
 using CoolSchool.Rewards;
 using CoolSchool.Tag;
@@ -222,6 +223,7 @@ namespace CoolSchool.EditorTools
             PlaygroundPrototypeBuilder.SetObject(system, "popup", popup);
             PlaygroundPrototypeBuilder.SetObject(system, "tagGame", Object.FindFirstObjectByType<TagGame>());
             PlaygroundPrototypeBuilder.SetObject(system, "knightsGame", Object.FindFirstObjectByType<KnightsGame>());
+            PlaygroundPrototypeBuilder.SetObject(system, "alienLanding", Object.FindFirstObjectByType<AlienLanding>());
         }
 
         // ----- Helpers -------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using CoolSchool.Audio;
 using CoolSchool.Battle;
 using UnityEngine;
 
@@ -366,7 +367,9 @@ namespace CoolSchool.Lessons
 
             toy.FlyTo(BasketSlot(count - 1, toy), ToyFlightSeconds, ToyFlightArc, BasketToyScale, () =>
             {
-                if (toy != null && basketToys.Contains(toy)) toy.Pop(basketToys.IndexOf(toy) + 1);
+                if (toy == null) return;
+                Sfx.Play("lesson.toy_into_basket", toy.transform.position);
+                if (basketToys.Contains(toy)) toy.Pop(basketToys.IndexOf(toy) + 1);
             });
         }
 

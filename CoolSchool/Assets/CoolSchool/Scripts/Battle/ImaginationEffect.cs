@@ -1,4 +1,5 @@
 using System.Collections;
+using CoolSchool.Audio;
 using CoolSchool.Player;
 using UnityEngine;
 
@@ -73,6 +74,7 @@ namespace CoolSchool.Battle
             if (player == null) player = FindAnyObjectByType<PlayerController>();
             if (player == null) return;
 
+            Sfx.Play("imagination.sparkle", player.transform.position);
             for (int i = 0; i < SparkleCount; i++)
             {
                 Vector2 ring = Random.insideUnitCircle * 1.5f;

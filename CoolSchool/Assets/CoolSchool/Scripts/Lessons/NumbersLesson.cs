@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using CoolSchool.Activities;
+using CoolSchool.Audio;
 using CoolSchool.Battle;
 using CoolSchool.Player;
 using CoolSchool.Rewards;
@@ -94,6 +95,8 @@ namespace CoolSchool.Lessons
             lastNumber = 0;
 
             MovePlayerToSeat();
+            Sfx.Play("lesson.bell");
+            Sfx.PlayMusic("music.classroom");
             if (UI != null) UI.SetGameplayHudVisible(false);
             lessonRoutine = StartCoroutine(LessonRoutine());
         }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using CoolSchool.Audio;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -58,6 +59,7 @@ namespace CoolSchool.Lessons
             Clear();
             EnsureBoard();
 
+            Sfx.Play("lesson.chalk", transform.position);
             Text text = CreateText("Digit", board, number.ToString(), Mathf.RoundToInt(BoardUnits.y * 0.85f));
             StartAnimation(PopIn(text.rectTransform));
         }
@@ -68,6 +70,7 @@ namespace CoolSchool.Lessons
             Clear();
             if (count <= 0) return;
             EnsureBoard();
+            Sfx.Play("lesson.chalk", transform.position);
 
             // Up to six is one dice face. More is split in two, e.g. 7 as 4 and 3.
             int groups = count > 6 ? 2 : 1;

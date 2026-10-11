@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using CoolSchool.Activities;
+using CoolSchool.Audio;
 using CoolSchool.Characters;
 using CoolSchool.Input;
 using CoolSchool.Lessons;
@@ -76,6 +77,7 @@ namespace CoolSchool.Battle
             if (PowerUps.TryConsume(PowerUps.GoldenSword)) SetGoldenSword(true);
             SetWeapons(true);
             if (imagination != null) imagination.Play(true);
+            Sfx.PlayMusic("music.knights");
 
             SetAlliesFighting(true);
             ResetHittables();
@@ -145,6 +147,7 @@ namespace CoolSchool.Battle
         IEnumerator RunWave(int waveIndex, int count)
         {
             onWaveStarted?.Invoke(waveIndex + 1);
+            Sfx.Play("battle.wave_horn");
 
             var wave = new List<BattleOpponentAI>();
             for (int i = 0; i < count; i++)

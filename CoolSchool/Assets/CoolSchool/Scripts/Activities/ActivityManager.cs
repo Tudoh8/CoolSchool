@@ -1,3 +1,4 @@
+using CoolSchool.Audio;
 using UnityEngine;
 
 namespace CoolSchool.Activities
@@ -49,6 +50,7 @@ namespace CoolSchool.Activities
             Current = activity;
             activity.Ended += HandleEnded;
             activity.Begin();
+            if (activity == defaultActivity) Sfx.PlayMusic("music.playground");
         }
 
         void HandleEnded(Activity activity)

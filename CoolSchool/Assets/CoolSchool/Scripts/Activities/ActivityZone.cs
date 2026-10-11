@@ -1,3 +1,4 @@
+using CoolSchool.Audio;
 using CoolSchool.Player;
 using UnityEngine;
 
@@ -55,6 +56,7 @@ namespace CoolSchool.Activities
             if (armed && idle)
             {
                 armed = false;
+                Sfx.Play("zone.enter", transform.position);
                 manager.StartActivity(activity);
             }
         }

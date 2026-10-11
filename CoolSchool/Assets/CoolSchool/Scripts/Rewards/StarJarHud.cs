@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using CoolSchool.Audio;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -60,6 +61,7 @@ namespace CoolSchool.Rewards
 
             canvas = canvas.rootCanvas;
             RectTransform star = CreateFlyingStar(canvas);
+            Sfx.Play("reward.star_fly");
             Vector2 start = screenPoint + UnityEngine.Random.insideUnitCircle * StartJitter * canvas.scaleFactor;
             StartCoroutine(FlyRoutine(star, canvas.scaleFactor, start, landed));
         }
@@ -99,6 +101,7 @@ namespace CoolSchool.Rewards
             }
 
             if (star != null) Destroy(star.gameObject);
+            Sfx.Play("reward.star_land");
             Bounce();
             landed?.Invoke();
         }

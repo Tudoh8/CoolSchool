@@ -22,6 +22,7 @@ namespace CoolSchool.Voice
         [SerializeField, Range(0.5f, 2f)] float narratorPitch = 1f;
         [SerializeField, Range(0.5f, 2f)] float kidPitch = 1.22f;
         [SerializeField, Range(0.5f, 2f)] float goblinPitch = 1.35f;
+        [SerializeField, Range(0.5f, 2f)] float alienPitch = 1.5f;
 
         const int MaxWaiting = 2;
         const float RepeatBlockSeconds = 1.5f;
@@ -112,11 +113,11 @@ namespace CoolSchool.Voice
             return lastSaidTime.TryGetValue(line.group, out float last) && Time.unscaledTime - last < RepeatBlockSeconds;
         }
 
-        /// <summary>While the teacher is talking, kids and goblins keep quiet.</summary>
+        /// <summary>While the teacher is talking, kids, goblins and aliens keep quiet.</summary>
         bool IsDrownedOut(VoiceLine line, bool interrupt)
         {
             if (interrupt || current == null || current.speaker != Speaker.Teacher) return false;
-            return line.speaker == Speaker.Kid || line.speaker == Speaker.Goblin;
+            return line.speaker == Speaker.Kid || line.speaker == Speaker.Goblin || line.speaker == Speaker.Alien;
         }
 
         void Play(VoiceLine line)
@@ -152,6 +153,7 @@ namespace CoolSchool.Voice
             {
                 case Speaker.Kid: return kidPitch;
                 case Speaker.Goblin: return goblinPitch;
+                case Speaker.Alien: return alienPitch;
                 case Speaker.Narrator: return narratorPitch;
                 default: return teacherPitch;
             }

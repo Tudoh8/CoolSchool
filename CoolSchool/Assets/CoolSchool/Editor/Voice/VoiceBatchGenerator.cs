@@ -406,6 +406,7 @@ namespace CoolSchool.EditorTools
             {
                 case Speaker.Kid: configured = settings.kidVoice; break;
                 case Speaker.Goblin: configured = settings.goblinVoice; break;
+                case Speaker.Alien: configured = settings.alienVoice; break;
                 case Speaker.Narrator: configured = settings.narratorVoice; break;
                 default: configured = settings.teacherVoice; break;
             }

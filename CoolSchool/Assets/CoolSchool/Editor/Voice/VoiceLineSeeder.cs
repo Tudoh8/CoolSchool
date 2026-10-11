@@ -61,6 +61,19 @@ namespace CoolSchool.EditorTools
             new Seed("invite.knights.1", Speaker.Teacher, "Kom, we gaan ridders spelen bij het kasteel! Volg de sterretjes!", "Come on, let's play knights at the castle! Follow the stars!"),
             new Seed("invite.knights.2", Speaker.Teacher, "Zie je dat zwaard daar? Daar is het kasteel!", "See that sword over there? That's the castle!"),
 
+            // The alien landing (superhero ray gun game).
+            new Seed("aliens.start.1", Speaker.Teacher, "Kijk! Er landt een raket! Er komen aliens uit! Jij bent de superheld!", "Look! A rocket is landing! Aliens are coming out! You're the superhero!"),
+            new Seed("aliens.zap_hint.1", Speaker.Teacher, "Tik op de knop, dan flits je met je straalpistool!", "Tap the button to zap with your ray gun!"),
+            new Seed("aliens.slime_warning.1", Speaker.Kid, "Pas op, slijm!", "Watch out, slime!"),
+            new Seed("aliens.zapped.1", Speaker.Alien, "Wiehoe! Ik wil dansen!", "Wheee! I want to dance!"),
+            new Seed("aliens.zapped.2", Speaker.Alien, "Hihi, jij bent mijn vriend!", "Hehe, you're my friend!"),
+            new Seed("aliens.zapped.3", Speaker.Alien, "Bliep bloep, wat leuk!", "Bleep bloop, what fun!"),
+            new Seed("aliens.rescue.1", Speaker.Teacher, "Help! De baby-alien zit vast in de boom! Spring op de trampoline!", "Help! The baby alien is stuck in the tree! Jump on the trampoline!"),
+            new Seed("aliens.rescued.1", Speaker.Teacher, "Je hebt hem gered! Wat een held!", "You saved him! What a hero!"),
+            new Seed("aliens.count.1", Speaker.Teacher, "Hoeveel aliens dansen er?", "How many aliens are dancing?"),
+            new Seed("aliens.victory.1", Speaker.Teacher, "Hoera! Alle aliens zijn onze vrienden! Feest!", "Hooray! All the aliens are our friends! Party!"),
+            new Seed("invite.aliens.1", Speaker.Teacher, "Kom snel! Er zijn aliens geland!", "Come quickly! Aliens have landed!"),
+
             new Seed("reward.star.1", Speaker.Narrator, "Een ster!", "A star!"),
             new Seed("reward.jar_full.1", Speaker.Teacher, "De pot is vol! Je krijgt een cadeautje!", "The jar is full! You get a present!"),
             new Seed("reward.present_tap.1", Speaker.Teacher, "Tik op het cadeau!", "Tap the present!"),

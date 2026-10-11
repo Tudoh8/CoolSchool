@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using CoolSchool.Audio;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -100,6 +101,7 @@ namespace CoolSchool.Lessons
             Card card = Find(number);
             if (card == null || !isActiveAndEnabled) return;
 
+            Sfx.Play("ui.card_wrong");
             if (card.TurnRoutine != null) StopCoroutine(card.TurnRoutine);
             card.TurnRoutine = StartCoroutine(WiggleRoutine(card));
         }
@@ -110,6 +112,7 @@ namespace CoolSchool.Lessons
             Card card = Find(number);
             if (card == null || !isActiveAndEnabled) return;
 
+            Sfx.Play("ui.card_right");
             foreach (Card other in cards)
             {
                 if (other == null || !other.Rect.gameObject.activeSelf) continue;

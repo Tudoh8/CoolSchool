@@ -1,3 +1,4 @@
+using CoolSchool.Audio;
 using CoolSchool.Characters;
 using CoolSchool.Input;
 using CoolSchool.Player;
@@ -109,6 +110,7 @@ namespace CoolSchool.Battle
         void OnHit(Hittable who)
         {
             if (kidAnimator != null) kidAnimator.PlayHit();
+            Sfx.Play("player.bump", transform.position);
         }
 
         void OnBlocked(Hittable who)

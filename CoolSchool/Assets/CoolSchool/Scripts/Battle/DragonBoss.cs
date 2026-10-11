@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using CoolSchool.Audio;
 using CoolSchool.Player;
 using UnityEngine;
 
@@ -116,6 +117,7 @@ namespace CoolSchool.Battle
             if (toCenter != Vector3.zero) transform.rotation = Quaternion.LookRotation(toCenter, Vector3.up);
 
             gameObject.SetActive(true);
+            Sfx.Play("dragon.roar", from);
             hittable.ResetState();
             ResetAnimator();
 
@@ -223,6 +225,7 @@ namespace CoolSchool.Battle
 
             SetTrigger(BreatheFireId);
             if (fireConfetti != null) fireConfetti.Play();
+            Sfx.Play("dragon.fire", fireOrigin != null ? fireOrigin.position : transform.position);
 
             var alreadyHit = new HashSet<Hittable>();
             float end = Time.time + fireSeconds;
@@ -281,6 +284,7 @@ namespace CoolSchool.Battle
         {
             SetFloat(SpeedId, 0f);
             SetTrigger(HappyId);
+            Sfx.Play("dragon.happy", transform.position);
             BattleEffects.Confetti(hittable.AimPosition);
             BattleEffects.Confetti(hittable.AimPosition + Vector3.up * 1.5f);
 
@@ -299,6 +303,7 @@ namespace CoolSchool.Battle
 
             // Take off: up and away from the arena.
             SetBool(FlyingId, true);
+            Sfx.Play("dragon.wing_flap", transform.position);
             Vector3 flyDirection = (awayDirection * FlyAwaySpeed + Vector3.up * FlyUpSpeed);
             float flyEnd = Time.time + FlySeconds;
             while (Time.time < flyEnd)

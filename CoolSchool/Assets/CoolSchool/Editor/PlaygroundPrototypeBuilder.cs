@@ -97,10 +97,16 @@ namespace CoolSchool.EditorTools
         /// <summary>How far the playground rectangle is extended toward the arena to make room for the knights arena.</summary>
         const float ArenaDepth = 26f;
 
+        /// <summary>How far the playground rectangle is extended toward the alien landing field.</summary>
+        const float AlienFieldDepth = 24f;
+
         // The camera always looks north (+Z), so "up" on screen is north and the player walks north to the school.
 
         /// <summary>Which way the knights arena lies from the playground (east, to the right on screen).</summary>
         internal static readonly Vector3 ArenaDirection = Vector3.right;
+
+        /// <summary>Which way the alien landing field lies from the playground (west, to the left on screen).</summary>
+        internal static readonly Vector3 AlienFieldDirection = Vector3.left;
 
         /// <summary>Which way the school lies from the playground (north, straight ahead of the camera).</summary>
         internal static readonly Vector3 SchoolDirection = Vector3.forward;
@@ -146,6 +152,7 @@ namespace CoolSchool.EditorTools
             public Vector3 PlayerFacing = Vector3.forward;
 
             public KnightsArenaBuilder.ArenaLayout Arena;
+            public AlienFieldBuilder.FieldLayout AlienField;
             public SchoolResult School;
         }
 
@@ -229,7 +236,20 @@ namespace CoolSchool.EditorTools
                 });
 
                 VoiceSetupBuilder.Setup();
+                SoundSetupBuilder.Setup();
                 LessonSetupBuilder.Setup();
+
+                // After the lesson (the counting uses its number cards) and the voice (the inviter), before the rewards (which listen to it).
+                ShowProgress("Building alien field", 0.96f);
+                AlienFieldBuilder.Build(environment.AlienField, new AlienFieldBuilder.AlienInputs
+                {
+                    KidController = controller,
+                    KidsLayer = kidsLayer,
+                    Player = player.GetComponent<PlayerController>(),
+                    ActionButton = jumpButton,
+                    Imagination = imagination,
+                });
+
                 RewardsSetupBuilder.Setup(player);
 
                 ShowProgress("Saving scene", 0.98f);
@@ -352,6 +372,7 @@ namespace CoolSchool.EditorTools
             info.MinX = info.MinZ = -info.FenceHalf;
             info.MaxX = info.MaxZ = info.FenceHalf;
             ExtendRectangle(info, ArenaDirection, ArenaDepth);
+            ExtendRectangle(info, AlienFieldDirection, AlienFieldDepth);
 
             // The player starts on the side opposite the school, facing it, and walks up through the playground.
             info.PlayerFacing = SchoolDirection;
@@ -386,6 +407,9 @@ namespace CoolSchool.EditorTools
 
             // The castle is static geometry, so it goes in before the NavMesh bake.
             info.Arena = KnightsArenaBuilder.BuildCastle(root, ArenaDirection, info.ArenaStart, info.ArenaEnd);
+
+            // The rocket and the tree are static too. The field mirrors the arena on the other side (west).
+            info.AlienField = AlienFieldBuilder.BuildField(root, AlienFieldDirection, info.FenceHalf, info.FenceHalf + AlienFieldDepth);
 
             Debug.Log($"CoolSchool playground: fence x {info.MinX:0.0}..{info.MaxX:0.0}, z {info.MinZ:0.0}..{info.MaxZ:0.0} "
                 + $"(half {info.FenceHalf:0.0} m, ring {info.RingRadius:0.0} m); arena along {ArenaDirection.ToString("0.0")} from "
@@ -732,6 +756,7 @@ namespace CoolSchool.EditorTools
             float zMin = info.MinZ + 1.5f;
             float zMax = info.MaxZ - 1.5f;
             Vector3 arenaAcross = Vector3.Cross(Vector3.up, ArenaDirection);
+            Vector3 fieldAcross = Vector3.Cross(Vector3.up, AlienFieldDirection);
             Vector3 schoolAcross = Vector3.Cross(Vector3.up, SchoolDirection);
 
             int placed = 0;
@@ -743,6 +768,8 @@ namespace CoolSchool.EditorTools
                 if (point.magnitude < minRadius) continue;
                 // Keep the arena itself clear: only a 4 m strip along its side fences is allowed.
                 if (Vector3.Dot(point, ArenaDirection) > info.ArenaStart - 2f && Mathf.Abs(Vector3.Dot(point, arenaAcross)) < arenaClearHalf) continue;
+                // The same for the alien field on the other side.
+                if (Vector3.Dot(point, AlienFieldDirection) > info.FenceHalf - 2f && Mathf.Abs(Vector3.Dot(point, fieldAcross)) < arenaClearHalf) continue;
                 // Keep the way from the playground to the school door clear.
                 if (Vector3.Dot(point, SchoolDirection) > 0f && Mathf.Abs(Vector3.Dot(point, schoolAcross)) < SchoolBuilder.CorridorHalfWidth) continue;
                 if (occupied.Any(o => (o - point).sqrMagnitude < spacing * spacing)) continue;
@@ -1338,7 +1365,8 @@ namespace CoolSchool.EditorTools
             // The sword, shield and mace clips come from a different pack than the other kid clips, so report them separately.
             List<string> missingSwordClips = missingClips.Where(KidAnimatorBuilder.IsCombatPackClip).ToList();
             List<string> missingDragonClips = missingClips.Where(c => c.StartsWith("Dragon")).ToList();
-            List<string> missingHumanClips = missingClips.Except(missingSwordClips).Except(missingDragonClips).ToList();
+            List<string> missingDanceClips = missingClips.Where(c => System.Array.IndexOf(KidAnimatorBuilder.DanceClips, c) >= 0).ToList();
+            List<string> missingHumanClips = missingClips.Except(missingSwordClips).Except(missingDragonClips).Except(missingDanceClips).ToList();
 
             if (controller == null)
             {
@@ -1357,6 +1385,13 @@ namespace CoolSchool.EditorTools
                 message += "\n\nSword, shield and club animations are missing (" + string.Join(", ", missingSwordClips)
                     + "). Import the " + KidAnimatorBuilder.CombatPackName + " and re-run the builder; "
                     + "until then knights attack without a sword animation.";
+            }
+
+            if (missingDanceClips.Count > 0)
+            {
+                message += "\n\nThe dance clips (" + string.Join(", ", missingDanceClips)
+                    + ") from the Gestures MoCap Collection are missing. Import it and re-run the builder; "
+                    + "until then the aliens and the superhero do not dance.";
             }
 
             if (!arena.DragonCreated)
