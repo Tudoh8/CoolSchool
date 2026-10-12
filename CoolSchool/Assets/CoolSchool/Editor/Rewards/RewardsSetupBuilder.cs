@@ -10,7 +10,7 @@ namespace CoolSchool.EditorTools
 {
     /// <summary>
     /// Adds the rewards to the playground scene: the star jar and the present popup on the touch UI,
-    /// the 3D reveal stage far below the playground, the RewardSystem and the sword applier on the player.
+    /// the 3D reveal stage far below the playground, the RewardSystem and the equipment on the player.
     /// Called once by the playground builder after the games exist.
     /// </summary>
     public static class RewardsSetupBuilder
@@ -27,6 +27,13 @@ namespace CoolSchool.EditorTools
         const float PresentSize = 600f;
         const float RevealSize = 820f;
         const float RaysSize = 1100f;
+        const float MedalSize = 700f;
+        const float CurrentCardSize = 200f;
+        const float CurrentCardX = 560f;
+        const float ArrowSize = 110f;
+        const float SwapButtonSize = 220f;
+        const float SwapButtonX = 330f;
+        const float SwapButtonY = -400f;
         const int RevealTextureSize = 1024;
 
         /// <summary>Where the reveal stage sits: far below the playground, where the main camera never looks.</summary>
@@ -52,7 +59,7 @@ namespace CoolSchool.EditorTools
                 Sprite gift = FindSprite("Gift", "Icons/Gift");
                 hud = BuildStarJar(canvas.transform, star);
                 BuildGoldenSwordBadge(canvas.transform);
-                popup = BuildPresentPopup(canvas.transform, gift, star, stage);
+                popup = BuildPresentPopup(canvas.transform, gift, star, stage, catalog);
             }
             else
             {
@@ -62,11 +69,8 @@ namespace CoolSchool.EditorTools
             BuildRewardSystem(catalog, hud, popup);
             BuildGoldenSwordReward();
 
-            if (player != null)
-            {
-                var applier = player.AddComponent<EquippedSwordApplier>();
-                PlaygroundPrototypeBuilder.SetObject(applier, "catalog", catalog);
-            }
+            // Sword, shield, hat and buddy: one applier for all of them (the hat holder and the buddy are made there too).
+            EquipmentSetupBuilder.Setup(player, catalog);
         }
 
         // ----- 3D reveal stage -----------------------------------------------------------------
@@ -221,7 +225,7 @@ namespace CoolSchool.EditorTools
         /// The full-screen present popup, switched off until a present is won. It is last on the canvas,
         /// so it covers the joystick and the button while it is open.
         /// </summary>
-        static PresentPopup BuildPresentPopup(Transform canvas, Sprite gift, Sprite star, RevealStage stage)
+        static PresentPopup BuildPresentPopup(Transform canvas, Sprite gift, Sprite star, RevealStage stage, RewardCatalog catalog)
         {
             RectTransform root = NewStretched("PresentPopup", canvas);
             Image dim = AddImage(root, null, new Color(0f, 0f, 0f, 0f));
@@ -241,16 +245,83 @@ namespace CoolSchool.EditorTools
             revealImage.texture = GetOrCreateRenderTexture();
             revealImage.raycastTarget = false;
 
+            // The medal: shown instead of the 3D item when everything has been won (Badge-Crown, or the trophy).
+            Sprite medalSprite = ActivityBeaconBuilder.FindSprite(new[] { "Badge-Crown", "Trophy" });
+            RectTransform medal = NewRect("Medal", root);
+            SetAnchored(medal, new Vector2(0.5f, 0.5f), new Vector2(0f, 30f), new Vector2(MedalSize, MedalSize));
+            Image medalImage = AddImage(medal, medalSprite, Color.white);
+            medal.gameObject.SetActive(false);
+
             var popup = root.gameObject.AddComponent<PresentPopup>();
             PlaygroundPrototypeBuilder.SetObject(popup, "dim", dim);
             PlaygroundPrototypeBuilder.SetObject(popup, "present", present);
             PlaygroundPrototypeBuilder.SetObject(popup, "rays", rays);
             PlaygroundPrototypeBuilder.SetObject(popup, "revealImage", revealImage);
             PlaygroundPrototypeBuilder.SetObject(popup, "stage", stage);
+            PlaygroundPrototypeBuilder.SetObject(popup, "catalog", catalog);
+            PlaygroundPrototypeBuilder.SetObject(popup, "medalImage", medalImage);
+            BuildSwapPanel(root, popup);
 
             root.SetAsLastSibling();
             root.gameObject.SetActive(false);
             return popup;
+        }
+
+        /// <summary>
+        /// "Use the new one?": the picture of what he wears now on the left with an arrow to the spinning item,
+        /// a big red cross (keep the old one) below left and a big green check (use the new one) below right.
+        /// Switched off until the popup asks.
+        /// </summary>
+        static void BuildSwapPanel(RectTransform root, PresentPopup popup)
+        {
+            Sprite circle = ParentAreaBuilder.LoadShape("Circle");
+            if (circle == null) circle = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
+            Sprite tick = ActivityBeaconBuilder.FindSprite(new[] { "Checkmark", "Check", "Tick" });
+            Sprite cross = ActivityBeaconBuilder.FindSprite(new[] { "X-Delete-Close-Error", "X-Delete-Close-Error-Thin" });
+            Sprite arrow = ActivityBeaconBuilder.FindSprite(new[] { "Arrow-Filled-Right", "Arrow-Right" });
+            if (tick == null || cross == null) Debug.LogWarning("CoolSchool: the check or cross sprite was not found; the swap question will have plain buttons.");
+
+            RectTransform panel = NewStretched("SwapPanel", root);
+
+            // What he wears now, on a soft round card, with an arrow pointing at the new item.
+            RectTransform card = NewRect("CurrentCard", panel);
+            SetAnchored(card, new Vector2(0.5f, 0.5f), new Vector2(-CurrentCardX, 30f), Vector2.one * CurrentCardSize);
+            AddImage(card, circle, new Color(1f, 1f, 1f, 0.25f));
+            RectTransform currentRect = NewRect("CurrentIcon", card);
+            SetAnchored(currentRect, new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.one * (CurrentCardSize * 0.8f));
+            Image currentIcon = AddImage(currentRect, null, Color.white);
+
+            RectTransform arrowRect = NewRect("Arrow", panel);
+            SetAnchored(arrowRect, new Vector2(0.5f, 0.5f), new Vector2(-CurrentCardX + CurrentCardSize * 0.5f + ArrowSize * 0.7f, 30f), Vector2.one * ArrowSize);
+            AddImage(arrowRect, arrow, new Color(1f, 0.9f, 0.4f, 1f));
+
+            Button keepOld = BuildRoundButton("KeepOld", panel, circle, cross, new Color32(0xE8, 0x57, 0x4A, 0xFF), new Vector2(-SwapButtonX, SwapButtonY));
+            Button useNew = BuildRoundButton("UseNew", panel, circle, tick, new Color32(0x4C, 0xC3, 0x5A, 0xFF), new Vector2(SwapButtonX, SwapButtonY));
+
+            PlaygroundPrototypeBuilder.SetObject(popup, "swapPanel", panel);
+            PlaygroundPrototypeBuilder.SetObject(popup, "currentIcon", currentIcon);
+            PlaygroundPrototypeBuilder.SetObject(popup, "emptySlotSprite", cross);
+            PlaygroundPrototypeBuilder.SetObject(popup, "useNewButton", useNew);
+            PlaygroundPrototypeBuilder.SetObject(popup, "keepOldButton", keepOld);
+
+            panel.gameObject.SetActive(false);
+        }
+
+        /// <summary>A big coloured circle with a white symbol on it that can be tapped.</summary>
+        static Button BuildRoundButton(string name, Transform parent, Sprite circle, Sprite symbol, Color color, Vector2 position)
+        {
+            RectTransform disc = NewRect(name, parent);
+            SetAnchored(disc, new Vector2(0.5f, 0.5f), position, Vector2.one * SwapButtonSize);
+            Image image = AddImage(disc, circle, color);
+            image.raycastTarget = true;
+
+            RectTransform icon = NewRect("Icon", disc);
+            SetAnchored(icon, new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.one * (SwapButtonSize * 0.55f));
+            AddImage(icon, symbol, Color.white);
+
+            var button = disc.gameObject.AddComponent<Button>();
+            button.targetGraphic = image;
+            return button;
         }
 
         // ----- Reward system -------------------------------------------------------------------

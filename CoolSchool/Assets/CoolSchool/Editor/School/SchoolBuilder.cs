@@ -3,6 +3,7 @@ using System.Linq;
 using CoolSchool.School;
 using UnityEditor;
 using UnityEngine;
+using static CoolSchool.EditorTools.ModularBuilding;
 using static CoolSchool.EditorTools.PlaygroundPrototypeBuilder;
 
 namespace CoolSchool.EditorTools
@@ -70,12 +71,6 @@ namespace CoolSchool.EditorTools
         /// <summary>Free ground between the fence and the school's front (door) wall.</summary>
         const float ForecourtDepth = 2f;
 
-        /// <summary>The door opening must be at least this wide (metres) for the kid and the NavMesh agent.</summary>
-        const float MinDoorWidth = 1.6f;
-
-        /// <summary>The NavMesh agent is 2 m tall; the door needs a little more.</summary>
-        const float MinDoorHeight = 2.05f;
-
         /// <summary>The floor sits a hair above the grass so the two never flicker.</summary>
         const float FloorY = 0.02f;
 
@@ -90,14 +85,20 @@ namespace CoolSchool.EditorTools
         const float BlackboardFaceOffset = 0.08f;
 
         // Lesson table (a stretched Kids table) and everything placed relative to it.
-        static readonly Vector3 LessonTableScale = new Vector3(2.6f, 1.25f, 1.1f);
-        const float TableCentreFromBoard = 2.7f;
+        // The table is 2.86 m wide and 1.37 m deep (the Kids table is 1.1 x 0.92 m before scaling), so two rows of toys 0.6 m apart fit.
+        static readonly Vector3 LessonTableScale = new Vector3(2.6f, 1.25f, 1.5f);
+        // The table stands close to the blackboard so the board and the toys fit in one picture from above.
+        const float TableCentreFromBoard = 1.8f;
         const float RugScale = 1.8f;
         const float SeatBesideTable = 0.1f;
-        const float SeatInFrontOfTable = 0.9f;
-        const float LessonCameraDistance = 3.3f;
-        const float LessonCameraHeight = 1.7f;
-        const float LessonLookHeight = 0.3f;
+        const float SeatInFrontOfTable = 1f;
+        // The lesson camera: 3.4 m toward the door and 3 m above the table top, looking at a point 0.5 m above the table's middle.
+        // That is about 41 degrees down onto the table, so toys in different rows do not hide each other, and still low enough
+        // (the top of the picture is about 11 degrees down) to keep the whole blackboard writing area in the picture.
+        // It sits above the roof; the roof is hidden while the kid is in the classroom (BuildingInteriorReveal).
+        const float LessonCameraDistance = 3.4f;
+        const float LessonCameraHeight = 3f;
+        const float LessonLookHeight = 0.5f;
         const float TeacherBesideBoard = 0.8f;
         const float TeacherFromWall = 1.3f;
 
@@ -114,24 +115,6 @@ namespace CoolSchool.EditorTools
         const float LightRange = 8f;
 
         // ----- Prefabs (resolved by name) ------------------------------------------------------
-
-        static readonly PrefabRef WallPrefab = new PrefabRef("SM_Bld_Base_Wall_01", GenericPack);
-        static readonly PrefabRef WindowPrefab = new PrefabRef("SM_Bld_Base_Wall_Window_01", GenericPack);
-        static readonly PrefabRef FloorPrefab = new PrefabRef("SM_Bld_Base_Floor_01", GenericPack);
-        static readonly PrefabRef CeilingPrefab = new PrefabRef("SM_Bld_Base_Ceiling_01", GenericPack);
-        static readonly PrefabRef PillarPrefab = new PrefabRef("SM_Bld_Base_Pillar_01", GenericPack);
-
-        /// <summary>
-        /// Doorway pieces in order of preference. The "Large" double door has a 2.2 m x 2.5 m opening; the plain double
-        /// door is 2.0 m wide but only 1.97 m tall, which a 2 m NavMesh agent can't pass. These are wall pieces with a hole:
-        /// the door leaves are separate prefabs we do not place, so nothing blocks the opening.
-        /// </summary>
-        static readonly PrefabRef[] DoorPrefabs =
-        {
-            new PrefabRef("SM_Bld_Base_Wall_Door_Double_Large_01", GenericPack),
-            new PrefabRef("SM_Bld_Base_Wall_Door_Double_01", GenericPack),
-            new PrefabRef("SM_Bld_Base_Wall_Door_Large_01", GenericPack),
-        };
 
         static readonly PrefabRef BlackboardPrefab = Kids("SM_Prop_Blackboard_01");
         static readonly PrefabRef TablePrefab = Kids("SM_Prop_Table_01");
@@ -150,37 +133,6 @@ namespace CoolSchool.EditorTools
         static readonly PrefabRef TeacherFallbackPrefab = new PrefabRef("Character_BusinessWoman", "PolygonCity");
 
         // ----- Data ----------------------------------------------------------------------------
-
-        /// <summary>One modular piece, measured from a probe instance.</summary>
-        sealed class Piece
-        {
-            public string Name;
-            public GameObject Prefab;
-            public Vector3 Size;
-            public bool LengthAlongX = true;
-            /// <summary>True if the plaster (inside) side faces local -Z, so the piece needs a half turn.</summary>
-            public bool InsideOnNegativeZ;
-            public float OpeningWidth;
-            public float OpeningHeight;
-
-            /// <summary>Turns the piece so that its thin axis points along the facing and its inside side faces that way.</summary>
-            public Quaternion Fix
-            {
-                get
-                {
-                    Quaternion fix = LengthAlongX ? Quaternion.identity : Quaternion.Euler(0f, -90f, 0f);
-                    return InsideOnNegativeZ ? fix * Quaternion.Euler(0f, 180f, 0f) : fix;
-                }
-            }
-
-            public float Length => LengthAlongX ? Size.x : Size.z;
-            public float Thickness => LengthAlongX ? Size.z : Size.x;
-        }
-
-        sealed class Kit
-        {
-            public Piece Wall, Window, Door, Floor, Ceiling, Pillar;
-        }
 
         /// <summary>The footprint in the school's own frame (centred on the origin, door on +Z). The walls' centre lines form the rectangle.</summary>
         sealed class Plan
@@ -293,174 +245,6 @@ namespace CoolSchool.EditorTools
         }
 
         // ----- Measuring -----------------------------------------------------------------------
-
-        /// <summary>Spawns probes of the modular pieces, measures them and removes the probes again. Null if essentials are missing.</summary>
-        static Kit MeasureKit(Transform scratch)
-        {
-            var kit = new Kit
-            {
-                Wall = MeasurePiece(WallPrefab, scratch, false),
-                Window = MeasurePiece(WindowPrefab, scratch, false),
-                Floor = MeasurePiece(FloorPrefab, scratch, false),
-                Ceiling = MeasurePiece(CeilingPrefab, scratch, false),
-                Pillar = MeasurePiece(PillarPrefab, scratch, false),
-                Door = ChooseDoor(scratch),
-            };
-
-            if (kit.Wall == null || kit.Floor == null) return null;
-            if (kit.Door == null)
-                Debug.LogError("CoolSchool: no doorway wall piece found (SM_Bld_Base_Wall_Door_Double_Large_01 and friends); the school will have no door!");
-
-            foreach (Piece piece in new[] { kit.Window, kit.Door })
-            {
-                if (piece == null) continue;
-                if (Mathf.Abs(piece.Length - kit.Wall.Length) > kit.Wall.Length * 0.05f)
-                    Debug.LogWarning($"CoolSchool: {piece.Name} is {piece.Length:0.00} m long but the plain wall is {kit.Wall.Length:0.00} m; the tiling will not meet exactly.");
-            }
-
-            if (!kit.Wall.LengthAlongX)
-                Debug.LogWarning("CoolSchool: the wall segment runs along Z, not X; turning every wall piece a quarter. Check the school's walls.");
-            return kit;
-        }
-
-        /// <summary>The first doorway piece whose opening is wide and tall enough; otherwise the widest one found.</summary>
-        static Piece ChooseDoor(Transform scratch)
-        {
-            Piece best = null;
-            foreach (PrefabRef reference in DoorPrefabs)
-            {
-                Piece piece = MeasurePiece(reference, scratch, true);
-                if (piece == null) continue;
-
-                if (piece.OpeningWidth >= MinDoorWidth && piece.OpeningHeight >= MinDoorHeight) return piece;
-                if (best == null || piece.OpeningWidth > best.OpeningWidth) best = piece;
-            }
-
-            if (best != null)
-                Debug.LogWarning($"CoolSchool: no doorway piece has an opening of {MinDoorWidth} x {MinDoorHeight} m; using {best.Name} "
-                    + $"({best.OpeningWidth:0.00} x {best.OpeningHeight:0.00} m).");
-            return best;
-        }
-
-        static Piece MeasurePiece(PrefabRef reference, Transform scratch, bool measureOpening)
-        {
-            GameObject prefab = LoadPrefab(reference);
-            if (prefab == null) return null;
-
-            GameObject probe = Spawn(prefab, scratch);
-            try
-            {
-                if (!TryGetBounds(probe, out Bounds bounds))
-                {
-                    Debug.LogWarning($"CoolSchool: {reference.Name} has no renderers, skipping.");
-                    return null;
-                }
-
-                var piece = new Piece
-                {
-                    Name = reference.Name,
-                    Prefab = prefab,
-                    Size = bounds.size,
-                    LengthAlongX = bounds.size.x >= bounds.size.z,
-                };
-                if (piece.LengthAlongX) piece.InsideOnNegativeZ = PlasterOnNegativeZ(probe, bounds.center.z);
-                if (measureOpening) MeasureOpening(probe, bounds, out piece.OpeningWidth, out piece.OpeningHeight);
-                return piece;
-            }
-            finally
-            {
-                Object.DestroyImmediate(probe);
-            }
-        }
-
-        /// <summary>
-        /// The Generic walls are brick on the outside and plaster on the inside. Finds which side of the mesh the plaster
-        /// triangles are on; false (no change) if the piece has no plaster material or the mesh can't be read.
-        /// </summary>
-        static bool PlasterOnNegativeZ(GameObject probe, float centreZ)
-        {
-            float sum = 0f;
-            int count = 0;
-            try
-            {
-                foreach (MeshFilter filter in probe.GetComponentsInChildren<MeshFilter>())
-                {
-                    var meshRenderer = filter.GetComponent<MeshRenderer>();
-                    Mesh mesh = filter.sharedMesh;
-                    if (meshRenderer == null || mesh == null) continue;
-
-                    Material[] materials = meshRenderer.sharedMaterials;
-                    Vector3[] vertices = mesh.vertices;
-                    for (int submesh = 0; submesh < mesh.subMeshCount && submesh < materials.Length; submesh++)
-                    {
-                        if (materials[submesh] == null || !materials[submesh].name.Contains("Plaster")) continue;
-
-                        foreach (int index in mesh.GetTriangles(submesh))
-                        {
-                            sum += filter.transform.TransformPoint(vertices[index]).z;
-                            count++;
-                        }
-                    }
-                }
-            }
-            catch (System.Exception exception)
-            {
-                Debug.LogWarning($"CoolSchool: could not read {probe.name}'s mesh to find its inside: {exception.Message}");
-                return false;
-            }
-
-            return count > 0 && sum / count < centreZ;
-        }
-
-        /// <summary>
-        /// The doorway: the widest gap between the vertices on the floor line, and the height of its lintel.
-        /// Width is 0 if the piece has no gap.
-        /// </summary>
-        static void MeasureOpening(GameObject probe, Bounds bounds, out float width, out float height)
-        {
-            width = 0f;
-            height = bounds.size.y;
-
-            var points = new List<Vector3>();
-            try
-            {
-                foreach (MeshFilter filter in probe.GetComponentsInChildren<MeshFilter>())
-                {
-                    if (filter.sharedMesh == null) continue;
-                    foreach (Vector3 vertex in filter.sharedMesh.vertices) points.Add(filter.transform.TransformPoint(vertex));
-                }
-            }
-            catch (System.Exception exception)
-            {
-                Debug.LogWarning($"CoolSchool: could not read {probe.name}'s mesh to measure the doorway: {exception.Message}");
-                return;
-            }
-
-            float floor = bounds.min.y;
-            float[] bottom = points.Where(p => p.y < floor + 0.05f)
-                .Select(p => Mathf.Round(p.x * 100f) / 100f)
-                .Distinct()
-                .OrderBy(x => x)
-                .ToArray();
-
-            float gapStart = 0f;
-            float gapEnd = 0f;
-            for (int i = 1; i < bottom.Length; i++)
-            {
-                if (bottom[i] - bottom[i - 1] <= width) continue;
-
-                width = bottom[i] - bottom[i - 1];
-                gapStart = bottom[i - 1];
-                gapEnd = bottom[i];
-            }
-            if (width <= 0f) return;
-
-            float lintel = points.Where(p => p.y > floor + 0.3f && p.x >= gapStart - 0.02f && p.x <= gapEnd + 0.02f)
-                .Select(p => p.y)
-                .DefaultIfEmpty(bounds.max.y)
-                .Min();
-            height = lintel - floor;
-        }
 
         /// <summary>The footprint: walls' centre lines, as a rectangle centred on the origin with the door wall on +Z.</summary>
         static Plan MakePlan(Kit kit)
@@ -617,7 +401,7 @@ namespace CoolSchool.EditorTools
 
         static void BuildFloor(Transform parent, Kit kit, Plan plan)
         {
-            LayTiles(parent, kit.Floor, plan, 0f, FloorY, Quaternion.identity, true);
+            LayTiles(parent, kit.Floor, plan.Width, plan.Depth, 0f, FloorY, Quaternion.identity, true);
         }
 
         /// <summary>
@@ -628,34 +412,11 @@ namespace CoolSchool.EditorTools
         {
             var renderers = new List<Renderer>();
             Piece tile = kit.Ceiling ?? kit.Floor;
-            LayTiles(parent, tile, plan, RoofOverhang, plan.Height, Quaternion.identity, false);
-            LayTiles(parent, tile, plan, RoofOverhang, plan.Height + 0.02f, Quaternion.Euler(180f, 0f, 0f), false);
+            LayTiles(parent, tile, plan.Width, plan.Depth, RoofOverhang, plan.Height, Quaternion.identity, false);
+            LayTiles(parent, tile, plan.Width, plan.Depth, RoofOverhang, plan.Height + 0.02f, Quaternion.Euler(180f, 0f, 0f), false);
 
             foreach (Renderer renderer in parent.GetComponentsInChildren<Renderer>(true)) renderers.Add(renderer);
             return renderers;
-        }
-
-        /// <summary>Tiles covering the plan's rectangle plus a margin, centred on it, with their lowest point at y.</summary>
-        static void LayTiles(Transform parent, Piece tile, Plan plan, float margin, float y, Quaternion rotation, bool solid)
-        {
-            float sizeX = Mathf.Max(0.5f, tile.Size.x);
-            float sizeZ = Mathf.Max(0.5f, tile.Size.z);
-            int countX = Mathf.CeilToInt((plan.Width + 2f * margin) / sizeX - 0.001f);
-            int countZ = Mathf.CeilToInt((plan.Depth + 2f * margin) / sizeZ - 0.001f);
-            float startX = -countX * sizeX * 0.5f;
-            float startZ = -countZ * sizeZ * 0.5f;
-
-            for (int ix = 0; ix < countX; ix++)
-            {
-                for (int iz = 0; iz < countZ; iz++)
-                {
-                    GameObject instance = Spawn(tile.Prefab, parent);
-                    instance.transform.rotation = rotation;
-                    AlignToBounds(instance, startX + sizeX * (ix + 0.5f), startZ + sizeZ * (iz + 0.5f), y, false);
-                    if (solid) FinishEnvironmentObject(instance);
-                    else MakeDecor(instance);
-                }
-            }
         }
 
         // ----- Furniture -----------------------------------------------------------------------
@@ -807,61 +568,6 @@ namespace CoolSchool.EditorTools
             PlaceProp(parent, FloorMatPrefab, Vector3.one, 0f, 0f, plan.InnerDoor - 0.9f, FloorY, false);
         }
 
-        // ----- Prop helpers --------------------------------------------------------------------
-
-        /// <summary>
-        /// Spawns a prop, scales and turns it, and puts the centre of its bounds at (x, z) with its bottom at baseY.
-        /// Without collide the prop is decoration: no colliders.
-        /// </summary>
-        static GameObject PlaceProp(Transform parent, PrefabRef reference, Vector3 scale, float yaw, float x, float z, float baseY,
-            bool collide = true)
-        {
-            GameObject prefab = LoadPrefab(reference);
-            if (prefab == null) return null;
-
-            GameObject prop = Spawn(prefab, parent);
-            prop.transform.localScale = Vector3.Scale(prop.transform.localScale, scale);
-            prop.transform.rotation = Quaternion.Euler(0f, yaw, 0f);
-            AlignToBounds(prop, x, z, baseY, false);
-
-            if (collide) FinishEnvironmentObject(prop);
-            else MakeDecor(prop);
-            return prop;
-        }
-
-        /// <summary>Moves the prop along the wall's normal until its back touches the wall face (inward = the way the room is).</summary>
-        static void PushAgainstWall(GameObject prop, Vector3 inward, float wallFace, float gap)
-        {
-            if (!TryGetBounds(prop, out Bounds bounds)) return;
-
-            Vector3 shift = Vector3.zero;
-            if (inward.z > 0.5f) shift.z = wallFace + gap - bounds.min.z;
-            else if (inward.z < -0.5f) shift.z = wallFace - gap - bounds.max.z;
-            else if (inward.x > 0.5f) shift.x = wallFace + gap - bounds.min.x;
-            else shift.x = wallFace - gap - bounds.max.x;
-            prop.transform.position += shift;
-        }
-
-        static void SetBottomY(GameObject prop, float y)
-        {
-            if (!TryGetBounds(prop, out Bounds bounds)) return;
-            prop.transform.position += new Vector3(0f, y - bounds.min.y, 0f);
-        }
-
-        /// <summary>Decoration: no colliders, but still static for batching.</summary>
-        static void MakeDecor(GameObject root)
-        {
-            foreach (Collider collider in root.GetComponentsInChildren<Collider>(true))
-                Object.DestroyImmediate(collider);
-
-            foreach (Transform child in root.GetComponentsInChildren<Transform>(true))
-            {
-                GameObject go = child.gameObject;
-                GameObjectUtility.SetStaticEditorFlags(go,
-                    GameObjectUtility.GetStaticEditorFlags(go) | StaticEditorFlags.BatchingStatic);
-            }
-        }
-
         // ----- Lights --------------------------------------------------------------------------
 
         /// <summary>Two warm point lights near the ceiling, one each side of the aisle.</summary>
@@ -899,7 +605,7 @@ namespace CoolSchool.EditorTools
             result.tableSurface = NewAnchor("TableSurface", anchors, tableCentre + Vector3.up * 0.005f, Quaternion.identity);
 
             float cameraZ = Mathf.Min(tableZ + LessonCameraDistance, plan.InnerDoor - 1f);
-            var cameraPosition = new Vector3(tableX, LessonCameraHeight, cameraZ);
+            var cameraPosition = new Vector3(tableX, tableTop + LessonCameraHeight, cameraZ);
             Vector3 lookTarget = tableCentre + Vector3.up * LessonLookHeight;
             result.lessonCamera = NewAnchor("LessonCamera", anchors, cameraPosition, Quaternion.LookRotation(lookTarget - cameraPosition, Vector3.up));
 
@@ -917,22 +623,6 @@ namespace CoolSchool.EditorTools
             result.playerSeat = NewAnchor("PlayerSeat", anchors, seatPosition, FlatLookRotation(seatPosition, tableCentre));
 
             result.classroomZone = NewAnchor("ClassroomZone", anchors, new Vector3(0f, FloorY, plan.InnerDoor - 2.2f), Quaternion.identity);
-        }
-
-        static Transform NewAnchor(string name, Transform parent, Vector3 position, Quaternion rotation)
-        {
-            Transform anchor = new GameObject(name).transform;
-            anchor.SetParent(parent, false);
-            anchor.SetPositionAndRotation(position, rotation);
-            return anchor;
-        }
-
-        /// <summary>Faces from one point toward another, staying upright.</summary>
-        static Quaternion FlatLookRotation(Vector3 from, Vector3 to)
-        {
-            Vector3 direction = to - from;
-            direction.y = 0f;
-            return direction.sqrMagnitude < 0.0001f ? Quaternion.identity : Quaternion.LookRotation(direction, Vector3.up);
         }
 
         // ----- Teacher -------------------------------------------------------------------------

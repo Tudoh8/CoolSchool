@@ -23,6 +23,10 @@ ui.card_right	0.8			PM/Magic Essentials/Magic Game Positive Bling.wav | PM/Magic
 ui.card_wrong	0.5			GUI/Soft (Short).wav | PM/Magic Hits/Magic Wobble Game Hit.wav
 ui.popup_open	0.7			PM/Fantasy Transitions/Fantasy Game Slide Airy.wav | PM/Fantasy Transitions/Fantasy Game Slide Airy 2.wav | GUI/Open (Button).wav
 ui.popup_close	0.7			GUI/Close.wav | PM/Magic Essentials/Magic Game Swoosh.wav
+ui.pick	0.7			PM/Magic UI/Magic Game UI Button.wav | GUI/Button.wav
+ui.locked	0.5			GUI/Soft (Short).wav | PM/Magic Hits/Magic Wobble Game Hit.wav
+wardrobe.equip	0.8			PM/Magic Essentials/Magic Game Potion Pop Off 1.wav | PM/Magic Spells and Dust/Magic Sparkle Whoosh.wav
+toyroom.sparkle	0.4			PM/Magic Spells and Dust/Magic Wand Sparkle.wav | PM/Spell Whooshes/Magic Game Positive Sparkle Glow.wav
 
 # ---- Player ----
 player.step	0.3	0.9	1.1	FEEL/NiceVibrations/HapticSamples/Footsteps/FootstepGrass1.wav | FEEL/NiceVibrations/HapticSamples/Footsteps/FootstepGrass2.wav | FEEL/NiceVibrations/HapticSamples/Footsteps/FootstepGrass3.wav | AR/Steps/Steps_Boots_Grass_Dirt_Light_01_01.wav

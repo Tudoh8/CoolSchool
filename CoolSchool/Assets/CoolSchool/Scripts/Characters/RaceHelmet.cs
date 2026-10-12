@@ -6,7 +6,8 @@ namespace CoolSchool.Characters
     /// A cardboard racing helmet on the head bone, for the soapbox race. The player wears one only during the race
     /// (SoapboxRace calls Show); the rival kids get their own RaceHelmet that is shown all the time.
     /// Like PirateCostume the helmet is made the first time it is needed and then only shown or hidden.
-    /// Synty's kid attachments are made to fit the kid rig at the bone origin, so the offsets start at zero.
+    /// The helmets are drawn around the head joint, so AttachmentFit leaves them at the bone and the offsets are just tweaks
+    /// (in the helmet's own axes) that start at zero.
     /// </summary>
     public class RaceHelmet : MonoBehaviour
     {
@@ -39,16 +40,16 @@ namespace CoolSchool.Characters
             if (head == null) return;
 
             helmet = Instantiate(helmetPrefab, head);
-            helmet.transform.localPosition = localPosition;
-            helmet.transform.localRotation = Quaternion.Euler(localEuler);
-            helmet.transform.localScale = Vector3.one * localScale;
+            AttachmentFit.Place(helmet.transform, animator, head, localPosition, localEuler, Vector3.one * localScale);
             helmet.SetActive(false);
 
             // A helmet must never push kids around or block the camera.
             foreach (Collider collider in helmet.GetComponentsInChildren<Collider>(true))
             {
                 collider.enabled = false;
-                Destroy(collider);
+                // Destroy is not allowed in edit mode (the preview tools may dress the kid there).
+                if (Application.isPlaying) Destroy(collider);
+                else DestroyImmediate(collider);
             }
         }
     }

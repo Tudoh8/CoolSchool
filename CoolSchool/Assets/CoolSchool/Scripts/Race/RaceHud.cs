@@ -66,6 +66,7 @@ namespace CoolSchool.Race
         Vector3 coinBaseScale = Vector3.one;
         Vector3 placeBaseScale = Vector3.one;
         Vector3 targetBaseScale = Vector3.one;
+        int targetBaseFontSize;
         Vector3 countdownBaseScale = Vector3.one;
 
         void Awake()
@@ -73,6 +74,7 @@ namespace CoolSchool.Race
             if (coinCounter != null) coinBaseScale = coinCounter.localScale;
             if (placeBadge != null) placeBaseScale = placeBadge.rectTransform.localScale;
             if (targetBubble != null) targetBaseScale = targetBubble.localScale;
+            if (targetText != null) targetBaseFontSize = targetText.fontSize;
             if (countdownText != null) countdownBaseScale = countdownText.rectTransform.localScale;
 
             // The HUD never blocks a tap: the race reads taps on the whole screen itself.
@@ -190,7 +192,18 @@ namespace CoolSchool.Race
             targetBubble.gameObject.SetActive(show);
             if (!show) return;
 
-            if (targetText != null) targetText.text = glyph;
+            if (targetText != null)
+            {
+                // "7→?" (which number comes after 7): a plain space if the font has no arrow.
+                if (glyph.IndexOf('→') >= 0 && targetText.font != null && !targetText.font.HasCharacter('→'))
+                    glyph = glyph.Replace("→", " ");
+
+                // Two digits and "12→?" are wider than one, so the type gets smaller to stay inside the bubble.
+                float shrink = glyph.Length <= 1 ? 1f : glyph.Length == 2 ? 0.62f : glyph.Length == 3 ? 0.45f : 0.36f;
+                if (targetBaseFontSize <= 0) targetBaseFontSize = targetText.fontSize;
+                targetText.fontSize = Mathf.RoundToInt(targetBaseFontSize * shrink);
+                targetText.text = glyph;
+            }
             targetPopT = 0f;
         }
 

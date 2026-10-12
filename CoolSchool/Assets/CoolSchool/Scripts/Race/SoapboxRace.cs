@@ -54,6 +54,14 @@ namespace CoolSchool.Race
         [Tooltip("Optional: found in the scene when empty.")]
         [SerializeField] FinishArch finishArch;
 
+        [Header("Cart picker")]
+        [Tooltip("On the touch canvas. Optional: without it the race starts with the cart he chose last time.")]
+        [SerializeField] CartPicker cartPicker;
+        [Tooltip("Front-left of the player's cart, looking at it. The camera glides here while he picks.")]
+        [SerializeField] Transform cartPickCameraSpot;
+        [Tooltip("The plush buddy that rides in the cart. Optional: found in the scene when empty (the rewards setup builds it after the race).")]
+        [SerializeField] BuddyFollower buddy;
+
         /// <summary>Raised on the podium: how many stars he earned, and where (for the stars to fly from).</summary>
         public event System.Action<int, Vector3> RaceFinished;
 
@@ -63,8 +71,6 @@ namespace CoolSchool.Race
         static readonly float[] CruiseSpeedByLevel = { 6f, 7f, 8f };
         // How often he wins when the rivals settle at the end.
         static readonly float[] WinChanceByLevel = { 0.9f, 0.8f, 0.7f };
-        // The biggest number a gate asks for, by numbers level 1 to 5. Mirrors NumbersLesson.MaxNumberByLevel.
-        static readonly int[] MaxNumberByLevel = { 3, 5, 5, 7, 10 };
 
         const float GateSlowFactor = 0.75f;
         const float CountdownStepSeconds = 1f;
@@ -73,6 +79,7 @@ namespace CoolSchool.Race
         const int ArrowsGoneAfterLaneChanges = 2;
         const float FinalLineDistance = 380f;
         const float RivalTauntDistance = 60f;
+        const float CartPickGlideSeconds = 0.8f;
 
         // Safety nets, so the race always ends.
         const float RivalGraceSeconds = 8f;
@@ -94,6 +101,12 @@ namespace CoolSchool.Race
         bool arrowsOn;
         bool announcerAtFinish;
         bool playerWins;
+        bool buddyRiding;
+        // What the cart picker ended with (also kept while it is open, for the rivals' bodies).
+        int pickedBody;
+        bool pickedFlag;
+        bool pickedStickers;
+        bool pickedGold;
         readonly List<CartController> finishOrder = new List<CartController>();
         CartController[] allCarts;
 
@@ -102,6 +115,7 @@ namespace CoolSchool.Race
             if (player == null) player = FindAnyObjectByType<PlayerController>();
             if (playerAnimator == null && player != null) playerAnimator = player.GetComponent<KidAnimator>();
             if (finishArch == null) finishArch = FindAnyObjectByType<FinishArch>(FindObjectsInactive.Include);
+            if (buddy == null) buddy = FindAnyObjectByType<BuddyFollower>(FindObjectsInactive.Include);
 
             level = Mathf.Clamp(ProgressStore.Current.GetLevel(Skill), 1, MaxLevel);
             ResetRaceState();
@@ -120,6 +134,11 @@ namespace CoolSchool.Race
 
             Unsubscribe();
             if (input != null) input.Active = false;
+
+            // The picker may be open (the back button works there too) and the buddy may be in the cart.
+            if (cartPicker != null) cartPicker.Close();
+            if (buddyRiding && buddy != null) buddy.StopRiding();
+            buddyRiding = false;
 
             RestorePlayer();
             RestoreWorld();
@@ -185,8 +204,12 @@ namespace CoolSchool.Race
             if (announcer != null && player != null) announcer.FaceTowards(player.transform.position);
             VoicePlayer.Say("race.welcome", true);
 
+            // Pick the cart, then hop in.
+            yield return PickCart();
+
             // Hop into the cart and sit down.
             if (player != null && playerCart != null && playerCart.Seat != null) player.RideOn(playerCart.Seat);
+            SeatBuddy();
             yield return new WaitForSeconds(0.55f);
             if (playerAnimator != null) playerAnimator.SetSitting(true);
 
@@ -247,15 +270,30 @@ namespace CoolSchool.Race
                 playerCart.ResetToStart(1);
             }
 
-            // The rivals take the two bodies the player does not use.
+            // The player's cart looks like he chose it (the store holds his choice); the rivals take the two other bodies.
             int playerBody = 0;
             if (playerLooks != null)
             {
                 playerLooks.ApplyPlayerLooks(ProgressStore.Current);
                 playerBody = playerLooks.BodyIndex;
             }
+            DressRivals(playerBody);
 
             playerWins = Random.value < WinChanceByLevel[level - 1];
+            for (int i = 0; rivals != null && i < rivals.Length; i++)
+            {
+                RivalCartAI rival = rivals[i];
+                if (rival == null) continue;
+
+                rival.PlayerCart = playerCart;
+                rival.ResetRival(i == 0 ? 0 : 2);
+                rival.Prepare(level, playerWins, i);
+            }
+        }
+
+        /// <summary>The rivals take the two bodies the player does not use, with no extras.</summary>
+        void DressRivals(int playerBody)
+        {
             int nextBody = 0;
             for (int i = 0; rivals != null && i < rivals.Length; i++)
             {
@@ -270,11 +308,103 @@ namespace CoolSchool.Race
                     looks.SetExtras(false, false, false);
                 }
                 nextBody++;
-
-                rival.PlayerCart = playerCart;
-                rival.ResetRival(i == 0 ? 0 : 2);
-                rival.Prepare(level, playerWins, i);
             }
+        }
+
+        /// <summary>
+        /// The cart picker: the camera glides to the front of his cart and he picks a body and extras (the real cart changes live).
+        /// A cart he owns but has never raced in is selected for him ("a new cart, try it out!"). Without a picker the race
+        /// simply starts with what he chose last time.
+        /// </summary>
+        IEnumerator PickCart()
+        {
+            if (cartPicker == null || playerCart == null || playerLooks == null) yield break;
+
+            // The selection: what he chose last time, or a new body he has not tried yet.
+            PlayerProgress progress = ProgressStore.Current;
+            int body = Mathf.Max(0, System.Array.IndexOf(CartLooks.BodyIds, ProgressStore.ChosenCartId()));
+            bool isNew = false;
+            for (int i = CartLooks.BodyIds.Length - 1; i >= 1; i--)
+            {
+                string id = CartLooks.BodyIds[i];
+                if (progress.IsUnlocked(id) && !progress.cartsTried.Contains(id))
+                {
+                    body = i;
+                    isNew = true;
+                    break;
+                }
+            }
+            pickedBody = body;
+            pickedFlag = ProgressStore.CartExtraOn(CartLooks.FlagId);
+            pickedStickers = ProgressStore.CartExtraOn(CartLooks.StickersId);
+            pickedGold = ProgressStore.CartExtraOn(CartLooks.GoldId);
+            ShowPickedLooks();
+
+            // He stands still and watches the cart.
+            if (player != null) player.InputEnabled = false;
+            if (joystick != null) joystick.gameObject.SetActive(false);
+
+            Transform cameraTransform = chaseCamera != null ? chaseCamera.transform : (followCamera != null ? followCamera.transform : null);
+            if (cartPickCameraSpot != null && cameraTransform != null)
+            {
+                if (followCamera != null) followCamera.enabled = false;
+                yield return GlideCamera(cameraTransform, cartPickCameraSpot, CartPickGlideSeconds);
+            }
+
+            VoicePlayer.Say(isNew ? "race.cart_new" : "race.pick_cart");
+
+            bool done = false;
+            cartPicker.Open(pickedBody, pickedFlag, pickedStickers, pickedGold,
+                (newBody, flag, stickers, gold) =>
+                {
+                    pickedBody = newBody;
+                    pickedFlag = flag;
+                    pickedStickers = stickers;
+                    pickedGold = gold;
+                    ShowPickedLooks();
+                    playerCart.Wobble(0.4f);
+                },
+                () => done = true);
+
+            while (!done && cartPicker.IsOpen) yield return null;
+
+            // The choice is remembered for the next race.
+            ProgressStore.SetCart(CartLooks.BodyIds[pickedBody], pickedFlag, pickedStickers, pickedGold);
+            VoicePlayer.Say("race.cart_ready", true);
+        }
+
+        /// <summary>Puts the picker's choice on his real cart, and keeps the rivals on the other bodies.</summary>
+        void ShowPickedLooks()
+        {
+            playerLooks.SetBody(pickedBody);
+            playerLooks.SetExtras(pickedFlag, pickedStickers, pickedGold);
+            DressRivals(pickedBody);
+        }
+
+        /// <summary>The camera glides to the spot's pose over some seconds, easing in and out.</summary>
+        static IEnumerator GlideCamera(Transform cameraTransform, Transform spot, float seconds)
+        {
+            Vector3 fromPosition = cameraTransform.position;
+            Quaternion fromRotation = cameraTransform.rotation;
+            for (float t = 0f; t < seconds; t += Time.deltaTime)
+            {
+                float k = Mathf.SmoothStep(0f, 1f, t / seconds);
+                cameraTransform.SetPositionAndRotation(Vector3.Lerp(fromPosition, spot.position, k), Quaternion.Slerp(fromRotation, spot.rotation, k));
+                yield return null;
+            }
+            cameraTransform.SetPositionAndRotation(spot.position, spot.rotation);
+        }
+
+        /// <summary>A plush buddy (not the parrot, which sits on his shoulder) rides along on the cart's buddy seat.</summary>
+        void SeatBuddy()
+        {
+            if (buddy == null || playerCart == null || playerCart.BuddySeat == null) return;
+
+            string worn = ProgressStore.EquippedId(EquipSlot.Buddy);
+            if (string.IsNullOrEmpty(worn) || worn == EquipSlots.ParrotId) return;
+
+            buddy.RideOn(playerCart.BuddySeat);
+            buddyRiding = true;
         }
 
         IEnumerator RunCountdown()

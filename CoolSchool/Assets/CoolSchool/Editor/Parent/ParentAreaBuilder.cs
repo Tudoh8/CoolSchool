@@ -171,7 +171,7 @@ namespace CoolSchool.EditorTools
             // Six rows, 96 px apart from y = 330, so the last one (and the caption under it) ends above the close button (top y = 931).
             var rows = new[]
             {
-                BuildLevelRow(window, sprites, font, 330f, ParentStrings.RowNumbers, "numbers", 5),
+                BuildLevelRow(window, sprites, font, 330f, ParentStrings.RowNumbers, "numbers", CoolSchool.Lessons.NumberCurriculum.MaxLevel),
                 BuildLevelRow(window, sprites, font, 426f, ParentStrings.RowLetters, "letters", 5),
                 BuildLevelRow(window, sprites, font, 522f, ParentStrings.RowShop, ParentPanel.ShopSkill, 3),
                 BuildLevelRow(window, sprites, font, 618f, ParentStrings.RowPirates, "pirates", 3),

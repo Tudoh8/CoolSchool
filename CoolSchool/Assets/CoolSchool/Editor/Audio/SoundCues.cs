@@ -7,6 +7,7 @@ namespace CoolSchool.EditorTools
         {
             // UI
             "ui.tap", "ui.button", "ui.card_right", "ui.card_wrong", "ui.popup_open", "ui.popup_close",
+            "ui.pick", "ui.locked", "wardrobe.equip", "toyroom.sparkle",
             // Player
             "player.step", "player.jump", "player.land", "player.bump",
             // Activities

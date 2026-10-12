@@ -12,6 +12,8 @@ namespace CoolSchool.EditorTools
     internal static partial class SoapboxStreetBuilder
     {
         const float CartLength = 1.7f;
+        // How far behind the kid's seat the riding buddy sits (the body tail is ~0.5 m behind the seat).
+        const float BuddySeatBehind = 0.38f;
         const string StickersPrefabPath = RaceFolder + "/Prefabs/CS_Cart_Stickers.prefab";
         const string GoldPrefabPath = RaceFolder + "/Prefabs/CS_Cart_Gold.prefab";
 
@@ -54,6 +56,7 @@ namespace CoolSchool.EditorTools
             public CartLooks Looks;
             public Transform Model;
             public Transform Seat;
+            public Transform BuddySeat;
             public Bounds BodyBounds;
             public Vector3 SeatLocal;
         }
@@ -102,6 +105,9 @@ namespace CoolSchool.EditorTools
 
             parts.Seat = NewLocalPoint("Seat", parts.Model, parts.SeatLocal);
 
+            // A riding plush buddy sits behind the kid's seat, on the same surface (the pivot of the buddy is its feet).
+            parts.BuddySeat = NewLocalPoint("BuddySeat", parts.Model, parts.SeatLocal + new Vector3(0f, 0.02f, -BuddySeatBehind));
+
             GameObject flag = BuildCartFlag(parts);
             GameObject stickers = BuildStickers(parts.Model, parts.BodyBounds, root.transform.position);
             if (flag != null) flag.SetActive(false);
@@ -109,6 +115,7 @@ namespace CoolSchool.EditorTools
 
             parts.Controller = root.AddComponent<CartController>();
             SetObject(parts.Controller, "seat", parts.Seat);
+            SetObject(parts.Controller, "buddySeat", parts.BuddySeat);
             SetObject(parts.Controller, "model", parts.Model);
             SetObjectArray(parts.Controller, "wheels", new Object[0]);
 

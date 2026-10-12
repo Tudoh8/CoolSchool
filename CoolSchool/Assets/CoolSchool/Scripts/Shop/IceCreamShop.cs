@@ -563,6 +563,8 @@ namespace CoolSchool.Shop
             inputMode = InputMode.Off;
             while (coinsFlying > 0) yield return null;
 
+            yield return TipRoutine(who, count);
+
             if (register != null) register.KaChing();
             Say("shop.paid");
             yield return WaitForSpeech();
@@ -712,6 +714,7 @@ namespace CoolSchool.Shop
             placed = 0;
             mistakes = 0;
             coins.Clear();
+            ResetTip();
 
             if (servedCone != null) Destroy(servedCone.gameObject);
             servedCone = null;

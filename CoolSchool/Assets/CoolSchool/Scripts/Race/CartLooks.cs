@@ -16,6 +16,9 @@ namespace CoolSchool.Race
         public const string Racer2Id = "cart.racer_2";
         public const string Racer3Id = "cart.racer_3";
 
+        /// <summary>The three body ids in body order (index 0..2). Racer 1 is the starter cart.</summary>
+        public static readonly string[] BodyIds = { EquipSlots.StarterCartId, Racer2Id, Racer3Id };
+
         [Tooltip("Racer 01, 02 and 03 (children of the cart's model). Only one is shown.")]
         [SerializeField] GameObject[] bodies;
         [Tooltip("Inactive by default.")]
@@ -59,23 +62,20 @@ namespace CoolSchool.Race
             ApplyGold();
         }
 
-        /// <summary>cart.racer_3 gives body 2, otherwise cart.racer_2 gives body 1, otherwise body 0.</summary>
+        /// <summary>The body he picked (racer 1 gives 0, racer 2 gives 1, racer 3 gives 2). The store falls back to the best owned body.</summary>
         public static int PlayerBodyIndex(PlayerProgress progress)
         {
-            if (progress == null) return 0;
-            if (progress.IsUnlocked(Racer3Id)) return 2;
-            if (progress.IsUnlocked(Racer2Id)) return 1;
-            return 0;
+            return Mathf.Max(0, System.Array.IndexOf(BodyIds, ProgressStore.ChosenCartId()));
         }
 
-        /// <summary>The body and the extras from the unlocked cart.* presents.</summary>
+        /// <summary>The body and the extras he picked: the chosen body, and each extra that is unlocked and switched on.</summary>
         public void ApplyPlayerLooks(PlayerProgress progress)
         {
             SetBody(PlayerBodyIndex(progress));
             SetExtras(
-                progress != null && progress.IsUnlocked(FlagId),
-                progress != null && progress.IsUnlocked(StickersId),
-                progress != null && progress.IsUnlocked(GoldId));
+                ProgressStore.CartExtraOn(FlagId),
+                ProgressStore.CartExtraOn(StickersId),
+                ProgressStore.CartExtraOn(GoldId));
         }
 
         void CacheOriginals()

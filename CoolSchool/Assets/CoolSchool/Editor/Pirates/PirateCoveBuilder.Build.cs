@@ -98,6 +98,8 @@ namespace CoolSchool.EditorTools
 
             WireAdventure(adventure, c, inputs, ship, cannon, boat, digSpot, chest, picker, trophy, skeletons, crew, parrot, costume, map, icons);
             SetObject(adventure, "guideMarker", BuildGuideMarker(root));
+            SetObject(adventure, "hidingBucket", BuildHidingBucket(c, root));
+            SetObject(adventure, "digitFont", FindDigitFont());
 
             Material ring = KnightsArenaBuilder.CreateGlowMaterial(MaterialFolder + "/PirateZoneRing.mat", new Color(0.3f, 0.7f, 1f), 0.4f);
             ActivityZone zone = KnightsArenaBuilder.CreateActivityZone("PirateZone", c.Root, c.ZonePosition, ZoneRadius, adventure, ring, PirateBeacon);
@@ -107,6 +109,56 @@ namespace CoolSchool.EditorTools
                 + $"{icons.Count(s => s != null)} of {icons.Length} map icons, zone {c.ZonePosition.ToString("0.0")}, "
                 + $"landing {(c.IslandLandingPoint != null ? c.IslandLandingPoint.position.ToString("0.0") : "missing")}.");
             return adventure;
+        }
+
+        // ---- The hiding bucket (the "how many are under the bucket?" game) ----
+
+        const float HidingBucketWidth = 0.45f;
+        // The town pack's bucket first, else the kids pack's (LoadPrefab prefers the pack named in the reference).
+        static readonly PrefabRef HidingBucketPrefab = new PrefabRef("SM_Prop_Bucket_01", "PolygonTown");
+
+        /// <summary>
+        /// An upside-down bucket about 0.45 m wide, without colliders, switched off. The returned wrapper's origin is the point where
+        /// the bucket touches the sand, so the game only has to place the wrapper on the ground. Null if the prefab is missing.
+        /// </summary>
+        static Transform BuildHidingBucket(CoveLayout c, Transform parent)
+        {
+            GameObject prefab = LoadPrefab(HidingBucketPrefab);
+            if (prefab == null) return null;
+
+            Transform wrapper = NewGroup("HidingBucket", parent);
+            wrapper.position = c.Chest != null ? c.Chest.position : c.SouthWest;
+
+            GameObject model = Spawn(prefab, wrapper);
+            PrefabUtility.UnpackPrefabInstance(model, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
+            foreach (Collider collider in model.GetComponentsInChildren<Collider>(true))
+                Object.DestroyImmediate(collider);
+
+            // Upside down, sized by its widest side, resting its rim on the wrapper's origin.
+            model.transform.rotation = Quaternion.Euler(180f, 0f, 0f);
+            if (TryGetBounds(model, out Bounds bounds))
+            {
+                float widest = Mathf.Max(bounds.size.x, bounds.size.z);
+                if (widest > 0.01f) model.transform.localScale *= HidingBucketWidth / widest;
+            }
+            AlignToBounds(model, wrapper.position.x, wrapper.position.z, wrapper.position.y, false);
+
+            wrapper.gameObject.SetActive(false);
+            return wrapper;
+        }
+
+        /// <summary>The Inter-Bold font for the gold digit above the chest (null if it is not in the project: the digit then uses the default font).</summary>
+        static Font FindDigitFont()
+        {
+            foreach (string guid in AssetDatabase.FindAssets("Inter-Bold t:Font"))
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                if (System.IO.Path.GetFileNameWithoutExtension(path) != "Inter-Bold") continue;
+
+                var font = AssetDatabase.LoadAssetAtPath<Font>(path);
+                if (font != null) return font;
+            }
+            return null;
         }
 
         static void SnapPoints(Transform[] points)
@@ -392,10 +444,12 @@ namespace CoolSchool.EditorTools
             panel.pivot = new Vector2(0.5f, 1f);
             panel.anchoredPosition = new Vector2(0f, -24f);
             panel.sizeDelta = new Vector2(770f, 220f);
-            UiImage(panel, background, new Color(0.97f, 0.87f, 0.62f, 0.96f));
+            // The parchment and its edge fill the whole wide panel: with the aspect kept they would shrink to a small square in
+            // the middle, and the pictures (laid out over the full width) would hang off it.
+            StretchToFill(UiImage(panel, background, new Color(0.97f, 0.87f, 0.62f, 0.96f)));
             RectTransform edge = NewUiRect("Edge", panel);
             Stretch(edge);
-            UiImage(edge, outline, new Color(0.5f, 0.32f, 0.13f, 1f));
+            StretchToFill(UiImage(edge, outline, new Color(0.5f, 0.32f, 0.13f, 1f)));
 
             var dots = new List<RectTransform>();
             for (int i = 0; i < 12; i++)
@@ -510,6 +564,16 @@ namespace CoolSchool.EditorTools
             image.raycastTarget = false;
             image.preserveAspect = true;
             return image;
+        }
+
+        /// <summary>
+        /// Makes a panel picture fill its rect: no kept aspect, and sliced (rounded corners stay round) when the sprite has
+        /// borders, otherwise simply stretched.
+        /// </summary>
+        static void StretchToFill(Image image)
+        {
+            image.preserveAspect = false;
+            if (image.sprite != null && image.sprite.border != Vector4.zero) image.type = Image.Type.Sliced;
         }
 
         // ---- The activity ----

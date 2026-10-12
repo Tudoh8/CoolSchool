@@ -31,6 +31,9 @@ namespace CoolSchool.Lessons
         /// <summary>The font for the number above the toy. The lesson passes Inter Bold.</summary>
         public Font LabelFont { get; set; }
 
+        /// <summary>Makes the number above the toy smaller (or bigger). Small toys, like the ones in a ten-frame tray, use less than 1 so neighbouring numbers do not overlap.</summary>
+        public float LabelSizeMultiplier { get; set; } = 1f;
+
         public bool Counted { get; private set; }
 
         /// <summary>True while the toy is hopping or flying, so another tap does not disturb it.</summary>
@@ -271,7 +274,7 @@ namespace CoolSchool.Lessons
 
             var rect = (RectTransform)root.transform;
             rect.sizeDelta = new Vector2(200f, 160f);
-            rect.localScale = Vector3.one * LabelScale;
+            rect.localScale = Vector3.one * (LabelScale * LabelSizeMultiplier);
 
             var textObject = new GameObject("Digit", typeof(RectTransform), typeof(Text), typeof(Outline));
             var textRect = (RectTransform)textObject.transform;
@@ -303,7 +306,7 @@ namespace CoolSchool.Lessons
         {
             if (label == null) return;
 
-            label.position = transform.position + Vector3.up * (topHeight + LabelLift);
+            label.position = transform.position + Vector3.up * (topHeight + LabelLift * LabelSizeMultiplier);
             Camera main = Camera.main;
             if (main != null) label.rotation = main.transform.rotation;
         }

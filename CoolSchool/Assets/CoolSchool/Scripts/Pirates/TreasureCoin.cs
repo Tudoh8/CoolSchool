@@ -22,6 +22,7 @@ namespace CoolSchool.Pirates
         const float FlySeconds = 0.5f;
         const float FlyArcHeight = 0.8f;
         const float SpawnPopSeconds = 0.3f;
+        const float HopSeconds = 0.4f;
 
         /// <summary>True once the coin has been tapped and is flying into (or is in) the chest.</summary>
         public bool Collected { get; private set; }
@@ -97,6 +98,27 @@ namespace CoolSchool.Pirates
         {
             pulsing = on;
             if (!on && !Collected) transform.localScale = baseScale;
+        }
+
+        /// <summary>A little hop on the spot (a friendly "not that one" wiggle, or a cheer). Ignored once collected.</summary>
+        public void Hop(float height = 0.3f)
+        {
+            if (Collected || !isActiveAndEnabled) return;
+
+            StartCoroutine(HopRoutine(height));
+        }
+
+        System.Collections.IEnumerator HopRoutine(float height)
+        {
+            Vector3 start = transform.position;
+            for (float elapsed = 0f; elapsed < HopSeconds; elapsed += Time.deltaTime)
+            {
+                if (Collected) yield break;
+
+                transform.position = start + Vector3.up * (Mathf.Sin(elapsed / HopSeconds * Mathf.PI) * height);
+                yield return null;
+            }
+            if (!Collected) transform.position = start;
         }
 
         void Update()

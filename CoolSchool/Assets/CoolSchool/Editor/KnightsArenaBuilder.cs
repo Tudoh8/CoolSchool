@@ -98,6 +98,10 @@ namespace CoolSchool.EditorTools
         /// <summary>How far the ladder tops stick up above the wall, so the kid sees them from the camera side.</summary>
         const float LadderPoke = 0.65f;
         const float LadderLeanDegrees = 12f;
+        /// <summary>The glowing start spot is this far in front of the courtyard's back wall, behind the dragon's landing spot and the goblins' ladder landings.</summary>
+        const float CastleZoneBackOffset = 5.5f;
+        /// <summary>Where everyone cheers after the dragon flew away: this far inside the gate, so the front wall stays see-through.</summary>
+        const float CelebrateGateOffset = 2.5f;
         /// <summary>No ladder gets wider than this (metres), whatever the model's proportions are.</summary>
         const float LadderMaxWidth = 1.1f;
         /// <summary>The climber stands this far in front of the ladder's middle line (towards the outside).</summary>
@@ -676,13 +680,19 @@ namespace CoolSchool.EditorTools
 
             Transform entry = NewPoint("DragonEntry", points, new Vector3(courtyardX, DragonEntryHeight, layout.BackWallOuterZ + 8f));
             Transform center = NewPoint("ArenaCenter", points, new Vector3(courtyardX, 0f, layout.Courtyard.center.z + 1f));
+            // After the dragon flew away the player and the knights run here, just inside the gate, and cheer facing the camera.
+            // It must stay inside the courtyard, or the front wall would turn solid again.
+            Transform celebrateSpot = NewPoint("CelebrateSpot", points,
+                SnapToNavMesh(new Vector3(layout.GatePosition.x, 0f, layout.Courtyard.min.z + CelebrateGateOffset)));
 
             var game = new GameObject("KnightsGame").AddComponent<KnightsGame>();
             game.transform.SetParent(arena, false);
 
-            // Inside the courtyard, a few steps past the gate: walking in through the gate starts the battle.
+            // At the back of the courtyard, in line with the gate: the kid walks in through the gate and across the courtyard
+            // to the glowing spot, and that starts the battle. Never in front of the courtyard's middle.
             Material ringMaterial = CreateGlowMaterial(ZoneRingMaterialPath, new Color(0.35f, 0.55f, 1f), 0.4f);
-            Vector3 zonePosition = new Vector3(layout.GatePosition.x, 0f, layout.Courtyard.min.z + 3f);
+            float zoneZ = Mathf.Max(layout.Courtyard.max.z - CastleZoneBackOffset, layout.Courtyard.center.z);
+            Vector3 zonePosition = new Vector3(layout.GatePosition.x, 0f, zoneZ);
             ActivityZone castleZone = CreateActivityZone("CastleZone", arena, zonePosition, 2.0f, game, ringMaterial,
                 ActivityBeaconBuilder.KnightsBeacon);
 
@@ -696,7 +706,7 @@ namespace CoolSchool.EditorTools
             // The dragon waits high behind the castle, facing the courtyard (south).
             DragonBoss dragon = CreateDragon(arena, entry, Vector3.back, inputs, result);
 
-            WireGame(game, layout, inputs, ladders, entry, center, opponents, dragon,
+            WireGame(game, layout, inputs, ladders, entry, center, celebrateSpot, opponents, dragon,
                 inputs.HeroWeaponHolders.Concat(opponentHolders).ToArray());
 
             Bounds footprint = layout.Footprint;
@@ -831,7 +841,7 @@ namespace CoolSchool.EditorTools
         }
 
         static void WireGame(KnightsGame game, ArenaLayout layout, ArenaInputs inputs, WallLadder[] ladders,
-            Transform entry, Transform center, BattleOpponentAI[] opponents, DragonBoss dragon, WeaponHolder[] holders)
+            Transform entry, Transform center, Transform celebrateSpot, BattleOpponentAI[] opponents, DragonBoss dragon, WeaponHolder[] holders)
         {
             SetObject(game, "player", inputs.Player);
             SetObject(game, "playerInput", inputs.PlayerInput);
@@ -844,6 +854,7 @@ namespace CoolSchool.EditorTools
             SetObject(game, "dragon", dragon);
             SetObject(game, "dragonEntry", entry);
             SetObject(game, "arenaCenter", center);
+            SetObject(game, "celebrateSpot", celebrateSpot);
             SetObjectArray(game, "allies", inputs.Allies);
             SetObjectArray(game, "weaponHolders", holders);
             SetFloat(game, "victorySeconds", 4f);

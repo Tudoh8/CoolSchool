@@ -1,4 +1,5 @@
 using System.Collections;
+using CoolSchool.Activities;
 using CoolSchool.Aliens;
 using CoolSchool.Audio;
 using CoolSchool.Battle;
@@ -170,6 +171,7 @@ namespace CoolSchool.Rewards
             while (ProgressStore.Current.starsInJar >= jarCapacity)
             {
                 yield return WaitForStarsToLand();
+                yield return WaitForActivityToEnd();
                 yield return new WaitForSeconds(JarFullPauseSeconds);
 
                 RewardVoice.Say("reward.jar_full");
@@ -178,6 +180,9 @@ namespace CoolSchool.Rewards
 
                 ProgressStore.EmptyJar(jarCapacity);
                 RewardItem item = catalog != null ? catalog.NextLocked(ProgressStore.Current) : null;
+
+                // Everything is won: the present holds a medal for the Toy Room wall.
+                if (item == null && catalog != null) ProgressStore.AddMedal();
                 yield return ShowPresent(item);
             }
 
@@ -200,6 +205,20 @@ namespace CoolSchool.Rewards
         {
             float giveUp = Time.time + MaxStarWaitSeconds;
             while (starsInFlight > 0 && Time.time < giveUp) yield return null;
+        }
+
+        /// <summary>
+        /// A present only opens back in free play: games can still ask questions after their stars (a countdown, a
+        /// podium question), and the present must never get in the way of those. The stars themselves land straight away.
+        /// </summary>
+        IEnumerator WaitForActivityToEnd()
+        {
+            while (true)
+            {
+                ActivityManager manager = ActivityManager.Instance;
+                if (manager == null || manager.Current == null || manager.Current == manager.DefaultActivity) yield break;
+                yield return null;
+            }
         }
 
         /// <summary>Waits for the teacher to finish talking, but never for long.</summary>

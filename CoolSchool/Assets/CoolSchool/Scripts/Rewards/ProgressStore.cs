@@ -52,6 +52,9 @@ namespace CoolSchool.Rewards
 
             if (current == null) current = new PlayerProgress();
             if (current.unlockedItems == null) current.unlockedItems = new List<string>();
+            if (current.cartExtrasOff == null) current.cartExtrasOff = new List<string>();
+            if (current.cartsTried == null) current.cartsTried = new List<string>();
+            if (current.unseenItems == null) current.unseenItems = new List<string>();
         }
 
         public static void Save()
@@ -83,7 +86,10 @@ namespace CoolSchool.Rewards
             Save();
         }
 
-        /// <summary>A present was opened. The item (if any) is unlocked, and a sword is also picked up to use.</summary>
+        /// <summary>
+        /// A present was opened. The item (if any) is unlocked and marked as new for the Toy Room.
+        /// It is NOT worn automatically: the popup asks, and its answer calls Equip. A null item (the medal) only counts.
+        /// </summary>
         public static void OpenPresent(RewardItem item)
         {
             PlayerProgress progress = Current;
@@ -92,8 +98,147 @@ namespace CoolSchool.Rewards
             if (item != null && !string.IsNullOrEmpty(item.id))
             {
                 if (!progress.IsUnlocked(item.id)) progress.unlockedItems.Add(item.id);
-                if (item.kind == RewardKind.Sword) progress.equippedSword = item.id;
+                if (!progress.unseenItems.Contains(item.id)) progress.unseenItems.Add(item.id);
             }
+            Save();
+        }
+
+        // ---- Equipment ----
+
+        const string NoBuddy = "none";
+        const string Racer2Id = "cart.racer_2";
+        const string Racer3Id = "cart.racer_3";
+
+        /// <summary>
+        /// The id worn in this slot now, resolved: sword and shield fall back to the starters, the buddy is
+        /// the parrot when nothing was chosen and it is owned. "" means nothing.
+        /// </summary>
+        public static string EquippedId(EquipSlot slot)
+        {
+            PlayerProgress progress = Current;
+            switch (slot)
+            {
+                case EquipSlot.Sword:
+                    return string.IsNullOrEmpty(progress.equippedSword) ? EquipSlots.StarterSwordId : progress.equippedSword;
+                case EquipSlot.Shield:
+                    return string.IsNullOrEmpty(progress.equippedShield) ? EquipSlots.StarterShieldId : progress.equippedShield;
+                case EquipSlot.Hat:
+                    return progress.equippedHat ?? "";
+                case EquipSlot.Buddy:
+                    if (progress.equippedBuddy == NoBuddy) return "";
+                    if (string.IsNullOrEmpty(progress.equippedBuddy))
+                        return progress.IsUnlocked(EquipSlots.ParrotId) ? EquipSlots.ParrotId : "";
+                    return progress.equippedBuddy;
+                default:
+                    return "";
+            }
+        }
+
+        /// <summary>
+        /// Wears this item in the slot, or nothing with "" (for the sword and shield that means the starter).
+        /// An empty buddy is stored as "none", so it does not fall back to the parrot. Saves.
+        /// </summary>
+        public static void Equip(EquipSlot slot, string id)
+        {
+            PlayerProgress progress = Current;
+            id = id ?? "";
+            switch (slot)
+            {
+                case EquipSlot.Sword:
+                    progress.equippedSword = id == EquipSlots.StarterSwordId ? "" : id;
+                    break;
+                case EquipSlot.Shield:
+                    progress.equippedShield = id == EquipSlots.StarterShieldId ? "" : id;
+                    break;
+                case EquipSlot.Hat:
+                    progress.equippedHat = id;
+                    break;
+                case EquipSlot.Buddy:
+                    progress.equippedBuddy = id == "" ? NoBuddy : id;
+                    break;
+                default:
+                    return;
+            }
+            Save();
+        }
+
+        /// <summary>The chosen cart body: equippedCart if it is owned, else the best owned one (racer 3, then 2, then 1).</summary>
+        public static string ChosenCartId()
+        {
+            PlayerProgress progress = Current;
+            string chosen = progress.equippedCart;
+            if (!string.IsNullOrEmpty(chosen) && OwnsCartBody(progress, chosen)) return chosen;
+
+            if (progress.IsUnlocked(Racer3Id)) return Racer3Id;
+            if (progress.IsUnlocked(Racer2Id)) return Racer2Id;
+            return EquipSlots.StarterCartId;
+        }
+
+        static bool OwnsCartBody(PlayerProgress progress, string id)
+        {
+            return id == EquipSlots.StarterCartId || progress.IsUnlocked(id);
+        }
+
+        /// <summary>A cart extra (flag, stickers, gold paint) is on when it is unlocked and not switched off in the picker.</summary>
+        public static bool CartExtraOn(string extraId)
+        {
+            PlayerProgress progress = Current;
+            return progress.IsUnlocked(extraId) && !progress.cartExtrasOff.Contains(extraId);
+        }
+
+        /// <summary>Stores the cart picker's choice, notes that the body and the extras that are on were tried, and saves.</summary>
+        public static void SetCart(string bodyId, bool flagOn, bool stickersOn, bool goldOn)
+        {
+            PlayerProgress progress = Current;
+            progress.equippedCart = bodyId ?? "";
+
+            SetExtra(progress, "cart.flag", flagOn);
+            SetExtra(progress, "cart.stickers", stickersOn);
+            SetExtra(progress, "cart.gold", goldOn);
+
+            AddOnce(progress.cartsTried, bodyId);
+            Save();
+        }
+
+        static void SetExtra(PlayerProgress progress, string extraId, bool on)
+        {
+            // Only owned extras can be switched on or off; a locked one is left alone.
+            if (!progress.IsUnlocked(extraId)) return;
+
+            if (on)
+            {
+                progress.cartExtrasOff.Remove(extraId);
+                AddOnce(progress.cartsTried, extraId);
+            }
+            else if (!progress.cartExtrasOff.Contains(extraId))
+            {
+                progress.cartExtrasOff.Add(extraId);
+            }
+        }
+
+        static void AddOnce(List<string> list, string id)
+        {
+            if (!string.IsNullOrEmpty(id) && !list.Contains(id)) list.Add(id);
+        }
+
+        /// <summary>He has looked at this item in the Toy Room. Saves only if it was marked as new.</summary>
+        public static void MarkSeen(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return;
+            if (Current.unseenItems.Remove(id)) Save();
+        }
+
+        /// <summary>A present after the whole catalog gave a medal for the Toy Room wall.</summary>
+        public static void AddMedal()
+        {
+            Current.medals++;
+            Save();
+        }
+
+        /// <summary>The Toy Room has shown all the medals won so far.</summary>
+        public static void MarkMedalsSeen()
+        {
+            Current.medalsSeen = Current.medals;
             Save();
         }
 

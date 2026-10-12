@@ -1,3 +1,4 @@
+using CoolSchool.Rewards;
 using UnityEngine;
 
 namespace CoolSchool.Battle
@@ -33,6 +34,8 @@ namespace CoolSchool.Battle
 
         GameObject sword;
         GameObject shield;
+        bool swordGold;
+        bool shieldGold;
         bool shown;
         Color? glow;
 
@@ -71,12 +74,16 @@ namespace CoolSchool.Battle
             if (shield != null) shield.SetActive(show);
         }
 
-        /// <summary>Swaps in another sword, e.g. one won from a present. A sword already in the hand is replaced.</summary>
-        public void SetSwordPrefab(GameObject prefab)
+        /// <summary>
+        /// Swaps in another sword, e.g. one won from a present. A sword already in the hand is replaced.
+        /// A gold sword (the gold variant of an item) is painted soft gold, also after SetGlow(null) makes a fresh one.
+        /// </summary>
+        public void SetSwordPrefab(GameObject prefab, bool gold = false)
         {
-            if (prefab == null || prefab == swordPrefab) return;
+            if (prefab == null || (prefab == swordPrefab && gold == swordGold)) return;
 
             swordPrefab = prefab;
+            swordGold = gold;
             if (sword != null)
             {
                 Destroy(sword);
@@ -84,6 +91,22 @@ namespace CoolSchool.Battle
             }
 
             // If the weapons are out right now, the new sword should appear straight away.
+            if (shown) ShowWeapons(true);
+        }
+
+        /// <summary>Swaps in another shield. A shield on the arm is replaced; a gold one is painted soft gold.</summary>
+        public void SetShieldPrefab(GameObject prefab, bool gold = false)
+        {
+            if (prefab == null || (prefab == shieldPrefab && gold == shieldGold)) return;
+
+            shieldPrefab = prefab;
+            shieldGold = gold;
+            if (shield != null)
+            {
+                Destroy(shield);
+                shield = null;
+            }
+
             if (shown) ShowWeapons(true);
         }
 
@@ -124,10 +147,15 @@ namespace CoolSchool.Battle
             if (sword == null)
             {
                 sword = Attach(swordPrefab, animator.GetBoneTransform(HumanBodyBones.RightHand), false);
+                if (sword != null && swordGold) ApplyGlow(sword, GoldPaint.SoftGlow);
+                // The lesson's golden-sword glow is brighter than the soft gold, so it goes on last.
                 if (sword != null && glow.HasValue) ApplyGlow(sword, glow.Value);
             }
             if (shield == null)
+            {
                 shield = Attach(shieldPrefab, animator.GetBoneTransform(HumanBodyBones.LeftLowerArm), true);
+                if (shield != null && shieldGold) ApplyGlow(shield, GoldPaint.SoftGlow);
+            }
         }
 
         GameObject Attach(GameObject prefab, Transform bone, bool isShield)
@@ -175,8 +203,9 @@ namespace CoolSchool.Battle
         {
             foreach (Renderer renderer in weapon.GetComponentsInChildren<Renderer>(true))
             {
-                // Reading .materials makes copies, so the shared material assets stay untouched.
-                foreach (Material material in renderer.materials)
+                // Reading .materials makes copies, so the shared material assets stay untouched. In edit mode (item icons,
+                // preview shots) .materials would leak into the scene, so the copies are made by hand there.
+                foreach (Material material in Application.isPlaying ? renderer.materials : CopySharedMaterials(renderer))
                 {
                     if (material.HasProperty(BaseMapId)) material.SetTexture(BaseMapId, Texture2D.whiteTexture);
                     if (material.HasProperty(MainTexId)) material.SetTexture(MainTexId, Texture2D.whiteTexture);
@@ -192,6 +221,16 @@ namespace CoolSchool.Battle
                     }
                 }
             }
+        }
+
+        /// <summary>Gives the renderer its own copies of its shared materials and returns them (edit-mode safe).</summary>
+        static Material[] CopySharedMaterials(Renderer renderer)
+        {
+            Material[] copies = renderer.sharedMaterials;
+            for (int i = 0; i < copies.Length; i++)
+                if (copies[i] != null) copies[i] = new Material(copies[i]);
+            renderer.sharedMaterials = copies;
+            return System.Array.FindAll(copies, material => material != null);
         }
 
         /// <summary>Toy weapons must not push kids around or block the camera.</summary>

@@ -879,3 +879,35 @@ MonoBehaviour:
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
+  - cue: ui.pick
+    clips:
+    - {fileID: 8300000, guid: ee409ffd1d3504cc39b34b055a95e404, type: 3}
+    - {fileID: 8300000, guid: 21d2dd36629bf406daad2064370e68fe, type: 3}
+    volume: 0.7
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 0
+    cooldown: 0.05
+  - cue: ui.locked
+    clips:
+    - {fileID: 8300000, guid: d1d69f0958c724d8b9af1f98108facbc, type: 3}
+    - {fileID: 8300000, guid: 357984fc32eaa4f90a2c17f08f97df07, type: 3}
+    volume: 0.5
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 0
+    cooldown: 0.05
+  - cue: wardrobe.equip
+    clips:
+    - {fileID: 8300000, guid: 24fdaac9fcb7b415a9ae19f9f0bed1b4, type: 3}
+    - {fileID: 8300000, guid: 92236ec5a1342439cac44dac0a67dda0, type: 3}
+    volume: 0.8
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: toyroom.sparkle
+    clips:
+    - {fileID: 8300000, guid: 700aadbab40e14d15a6e78c518cdb353, type: 3}
+    - {fileID: 8300000, guid: 663821756f4e54748b8fbf25b5186ca5, type: 3}
+    volume: 0.4
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05

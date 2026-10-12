@@ -50,6 +50,7 @@ namespace CoolSchool.Rewards
             model.localPosition = Vector3.zero;
             model.localRotation = Quaternion.Euler(item.revealEuler);
             PrepareModel(model.gameObject);
+            if (item.IsGold) GoldPaint.Apply(model.gameObject);
 
             // Carts are long and low too, but they stay on their wheels.
             if (standLongThingsUp && item.kind != RewardKind.Cart) StandUp(model);

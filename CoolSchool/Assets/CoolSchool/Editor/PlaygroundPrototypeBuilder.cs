@@ -158,6 +158,7 @@ namespace CoolSchool.EditorTools
             public PirateCoveBuilder.CoveLayout PirateCove;
             public SoapboxStreetBuilder.StreetLayout RaceStreet;
             public SchoolResult School;
+            public ToyRoomLayout ToyRoom;
         }
 
         /// <summary>Ground (x, z rectangles) that benches, bins and trees keep clear of, e.g. the ice cream stall. Cleared at the start of each build.</summary>
@@ -299,6 +300,9 @@ namespace CoolSchool.EditorTools
 
                 RewardsSetupBuilder.Setup(player);
 
+                // After the rewards: the wardrobe needs the catalog, the buddy and the present popup (the picture menu sits below it).
+                ToyRoomBuilder.Build(environment.ToyRoom, new ToyRoomInputs { Player = player.GetComponent<PlayerController>() });
+
                 ColorGradingSetup.ApplyToProfile();
 
                 ShowProgress("Saving scene", 0.98f);
@@ -432,6 +436,11 @@ namespace CoolSchool.EditorTools
             // Its door faces back toward the playground, and so toward the follow camera.
             info.School = SchoolBuilder.Build(root, SchoolDirection * info.FenceHalf, -SchoolDirection);
 
+            // The Toy Room in the north-east corner (door facing south) has a floor like the school, so it goes in before the grass is laid
+            // (the grass leaves its floor out) and before the NavMesh bake. It reserves its ground, so the benches and trees keep clear.
+            // Its wardrobe and picture menu are added later, after the rewards exist (ToyRoomBuilder.Build).
+            info.ToyRoom = ToyRoomBuilder.BuildRoom(root, info);
+
             // Grass under everything: the fenced area plus a margin, and the school's footprint plus a margin.
             var grass = new Bounds(new Vector3((info.MinX + info.MaxX) * 0.5f, 0f, (info.MinZ + info.MaxZ) * 0.5f),
                 new Vector3(info.MaxX - info.MinX, 0f, info.MaxZ - info.MinZ));
@@ -453,6 +462,11 @@ namespace CoolSchool.EditorTools
             {
                 Bounds floor = info.School.floorArea;
                 floors.Add(Rect.MinMaxRect(floor.min.x, floor.min.z, floor.max.x, floor.max.z));
+            }
+            if (info.ToyRoom != null && info.ToyRoom.FloorArea.size.sqrMagnitude > 0f)
+            {
+                Bounds toyFloor = info.ToyRoom.FloorArea;
+                floors.Add(Rect.MinMaxRect(toyFloor.min.x, toyFloor.min.z, toyFloor.max.x, toyFloor.max.z));
             }
             BuildTileGrid(LoadPrefab(GrassPrefab), groundGroup, grass.min.x, grass.max.x, grass.min.z, grass.max.z, 0f, floors);
 

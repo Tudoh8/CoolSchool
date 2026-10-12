@@ -2218,3 +2218,1319 @@ MonoBehaviour:
     english: Thank you! I'm free again!
     dutchClip: {fileID: 8300000, guid: 18d1f7a6491b89b44889fc9c6e02ad82, type: 3}
     englishClip: {fileID: 0}
+  - key: reward.swap_sword.1
+    group: reward.swap_sword
+    speaker: 0
+    dutch: Wil je je nieuwe zwaard gebruiken?
+    english: Do you want to use your new sword?
+    dutchClip: {fileID: 8300000, guid: f612d07c0bd48c94691d2e16f2f43495, type: 3}
+    englishClip: {fileID: 0}
+  - key: reward.swap_shield.1
+    group: reward.swap_shield
+    speaker: 0
+    dutch: Wil je je nieuwe schild gebruiken?
+    english: Do you want to use your new shield?
+    dutchClip: {fileID: 8300000, guid: 0503b24944107134db0a90e79cec2bde, type: 3}
+    englishClip: {fileID: 0}
+  - key: reward.swap_hat.1
+    group: reward.swap_hat
+    speaker: 0
+    dutch: Wil je hem meteen opzetten?
+    english: Do you want to put it on right away?
+    dutchClip: {fileID: 8300000, guid: 075c651601efef649a837d6863cf96ac, type: 3}
+    englishClip: {fileID: 0}
+  - key: reward.swap_buddy.1
+    group: reward.swap_buddy
+    speaker: 0
+    dutch: Mag je nieuwe knuffel met je mee?
+    english: Can your new cuddly toy come along?
+    dutchClip: {fileID: 8300000, guid: 6cdeed248ec137b4796807be6afb12af, type: 3}
+    englishClip: {fileID: 0}
+  - key: reward.swap_yes.1
+    group: reward.swap_yes
+    speaker: 0
+    dutch: Goed gekozen!
+    english: Good choice!
+    dutchClip: {fileID: 8300000, guid: 5a64445445713c446bafe5017b47c33e, type: 3}
+    englishClip: {fileID: 0}
+  - key: reward.swap_yes.2
+    group: reward.swap_yes
+    speaker: 0
+    dutch: Super!
+    english: Super!
+    dutchClip: {fileID: 8300000, guid: 18596c6753c8cbc459dc8967b7d819f1, type: 3}
+    englishClip: {fileID: 0}
+  - key: reward.swap_no.1
+    group: reward.swap_no
+    speaker: 0
+    dutch: "Ok\xE9! Hij wacht op je in je speelgoedkamer."
+    english: Okay! It's waiting for you in your toy room.
+    dutchClip: {fileID: 8300000, guid: 79257f00aa50bd04993cf4e4f0e9409b, type: 3}
+    englishClip: {fileID: 0}
+  - key: reward.cart_new.1
+    group: reward.cart_new
+    speaker: 0
+    dutch: Die kun je kiezen bij de race!
+    english: You can pick it at the race!
+    dutchClip: {fileID: 8300000, guid: f07fdf75a487a8d45b3a34897cf9f947, type: 3}
+    englishClip: {fileID: 0}
+  - key: reward.medal.1
+    group: reward.medal
+    speaker: 0
+    dutch: Een medaille! Die hangt in je speelgoedkamer.
+    english: A medal! It hangs in your toy room.
+    dutchClip: {fileID: 8300000, guid: ef100e6e02b36bd4087312562d4cb8b3, type: 3}
+    englishClip: {fileID: 0}
+  - key: toyroom.invite.1
+    group: toyroom.invite
+    speaker: 0
+    dutch: Kom kijken in je speelgoedkamer!
+    english: Come and look in your toy room!
+    dutchClip: {fileID: 8300000, guid: 6b3bc60bd56072c4080c64484d65f0b0, type: 3}
+    englishClip: {fileID: 0}
+  - key: toyroom.welcome.1
+    group: toyroom.welcome
+    speaker: 3
+    dutch: Dit is jouw speelgoedkamer! Hier staat alles wat je hebt verdiend.
+    english: This is your toy room! Everything you've earned is here.
+    dutchClip: {fileID: 8300000, guid: c7dcbe74f4103e64d800e5502293fdbc, type: 3}
+    englishClip: {fileID: 0}
+  - key: toyroom.new_item.1
+    group: toyroom.new_item
+    speaker: 3
+    dutch: Kijk, iets nieuws!
+    english: Look, something new!
+    dutchClip: {fileID: 8300000, guid: a99bc6ba8411f184b94b0f79c0f354d9, type: 3}
+    englishClip: {fileID: 0}
+  - key: toyroom.medal.1
+    group: toyroom.medal
+    speaker: 3
+    dutch: Je hebt een nieuwe medaille!
+    english: You have a new medal!
+    dutchClip: {fileID: 8300000, guid: fe7248629b980e946b7cff388b2e4987, type: 3}
+    englishClip: {fileID: 0}
+  - key: wardrobe.welcome.1
+    group: wardrobe.welcome
+    speaker: 3
+    dutch: Wat wil je aan?
+    english: What do you want to wear?
+    dutchClip: {fileID: 8300000, guid: ff0b71087d7943e48bcb25a4fa0ab65d, type: 3}
+    englishClip: {fileID: 0}
+  - key: wardrobe.pick.1
+    group: wardrobe.pick
+    speaker: 3
+    dutch: Mooi!
+    english: Nice!
+    dutchClip: {fileID: 8300000, guid: e04a383d7433aeb48baf31d8b6db5089, type: 3}
+    englishClip: {fileID: 0}
+  - key: wardrobe.pick.2
+    group: wardrobe.pick
+    speaker: 3
+    dutch: Wat stoer!
+    english: So cool!
+    dutchClip: {fileID: 8300000, guid: 2a0172d95b6e8d14992fc33f1cd11f39, type: 3}
+    englishClip: {fileID: 0}
+  - key: wardrobe.locked.1
+    group: wardrobe.locked
+    speaker: 3
+    dutch: Die moet je nog verdienen. Vul de sterrenpot!
+    english: You still have to earn that one. Fill the star jar!
+    dutchClip: {fileID: 8300000, guid: a3258e315d006964c8ebdc046fbda1d9, type: 3}
+    englishClip: {fileID: 0}
+  - key: wardrobe.done.1
+    group: wardrobe.done
+    speaker: 3
+    dutch: Klaar! Je ziet er geweldig uit!
+    english: Done! You look great!
+    dutchClip: {fileID: 8300000, guid: 62ac29bb4d26ee646976190c24e31a58, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.pick_cart.1
+    group: race.pick_cart
+    speaker: 6
+    dutch: Kies je kar!
+    english: Pick your cart!
+    dutchClip: {fileID: 8300000, guid: e433e75430491d64c9d31aa631ce30f7, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.cart_locked.1
+    group: race.cart_locked
+    speaker: 6
+    dutch: Die kar moet je nog winnen!
+    english: You still have to win that one!
+    dutchClip: {fileID: 8300000, guid: a8ef3714528865d499213a91d0c94c34, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.cart_new.1
+    group: race.cart_new
+    speaker: 6
+    dutch: Ooh, een nieuwe kar! Probeer hem uit!
+    english: Ooh, a new cart! Try it out!
+    dutchClip: {fileID: 8300000, guid: 304a77e672c9acb44afd2f68a2cce2b7, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.cart_ready.1
+    group: race.cart_ready
+    speaker: 6
+    dutch: Daar gaan we!
+    english: Here we go!
+    dutchClip: {fileID: 8300000, guid: 736dc0a48a2dc584abd36e9ff6c0c9e1, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.gold.1
+    group: item.gold
+    speaker: 3
+    dutch: Wauw, goud!
+    english: Wow, gold!
+    dutchClip: {fileID: 8300000, guid: 17d62d6458ed2df468bb38b13e5480a3, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.sword.foam.1
+    group: item.sword.foam
+    speaker: 3
+    dutch: Het schuimzwaard!
+    english: The foam sword!
+    dutchClip: {fileID: 8300000, guid: 6f8fb766f363b8b45933bd5cfb969ec1, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.shield.basic.1
+    group: item.shield.basic
+    speaker: 3
+    dutch: Het schild!
+    english: The shield!
+    dutchClip: {fileID: 8300000, guid: 5ab71c50cedb1f149954eebf0c946231, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.racer_1.1
+    group: item.cart.racer_1
+    speaker: 3
+    dutch: "Kar \xE9\xE9n!"
+    english: Cart one!
+    dutchClip: {fileID: 8300000, guid: 0f02a651d8eb05e498c8cb2500d9904a, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.sword.plastic.1
+    group: item.sword.plastic
+    speaker: 3
+    dutch: Het plastic zwaard!
+    english: The plastic sword!
+    dutchClip: {fileID: 8300000, guid: 3009993790075954e8be31d12ceb5f1b, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.hat.knight_helmet.1
+    group: item.hat.knight_helmet
+    speaker: 3
+    dutch: De ridderhelm!
+    english: The knight's helmet!
+    dutchClip: {fileID: 8300000, guid: 6383078efad056e4a8ca06700b4d694b, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.plush.dino.1
+    group: item.plush.dino
+    speaker: 3
+    dutch: De dino!
+    english: The dino!
+    dutchClip: {fileID: 8300000, guid: 90a4b8834bf178344928e0bbe8e27fc6, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.flag.1
+    group: item.cart.flag
+    speaker: 3
+    dutch: De vlag!
+    english: The flag!
+    dutchClip: {fileID: 8300000, guid: 3d21c740ec671a443ac67074cc2da9f0, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.sword.wood.1
+    group: item.sword.wood
+    speaker: 3
+    dutch: Het houten zwaard!
+    english: The wooden sword!
+    dutchClip: {fileID: 8300000, guid: b5fe3338e9eef76468bef832daf52c14, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.shield.round.1
+    group: item.shield.round
+    speaker: 3
+    dutch: Het ronde schild!
+    english: The round shield!
+    dutchClip: {fileID: 8300000, guid: 123a08a1abd234d40a5753cedf267874, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.racer_2.1
+    group: item.cart.racer_2
+    speaker: 3
+    dutch: Kar twee!
+    english: Cart two!
+    dutchClip: {fileID: 8300000, guid: e4ab46439e0f53f42b4e5fe240bbd87f, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.plush.parrot.1
+    group: item.plush.parrot
+    speaker: 3
+    dutch: Lorre de papegaai!
+    english: Lorre the parrot!
+    dutchClip: {fileID: 8300000, guid: 5d89a9564af1c014ea671940051fedcb, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.plush.unicorn.1
+    group: item.plush.unicorn
+    speaker: 3
+    dutch: De eenhoorn!
+    english: The unicorn!
+    dutchClip: {fileID: 8300000, guid: 3c2b78a8d6ea6814fb80d6d6e0dc4c73, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.hat.cap.1
+    group: item.hat.cap
+    speaker: 3
+    dutch: De pet!
+    english: The cap!
+    dutchClip: {fileID: 8300000, guid: b4f09411e14ed8f4e9f5c7687adf654b, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.stickers.1
+    group: item.cart.stickers
+    speaker: 3
+    dutch: De stickers!
+    english: The stickers!
+    dutchClip: {fileID: 8300000, guid: 8d83eeb8425a2bc4dae2b3db4ec8c937, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.sword.pirate.1
+    group: item.sword.pirate
+    speaker: 3
+    dutch: Het piratenzwaard!
+    english: The pirate sword!
+    dutchClip: {fileID: 8300000, guid: 1466c8f25500330468375029811b1602, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.sword.foam_big.1
+    group: item.sword.foam_big
+    speaker: 3
+    dutch: Het grote schuimzwaard!
+    english: The big foam sword!
+    dutchClip: {fileID: 8300000, guid: 843e4c9be9d7f8241a1c3ae54f78f383, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.plush.bear.1
+    group: item.plush.bear
+    speaker: 3
+    dutch: De beer!
+    english: The bear!
+    dutchClip: {fileID: 8300000, guid: 0c9a40f34a7324f4c8f85f864b2080ca, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.racer_3.1
+    group: item.cart.racer_3
+    speaker: 3
+    dutch: Kar drie!
+    english: Cart three!
+    dutchClip: {fileID: 8300000, guid: a751599f58a420a40a31330da1ee0d98, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.hat.pirate.1
+    group: item.hat.pirate
+    speaker: 3
+    dutch: De piratenhoed!
+    english: The pirate hat!
+    dutchClip: {fileID: 8300000, guid: 39820804ca9f4d54e8b273babfd72b66, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.gold.1
+    group: item.cart.gold
+    speaker: 3
+    dutch: De gouden verf!
+    english: The gold paint!
+    dutchClip: {fileID: 8300000, guid: 6dca22e967dbcea4496c55b61fb9b688, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.0.1
+    group: number.0
+    speaker: 0
+    dutch: Nul
+    english: Zero
+    dutchClip: {fileID: 8300000, guid: e13519f5b1c61cf419323e53d7f5c58c, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.11.1
+    group: number.11
+    speaker: 0
+    dutch: Elf
+    english: Eleven
+    dutchClip: {fileID: 8300000, guid: 896c702870bbbf04884c2ebd0a87f024, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.12.1
+    group: number.12
+    speaker: 0
+    dutch: Twaalf
+    english: Twelve
+    dutchClip: {fileID: 8300000, guid: 3bc93b42710494d48a202f3daaf33f05, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.13.1
+    group: number.13
+    speaker: 0
+    dutch: Dertien
+    english: Thirteen
+    dutchClip: {fileID: 8300000, guid: 566cf9a1b09ef60438f188bab0e13107, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.14.1
+    group: number.14
+    speaker: 0
+    dutch: Veertien
+    english: Fourteen
+    dutchClip: {fileID: 8300000, guid: 4aed1ca486c13204ab25e96d726d8051, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.15.1
+    group: number.15
+    speaker: 0
+    dutch: Vijftien
+    english: Fifteen
+    dutchClip: {fileID: 8300000, guid: 65fcba793a7133347ba2e671df28e262, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.16.1
+    group: number.16
+    speaker: 0
+    dutch: Zestien
+    english: Sixteen
+    dutchClip: {fileID: 8300000, guid: 74fa1579c0218634da23d4d459d85f57, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.17.1
+    group: number.17
+    speaker: 0
+    dutch: Zeventien
+    english: Seventeen
+    dutchClip: {fileID: 8300000, guid: 2ee9c718b6154484cba5262accbd3ba7, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.18.1
+    group: number.18
+    speaker: 0
+    dutch: Achttien
+    english: Eighteen
+    dutchClip: {fileID: 8300000, guid: 797d8f9ad6737434699ee29e219717fb, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.19.1
+    group: number.19
+    speaker: 0
+    dutch: Negentien
+    english: Nineteen
+    dutchClip: {fileID: 8300000, guid: 8419eb932c5e3ae4f9bb58f9aea7b165, type: 3}
+    englishClip: {fileID: 0}
+  - key: number.20.1
+    group: number.20
+    speaker: 0
+    dutch: Twintig
+    english: Twenty
+    dutchClip: {fileID: 8300000, guid: 6fd1ab755fc745249a9caca702f5e096, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.quick_look.1
+    group: lesson.quick_look
+    speaker: 0
+    dutch: Kijk goed! De stippen zijn er maar heel even.
+    english: Look closely! The dots are only there for a moment.
+    dutchClip: {fileID: 8300000, guid: d6b3516c7df9f914da5a7edd8fb650f2, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.quick_look_ask.1
+    group: lesson.quick_look_ask
+    speaker: 0
+    dutch: Hoeveel stippen zag je?
+    english: How many dots did you see?
+    dutchClip: {fileID: 8300000, guid: e0d0c0f8a2fefa3469bd4094e7e610d3, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.compare_more.1
+    group: lesson.compare_more
+    speaker: 0
+    dutch: Waar zijn er meer? Tik op die kant!
+    english: Where are there more? Tap that side!
+    dutchClip: {fileID: 8300000, guid: 08dd0bdce97ed9540bbef04e1f92932b, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.compare_fewer.1
+    group: lesson.compare_fewer
+    speaker: 0
+    dutch: Waar zijn er minder? Tik op die kant!
+    english: Where are there fewer? Tap that side!
+    dutchClip: {fileID: 8300000, guid: b57820c9267ee344386e099e06745e4a, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.compare_hint.1
+    group: lesson.compare_hint
+    speaker: 0
+    dutch: We tellen ze allebei. Tel maar mee!
+    english: Let's count them both. Count along!
+    dutchClip: {fileID: 8300000, guid: 10890bfe133ced14a88539b61553dd02, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.same_amount.1
+    group: lesson.same_amount
+    speaker: 0
+    dutch: Doe er net zoveel in de mand als er in het bakje liggen!
+    english: Put just as many in the basket as there are in the tray!
+    dutchClip: {fileID: 8300000, guid: c5e2e69014e72944cb7f8ba5fef49d1f, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.one_more.1
+    group: lesson.one_more
+    speaker: 0
+    dutch: Kijk! Er komt er eentje bij!
+    english: Look! One more is coming!
+    dutchClip: {fileID: 8300000, guid: 7fd635eec0977634095adfe37c4378ce, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.one_less.1
+    group: lesson.one_less
+    speaker: 0
+    dutch: Kijk! Er gaat er eentje weg!
+    english: Look! One is going away!
+    dutchClip: {fileID: 8300000, guid: 2513b016504f07d4894bbe948d64e6fa, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.how_many_now.1
+    group: lesson.how_many_now
+    speaker: 0
+    dutch: Hoeveel zijn het er nu?
+    english: How many are there now?
+    dutchClip: {fileID: 8300000, guid: 40da4d63a5f47884d9e76d93d732c576, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.1.1
+    group: lesson.number_after.1
+    speaker: 0
+    dutch: "Welk getal komt na \xE9\xE9n?"
+    english: Which number comes after one?
+    dutchClip: {fileID: 8300000, guid: 99170ade9d8bb53479df38ad5d5003d3, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.2.1
+    group: lesson.number_after.2
+    speaker: 0
+    dutch: Welk getal komt na twee?
+    english: Which number comes after two?
+    dutchClip: {fileID: 8300000, guid: 66329d14765f6d64eaa27a981774cf60, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.3.1
+    group: lesson.number_after.3
+    speaker: 0
+    dutch: Welk getal komt na drie?
+    english: Which number comes after three?
+    dutchClip: {fileID: 8300000, guid: 18729fd45f3efd14181218dc8c331a10, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.4.1
+    group: lesson.number_after.4
+    speaker: 0
+    dutch: Welk getal komt na vier?
+    english: Which number comes after four?
+    dutchClip: {fileID: 8300000, guid: a76eb183acb2cab4e9d58c07b7ae0515, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.5.1
+    group: lesson.number_after.5
+    speaker: 0
+    dutch: Welk getal komt na vijf?
+    english: Which number comes after five?
+    dutchClip: {fileID: 8300000, guid: 4da44f35c49b7fc4ea0ceb3b59bf74df, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.6.1
+    group: lesson.number_after.6
+    speaker: 0
+    dutch: Welk getal komt na zes?
+    english: Which number comes after six?
+    dutchClip: {fileID: 8300000, guid: 2d574fe7e87dc5446a173332c7077d5b, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.7.1
+    group: lesson.number_after.7
+    speaker: 0
+    dutch: Welk getal komt na zeven?
+    english: Which number comes after seven?
+    dutchClip: {fileID: 8300000, guid: 001c9d3a4112e7d4aa316464aef20af4, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.8.1
+    group: lesson.number_after.8
+    speaker: 0
+    dutch: Welk getal komt na acht?
+    english: Which number comes after eight?
+    dutchClip: {fileID: 8300000, guid: 361cfbe4bcd04414fa26f6bf4ccfba7d, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.9.1
+    group: lesson.number_after.9
+    speaker: 0
+    dutch: Welk getal komt na negen?
+    english: Which number comes after nine?
+    dutchClip: {fileID: 8300000, guid: e233178dfb326464395c6ae13a20d34b, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.10.1
+    group: lesson.number_after.10
+    speaker: 0
+    dutch: Welk getal komt na tien?
+    english: Which number comes after ten?
+    dutchClip: {fileID: 8300000, guid: 0f8b17f771277064cbb9f7e310ca5245, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.11.1
+    group: lesson.number_after.11
+    speaker: 0
+    dutch: Welk getal komt na elf?
+    english: Which number comes after eleven?
+    dutchClip: {fileID: 8300000, guid: a220a5c666dd9de48bc4e650c74676b3, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.12.1
+    group: lesson.number_after.12
+    speaker: 0
+    dutch: Welk getal komt na twaalf?
+    english: Which number comes after twelve?
+    dutchClip: {fileID: 8300000, guid: 12d7195d50673f340ad10122ba49bc28, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.13.1
+    group: lesson.number_after.13
+    speaker: 0
+    dutch: Welk getal komt na dertien?
+    english: Which number comes after thirteen?
+    dutchClip: {fileID: 8300000, guid: 4e99567064e928443ab13b46c43f711b, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.14.1
+    group: lesson.number_after.14
+    speaker: 0
+    dutch: Welk getal komt na veertien?
+    english: Which number comes after fourteen?
+    dutchClip: {fileID: 8300000, guid: 0584b0230004fa2488d3a7c34a04a202, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.15.1
+    group: lesson.number_after.15
+    speaker: 0
+    dutch: Welk getal komt na vijftien?
+    english: Which number comes after fifteen?
+    dutchClip: {fileID: 8300000, guid: 424d5d54f7553b4469aaad07d859e939, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.16.1
+    group: lesson.number_after.16
+    speaker: 0
+    dutch: Welk getal komt na zestien?
+    english: Which number comes after sixteen?
+    dutchClip: {fileID: 8300000, guid: 0e3967d562ac7cb479d1fe12757fd28d, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.17.1
+    group: lesson.number_after.17
+    speaker: 0
+    dutch: Welk getal komt na zeventien?
+    english: Which number comes after seventeen?
+    dutchClip: {fileID: 8300000, guid: 1030c727099123a4488a895167d0ca32, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.18.1
+    group: lesson.number_after.18
+    speaker: 0
+    dutch: Welk getal komt na achttien?
+    english: Which number comes after eighteen?
+    dutchClip: {fileID: 8300000, guid: 35d5fb34f59020749afe5a753dd8cccf, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_after.19.1
+    group: lesson.number_after.19
+    speaker: 0
+    dutch: Welk getal komt na negentien?
+    english: Which number comes after nineteen?
+    dutchClip: {fileID: 8300000, guid: 897ad946a29cb7e4abec4ec5263ab432, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.2.1
+    group: lesson.number_before.2
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r twee?"
+    english: Which number comes before two?
+    dutchClip: {fileID: 8300000, guid: c16e80c2a3c07be4fa9a781e268adc6f, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.3.1
+    group: lesson.number_before.3
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r drie?"
+    english: Which number comes before three?
+    dutchClip: {fileID: 8300000, guid: 0f61da64e14944e4aadf57d3ab952638, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.4.1
+    group: lesson.number_before.4
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r vier?"
+    english: Which number comes before four?
+    dutchClip: {fileID: 8300000, guid: 1f6446c7da8521b499cb83c3db86239d, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.5.1
+    group: lesson.number_before.5
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r vijf?"
+    english: Which number comes before five?
+    dutchClip: {fileID: 8300000, guid: ea6a7bdfa475b304887c69e61e3afd9a, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.6.1
+    group: lesson.number_before.6
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r zes?"
+    english: Which number comes before six?
+    dutchClip: {fileID: 8300000, guid: db47c8cab523b934c9d88aa0e6f40c86, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.7.1
+    group: lesson.number_before.7
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r zeven?"
+    english: Which number comes before seven?
+    dutchClip: {fileID: 8300000, guid: 36a3e2e23d659ae4c95f738b8493b44b, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.8.1
+    group: lesson.number_before.8
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r acht?"
+    english: Which number comes before eight?
+    dutchClip: {fileID: 8300000, guid: a453f81b40daee344bf48bcdbaab99bb, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.9.1
+    group: lesson.number_before.9
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r negen?"
+    english: Which number comes before nine?
+    dutchClip: {fileID: 8300000, guid: 0b3e3dfdd97266c43bb74c36f0ccb66c, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.10.1
+    group: lesson.number_before.10
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r tien?"
+    english: Which number comes before ten?
+    dutchClip: {fileID: 8300000, guid: bd618e848f6899d4abe6a9fa5951cba3, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.11.1
+    group: lesson.number_before.11
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r elf?"
+    english: Which number comes before eleven?
+    dutchClip: {fileID: 8300000, guid: 0ba6d2aedc80102478bb9d1cf3dc4c08, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.12.1
+    group: lesson.number_before.12
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r twaalf?"
+    english: Which number comes before twelve?
+    dutchClip: {fileID: 8300000, guid: 22f2a9f22c205964bad29960bee5082e, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.13.1
+    group: lesson.number_before.13
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r dertien?"
+    english: Which number comes before thirteen?
+    dutchClip: {fileID: 8300000, guid: 411efb9c469db8b4187946a1c4a0730f, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.14.1
+    group: lesson.number_before.14
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r veertien?"
+    english: Which number comes before fourteen?
+    dutchClip: {fileID: 8300000, guid: d34b5ee64ef01084ebf26cecdc4f5a18, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.15.1
+    group: lesson.number_before.15
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r vijftien?"
+    english: Which number comes before fifteen?
+    dutchClip: {fileID: 8300000, guid: 6a88887f734028546810f2e820660149, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.16.1
+    group: lesson.number_before.16
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r zestien?"
+    english: Which number comes before sixteen?
+    dutchClip: {fileID: 8300000, guid: a2b7f3398aa77cf4ea0c97b521e43c2d, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.17.1
+    group: lesson.number_before.17
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r zeventien?"
+    english: Which number comes before seventeen?
+    dutchClip: {fileID: 8300000, guid: 95fddf61ddd4d8642a2e7aeea610b3b6, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.18.1
+    group: lesson.number_before.18
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r achttien?"
+    english: Which number comes before eighteen?
+    dutchClip: {fileID: 8300000, guid: cc07e494a9f18d8418df966d71bfd2a3, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.19.1
+    group: lesson.number_before.19
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r negentien?"
+    english: Which number comes before nineteen?
+    dutchClip: {fileID: 8300000, guid: dd7fed61859e13d42ae92d1403ffc3a0, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_before.20.1
+    group: lesson.number_before.20
+    speaker: 0
+    dutch: "Welk getal komt v\xF3\xF3r twintig?"
+    english: Which number comes before twenty?
+    dutchClip: {fileID: 8300000, guid: 24eee90c5ae05ea45a30dfe36350dd24, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.number_gap.1
+    group: lesson.number_gap
+    speaker: 0
+    dutch: Welk getal mist er? Tel maar mee!
+    english: Which number is missing? Count along!
+    dutchClip: {fileID: 8300000, guid: 54867e4d1dd621340801fc8cec941dfd, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_back.1
+    group: lesson.count_back
+    speaker: 0
+    dutch: "Tik ze \xE9\xE9n voor \xE9\xE9n weg, en tel terug!"
+    english: Tap them away one by one, and count backwards!
+    dutchClip: {fileID: 8300000, guid: 344070d16badbd34d9129bc9585108b5, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_back_done.1
+    group: lesson.count_back_done
+    speaker: 0
+    dutch: Nul! Allemaal weg!
+    english: Zero! All gone!
+    dutchClip: {fileID: 8300000, guid: 0caea923d5b9cac45b714312a51b6c16, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.2.1
+    group: lesson.count_on.2
+    speaker: 0
+    dutch: In de mand zitten er al twee. Tel maar verder!
+    english: There are already two in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 0dc53a95808d64f42b838103148083ee, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.3.1
+    group: lesson.count_on.3
+    speaker: 0
+    dutch: In de mand zitten er al drie. Tel maar verder!
+    english: There are already three in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 503ae035b1a2b5d42bb076313a3975ed, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.4.1
+    group: lesson.count_on.4
+    speaker: 0
+    dutch: In de mand zitten er al vier. Tel maar verder!
+    english: There are already four in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 771dde691447eeb49806d858fe4ecae8, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.5.1
+    group: lesson.count_on.5
+    speaker: 0
+    dutch: In de mand zitten er al vijf. Tel maar verder!
+    english: There are already five in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 9b4b20653c162e44aa9075a117d92cab, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.6.1
+    group: lesson.count_on.6
+    speaker: 0
+    dutch: In de mand zitten er al zes. Tel maar verder!
+    english: There are already six in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 573170b1a62a0d64c9e85125da111464, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.7.1
+    group: lesson.count_on.7
+    speaker: 0
+    dutch: In de mand zitten er al zeven. Tel maar verder!
+    english: There are already seven in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 23de7e07e5feeff4083c67cb27d83553, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.8.1
+    group: lesson.count_on.8
+    speaker: 0
+    dutch: In de mand zitten er al acht. Tel maar verder!
+    english: There are already eight in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: e470d448c4c141c48b7de1144c92dc65, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.9.1
+    group: lesson.count_on.9
+    speaker: 0
+    dutch: In de mand zitten er al negen. Tel maar verder!
+    english: There are already nine in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 55495fc3a3715004ab8c34bfbfd2ab50, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.10.1
+    group: lesson.count_on.10
+    speaker: 0
+    dutch: In de mand zitten er al tien. Tel maar verder!
+    english: There are already ten in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 3896e4ef0bf62cd459530fa5a1548bf6, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.11.1
+    group: lesson.count_on.11
+    speaker: 0
+    dutch: In de mand zitten er al elf. Tel maar verder!
+    english: There are already eleven in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 0d767db8096689e4cb834e4ab2baee3d, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.12.1
+    group: lesson.count_on.12
+    speaker: 0
+    dutch: In de mand zitten er al twaalf. Tel maar verder!
+    english: There are already twelve in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: bc76740c6a98d68449e7e224193019d4, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.13.1
+    group: lesson.count_on.13
+    speaker: 0
+    dutch: In de mand zitten er al dertien. Tel maar verder!
+    english: There are already thirteen in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 9bc85d4b6bf4fa64ab36b6fa11775f18, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.14.1
+    group: lesson.count_on.14
+    speaker: 0
+    dutch: In de mand zitten er al veertien. Tel maar verder!
+    english: There are already fourteen in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: ad3ac940ccea2f1468ec881f4f51458b, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.15.1
+    group: lesson.count_on.15
+    speaker: 0
+    dutch: In de mand zitten er al vijftien. Tel maar verder!
+    english: There are already fifteen in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 647db274ba29bc54ab85606cbd4ed81f, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.16.1
+    group: lesson.count_on.16
+    speaker: 0
+    dutch: In de mand zitten er al zestien. Tel maar verder!
+    english: There are already sixteen in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 2c50871e79733f643a1b5ff616455f09, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on.17.1
+    group: lesson.count_on.17
+    speaker: 0
+    dutch: In de mand zitten er al zeventien. Tel maar verder!
+    english: There are already seventeen in the basket. Keep counting!
+    dutchClip: {fileID: 8300000, guid: ccbd90b6d1592c841a4a60bff5f8640d, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.count_on_ask.1
+    group: lesson.count_on_ask
+    speaker: 0
+    dutch: Hoeveel zitten er nu in de mand?
+    english: How many are in the basket now?
+    dutchClip: {fileID: 8300000, guid: 7e9ff7e68c874fc44999b4d1c163a8b3, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.hidden.1
+    group: lesson.hidden
+    speaker: 0
+    dutch: Kijk goed! De beker verstopt er een paar.
+    english: Watch closely! The cup hides some.
+    dutchClip: {fileID: 8300000, guid: e7514b8a39f92e34d96c03790f098258, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.hidden_ask.1
+    group: lesson.hidden_ask
+    speaker: 0
+    dutch: Hoeveel zitten er onder de beker?
+    english: How many are under the cup?
+    dutchClip: {fileID: 8300000, guid: dd4398049972a9b42a8095e4fca5d617, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.hidden_hint.1
+    group: lesson.hidden_hint
+    speaker: 0
+    dutch: Zullen we eens onder de beker kijken?
+    english: Shall we look under the cup?
+    dutchClip: {fileID: 8300000, guid: 35348da04769fa04ba25af98005ccacb, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.11.1
+    group: race.gate_number.11
+    speaker: 6
+    dutch: Rij door de elf!
+    english: Drive through the eleven!
+    dutchClip: {fileID: 8300000, guid: 9d1b22f7e15b65c4f9632e15c98578b6, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.12.1
+    group: race.gate_number.12
+    speaker: 6
+    dutch: Rij door de twaalf!
+    english: Drive through the twelve!
+    dutchClip: {fileID: 8300000, guid: 56484d40e163e6542b7ddfec17e482e8, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.13.1
+    group: race.gate_number.13
+    speaker: 6
+    dutch: Rij door de dertien!
+    english: Drive through the thirteen!
+    dutchClip: {fileID: 8300000, guid: 59e111ced015bca42934fa9f5ca6d661, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.14.1
+    group: race.gate_number.14
+    speaker: 6
+    dutch: Rij door de veertien!
+    english: Drive through the fourteen!
+    dutchClip: {fileID: 8300000, guid: 45eac7d27c9274f438328ee1202be2a9, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.15.1
+    group: race.gate_number.15
+    speaker: 6
+    dutch: Rij door de vijftien!
+    english: Drive through the fifteen!
+    dutchClip: {fileID: 8300000, guid: 770ae0546ef022640b5f9e3479c4d8e0, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.16.1
+    group: race.gate_number.16
+    speaker: 6
+    dutch: Rij door de zestien!
+    english: Drive through the sixteen!
+    dutchClip: {fileID: 8300000, guid: 98d3aeac207906940b73670169cbe271, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.17.1
+    group: race.gate_number.17
+    speaker: 6
+    dutch: Rij door de zeventien!
+    english: Drive through the seventeen!
+    dutchClip: {fileID: 8300000, guid: fdc5f11c89cc29b4c9a66c43d9da3fa8, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.18.1
+    group: race.gate_number.18
+    speaker: 6
+    dutch: Rij door de achttien!
+    english: Drive through the eighteen!
+    dutchClip: {fileID: 8300000, guid: 35d871fb61549ba4f9ebb7b679d8e858, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.19.1
+    group: race.gate_number.19
+    speaker: 6
+    dutch: Rij door de negentien!
+    english: Drive through the nineteen!
+    dutchClip: {fileID: 8300000, guid: 398a64297a5acce49a807da8ae996184, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.20.1
+    group: race.gate_number.20
+    speaker: 6
+    dutch: Rij door de twintig!
+    english: Drive through the twenty!
+    dutchClip: {fileID: 8300000, guid: fce11f8027ace3443a38e9069667d89f, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.1.1
+    group: race.gate_after.1
+    speaker: 6
+    dutch: "Welk getal komt na \xE9\xE9n? Rij erdoor!"
+    english: Which number comes after one? Drive through it!
+    dutchClip: {fileID: 8300000, guid: 8e35ce6128efab94392a52d8701fc1ad, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.2.1
+    group: race.gate_after.2
+    speaker: 6
+    dutch: Welk getal komt na twee? Rij erdoor!
+    english: Which number comes after two? Drive through it!
+    dutchClip: {fileID: 8300000, guid: 8d0ad06b4e0587445953ebe51233b8e1, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.3.1
+    group: race.gate_after.3
+    speaker: 6
+    dutch: Welk getal komt na drie? Rij erdoor!
+    english: Which number comes after three? Drive through it!
+    dutchClip: {fileID: 8300000, guid: 881b94e4fe2058d41a08af9735fbc8d9, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.4.1
+    group: race.gate_after.4
+    speaker: 6
+    dutch: Welk getal komt na vier? Rij erdoor!
+    english: Which number comes after four? Drive through it!
+    dutchClip: {fileID: 8300000, guid: 9e96e47d61f77f547ab7b738d9256216, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.5.1
+    group: race.gate_after.5
+    speaker: 6
+    dutch: Welk getal komt na vijf? Rij erdoor!
+    english: Which number comes after five? Drive through it!
+    dutchClip: {fileID: 8300000, guid: 90acb392e20b3ac4dbf13797e20414e1, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.6.1
+    group: race.gate_after.6
+    speaker: 6
+    dutch: Welk getal komt na zes? Rij erdoor!
+    english: Which number comes after six? Drive through it!
+    dutchClip: {fileID: 8300000, guid: 8a34eb14b9d14f44b86a95c469135905, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.7.1
+    group: race.gate_after.7
+    speaker: 6
+    dutch: Welk getal komt na zeven? Rij erdoor!
+    english: Which number comes after seven? Drive through it!
+    dutchClip: {fileID: 8300000, guid: aba49de54255ab546aed031f801c7db1, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.8.1
+    group: race.gate_after.8
+    speaker: 6
+    dutch: Welk getal komt na acht? Rij erdoor!
+    english: Which number comes after eight? Drive through it!
+    dutchClip: {fileID: 8300000, guid: 1e4ff16f3af3dd14ba21dbc7b6794f34, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.9.1
+    group: race.gate_after.9
+    speaker: 6
+    dutch: Welk getal komt na negen? Rij erdoor!
+    english: Which number comes after nine? Drive through it!
+    dutchClip: {fileID: 8300000, guid: c630707fe0a7c2b4085fcae0a3fecc42, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.10.1
+    group: race.gate_after.10
+    speaker: 6
+    dutch: Welk getal komt na tien? Rij erdoor!
+    english: Which number comes after ten? Drive through it!
+    dutchClip: {fileID: 8300000, guid: 0d3d40256a6c20a43a93cfb862b8b727, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.11.1
+    group: race.gate_after.11
+    speaker: 6
+    dutch: Welk getal komt na elf? Rij erdoor!
+    english: Which number comes after eleven? Drive through it!
+    dutchClip: {fileID: 8300000, guid: f26f718a0f02d3949aa0fc440135db4b, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.12.1
+    group: race.gate_after.12
+    speaker: 6
+    dutch: Welk getal komt na twaalf? Rij erdoor!
+    english: Which number comes after twelve? Drive through it!
+    dutchClip: {fileID: 8300000, guid: 46c7e8d0c2563c946bf1cf791bcb610d, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.13.1
+    group: race.gate_after.13
+    speaker: 6
+    dutch: Welk getal komt na dertien? Rij erdoor!
+    english: Which number comes after thirteen? Drive through it!
+    dutchClip: {fileID: 8300000, guid: 4347f38cf71899b41b0f33fc79cec6f1, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.14.1
+    group: race.gate_after.14
+    speaker: 6
+    dutch: Welk getal komt na veertien? Rij erdoor!
+    english: Which number comes after fourteen? Drive through it!
+    dutchClip: {fileID: 8300000, guid: 5ad3db4f0b42dbd428c56383c1b369d5, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.15.1
+    group: race.gate_after.15
+    speaker: 6
+    dutch: Welk getal komt na vijftien? Rij erdoor!
+    english: Which number comes after fifteen? Drive through it!
+    dutchClip: {fileID: 8300000, guid: a6d776c3c4816ad49a4a4d1ab39c6114, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.16.1
+    group: race.gate_after.16
+    speaker: 6
+    dutch: Welk getal komt na zestien? Rij erdoor!
+    english: Which number comes after sixteen? Drive through it!
+    dutchClip: {fileID: 8300000, guid: 8c7d514a4a74fc841a916cc90a30552a, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.17.1
+    group: race.gate_after.17
+    speaker: 6
+    dutch: Welk getal komt na zeventien? Rij erdoor!
+    english: Which number comes after seventeen? Drive through it!
+    dutchClip: {fileID: 8300000, guid: d6325e3da8e8db841a8ee4e4f1423c89, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.18.1
+    group: race.gate_after.18
+    speaker: 6
+    dutch: Welk getal komt na achttien? Rij erdoor!
+    english: Which number comes after eighteen? Drive through it!
+    dutchClip: {fileID: 8300000, guid: 4e46c802aa576e64e9b5f7e8134e1faf, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.gate_after.19.1
+    group: race.gate_after.19
+    speaker: 6
+    dutch: Welk getal komt na negentien? Rij erdoor!
+    english: Which number comes after nineteen? Drive through it!
+    dutchClip: {fileID: 8300000, guid: cdbaa0055ae02e247ba97a296445d7a4, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.podium_ask.1.1
+    group: race.podium_ask.1
+    speaker: 6
+    dutch: Wie staat er op de eerste plek? Tik maar aan!
+    english: Who is in first place? Tap them!
+    dutchClip: {fileID: 8300000, guid: 0cfec294a18866c4ba1c715710429506, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.podium_ask.2.1
+    group: race.podium_ask.2
+    speaker: 6
+    dutch: Wie staat er op de tweede plek? Tik maar aan!
+    english: Who is in second place? Tap them!
+    dutchClip: {fileID: 8300000, guid: 275644bac61631a48ab0cd5aaa01604e, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.podium_ask.3.1
+    group: race.podium_ask.3
+    speaker: 6
+    dutch: Wie staat er op de derde plek? Tik maar aan!
+    english: Who is in third place? Tap them!
+    dutchClip: {fileID: 8300000, guid: a2d3a7fcd00bfb445918e0b1fa8accc5, type: 3}
+    englishClip: {fileID: 0}
+  - key: race.podium_wrong.1
+    group: race.podium_wrong
+    speaker: 6
+    dutch: Bijna! Kijk maar naar de cijfers.
+    english: Almost! Look at the numbers.
+    dutchClip: {fileID: 8300000, guid: 7710190a93abb224ba171a75df3fb192, type: 3}
+    englishClip: {fileID: 0}
+  - key: aliens.baby_joins.1
+    group: aliens.baby_joins
+    speaker: 0
+    dutch: De baby-alien doet ook mee! Hoeveel aliens dansen er nu?
+    english: The baby alien joins in! How many aliens are dancing now?
+    dutchClip: {fileID: 8300000, guid: 64c9be8e81b91ab4aa6a471216d6f009, type: 3}
+    englishClip: {fileID: 0}
+  - key: aliens.one_leaves.1
+    group: aliens.one_leaves
+    speaker: 0
+    dutch: Oei, eentje rent even naar de raket! Hoeveel dansen er nu nog?
+    english: Oops, one runs off to the rocket! How many are still dancing?
+    dutchClip: {fileID: 8300000, guid: d2b5ef4b2f2c0ad4abd1b892410a6034, type: 3}
+    englishClip: {fileID: 0}
+  - key: aliens.countdown.1
+    group: aliens.countdown
+    speaker: 0
+    dutch: De raket gaat vertrekken! Tel mee terug. Tik op het getal!
+    english: The rocket is about to leave! Count down with me. Tap the number!
+    dutchClip: {fileID: 8300000, guid: c563b44cad454c342a3ef38447002c8a, type: 3}
+    englishClip: {fileID: 0}
+  - key: aliens.liftoff.1
+    group: aliens.liftoff
+    speaker: 0
+    dutch: Lancering! Daar gaat de raket!
+    english: Lift-off! There goes the rocket!
+    dutchClip: {fileID: 8300000, guid: d5a850f0621a5ec4b800908fc02c0cbd, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.compare.1
+    group: pirates.compare
+    speaker: 5
+    dutch: Twee stapels goud! Welke stapel is het grootst? Tik erop!
+    english: Two piles of gold! Which pile is bigger? Tap it!
+    dutchClip: {fileID: 8300000, guid: 88f9f9876781c7f4a91920eb46f08d77, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.compare_hint.1
+    group: pirates.compare_hint
+    speaker: 5
+    dutch: Kraa! We tellen ze allebei. Tel maar mee!
+    english: Squawk! Let's count them both. Count along!
+    dutchClip: {fileID: 8300000, guid: 22bc45593c277fc4a8bbf4724d4794e2, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.compare_share.1
+    group: pirates.compare_share
+    speaker: 5
+    dutch: De kleine stapel is voor de skeletten. Kijk eens hoe blij ze zijn!
+    english: The small pile is for the skeletons. Look how happy they are!
+    dutchClip: {fileID: 8300000, guid: 80dfb46568338994a915f57e6eb9b64d, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.hidden.1
+    group: pirates.hidden
+    speaker: 5
+    dutch: Kijk goed! Lorre verstopt een paar munten onder de emmer!
+    english: Watch closely! Lorre hides some coins under the bucket!
+    dutchClip: {fileID: 8300000, guid: 96136e415f8ae004ab5f04291157c1d6, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.hidden_ask.1
+    group: pirates.hidden_ask
+    speaker: 5
+    dutch: Hoeveel munten liggen er onder de emmer?
+    english: How many coins are under the bucket?
+    dutchClip: {fileID: 8300000, guid: 5c356dbada4cd924eb68b3c738a95006, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.hidden_reveal.1
+    group: pirates.hidden_reveal
+    speaker: 5
+    dutch: Daar zijn ze! Tel maar mee!
+    english: There they are! Count along!
+    dutchClip: {fileID: 8300000, guid: f40f52bcb5923414ebadec3d3312b9ed, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.2.1
+    group: pirates.count_on.2
+    speaker: 5
+    dutch: In de kist zitten al twee munten. Tel maar verder!
+    english: There are already two coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 82dad9587bde6cd4ba67dd13bab8e403, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.3.1
+    group: pirates.count_on.3
+    speaker: 5
+    dutch: In de kist zitten al drie munten. Tel maar verder!
+    english: There are already three coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 9ffe370f640df7b4bb33630fd7560181, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.4.1
+    group: pirates.count_on.4
+    speaker: 5
+    dutch: In de kist zitten al vier munten. Tel maar verder!
+    english: There are already four coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 855af3fd72658434e93f95ff1e8270aa, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.5.1
+    group: pirates.count_on.5
+    speaker: 5
+    dutch: In de kist zitten al vijf munten. Tel maar verder!
+    english: There are already five coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: d0f4ae95b5da5b14c955be62c024eb27, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.6.1
+    group: pirates.count_on.6
+    speaker: 5
+    dutch: In de kist zitten al zes munten. Tel maar verder!
+    english: There are already six coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 23a210ae050558f4f935e9b7b6d094d1, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.7.1
+    group: pirates.count_on.7
+    speaker: 5
+    dutch: In de kist zitten al zeven munten. Tel maar verder!
+    english: There are already seven coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: aed4cedca21e0b34fa6b95a34aa6f3ec, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.8.1
+    group: pirates.count_on.8
+    speaker: 5
+    dutch: In de kist zitten al acht munten. Tel maar verder!
+    english: There are already eight coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 9fe02737700514446978e9dd69c92acb, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.9.1
+    group: pirates.count_on.9
+    speaker: 5
+    dutch: In de kist zitten al negen munten. Tel maar verder!
+    english: There are already nine coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: cfdd711cec675a14e8c39ee6e0151db0, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.10.1
+    group: pirates.count_on.10
+    speaker: 5
+    dutch: In de kist zitten al tien munten. Tel maar verder!
+    english: There are already ten coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: c9617c96690988548abdfd9e5c1b02de, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.11.1
+    group: pirates.count_on.11
+    speaker: 5
+    dutch: In de kist zitten al elf munten. Tel maar verder!
+    english: There are already eleven coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: a90b06a9205516c4eb5ad3b48d1a1132, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.12.1
+    group: pirates.count_on.12
+    speaker: 5
+    dutch: In de kist zitten al twaalf munten. Tel maar verder!
+    english: There are already twelve coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: bf57a837262fba84aa029fe61e8f6ff8, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.13.1
+    group: pirates.count_on.13
+    speaker: 5
+    dutch: In de kist zitten al dertien munten. Tel maar verder!
+    english: There are already thirteen coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: f5bf94f4bd21a10418fe12313ec34c7a, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.14.1
+    group: pirates.count_on.14
+    speaker: 5
+    dutch: In de kist zitten al veertien munten. Tel maar verder!
+    english: There are already fourteen coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 654cb64ff77076049b2d96218e93c465, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.15.1
+    group: pirates.count_on.15
+    speaker: 5
+    dutch: In de kist zitten al vijftien munten. Tel maar verder!
+    english: There are already fifteen coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 0bf0d86c200885843b6dfed02438dc01, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.16.1
+    group: pirates.count_on.16
+    speaker: 5
+    dutch: In de kist zitten al zestien munten. Tel maar verder!
+    english: There are already sixteen coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 00d29d4ef7a152c4b8c662d687ae8083, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count_on.17.1
+    group: pirates.count_on.17
+    speaker: 5
+    dutch: In de kist zitten al zeventien munten. Tel maar verder!
+    english: There are already seventeen coins in the chest. Keep counting!
+    dutchClip: {fileID: 8300000, guid: 1d8ad85dbe579944aaa61ecfdea2cd36, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.tip.kid.1
+    group: shop.tip.kid
+    speaker: 1
+    dutch: En nog eentje extra, omdat het zo lekker is!
+    english: And one extra, because it's so yummy!
+    dutchClip: {fileID: 8300000, guid: 495aba5e6e68862469938aad4511403b, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.tip.knight.1
+    group: shop.tip.knight
+    speaker: 1
+    dutch: "Voor de beste ijsverkoper: nog \xE9\xE9n muntje extra!"
+    english: 'For the best ice cream seller: one extra coin!'
+    dutchClip: {fileID: 8300000, guid: d66a2b8c4a73c734980b0eae81183d8e, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.tip.alien.1
+    group: shop.tip.alien
+    speaker: 4
+    dutch: Bliep! Nog eentje extra voor jou!
+    english: Bleep! One extra for you!
+    dutchClip: {fileID: 8300000, guid: a985b77566bbc5748b5a2a9da36407f4, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.tip.dragon.1
+    group: shop.tip.dragon
+    speaker: 2
+    dutch: Grrroar! Nog een muntje extra!
+    english: Grrroar! One more coin!
+    dutchClip: {fileID: 8300000, guid: d410a58a930a99b4dbd28d6202f51666, type: 3}
+    englishClip: {fileID: 0}
+  - key: shop.how_many_now.1
+    group: shop.how_many_now
+    speaker: 3
+    dutch: Hoeveel muntjes zijn het nu?
+    english: How many coins are there now?
+    dutchClip: {fileID: 8300000, guid: 7323279357e466441ae4765ccccaf08c, type: 3}
+    englishClip: {fileID: 0}

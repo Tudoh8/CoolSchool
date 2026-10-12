@@ -19,7 +19,19 @@ namespace CoolSchool.Rewards
         public int totalStars;
         public int presentsOpened;
         public List<string> unlockedItems = new List<string>();
-        public string equippedSword = "";
+        public string equippedSword = "";   // "" = the starter sword
+
+        // What else he wears or carries. Chosen in the present popup or the Toy Room wardrobe.
+        public string equippedShield = "";   // "" = the starter shield
+        public string equippedHat = "";      // "" = no hat
+        public string equippedBuddy = "";    // "" = automatic: the parrot if owned (today's behaviour); "none" = no buddy
+        public string equippedCart = "";     // "" = automatic: the best owned body (today's behaviour)
+        public List<string> cartExtrasOff = new List<string>();  // owned cart extras switched off in the picker
+        public List<string> cartsTried = new List<string>();     // cart bodies/extras used in a race at least once
+        public List<string> unseenItems = new List<string>();    // won, not yet looked at in the Toy Room
+        public bool toyRoomVisited;
+        public int medals;       // medals won after the whole catalog was collected
+        public int medalsSeen;   // how many of them the Toy Room has shown
 
         public List<SkillLevel> skillLevels = new List<SkillLevel>();
         // A power-up won in a lesson that the next game uses up, e.g. golden_sword.

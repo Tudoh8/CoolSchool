@@ -21,6 +21,9 @@ namespace CoolSchool.Race
         const float AnswerQuietSeconds = 2.5f;
         const float ReminderSeconds = 2.2f;
 
+        // The target bubble shows "7→?" for "which number comes after 7?" (the HUD swaps the arrow for a space if the font lacks it).
+        const string ArrowGlyph = "→?";
+
         sealed class GateQuestion
         {
             public string[] options;
@@ -28,6 +31,7 @@ namespace CoolSchool.Race
             public LearningGate.GateKind kind;
             public string glyph;
             public int number;
+            public bool after;
             public char letter;
             public bool reminded;
         }
@@ -78,8 +82,7 @@ namespace CoolSchool.Race
 
         GateQuestion MakeNumberQuestion(List<int> used)
         {
-            int numbersLevel = Mathf.Clamp(ProgressStore.Current.GetLevel("numbers"), 1, MaxNumberByLevel.Length);
-            int max = MaxNumberByLevel[numbersLevel - 1];
+            int max = Mathf.Clamp(NumberCurriculum.MaxNumber(), 3, NumberCurriculum.HighestNumber);
 
             // The right answer: not the same number twice in one race.
             var candidates = new List<int>();
@@ -90,9 +93,16 @@ namespace CoolSchool.Race
             int target = candidates[Random.Range(0, candidates.Count)];
             used.Add(target);
 
+            // Once he has met "which number comes after", half of the number gates ask it (the answer is N + 1).
+            bool after = target >= 2 && NumberCurriculum.IsUnlocked(NumberSkill.NumberLine) && Random.value < 0.5f;
+            if (after) return MakeAfterQuestion(target - 1, max);
+
             // Two other numbers to choose from (at least 1 to 3, so there is always something to pick).
+            // Teens are compared with numbers close by, so he has to look at the digits.
             var others = new List<int>();
-            for (int n = 1; n <= Mathf.Max(max, 3); n++)
+            int low = target > 10 ? Mathf.Max(1, target - 3) : 1;
+            int high = target > 10 ? Mathf.Min(max, target + 3) : max;
+            for (int n = low; n <= Mathf.Max(high, 3); n++)
                 if (n != target) others.Add(n);
             Shuffle(others);
 
@@ -104,6 +114,31 @@ namespace CoolSchool.Race
             };
             question.correctLane = Random.Range(0, 3);
             question.options = FillOptions(question.correctLane, target.ToString(), others[0].ToString(), others[1].ToString());
+            return question;
+        }
+
+        /// <summary>"Which number comes after N?": the right lane shows N + 1; N itself is a good wrong answer.</summary>
+        GateQuestion MakeAfterQuestion(int n, int max)
+        {
+            int answer = n + 1;
+            var others = new List<int>();
+            foreach (int candidate in new[] { n, n + 2, n - 1, n + 3 })
+                if (candidate >= 1 && candidate <= max && candidate != answer) others.Add(candidate);
+
+            // Always two wrong answers, also at the edges of the range.
+            for (int fill = 1; others.Count < 2 && fill <= max; fill++)
+                if (fill != answer && !others.Contains(fill)) others.Add(fill);
+            Shuffle(others);
+
+            var question = new GateQuestion
+            {
+                kind = LearningGate.GateKind.Number,
+                after = true,
+                number = n,
+                glyph = n + ArrowGlyph,
+            };
+            question.correctLane = Random.Range(0, 3);
+            question.options = FillOptions(question.correctLane, answer.ToString(), others[0].ToString(), others[1].ToString());
             return question;
         }
 
@@ -241,7 +276,7 @@ namespace CoolSchool.Race
         {
             if (question.kind == LearningGate.GateKind.Number)
             {
-                VoicePlayer.Say("race.gate_number." + question.number, interrupt);
+                VoicePlayer.Say((question.after ? "race.gate_after." : "race.gate_number.") + question.number, interrupt);
                 return;
             }
 

@@ -9,7 +9,7 @@ namespace CoolSchool.EditorTools
     /// Creates or updates Assets/CoolSchool/Voice/Lines.asset from the seed list below.
     /// Lines are matched by key: text is updated, recorded clips are never cleared, new keys are added.
     /// </summary>
-    public static class VoiceLineSeeder
+    public static partial class VoiceLineSeeder
     {
         const string RootFolder = "Assets/CoolSchool";
         public const string TablePath = RootFolder + "/Voice/Lines.asset";
@@ -207,6 +207,57 @@ namespace CoolSchool.EditorTools
             new Seed("reward.present_tap.1", Speaker.Teacher, "Tik op het cadeau!", "Tap the present!"),
             new Seed("reward.present_open.1", Speaker.Teacher, "Wauw! Kijk eens wat erin zit!", "Wow! Look what's inside!"),
 
+            // Toy room and equipment (contract Docs/specs/toy-room-and-equipment-contract.md): the swap question in the present popup.
+            new Seed("reward.swap_sword.1", Speaker.Teacher, "Wil je je nieuwe zwaard gebruiken?", "Do you want to use your new sword?"),
+            new Seed("reward.swap_shield.1", Speaker.Teacher, "Wil je je nieuwe schild gebruiken?", "Do you want to use your new shield?"),
+            new Seed("reward.swap_hat.1", Speaker.Teacher, "Wil je hem meteen opzetten?", "Do you want to put it on right away?"),
+            new Seed("reward.swap_buddy.1", Speaker.Teacher, "Mag je nieuwe knuffel met je mee?", "Can your new cuddly toy come along?"),
+            new Seed("reward.swap_yes.1", Speaker.Teacher, "Goed gekozen!", "Good choice!"),
+            new Seed("reward.swap_yes.2", Speaker.Teacher, "Super!", "Super!"),
+            new Seed("reward.swap_no.1", Speaker.Teacher, "Oké! Hij wacht op je in je speelgoedkamer.", "Okay! It's waiting for you in your toy room."),
+            new Seed("reward.cart_new.1", Speaker.Teacher, "Die kun je kiezen bij de race!", "You can pick it at the race!"),
+            new Seed("reward.medal.1", Speaker.Teacher, "Een medaille! Die hangt in je speelgoedkamer.", "A medal! It hangs in your toy room."),
+
+            // The Toy Room and its dress-up mirror.
+            new Seed("toyroom.invite.1", Speaker.Teacher, "Kom kijken in je speelgoedkamer!", "Come and look in your toy room!"),
+            new Seed("toyroom.welcome.1", Speaker.Narrator, "Dit is jouw speelgoedkamer! Hier staat alles wat je hebt verdiend.", "This is your toy room! Everything you've earned is here."),
+            new Seed("toyroom.new_item.1", Speaker.Narrator, "Kijk, iets nieuws!", "Look, something new!"),
+            new Seed("toyroom.medal.1", Speaker.Narrator, "Je hebt een nieuwe medaille!", "You have a new medal!"),
+            new Seed("wardrobe.welcome.1", Speaker.Narrator, "Wat wil je aan?", "What do you want to wear?"),
+            new Seed("wardrobe.pick.1", Speaker.Narrator, "Mooi!", "Nice!"),
+            new Seed("wardrobe.pick.2", Speaker.Narrator, "Wat stoer!", "So cool!"),
+            new Seed("wardrobe.locked.1", Speaker.Narrator, "Die moet je nog verdienen. Vul de sterrenpot!", "You still have to earn that one. Fill the star jar!"),
+            new Seed("wardrobe.done.1", Speaker.Narrator, "Klaar! Je ziet er geweldig uit!", "Done! You look great!"),
+
+            // The cart picker at the start of the soapbox race.
+            new Seed("race.pick_cart.1", Speaker.Announcer, "Kies je kar!", "Pick your cart!"),
+            new Seed("race.cart_locked.1", Speaker.Announcer, "Die kar moet je nog winnen!", "You still have to win that one!"),
+            new Seed("race.cart_new.1", Speaker.Announcer, "Ooh, een nieuwe kar! Probeer hem uit!", "Ooh, a new cart! Try it out!"),
+            new Seed("race.cart_ready.1", Speaker.Announcer, "Daar gaan we!", "Here we go!"),
+
+            // The name of each item, said when it is revealed and when he walks past it in the Toy Room (gold variants share item.gold).
+            new Seed("item.gold.1", Speaker.Narrator, "Wauw, goud!", "Wow, gold!"),
+            new Seed("item.sword.foam.1", Speaker.Narrator, "Het schuimzwaard!", "The foam sword!"),
+            new Seed("item.shield.basic.1", Speaker.Narrator, "Het schild!", "The shield!"),
+            new Seed("item.cart.racer_1.1", Speaker.Narrator, "Kar één!", "Cart one!"),
+            new Seed("item.sword.plastic.1", Speaker.Narrator, "Het plastic zwaard!", "The plastic sword!"),
+            new Seed("item.hat.knight_helmet.1", Speaker.Narrator, "De ridderhelm!", "The knight's helmet!"),
+            new Seed("item.plush.dino.1", Speaker.Narrator, "De dino!", "The dino!"),
+            new Seed("item.cart.flag.1", Speaker.Narrator, "De vlag!", "The flag!"),
+            new Seed("item.sword.wood.1", Speaker.Narrator, "Het houten zwaard!", "The wooden sword!"),
+            new Seed("item.shield.round.1", Speaker.Narrator, "Het ronde schild!", "The round shield!"),
+            new Seed("item.cart.racer_2.1", Speaker.Narrator, "Kar twee!", "Cart two!"),
+            new Seed("item.plush.parrot.1", Speaker.Narrator, "Lorre de papegaai!", "Lorre the parrot!"),
+            new Seed("item.plush.unicorn.1", Speaker.Narrator, "De eenhoorn!", "The unicorn!"),
+            new Seed("item.hat.cap.1", Speaker.Narrator, "De pet!", "The cap!"),
+            new Seed("item.cart.stickers.1", Speaker.Narrator, "De stickers!", "The stickers!"),
+            new Seed("item.sword.pirate.1", Speaker.Narrator, "Het piratenzwaard!", "The pirate sword!"),
+            new Seed("item.sword.foam_big.1", Speaker.Narrator, "Het grote schuimzwaard!", "The big foam sword!"),
+            new Seed("item.plush.bear.1", Speaker.Narrator, "De beer!", "The bear!"),
+            new Seed("item.cart.racer_3.1", Speaker.Narrator, "Kar drie!", "Cart three!"),
+            new Seed("item.hat.pirate.1", Speaker.Narrator, "De piratenhoed!", "The pirate hat!"),
+            new Seed("item.cart.gold.1", Speaker.Narrator, "De gouden verf!", "The gold paint!"),
+
             // The numbers lesson. Each number is its own group (number.3), so it can be said on its own.
             new Seed("number.1.1", Speaker.Teacher, "Eén", "One"),
             new Seed("number.2.1", Speaker.Teacher, "Twee", "Two"),
@@ -319,6 +370,8 @@ namespace CoolSchool.EditorTools
 
             foreach (Seed seed in LetterSeeds())
                 ApplySeed(table, seed);
+
+            foreach (Seed seed in NumberSeeds()) ApplySeed(table, seed);
 
             EditorUtility.SetDirty(table);
             AssetDatabase.SaveAssets();

@@ -13,88 +13,251 @@ MonoBehaviour:
   m_Name: Catalog
   m_EditorClassIdentifier: Assembly-CSharp::CoolSchool.Rewards.RewardCatalog
   items:
+  - id: sword.foam
+    kind: 0
+    prefab: {fileID: 5371836728183691644, guid: 4fe3b6fc53375724cb3b55052fa41b44, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 1
+    goldOf: 
+    icon: {fileID: 21300000, guid: 349f2df27d1a846499a4196ebe2d512a, type: 3}
+  - id: shield.basic
+    kind: 1
+    prefab: {fileID: 6507139061417640626, guid: 14d5a94c58e09c94bbe4bea30abccef6, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 1
+    goldOf: 
+    icon: {fileID: 21300000, guid: c2e603c0fbf03004e9c642e97b144eda, type: 3}
+  - id: cart.racer_1
+    kind: 5
+    prefab: {fileID: 1497981545583403586, guid: b5a85d64f01c88c4c90874f650ad9b5f, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
+    starter: 1
+    goldOf: 
+    icon: {fileID: 21300000, guid: 71e79157cde49a14e8456aafecdbe449, type: 3}
   - id: sword.plastic
     kind: 0
     prefab: {fileID: 2346174602533196880, guid: bca922903d80e904abd5a9e5e9b2b607, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 69e945c290e1f1040be253776b331c07, type: 3}
   - id: hat.knight_helmet
     kind: 3
     prefab: {fileID: 579896903341717117, guid: 4fbb600ef1480d246a0fe7c3819b6479, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 58230b8709c39b34c965be6d4ae279d7, type: 3}
   - id: plush.dino
     kind: 4
     prefab: {fileID: 576831500808881760, guid: c1fb3cce51613414d9dc446f6f7d53af, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: d15dce8072fc7a940bb9251c9ff86d2c, type: 3}
   - id: cart.flag
     kind: 5
     prefab: {fileID: 4324879067095937195, guid: 11138c63af0c545459f47999d977c004, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 798f3b79d055d0e45b32fd67a0fbcae4, type: 3}
   - id: sword.wood
     kind: 0
     prefab: {fileID: 3185189667651922555, guid: 6b374ed581a1a724d957249c7d3e7854, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 713bc979f22e2524bac90bb8a7e28478, type: 3}
   - id: shield.round
     kind: 1
     prefab: {fileID: 3466557726058760119, guid: 018ac46aa02b90445bc455e3ce3af3af, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 75cbb2f7ed9ad6a4a8392ae250adb57c, type: 3}
   - id: cart.racer_2
     kind: 5
     prefab: {fileID: 6431105003458190973, guid: d8bb925d7e46e2340bf37173c0834366, type: 3}
     revealEuler: {x: 15, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: df0a0a4e2f8c7ec4b90572903f42df10, type: 3}
   - id: plush.parrot
     kind: 4
     prefab: {fileID: 9039543982116785190, guid: 03c6b6a13a8811f49bcf30e4e2f9e77f, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: b65a3517d6aa164489bbf89f9299580d, type: 3}
   - id: plush.unicorn
     kind: 4
     prefab: {fileID: 342286626370472532, guid: 4cc2c406508a814468fcd83b7c77173a, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 359b49891ef45a74ca10db3040000d02, type: 3}
   - id: hat.cap
     kind: 3
     prefab: {fileID: 3523754109741742598, guid: 09febf92b31c7d54ab3e5504c0e5b2a3, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: e18edd2fb45b0c3429b41f1d524b82ee, type: 3}
   - id: cart.stickers
     kind: 5
-    prefab: {fileID: 1331861384701118646, guid: ca493500d205c1f468c334d7865e91cc, type: 3}
+    prefab: {fileID: 219008481333106054, guid: ca493500d205c1f468c334d7865e91cc, type: 3}
     revealEuler: {x: 15, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 2b9831c647f10094389ebf4efdbada8d, type: 3}
   - id: sword.pirate
     kind: 0
     prefab: {fileID: 4845071059551229268, guid: 3087ae39d63cded47a57622195132c7f, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: e3cb9091e3d9cf24d9b4d6c8a19686a2, type: 3}
   - id: sword.foam_big
     kind: 0
     prefab: {fileID: 5293161329003066448, guid: 4d1ec1d1b0c07214e83480e49c98d0fd, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 351c614aca05be0479a33a95010575bd, type: 3}
   - id: plush.bear
     kind: 4
     prefab: {fileID: 6285028938098056976, guid: bbb1a5c01ffd5b34b84e6ee8d7e3f540, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 0ecd7ec4f46697546af4ea2a0f738bd5, type: 3}
   - id: cart.racer_3
     kind: 5
     prefab: {fileID: 5588319514320211083, guid: 41675f0548589e045ba5676a786dd5a0, type: 3}
     revealEuler: {x: 15, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 709418004435c0f4282f792d4fce1ee0, type: 3}
   - id: hat.pirate
     kind: 3
     prefab: {fileID: 6143756539287377912, guid: afce7dd8f017c9f4690b726aa021dd46, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: daabdbdfcc404524682297daa0e92fd9, type: 3}
   - id: cart.gold
     kind: 5
-    prefab: {fileID: 7915174046580787027, guid: ed0e1acc3409c714797f49c8e5a20eaf, type: 3}
+    prefab: {fileID: 3175275680469403952, guid: ed0e1acc3409c714797f49c8e5a20eaf, type: 3}
     revealEuler: {x: 15, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 35707e90656e68f4799e1341256c78db, type: 3}
+  - id: gold.sword.wood
+    kind: 0
+    prefab: {fileID: 3185189667651922555, guid: 6b374ed581a1a724d957249c7d3e7854, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    goldOf: sword.wood
+    icon: {fileID: 21300000, guid: e603cb33a4f6abb42886718e1a0c0ed4, type: 3}
+  - id: gold.plush.dino
+    kind: 4
+    prefab: {fileID: 576831500808881760, guid: c1fb3cce51613414d9dc446f6f7d53af, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    goldOf: plush.dino
+    icon: {fileID: 21300000, guid: d89ec98a8e0246a4997896635b6118aa, type: 3}
+  - id: gold.hat.knight_helmet
+    kind: 3
+    prefab: {fileID: 579896903341717117, guid: 4fbb600ef1480d246a0fe7c3819b6479, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    goldOf: hat.knight_helmet
+    icon: {fileID: 21300000, guid: eee0ce04da181574597403280ff5b295, type: 3}
+  - id: gold.shield.round
+    kind: 1
+    prefab: {fileID: 3466557726058760119, guid: 018ac46aa02b90445bc455e3ce3af3af, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    goldOf: shield.round
+    icon: {fileID: 21300000, guid: 07fea2e6042471a4abe984036daa5e9a, type: 3}
+  - id: gold.plush.unicorn
+    kind: 4
+    prefab: {fileID: 342286626370472532, guid: 4cc2c406508a814468fcd83b7c77173a, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    goldOf: plush.unicorn
+    icon: {fileID: 21300000, guid: 1f1a64b72ae1fc1459e2638becc299bb, type: 3}
+  - id: gold.sword.pirate
+    kind: 0
+    prefab: {fileID: 4845071059551229268, guid: 3087ae39d63cded47a57622195132c7f, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    goldOf: sword.pirate
+    icon: {fileID: 21300000, guid: 8201a02301fb17f42992eebe52378922, type: 3}
+  - id: gold.hat.cap
+    kind: 3
+    prefab: {fileID: 3523754109741742598, guid: 09febf92b31c7d54ab3e5504c0e5b2a3, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    goldOf: hat.cap
+    icon: {fileID: 21300000, guid: 9e6d62e25bac2064fa94c23c4562516f, type: 3}
+  - id: gold.plush.bear
+    kind: 4
+    prefab: {fileID: 6285028938098056976, guid: bbb1a5c01ffd5b34b84e6ee8d7e3f540, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    goldOf: plush.bear
+    icon: {fileID: 21300000, guid: f6cd7c016c5ba874d8c07d58da3ef1f3, type: 3}
+  - id: gold.sword.plastic
+    kind: 0
+    prefab: {fileID: 2346174602533196880, guid: bca922903d80e904abd5a9e5e9b2b607, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    goldOf: sword.plastic
+    icon: {fileID: 21300000, guid: d1222a8f532034744bc73379be4f097f, type: 3}
+  - id: gold.hat.pirate
+    kind: 3
+    prefab: {fileID: 6143756539287377912, guid: afce7dd8f017c9f4690b726aa021dd46, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    goldOf: hat.pirate
+    icon: {fileID: 21300000, guid: 64f42711ab13c7a419c0951485fcce2f, type: 3}
+  - id: gold.sword.foam_big
+    kind: 0
+    prefab: {fileID: 5293161329003066448, guid: 4d1ec1d1b0c07214e83480e49c98d0fd, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    goldOf: sword.foam_big
+    icon: {fileID: 21300000, guid: d7302d6185b7dd048a50e085fcde4e6c, type: 3}

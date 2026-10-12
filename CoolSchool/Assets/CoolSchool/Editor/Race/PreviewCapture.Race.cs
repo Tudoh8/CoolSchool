@@ -58,6 +58,11 @@ namespace CoolSchool.EditorTools
             seat.Shots.Add(new Shot { Name = "rival_b_three_quarter", Frame = () => CartSeatView("RivalCart_B", -40f, 3.6f) });
             groups.Add(seat);
 
+            // The cart picker's view: the camera spot in front of his cart, which wears racer 2 and the flag (the cards are screen UI, not in the shot).
+            var picker = new Group { Name = "race_cart_picker", Stage = StageCartPicker };
+            picker.Shots.Add(new Shot { Name = "camera", Frame = CartPickerView });
+            groups.Add(picker);
+
             // The crossing animals on their sidewalk spots.
             var animals = new Group { Name = "race_animals", Stage = StageRaceAnimals };
             foreach (string kind in new[] { "cat", "dog", "hen", "rabbit" })
@@ -119,7 +124,48 @@ namespace CoolSchool.EditorTools
             cam.farClipPlane = 200f;
         }
 
+        static void CartPickerView()
+        {
+            GameObject spot = GameObject.Find(SoapboxStreetBuilder.CartPickCameraSpotName);
+            if (spot == null) throw new InvalidOperationException("no " + SoapboxStreetBuilder.CartPickCameraSpotName);
+            cam.transform.SetPositionAndRotation(spot.transform.position, spot.transform.rotation);
+            cam.fieldOfView = 50f;
+            cam.farClipPlane = 200f;
+        }
+
         // ----- Staging -----
+
+        /// <summary>The player's cart with racer 2 and the flag, the rivals on the other bodies and sitting; the player is not in a cart.</summary>
+        static void StageCartPicker()
+        {
+            HideZoneVisuals();
+            ActivateWithParents(GameObject.Find("RaceObjects"));
+
+            GameObject playerCart = GameObject.Find("PlayerCart");
+            if (playerCart == null) throw new InvalidOperationException("no PlayerCart");
+            var looks = playerCart.GetComponent<CartLooks>();
+            looks.SetBody(1);
+            looks.SetExtras(true, false, false);
+
+            int[] rivalBodies = { 0, 2 };
+            string[] rivalNames = { "RivalCart_A", "RivalCart_B" };
+            for (int i = 0; i < rivalNames.Length; i++)
+            {
+                GameObject cart = GameObject.Find(rivalNames[i]);
+                if (cart == null) continue;
+
+                var rivalLooks = cart.GetComponent<CartLooks>();
+                rivalLooks.SetBody(rivalBodies[i]);
+                rivalLooks.SetExtras(false, false, false);
+                foreach (KidAnimator kid in cart.GetComponentsInChildren<KidAnimator>(true))
+                {
+                    ActivateWithParents(kid.gameObject);
+                    ShowHelmet(kid.gameObject);
+                    SitAndSettle(kid.gameObject);
+                }
+            }
+            Physics.SyncTransforms();
+        }
 
         static void HideZoneVisualsRace()
         {

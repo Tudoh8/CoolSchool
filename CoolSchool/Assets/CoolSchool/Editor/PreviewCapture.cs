@@ -236,6 +236,15 @@ namespace CoolSchool.EditorTools
 
             // --- The alien field (see Aliens/PreviewCapture.Aliens.cs). ---
             AddAlienGroups(groups);
+
+            // --- The Toy Room and the dress-up mirror (see ToyRoom/PreviewCapture.ToyRoom.cs). ---
+            AddToyRoomGroups(groups);
+
+            // --- Costumes and head pieces on the player (see Characters/PreviewCapture.Costumes.cs). ---
+            AddCostumeGroups(groups);
+
+            // --- The classroom: every exercise's props from the lesson camera (see Lessons/PreviewCapture.Lesson.cs). ---
+            AddLessonGroups(groups);
             return groups;
         }
 

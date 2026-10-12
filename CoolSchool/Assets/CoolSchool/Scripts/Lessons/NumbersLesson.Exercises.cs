@@ -7,7 +7,8 @@ using UnityEngine;
 namespace CoolSchool.Lessons
 {
     /// <summary>
-    /// The four kinds of exercise of the numbers lesson. None of them can be failed:
+    /// The first four kinds of exercise of the numbers lesson (tap and count, how many, find the number, give me N)
+    /// and the pieces the others reuse: the number cards, the basket and the toys on the table. None of them can be failed:
     /// a wrong answer gets a friendly hint, and a child who does nothing is helped step by step.
     /// </summary>
     public partial class NumbersLesson
@@ -15,8 +16,12 @@ namespace CoolSchool.Lessons
         const float ToyAppearGapSeconds = 0.12f;
         const float SpeechEndPauseSeconds = 1f;
         const float CelebrationPauseSeconds = 0.8f;
-        const int SingleRowMaxToys = 5;
+        // Toys (about 0.35 m wide) stand in one row while their centres can be this far apart, otherwise in two staggered rows.
+        const float MinToySpacing = 0.36f;
         const int MaxGiveMeToys = 12;
+        const int MaxGiveMeNumber = 10;
+        // Near-miss number cards for a number above ten: a teen is compared with teens.
+        const int NearChoiceReach = 3;
         const float BasketToyScale = 0.7f;
         const float ToyFlightSeconds = 0.5f;
         const float ToyFlightArc = 0.5f;
@@ -130,10 +135,10 @@ namespace CoolSchool.Lessons
         /// Shows three cards and waits for the right one. A wrong card wiggles and gets another try; the second
         /// wrong card starts the hint (counting aloud), after which the wrong cards fade away one by one.
         /// </summary>
-        IEnumerator AskForNumber(int answer, int maxNumber, System.Action prompt, System.Func<IEnumerator> hint)
+        IEnumerator AskForNumber(int answer, int maxNumber, System.Action prompt, System.Func<IEnumerator> hint, int[] fixedChoices = null)
         {
             LessonUI ui = UI;
-            int[] choices = BuildChoices(answer, maxNumber);
+            int[] choices = fixedChoices ?? BuildChoices(answer, maxNumber);
             int misses = 0;
             bool solved = false;
             bool hintWanted = false;
@@ -234,15 +239,47 @@ namespace CoolSchool.Lessons
             UI.HideCards();
         }
 
-        /// <summary>Three different numbers in a random order: the answer and two others from the lesson's range.</summary>
+        /// <summary>
+        /// Three different numbers in a random order: the answer and two others from the lesson's range.
+        /// For an answer above ten the others are close to it (up to three away), so a teen is compared with teens.
+        /// </summary>
         static int[] BuildChoices(int answer, int maxNumber)
         {
+            if (answer > 10)
+                return BuildNearChoices(answer, 1, Mathf.Min(NumberCurriculum.HighestNumber, Mathf.Max(answer, maxNumber)), NearChoiceReach);
+
             var pool = new List<int>();
-            for (int n = 1; n <= Mathf.Max(3, maxNumber); n++)
+            for (int n = 1; n <= Mathf.Max(3, Mathf.Min(maxNumber, 10)); n++)
                 if (n != answer) pool.Add(n);
 
             var choices = new List<int> { answer };
             for (int i = 0; i < 2; i++)
+            {
+                int pick = Random.Range(0, pool.Count);
+                choices.Add(pool[pick]);
+                pool.RemoveAt(pick);
+            }
+
+            Shuffle(choices);
+            return choices.ToArray();
+        }
+
+        /// <summary>
+        /// Three different numbers in a random order: the answer and two others no further than reach away from it,
+        /// all inside low to high. A narrow range widens the reach so there are always two others.
+        /// </summary>
+        static int[] BuildNearChoices(int answer, int low, int high, int reach)
+        {
+            var pool = new List<int>();
+            for (int distance = 1; distance <= reach || pool.Count < 2; distance++)
+            {
+                if (answer - distance >= low) pool.Add(answer - distance);
+                if (answer + distance <= high) pool.Add(answer + distance);
+                if (distance > high - low + 1) break;
+            }
+
+            var choices = new List<int> { answer };
+            for (int i = 0; i < 2 && pool.Count > 0; i++)
             {
                 int pick = Random.Range(0, pool.Count);
                 choices.Add(pool[pick]);
@@ -269,35 +306,23 @@ namespace CoolSchool.Lessons
         {
             int total = Mathf.Min(MaxGiveMeToys, number + (number >= 8 ? 2 : 3));
             PlaceBasket();
-            SpawnToys(toy, total, giveMeToyZ);
+            SpawnToys(toy, total, giveMeToyZ, allowTrays: false, centerX: giveMeToysX, maxWidth: giveMeToysWidth);
             basketToys.Clear();
             yield return new WaitForSeconds(SpawnWaitSeconds(total));
-
-            void Give(CountableObject tapped)
-            {
-                if (tapped == null || tapped.IsMoving || basketToys.Count >= number) return;
-
-                if (tapped.Counted)
-                {
-                    TakeOutOfBasket(tapped);
-                    return;
-                }
-                PutInBasket(tapped);
-            }
 
             System.Action prompt = () =>
             {
                 Say(toy.giveMePromptGroup);
                 Say("number." + number);
             };
-            tapHandler = Give;
+            tapHandler = tapped => GiveToBasket(tapped, number);
             prompt();
 
             var idle = new IdleTimer();
             while (basketToys.Count != number || AnyMoving())
             {
                 if (idle.Tick(IsBusy(), lastActivityTime))
-                    HandleIdle(idle.Cycles, prompt, () => Pulse(NextOnTable()), () => Give(NextOnTable()));
+                    HandleIdle(idle.Cycles, prompt, () => Pulse(NextOnTable()), () => GiveToBasket(NextOnTable(), number));
                 yield return null;
             }
 
@@ -306,18 +331,49 @@ namespace CoolSchool.Lessons
             yield return CelebrateAnswer(number);
         }
 
-        void PutInBasket(CountableObject toy)
+        /// <summary>A tap on a toy: it goes into the basket (and is counted), or, if it is already in, comes out again. The basket takes at most limit.</summary>
+        void GiveToBasket(CountableObject tapped, int limit)
+        {
+            if (tapped == null || tapped.IsMoving) return;
+
+            if (tapped.Counted)
+            {
+                TakeOutOfBasket(tapped);
+                return;
+            }
+
+            if (basketToys.Count >= limit) return;
+            PutInBasket(tapped);
+        }
+
+        /// <summary>
+        /// The toy flies into the basket and is counted. The numbers said and shown start after "alreadyIn" (for the basket
+        /// that already holds some), so the third toy of a basket holding 12 is called 15. Without speak the toy only plops in.
+        /// </summary>
+        void PutInBasket(CountableObject toy, int alreadyIn = 0, bool speak = true)
         {
             basketToys.Add(toy);
-            int count = basketToys.Count;
-            Say("number." + count, true);
+            if (speak) Say("number." + (alreadyIn + basketToys.Count), true);
 
-            toy.FlyTo(BasketSlot(count - 1, toy), ToyFlightSeconds, ToyFlightArc, BasketToyScale, () =>
+            toy.FlyTo(BasketSlot(basketToys.Count - 1, toy), ToyFlightSeconds, ToyFlightArc, BasketToyScale, () =>
             {
                 if (toy == null) return;
                 Sfx.Play("lesson.toy_into_basket", toy.transform.position);
-                if (basketToys.Contains(toy)) toy.Pop(basketToys.IndexOf(toy) + 1);
+                if (!speak || !basketToys.Contains(toy)) return;
+
+                toy.Pop(alreadyIn + basketToys.IndexOf(toy) + 1);
+                ClearOtherBasketNumbers(toy);
             });
+        }
+
+        /// <summary>
+        /// Only the newest toy in the basket shows its number. The toys sit close together in the basket, so a number for each of
+        /// them would pile up in one unreadable clump above it.
+        /// </summary>
+        void ClearOtherBasketNumbers(CountableObject keep)
+        {
+            foreach (CountableObject other in basketToys)
+                if (other != null && other != keep) other.ClearNumber();
         }
 
         /// <summary>No wrong answer, only "not yet": the toy hops back to its place and the others are counted again.</summary>
@@ -327,14 +383,22 @@ namespace CoolSchool.Lessons
             toy.ResetCounted();
             toy.ReturnToRest(ToyFlightSeconds, null);
 
-            for (int i = 0; i < basketToys.Count; i++)
-                if (basketToys[i].Counted) basketToys[i].ShowNumber(i + 1);
+            // The count now is the number of the newest toy, and that one number is all that is shown.
+            foreach (CountableObject inBasket in basketToys)
+                if (inBasket != null) inBasket.ClearNumber();
+
+            CountableObject newest = basketToys.Count > 0 ? basketToys[basketToys.Count - 1] : null;
+            if (newest != null && newest.Counted) newest.ShowNumber(basketToys.Count);
         }
 
-        CountableObject NextOnTable()
+        /// <summary>The next toy that could still go into the basket. With a list: only toys from that list (not the ones in a tray).</summary>
+        CountableObject NextOnTable(List<CountableObject> among = null)
         {
             foreach (CountableObject toy in toys)
-                if (toy != null && !toy.Counted && !toy.IsMoving && !basketToys.Contains(toy)) return toy;
+            {
+                if (toy == null || toy.Counted || toy.IsMoving || basketToys.Contains(toy)) continue;
+                if (among == null || among.Contains(toy)) return toy;
+            }
             return null;
         }
 
@@ -359,10 +423,16 @@ namespace CoolSchool.Lessons
 
         void PlaceBasket()
         {
+            PlaceBasket(basketPosition);
+        }
+
+        /// <summary>Stands the basket on the table at this spot (x along the table, z toward the camera).</summary>
+        void PlaceBasket(Vector2 position)
+        {
             if (basket == null) return;
 
             Transform t = basket.transform;
-            t.SetPositionAndRotation(stage.TablePoint(basketPosition.x, basketPosition.y), stage.TableFacing());
+            t.SetPositionAndRotation(stage.TablePoint(position.x, position.y), stage.TableFacing());
             basket.SetActive(true);
 
             // Pivots can't be trusted, so sit the basket on the table by its bounds.
@@ -395,30 +465,52 @@ namespace CoolSchool.Lessons
 
         // ----- Toys on the table -----------------------------------------------------------------
 
-        /// <summary>Puts toys on the table in a neat row, or two rows when there are many. The first toy is on the left of the screen.</summary>
-        void SpawnToys(Countable entry, int count, float centerZ)
+        /// <summary>
+        /// Puts toys on the table in a neat row, or two rows when there are many. The first toy is on the left of the screen.
+        /// More than ten toys go into the ten-frame trays instead (the first tray full, then the second), unless allowTrays is off.
+        /// </summary>
+        void SpawnToys(Countable entry, int count, float centerZ, bool allowTrays = true, float centerX = 0f, float maxWidth = -1f)
         {
-            Vector2[] layout = ToyLayout(count, centerZ);
-            Quaternion facing = stage.TableFacing();
-
-            for (int i = 0; i < count; i++)
+            if (allowTrays && count > TenFrameTray.Capacity && TraysReady)
             {
-                GameObject instance = Instantiate(entry.prefab);
-                var toy = instance.GetComponent<CountableObject>();
-                if (toy == null) toy = instance.AddComponent<CountableObject>();
-
-                toy.LabelFont = numberFont;
-                toy.Place(stage.TablePoint(layout[i].x, layout[i].y), facing * Quaternion.Euler(0f, Random.Range(-20f, 20f), 0f), entry.scale);
-                toy.Appear(i * ToyAppearGapSeconds);
-                toys.Add(toy);
+                ShowTrayPair(centerZ);
+                for (int i = 0; i < count; i++)
+                    SpawnTrayToy(entry, i / TenFrameTray.Capacity, i % TenFrameTray.Capacity, i * ToyAppearGapSeconds);
+                return;
             }
+
+            Vector2[] layout = ToyLayout(count, centerZ, centerX, maxWidth);
+            for (int i = 0; i < count; i++)
+                SpawnToy(entry, stage.TablePoint(layout[i].x, layout[i].y), 1f, i * ToyAppearGapSeconds);
         }
 
-        /// <summary>(x, z) on the table for each toy. Table x grows toward the left of the screen, so it is mirrored. With two equal rows, the back row is nudged sideways so it peeks through the gaps.</summary>
-        Vector2[] ToyLayout(int count, float centerZ)
+        /// <summary>One toy on the table at this point. The factor shrinks or grows it on top of the toy's own scale.</summary>
+        CountableObject SpawnToy(Countable entry, Vector3 point, float scaleFactor, float appearDelay)
         {
-            int perRow = count <= SingleRowMaxToys ? count : Mathf.CeilToInt(count * 0.5f);
-            float spacing = perRow > 1 ? Mathf.Min(toySpacing, maxRowWidth / (perRow - 1)) : 0f;
+            GameObject instance = Instantiate(entry.prefab);
+            var toy = instance.GetComponent<CountableObject>();
+            if (toy == null) toy = instance.AddComponent<CountableObject>();
+
+            toy.LabelFont = numberFont;
+            toy.Place(point, stage.TableFacing() * Quaternion.Euler(0f, Random.Range(-20f, 20f), 0f), entry.scale * scaleFactor);
+            if (!stagingForPreview) toy.Appear(appearDelay);
+            toys.Add(toy);
+            return toy;
+        }
+
+        /// <summary>
+        /// (x, z) on the table for each toy. Table x grows toward the left of the screen, so it is mirrored. The toys stand in one
+        /// row across the screen as long as they fit side by side without touching; more than that go in two rows rowGap apart
+        /// (the table is 1.4 m deep), and with two equal rows the back row is nudged sideways so it peeks through the gaps.
+        /// The rows are centred on centerX and no wider than maxWidth (the whole table row by default).
+        /// </summary>
+        Vector2[] ToyLayout(int count, float centerZ, float centerX = 0f, float maxWidth = -1f, float rowGap = -1f)
+        {
+            if (maxWidth <= 0f) maxWidth = maxRowWidth;
+            if (rowGap <= 0f) rowGap = rowSpacing;
+
+            int perRow = (count - 1) * MinToySpacing <= maxWidth ? count : Mathf.CeilToInt(count * 0.5f);
+            float spacing = perRow > 1 ? Mathf.Min(toySpacing, maxWidth / (perRow - 1)) : 0f;
             bool equalRows = perRow < count && count == perRow * 2;
 
             var layout = new Vector2[count];
@@ -430,8 +522,8 @@ namespace CoolSchool.Lessons
 
                 float x = ((inRow - 1) * 0.5f - column) * spacing;
                 if (equalRows) x += (row == 0 ? -0.25f : 0.25f) * spacing;
-                float z = centerZ + (perRow == count ? 0f : (row == 0 ? -0.5f : 0.5f) * rowSpacing);
-                layout[i] = new Vector2(x, z);
+                float z = centerZ + (perRow == count ? 0f : (row == 0 ? -0.5f : 0.5f) * rowGap);
+                layout[i] = new Vector2(centerX + x, z);
             }
             return layout;
         }

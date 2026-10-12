@@ -509,18 +509,42 @@ namespace CoolSchool.Pirates
         {
             if (chest == null) yield break;
 
+            // One extra number idea per visit (a new one every time), from the ones the classroom has taught.
+            switch (ChooseTreasureExtra())
+            {
+                case TreasureExtra.Compare: yield return RunCompareTreasure(); break;
+                case TreasureExtra.Hidden: yield return RunHiddenTreasure(); break;
+                case TreasureExtra.CountOn: yield return RunCountOnTreasure(); break;
+                default: yield return RunPlainTreasure(); break;
+            }
+        }
+
+        /// <summary>The usual count: the coins spill, he taps each one into the chest, then "how many?".</summary>
+        IEnumerator RunPlainTreasure()
+        {
             int wanted = Random.Range(ByLevel(CoinsMinByLevel, level), ByLevel(CoinsMaxByLevel, level) + 1);
             TreasureCoin[] coins = chest.SpillCoins(wanted);
             int count = coins.Length;
             if (count == 0) yield break;
 
+            yield return TapCoinsIntoChest(coins, "pirates.count");
+            yield return AskHowMany(count);
+            FinishCounted(count);
+        }
+
+        /// <summary>
+        /// He taps every coin; each one flies into the chest while Lorre counts (from coinNumberOffset + 1). The group line
+        /// plays first unless sayGroupFirst is false (it is also the reminder when he is stuck; null means pirates.count). Returns when every coin is in the chest.
+        /// </summary>
+        IEnumerator TapCoinsIntoChest(TreasureCoin[] coins, string group, bool sayGroupFirst = true)
+        {
             if (coinPicker != null) coinPicker.SetCoins(coins);
             coinsCollected = 0;
+            int count = coins.Length;
 
-            VoicePlayer.Say("pirates.count");
+            if (sayGroupFirst && group != null) VoicePlayer.Say(group);
             yield return new WaitForSeconds(1.2f);
 
-            // He taps every coin; each one flies into the chest while Lorre counts.
             if (coinPicker != null)
             {
                 coinPicker.Picked += OnCoinPicked;
@@ -546,7 +570,7 @@ namespace CoolSchool.Pirates
                 {
                     // Stuck: say it again and let the next coin pulse.
                     nextHint = Time.time + CoinHintSeconds;
-                    VoicePlayer.Say("pirates.count");
+                    VoicePlayer.Say(group ?? "pirates.count");
                     pulsing = FirstUncollected(coins);
                     if (pulsing != null) pulsing.Pulse(true);
                 }
@@ -568,14 +592,15 @@ namespace CoolSchool.Pirates
             }
             yield return new WaitForSeconds(0.9f);
             yield return WaitForVoice(4f);
+        }
 
-            yield return AskHowMany(count);
-
-            // The treasure is counted: that many stars, and the trophy chest by the dock fills up.
+        /// <summary>The treasure is counted: that many stars (only the coins that came out of the chest this visit), and the trophy chest fills up.</summary>
+        void FinishCounted(int coinsFound)
+        {
             treasureCounted = true;
-            ProgressStore.Current.pirateCoinsTotal += count;
+            ProgressStore.Current.pirateCoinsTotal += coinsFound;
             ProgressStore.Save();
-            TreasureCounted?.Invoke(count, chest.transform.position);
+            TreasureCounted?.Invoke(coinsFound, chest.transform.position);
         }
 
         void OnCoinPicked(TreasureCoin coin)
@@ -586,7 +611,7 @@ namespace CoolSchool.Pirates
             coin.Pulse(false);
             coin.FlyInto(chest.IntoChestPoint, null);
             Sfx.Play("pirates.coin", coin.transform.position);
-            VoicePlayer.Say("number." + coinsCollected, true);
+            VoicePlayer.Say("number." + (coinNumberOffset + coinsCollected), true);
             if (parrot != null && coinsCollected % 3 == 0) parrot.Squawk();
         }
 
@@ -597,8 +622,11 @@ namespace CoolSchool.Pirates
             return null;
         }
 
-        /// <summary>"How many coins did we find?" The number cards: a wrong one wiggles and we count along again.</summary>
-        IEnumerator AskHowMany(int count)
+        /// <summary>
+        /// "How many coins did we find?" The number cards: a wrong one wiggles and we count along again (countHint, or the coins
+        /// popping out and back in when none is given).
+        /// </summary>
+        IEnumerator AskHowMany(int count, System.Func<IEnumerator> countHint = null)
         {
             if (lessonUI == null) yield break;
 
@@ -625,7 +653,7 @@ namespace CoolSchool.Pirates
                     lessonUI.DimCard(picked);
                     VoicePlayer.Say("lesson.try_again", true);
                     yield return new WaitForSeconds(1.8f);
-                    yield return CountAlong(count);
+                    yield return countHint != null ? countHint() : CountAlong(count);
                     if (wrong >= 2 || wrongLeft <= 0) lessonUI.PulseCard(count);
                 }
                 yield return null;
@@ -655,8 +683,8 @@ namespace CoolSchool.Pirates
             }
         }
 
-        /// <summary>The right answer and other numbers from 1 to 10, shuffled.</summary>
-        static int[] MakeNumberCards(int correct, int cardCount)
+        /// <summary>The right answer and other numbers from 1 to maxValue (up to 20), shuffled.</summary>
+        static int[] MakeNumberCards(int correct, int cardCount, int maxValue = 20)
         {
             var cards = new List<int> { correct };
             int[] offsets = { -1, 1, 2, -2, 3, -3, 4, -4 };
@@ -665,7 +693,7 @@ namespace CoolSchool.Pirates
                 if (cards.Count >= Mathf.Clamp(cardCount, 2, 3)) break;
 
                 int candidate = correct + offset;
-                if (candidate < 1 || candidate > 10 || cards.Contains(candidate)) continue;
+                if (candidate < 1 || candidate > maxValue || cards.Contains(candidate)) continue;
                 cards.Add(candidate);
             }
 

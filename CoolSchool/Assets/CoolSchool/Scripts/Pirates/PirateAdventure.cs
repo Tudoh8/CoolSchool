@@ -53,6 +53,10 @@ namespace CoolSchool.Pirates
         [SerializeField] Transform[] partyPoints;     // 12: a front row of 8 on the island beach, camera side, and 4 staggered behind
         [Tooltip("The trophy chest by the dock. Optional: found in the scene when empty.")]
         [SerializeField] TreasureTrophy trophy;
+        [Tooltip("An upside-down bucket (origin = where it touches the sand), inactive. Hides coins in the 'how many are under the bucket' game.")]
+        [SerializeField] Transform hidingBucket;
+        [Tooltip("Font of the gold digit that floats above the chest in the count-on game. Optional.")]
+        [SerializeField] Font digitFont;
 
         [Header("Characters")]
         [SerializeField] SkeletonPirateAI[] skeletons; // 9, inactive (the first wave uses the first ones, the second wave the next)
@@ -284,6 +288,7 @@ namespace CoolSchool.Pirates
             }
             if (chest != null) chest.ResetChest();
             if (cannon != null) cannon.Armed = false;
+            ResetNumberExtras();
 
             ResetCrew();
             if (skeletons != null)

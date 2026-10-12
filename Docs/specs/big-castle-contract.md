@@ -71,7 +71,8 @@ comment):
 
 | Point | Where |
 |---|---|
-| `CastleZone` (ActivityZone, radius 2.0) | inside the courtyard, centred on the gate in x, 3 m north of the front wall's inner face |
+| `CastleZone` (ActivityZone, radius 2.0) | at the back of the courtyard, centred on the gate in x, z = courtyard max z - `CastleZoneBackOffset` (5.5 m), never in front of the courtyard's z-centre |
+| `CelebrateSpot` | just inside the gate: gate x, 2.5 m north of the front wall's inner face (inside the courtyard, so the front wall stays see-through). After the dragon flies away the player and the knights run here and cheer facing the camera |
 | `OpponentSpawn_1..4` | in a row 1.8 m in front of the goblin door, across −1.5, −0.5, 0.5, 1.5 m |
 | `RetreatPoint` | 0.8 m in front of the goblin door (goblins run "home" through the door and vanish) |
 | `ArenaCenter` (dragon landing) | courtyard centre in x, 1 m north of the courtyard's z-centre |
