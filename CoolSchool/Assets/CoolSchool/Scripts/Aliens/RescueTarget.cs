@@ -7,8 +7,9 @@ using UnityEngine.AI;
 namespace CoolSchool.Aliens
 {
     /// <summary>
-    /// The baby alien. It starts stuck up in the tree and waves for help. When the kid flies close enough it jumps into
-    /// his arms and they float down together. Once on the ground it runs to its place in the party line and dances.
+    /// The baby alien. It starts stuck (up in a tree, on the rocket, in a bubble, or in slime) and waves for help. When the
+    /// kid flies close enough it jumps into his arms and they float down together. Once on the ground it runs to its
+    /// place in the party line and dances.
     /// </summary>
     public class RescueTarget : MonoBehaviour
     {
@@ -28,8 +29,9 @@ namespace CoolSchool.Aliens
         Transform homeParent;
         Coroutine routine;
         int danceVariant;
+        Quaternion baseLocalRotation = Quaternion.identity;
 
-        /// <summary>True while the baby is up in the tree or in the kid's arms.</summary>
+        /// <summary>True while the baby is stuck (up in a tree, in a bubble, in slime) or in the kid's arms.</summary>
         public bool IsStuck { get; private set; }
 
         public bool IsCarried { get; private set; }
@@ -60,31 +62,59 @@ namespace CoolSchool.Aliens
             routine = null;
         }
 
-        /// <summary>Appears up in the tree at the perch, facing the camera, and waves for help every few seconds.</summary>
+        /// <summary>
+        /// Appears at the seat (a tree perch, the rocket's nose or a bubble's seat), facing the way the seat faces, and waves
+        /// for help every few seconds. It is parented to the seat, so a seat that moves (the bobbing bubble) takes it along.
+        /// </summary>
         public void ShowAt(Transform perch)
+        {
+            Show(perch, perch.rotation, false);
+        }
+
+        /// <summary>
+        /// Stuck in the slime on the ground at this spot, facing the camera: it wiggles and waves for help. The agent is
+        /// off until the baby is put down.
+        /// </summary>
+        public void ShowStuck(Transform spot)
+        {
+            Show(spot, Quaternion.LookRotation(Vector3.back, Vector3.up), true);
+        }
+
+        void Show(Transform seat, Quaternion facing, bool wiggle)
         {
             CacheReferences();
             ResetTarget();
 
             IsStuck = true;
-            // The perch is in the air, off the NavMesh: the agent and the collider stay off until the baby is down.
+            // The seat is in the air or in slime, off the NavMesh: the agent and the collider stay off until the baby is down.
             if (agent != null) agent.enabled = false;
             if (body != null) body.enabled = false;
 
-            transform.SetPositionAndRotation(perch.position, perch.rotation);
+            transform.SetPositionAndRotation(seat.position, facing);
+            transform.SetParent(seat, true);
+            baseLocalRotation = transform.localRotation;
             gameObject.SetActive(true);
-            BattleEffects.Sparkle(perch.position + Vector3.up * 0.6f);
+            BattleEffects.Sparkle(seat.position + Vector3.up * 0.6f);
 
-            routine = StartCoroutine(HelpRoutine());
+            routine = StartCoroutine(HelpRoutine(wiggle));
         }
 
-        IEnumerator HelpRoutine()
+        IEnumerator HelpRoutine(bool wiggle)
         {
+            float nextHelp = 0f;
             while (true)
             {
-                if (kidAnimator != null) kidAnimator.PlayCheer();
-                BattleEffects.Sparkle(transform.position + Vector3.up * 1f);
-                yield return new WaitForSeconds(helpSeconds);
+                if (Time.time >= nextHelp)
+                {
+                    nextHelp = Time.time + helpSeconds;
+                    if (kidAnimator != null) kidAnimator.PlayCheer();
+                    BattleEffects.Sparkle(transform.position + Vector3.up * 1f);
+                }
+
+                // Stuck in the slime: it sways from side to side.
+                if (wiggle && !IsCarried)
+                    transform.localRotation = baseLocalRotation * Quaternion.Euler(0f, Mathf.Sin(Time.time * 6f) * 14f, 0f);
+                yield return null;
             }
         }
 
@@ -97,6 +127,15 @@ namespace CoolSchool.Aliens
             Vector3 babyChest = transform.position + Vector3.up * 0.4f;
             if (Vector3.Distance(playerChest, babyChest) > grabDistance) return false;
 
+            Grab(player);
+            return true;
+        }
+
+        /// <summary>The baby holds on to the kid, wherever it is (the popped bubble does this). Does nothing if it already does.</summary>
+        public void Grab(Transform player)
+        {
+            if (!IsStuck || IsCarried || player == null) return;
+
             if (routine != null) StopCoroutine(routine);
             routine = null;
 
@@ -107,7 +146,6 @@ namespace CoolSchool.Aliens
 
             BattleEffects.Sparkle(transform.position + Vector3.up * 0.5f);
             if (kidAnimator != null) kidAnimator.PlayCheer();
-            return true;
         }
 
         /// <summary>

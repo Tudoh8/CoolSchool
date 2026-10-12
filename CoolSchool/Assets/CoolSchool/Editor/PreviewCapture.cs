@@ -233,6 +233,9 @@ namespace CoolSchool.EditorTools
 
             // --- The soapbox street (see Race/PreviewCapture.Race.cs). ---
             AddRaceGroups(groups);
+
+            // --- The alien field (see Aliens/PreviewCapture.Aliens.cs). ---
+            AddAlienGroups(groups);
             return groups;
         }
 

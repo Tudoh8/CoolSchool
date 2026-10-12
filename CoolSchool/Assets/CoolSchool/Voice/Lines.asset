@@ -2120,3 +2120,101 @@ MonoBehaviour:
     english: Hehe, bumper car!
     dutchClip: {fileID: 0}
     englishClip: {fileID: 0}
+  - key: aliens.arrive.1
+    group: aliens.arrive
+    speaker: 0
+    dutch: Kijk goed, ze komen overal vandaan!
+    english: Look closely, they're coming from everywhere!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: aliens.big_hint.1
+    group: aliens.big_hint
+    speaker: 0
+    dutch: Wat een grote alien! Flits hem een paar keer!
+    english: What a big alien! Zap it a few times!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: aliens.big_hit.1
+    group: aliens.big_hit
+    speaker: 4
+    dutch: Hihi, ik krimp!
+    english: Hehe, I'm shrinking!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: aliens.big_hit.2
+    group: aliens.big_hit
+    speaker: 4
+    dutch: Oei, ik word kleiner!
+    english: Oops, I'm getting smaller!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: aliens.tiny_hint.1
+    group: aliens.tiny_hint
+    speaker: 0
+    dutch: Die kleine is snel! Als hij moe is, kun je hem flitsen!
+    english: That little one is fast! When he's tired, you can zap him!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: aliens.tiny_tease.1
+    group: aliens.tiny_tease
+    speaker: 4
+    dutch: Hihi, vang me dan!
+    english: Hehe, catch me!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: aliens.tiny_tired.1
+    group: aliens.tiny_tired
+    speaker: 4
+    dutch: Pfoe, ik ben moe!
+    english: Phew, I'm tired!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: aliens.shy_hint.1
+    group: aliens.shy_hint
+    speaker: 0
+    dutch: Daar verstopt er eentje! Loop ernaartoe!
+    english: One is hiding there! Walk over to it!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: aliens.shy_peek.1
+    group: aliens.shy_peek
+    speaker: 4
+    dutch: Kiekeboe!
+    english: Peekaboo!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: aliens.robot_zapped.1
+    group: aliens.robot_zapped
+    speaker: 4
+    dutch: Bliep bliep! Robotdans!
+    english: Beep beep! Robot dance!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: aliens.rescue_rocket.1
+    group: aliens.rescue_rocket
+    speaker: 0
+    dutch: Help! De baby-alien zit bovenop de raket! Spring op de trampoline!
+    english: Help! The baby alien is on top of the rocket! Jump on the trampoline!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: aliens.rescue_bubble.1
+    group: aliens.rescue_bubble
+    speaker: 0
+    dutch: Kijk! De baby-alien zweeft in een bel! Spring omhoog en pak hem!
+    english: Look! The baby alien is floating in a bubble! Jump up and grab him!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: aliens.rescue_slime.1
+    group: aliens.rescue_slime
+    speaker: 0
+    dutch: Oh nee, de baby-alien zit vast in het slijm! Flits het slijm weg!
+    english: Oh no, the baby alien is stuck in the slime! Zap the slime away!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: aliens.slime_free.1
+    group: aliens.slime_free
+    speaker: 4
+    dutch: Dankjewel! Ik ben weer vrij!
+    english: Thank you! I'm free again!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}

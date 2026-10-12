@@ -1,0 +1,144 @@
+# CoolSchool sound picks: which imported clips play for each cue.
+# Read by Tools/import-audio-clips.py (copies the clips out of the Asset Store packages)
+# and by CoolSchool > Audio > Apply Sound Pack Picks (fills SoundLibrary.asset).
+#
+# One cue per line, tab separated:  cue  volume  pitchMin  pitchMax  clips
+# Empty volume/pitch = keep the default (1, 0.95..1.05). Clips are separated by " | ".
+# A clip starts with a pack key; the rest is its path inside that pack:
+#   PM   = Phantom Magic Sounds        (Assets/Phantom Magic/)
+#   AR   = Action RPG SFX Pack v2      (Assets/Action RPG SFX V2/)
+#   ENV  = Environment Sounds Pack     (Assets/Environment Sounds/)
+#   BES  = Bestiary Monster Bundle     (Assets/BestiaryMonsterBundle/)
+#   MON  = Monster Sounds Pack         (Assets/Monster Sounds Pack/)
+#   FEEL = Feel                        (Assets/Feel/)
+#   GUI  = Ultimate Clean GUI Pack     (Assets/UltimateCleanGUIPack/Common/Sounds/)
+#   POLY = already in the project      (Assets/polyperfect/Low Poly Animated Animals/Sounds/)
+# Imported clips land in Assets/Imported/Audio/<PackFolder>/<path inside the pack>.
+# Picks were made from file names; audition them and swap any that sound wrong.
+
+# ---- UI ----
+ui.tap	0.7			PM/Magic UI/Magic Game Proceed UI Tap.wav | PM/Magic UI/Magic Game UI Button.wav
+ui.button	0.7			GUI/Button.wav | PM/Magic UI/Magic Game UI Button 2.wav | PM/Fantasy UI/Fantasy Game Menu Tap Button.wav
+ui.card_right	0.8			PM/Magic Essentials/Magic Game Positive Bling.wav | PM/Magic Essentials/Magic Game Chime Glitter Ding.wav | PM/Magic Essentials/Magic Game Positive Affirmation.wav
+ui.card_wrong	0.5			GUI/Soft (Short).wav | PM/Magic Hits/Magic Wobble Game Hit.wav
+ui.popup_open	0.7			PM/Fantasy Transitions/Fantasy Game Slide Airy.wav | PM/Fantasy Transitions/Fantasy Game Slide Airy 2.wav | GUI/Open (Button).wav
+ui.popup_close	0.7			GUI/Close.wav | PM/Magic Essentials/Magic Game Swoosh.wav
+
+# ---- Player ----
+player.step	0.3	0.9	1.1	FEEL/NiceVibrations/HapticSamples/Footsteps/FootstepGrass1.wav | FEEL/NiceVibrations/HapticSamples/Footsteps/FootstepGrass2.wav | FEEL/NiceVibrations/HapticSamples/Footsteps/FootstepGrass3.wav | AR/Steps/Steps_Boots_Grass_Dirt_Light_01_01.wav
+player.jump	0.6			FEEL/FeelDemos/Bounce/Sounds/FeelBounceJump.wav | AR/Movement/Whoosh_Dodge_Cloth_Movement_Light_01_01.wav
+player.land	0.6			FEEL/FeelDemos/Bounce/Sounds/FeelBounceLanding.wav | ENV/Miscellaneous/Soil Impact 3-1.wav
+player.bump	0.7			PM/Magic Hits/Magic Wobble Game Hit.wav | ENV/Wood/Wood 01.wav
+
+# ---- Activities ----
+zone.enter	0.8			PM/Magic Essentials/Magic Game Aura Twinkle.wav | PM/Fantasy Transitions/Fantasy Airy Positive Twinkle Whoosh.wav
+zone.invite_chime	0.8			PM/Magic Essentials/Magic Game Sparkle Ding.wav | PM/Magic Essentials/Magic Game Time Chime Ding 2.wav | PM/Source Bonus/Chime Hit 2.wav
+activity.start	0.8			PM/Magic Unlocks/Magic Chime Level Unlock.wav | PM/Fantasy Essentials/Fantasy Game Power Up 1.wav
+activity.end_cheer	0.9			PM/Magic Coins and Items/Magic Game Trophy.wav | PM/Fantasy Alerts and Notifications/Fantasy Game Achievement.wav
+
+# ---- Tag ----
+tag.tagged	0.8			PM/Magic Coins and Items/Magic Game Touch Zing Spell.wav | PM/Magic Coins and Items/Magic Game Touch Zing Spell 2.wav | PM/Fantasy Touches and Collects/Fantasy Game Touch.wav
+tag.whoosh	0.6			PM/Spell Whooshes/Magic Game Spell Whoosh 3.wav | PM/Magic Transitions and Whooshes/Magic Essence Whoosh 2.wav | PM/Fantasy Transitions/Fantasy Particle Air Whoosh.wav
+
+# ---- Battle ----
+battle.sword_swing	0.6	1.0	1.2	AR/Combat/Melee_Weapon_Swing_Simple_Small_Short_01_01.wav | AR/Combat/Melee_Weapon_Swing_Simple_Small_Short_01_02.wav | AR/Combat/Melee_Weapon_Swing_Simple_Small_Short_01_03.wav
+battle.hit_confetti	0.8			PM/Magic Hits/Magic Sparkle Poof Hit.wav | PM/Magic Hits/Magic Dust or Glitter Hit.wav | PM/Magic Hits/Magic Sparkle Poof Hit 2.wav
+battle.shield_block	0.6			AR/Combat/Melee_Shield_Metal_Movement_Impact_01_01.wav | AR/Combat/Melee_Shield_Metal_Movement_Impact_01_02.wav | PM/Magic Essentials/Magic Game Shield Guard.wav
+battle.tumble	0.8			PM/Magic Spells and Dust/Magic Game Wacky Spell.wav | PM/Magic Spells and Dust/Magic Game Wacky Spell 2.wav | PM/Magic Hits/Magic Wobble Game Hit.wav
+battle.giggle	0.7	1.2	1.35	MON/Humanoid Small 4/Humanoid Small 4 - Laugh 15.wav | MON/Humanoid Small 4/Humanoid Small 4 - Laugh 16.wav | MON/Humanoid Small 3/Humanoid Small 3 - Laugh 1.wav
+battle.goblin_appear	0.8			PM/Magic Essentials/Magic Essence Poof.wav | PM/Magic Spells and Dust/Magic Game Poof Spell.wav | PM/Fantasy Touches and Collects/Fantasy Game Appear Touch.wav
+battle.wave_horn	0.8	1.0	1.0	PM/Fantasy Transitions/Fantasy App Game Horn Blow or Tone Whoosh.wav
+dragon.roar	0.6	1.1	1.25	BES/Khron Studio - Monster Library Vol 1/14.short_Roar/Short_Roar_With_Caw_01.wav | BES/Khron Studio - Monster Library Vol 1/14.short_Roar/Short_Roar_01.wav | BES/Khron Studio - Monster Library Vol 2/15.DragonShout/DragonShout_03.wav
+dragon.fire	0.7			PM/Magic Conjure/Magic Game Flame Conjure.wav | PM/Magic Conjure/Magic Game Flame Conjure 2.wav | ENV/Miscellaneous/Fire Whoosh 1-4.wav
+dragon.wing_flap	0.6			BES/Khron Studio - Monster Library Vol 3/Dragon/Dragon_Wings/Dragon_Wings_01.wav | BES/Khron Studio - Monster Library Vol 3/Dragon/Dragon_Wings/Dragon_Wings_02.wav | BES/Khron Studio - Monster Library Vol 3/Dragon/Dragon_Wings/Dragon_Wings_03.wav
+dragon.happy	0.7	1.15	1.3	BES/Khron Studio - Monster Library Vol 1/5.Friendship_Call/Friendship_Call_01.wav | BES/Khron Studio - Monster Library Vol 1/5.Friendship_Call/Friendship_Call_With_Caw_02.wav
+
+# ---- Imagination ----
+imagination.sparkle	0.7			PM/Spell Whooshes/Magic Game Sparkle Spell 1.wav | PM/Spell Whooshes/Magic Game Positive Sparkle Glow.wav | PM/Magic Spells and Dust/Magic Wand Sparkle.wav
+
+# ---- Rewards ----
+reward.star_fly	0.7			PM/Magic Transitions and Whooshes/Magic Game Bell Twinkle Whoosh.wav | PM/Magic Spells and Dust/Magic Sparkle Whoosh.wav
+reward.star_land	0.8			PM/Magic Coins and Items/Magic Game Positive Item Touch.wav | PM/Magic Coins and Items/Magic Game Glitter Item Touch.wav | PM/Magic Coins and Items/Magic Sparkle Item Touch 2.wav
+reward.jar_full	0.9	1.0	1.0	PM/Magic Coins and Items/Magic Game Treasure Pick Up.wav | PM/Magic Coins and Items/Magic Game Trophy or Positive Item.wav
+reward.present_shake	0.7			PM/Source Bonus/Sleigh Bell Shake 1.wav | PM/Source Bonus/Sleigh Bell Shake 15 Foley.wav
+reward.present_open	0.9			PM/Magic Coins and Items/Magic Game Treasure 3.wav | PM/Magic Coins and Items/Magic Game Treasure 4.wav
+reward.item_reveal	0.9	1.0	1.0	PM/Magic Unlocks/Magic Item Unlock.wav | PM/Magic Unlocks/Magic Dust or Glitter Unlock or Reward.wav
+
+# ---- Lesson ----
+lesson.toy_pop	0.7			PM/Magic Essentials/Magic Game Potion Pop Off 1.wav | PM/Magic Essentials/Magic Game Potion Pop Off 2.wav | GUI/Pop.wav
+lesson.toy_into_basket	0.7			PM/Magic Coins and Items/Magic Game Pick Up 4.wav | PM/Magic Coins and Items/Magic Game Organic Pick Up 2.wav
+lesson.chalk	0.5			FEEL/NiceVibrations/HapticSamples/Objects/Pen1.wav | AR/Foley/Foley_Stone_Gate_Drag_Friction_Light_Short_02_01.wav
+lesson.bell	0.8	1.0	1.0	PM/Source Bonus/Store Bell or Chime 8 Single.wav | AR/UI/UI_Bell_Hit_01_01.wav
+lesson.trace_progress	0.5			PM/Spell Whooshes/Magic Game Tone Whoosh Short.wav | PM/Spell Whooshes/Magic Game Sparkle Spell 2.wav
+lesson.letter_pop	0.8			PM/Magic Essentials/Magic Essence Poof 2.wav | PM/Magic Hits/Magic Sparkle Poof Hit 2.wav | PM/Magic Coins and Items/Magic Game Pixel Item 2.wav
+
+# ---- Aliens ----
+aliens.rocket_land	0.8			ENV/Miscellaneous/Fire Whoosh 1-2.wav
+aliens.rocket_takeoff	0.8			PM/Fantasy Essentials/Futuristic Game Power Up Rise.wav | ENV/Miscellaneous/Fire Whoosh 1-3.wav
+aliens.zap	0.6	1.0	1.15	PM/Magic Coins and Items/Magic Game Touch Zing Spell 4.wav | FEEL/NiceVibrations/Demo/DemoAssets/HapticClipsDemo/Sounds/NVLaser.wav
+aliens.zap_hit	0.7			PM/Magic Hits/Magic Game Spell Tone Hit 2.wav | PM/Magic Hits/Magic Game Wizard Dust Hit 2.wav
+aliens.slime_throw	0.7			PM/Magic Spells and Dust/Magic Game Dust Whoosh.wav | AR/Combat/Ranged_Weapon_Throw_Cloth_Movement_Whiz_Sharp_01_01.wav
+aliens.slime_splat	0.7			MON/Ooze/Ooze 1_4.wav | MON/Ooze/Ooze 1_5.wav | PM/Magic Hits/Magic Game Liquid Spell Hit.wav | ENV/Water/Water Splash 1-1.wav
+aliens.dance_party	0.8			PM/Fantasy Essentials/Fantasy Game Power Up 6.wav | PM/Magic Buffs/Magic Game Power Up or Buff 2.wav
+aliens.jump_pad	0.7			FEEL/NiceVibrations/Demo/DemoAssets/WobbleDemo/Sounds/NVWobbleSpring.wav | PM/Magic Essentials/Magic Power Up Boost 1.wav
+aliens.rescue	0.9			PM/Magic Essentials/Magic Game Revive 1.wav | PM/Magic Essentials/Magic Game Revive 2.wav
+aliens.spawn	0.8			PM/Fantasy Touches and Collects/Futuristic Gizmo Toy Activate or Touch.wav | PM/Magic Essentials/Magic Essence Poof.wav
+aliens.giggle	0.7	1.4	1.6	MON/Humanoid Small 4/Humanoid Small 4 - Laugh 15.wav | MON/Humanoid Small 3/Humanoid Small 3 - Laugh 1.wav
+aliens.shrink	0.8	1.2	1.4	PM/Magic Spells and Dust/Magic Game Wacky Spell.wav | PM/Magic Spells and Dust/Magic Game Wacky Spell 2.wav
+aliens.peek	0.6			PM/Fantasy Essentials/Futuristic Game Blip.wav | PM/Fantasy Touches and Collects/Fantasy Game Touch 2.wav
+aliens.robot_beep	0.6			PM/Fantasy Touches and Collects/Futuristic Robotic Touch.wav | FEEL/NiceVibrations/HapticSamples/ApplicationUX/Beep2.wav | FEEL/NiceVibrations/HapticSamples/ApplicationUX/Beep3.wav
+aliens.bubble_pop	0.8			GUI/Pop.wav | ENV/Water/Water Bubble 02.wav | ENV/Water/Water Bubble 03.wav
+aliens.slime_pop	0.7			MON/Ooze/Ooze 1_3.wav | PM/Magic Essentials/Magic Game Potion Pop Off 1.wav
+
+# ---- Ice cream shop ----
+shop.bell	0.8	1.0	1.0	PM/Source Bonus/Store Bell or Chime 1.wav | PM/Source Bonus/Store Bell or Chime 2.wav
+shop.scoop	0.5			ENV/Miscellaneous/Soil Impact 1-2.wav
+shop.plop	0.7			ENV/Water/Water Drop 01.wav | PM/Magic Hits/Magic Sparkle Poof Hit 3.wav
+shop.bounce	0.7			FEEL/NiceVibrations/Demo/DemoAssets/WobbleDemo/Sounds/NVWobbleSpring.wav | PM/Magic Hits/Magic Wobble Game Hit.wav
+shop.cone_pop	0.7			PM/Magic Essentials/Magic Game Potion Pop Off 3 Cork.wav | PM/Magic Essentials/Magic Game Potion Pop Off 4 Cork.wav
+shop.slurp	0.6			PM/Magic Essentials/Magic Game Health Regeneration Liquid.wav | ENV/Water/Water Bubbles 06.wav
+shop.coin_drop	0.7			FEEL/NiceVibrations/HapticSamples/Objects/Coin1.wav | FEEL/NiceVibrations/HapticSamples/Objects/Coins2.wav | AR/Foley/Foley_Coin_Drop_Impact_Light_01_01.wav
+shop.coin_tap	0.7			PM/Magic Coins and Items/Magic Game Coin Touch 1.wav | PM/Magic Coins and Items/Magic Game Shimmer Coin 1.wav
+shop.register	0.8			FEEL/NiceVibrations/HapticSamples/Objects/Cash2.wav | FEEL/NiceVibrations/HapticSamples/Objects/Cash5.wav
+
+# ---- Pirate cove ----
+pirates.waves	0.6			ENV/Water/Waves 1-1.wav | ENV/Water/Waves 2-1.wav
+pirates.wheel	0.7			ENV/Wood/Wood 14-3.wav | ENV/Wood/Wood 14-7.wav | ENV/Wood/Wood 16-1.wav
+pirates.cannon	0.8			FEEL/FeelDemos/Duck/Sounds/FeelDuckBoom.wav
+pirates.balloon_pop	0.8			GUI/Pop.wav | FEEL/NiceVibrations/HapticSamples/ApplicationUX/Pop1.wav | PM/Magic Essentials/Magic Essence Poof 2.wav
+pirates.bones_rattle	0.7			BES/Khron Studio - Monster Library Vol 4/Skeleton/Skeleton_Bones/Skeleton_Bones_01.wav | BES/Khron Studio - Monster Library Vol 4/Skeleton/Skeleton_Bones/Skeleton_Bones_02.wav | BES/Khron Studio - Monster Library Vol 4/Skeleton/Skeleton_Bones/Skeleton_Bones_03.wav | BES/Khron Studio - Monster Library Vol 4/Skeleton/Skeleton_Bones/Skeleton_Bones_04.wav
+pirates.bones_rebuild	0.8			PM/Magic Spells and Dust/Magic Game Regenerate Spell.wav | PM/Magic Spells and Dust/Magic Game Regenerate Spell 2.wav
+pirates.parrot	0.7	1.1	1.3	ENV/Animals/Bird Chirp 01.wav | ENV/Animals/Bird Chirp 04.wav | ENV/Animals/Bird Chirp 05.wav
+pirates.map_tick	0.7			PM/Fantasy Transitions/Fantasy App Game Page Turn.wav | PM/Fantasy Transitions/Fantasy App Game Page Turn 2 Selection.wav
+pirates.dig	0.7			ENV/Miscellaneous/Soil Impact 1-1.wav | ENV/Miscellaneous/Soil Impact 3-1.wav | ENV/Miscellaneous/Soil Impact 2-1.wav
+pirates.chest_rise	0.8			PM/Magic Coins and Items/Magic Game Treasure 5.wav | ENV/Wood/Wood Move 1-10.wav
+pirates.lock_open	0.8			PM/Magic Unlocks/Magic Game Unlock 1.wav | AR/Foley/Foley_Mechanical_Unlock_Metal_Short_01_01.wav
+pirates.coin	0.7			PM/Magic Coins and Items/Magic Game Coin Touch 1.wav | FEEL/NiceVibrations/HapticSamples/Objects/Coin1.wav
+pirates.party	0.9			PM/Fantasy Alerts and Notifications/Fantasy Achievement Notification.wav | PM/Magic Notifications/Magic Game Notification 3.wav
+
+# ---- Soapbox race ----
+race.lane	0.5			PM/Magic Essentials/Magic Game Swoosh.wav | AR/Movement/Whoosh_Dodge_Heavy_Swish_Short_01_03.wav
+race.jump	0.6			FEEL/FeelDemos/Bounce/Sounds/FeelBounceJump.wav | PM/Fantasy Essentials/Fantasy Airy Power Up.wav
+race.land	0.6			FEEL/FeelDemos/Bounce/Sounds/FeelBounceLanding.wav | ENV/Miscellaneous/Soil Impact 3-2.wav
+race.bonk	0.7			ENV/Wood/Wood 01.wav | ENV/Wood/Wood 02.wav | PM/Magic Hits/Magic Wobble Game Hit.wav
+race.splash	0.7			ENV/Water/Water Splash 3-1.wav | FEEL/NiceVibrations/HapticSamples/Nature/Splash1.wav
+race.coin	0.6			PM/Fantasy Touches and Collects/Fantasy World Item Blip 2 Coin.wav | FEEL/NiceVibrations/HapticSamples/Objects/Coin1.wav
+race.gate_ding	0.8			PM/Magic Essentials/Magic Game Chime Glitter Ding.wav | PM/Magic Essentials/Magic Game Time Chime Ding 3.wav
+race.countdown_beep	0.7	1.0	1.0	FEEL/NiceVibrations/HapticSamples/ApplicationUX/Beep1.wav
+race.go_horn	0.8	1.0	1.0	PM/Fantasy Transitions/Fantasy App Game Horn Blow or Tone Whoosh 2.wav
+race.ramp_whoosh	0.7			AR/Movement/Whoosh_Dodge_Heavy_Swish_Delay_Long_01_01.wav | PM/Spell Whooshes/Magic Game Spell Whoosh 3.wav
+race.spinout	0.7			PM/Magic Spells and Dust/Magic Game Wacky Spell.wav | PM/Magic Spells and Dust/Magic Game Wacky Spell 2.wav
+race.cheer	0.9			PM/Magic Coins and Items/Magic Game Trophy.wav | PM/Fantasy Alerts and Notifications/Fantasy Achievement Notification.wav
+race.brake	0.35			FEEL/NiceVibrations/HapticSamples/SoundFX/CarScreech2.wav
+
+# ---- Ambience beds (looping, flat; start together with the area's music cue) ----
+ambience.playground	0.35	1.0	1.0	ENV/Ambient Loops/Birds Loop 01.wav
+ambience.knights	0.3	1.0	1.0	ENV/Ambient Loops/Birds Loop 01.wav
+ambience.shop	0.3	1.0	1.0	ENV/Ambient Loops/Birds Loop 01.wav
+ambience.race	0.3	1.0	1.0	ENV/Ambient Loops/Birds Loop 01.wav
+ambience.aliens	0.3	1.0	1.0	ENV/Ambient Loops/Crickets Loop 01.wav
+ambience.pirates	0.45	1.0	1.0	ENV/Ambient Loops/Waves Loop 1.wav
+# ambience.classroom stays empty on purpose: the classroom is quiet.
+
+# ---- Music ----
+# None of the installed packs has music. The music.* cues stay empty until a music pack is added.

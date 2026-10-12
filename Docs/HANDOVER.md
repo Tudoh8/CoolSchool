@@ -59,6 +59,7 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
   - At runtime the pitch is raised per speaker (Kid 1.22, Goblin 1.35, Alien 1.5).
   - To redo a line, delete its mp3 and re-run.
   - Quota used so far: about 4,650 characters, plus 926 for the pirate lines (2026-10-12).
+  - **Still missing (2026-10-12):** 55 NL lines (back button, soapbox race, alien variety; 1,456 chars). This checkout has no invoice, so the user will generate them on another PC. Steps and the full list are in `Docs/voice/missing-lines-2026-10-12.md`.
 - **Batch logs:** `Logs/batch-<Method>.log`.
 - **Preview pictures + grounding check** (editor closed): `-Method CoolSchool.EditorTools.PreviewCapture.BuildAndCaptureFromCommandLine` builds and saves the scene, runs `SceneGroundCheck` (`SceneGround:` log lines, also menu **CoolSchool → Check Scene Grounding**) and renders named shots (weapons on characters, ground contact, ship helm, skeleton boat, cove) to `Logs/preview/*.png`. `CaptureFromCommandLine` renders the saved scene without rebuilding; filter with `-ExtraArgs '-previewShots','ship,ground'`. Add shots in `BuildGroups()`. Look at the PNGs to verify visual changes before asking the user.
 - **Weapons** are placed by `Scripts/Battle/WeaponFit.cs` from the hand/forearm bone positions and the weapon's mesh bounds (the old hand-guessed offsets were wrong). **Ground tiles** are aligned by their measured flat surface (`Editor/GroundSurface.cs`), not their bounds top; lumpy tiles get a flat collider.
@@ -95,6 +96,15 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
     Since 2026-10-12 (contract `Docs/specs/big-castle-contract.md`) it plays inside a 5× walk-in cardboard castle (gate facing the camera, zone just inside the gate, goblins pop out of a door in the back wall, the dragon flies in over the back wall). `CastleCutaway` (`Scripts/World`) ghosts the front wall while the player is inside. The inviter's sparkle trail now follows the NavMesh path. **Not yet rebuilt or played.**
   - `NumbersLesson`: in the classroom; four exercise types and adaptive levels 1–5, stored in progress.
   - `AlienLanding`: ray gun zaps aliens into dancing friends; slime; trampoline rescue of the baby alien; a counting moment; then a party.
+    Since 2026-10-12 (contract `Docs/specs/alien-variety-contract.md`) every visit differs:
+    - **Count:** 2–8 aliens, adaptive `aliens` level 1–3 with a parent row, never the same count twice in a row.
+    - **Spawns:** 2–3 spawn spots out of 8 spread over the field.
+    - **Kinds:** Normal, Big (3 zaps, shrinks), Tiny (runs off, rests), Shy (hides behind `AlienCover`s, peeks) and Robot.
+    - **Rescues:** one of four kinds (`AlienRescueSite`): one of 4 trees, the rocket nose, a `FloatingBubble`, or a `SlimeTrap` with zappable `SlimeBlob`s (`IZapTarget`). There are two baby models.
+    - **Trampolines:** real Synty trampolines, always bouncy also in free play; only the rescue one glows. The lit pad aims its launch at the baby's seat (`JumpPad.AimAt`).
+    - **Count camera:** framed at run time on the N dancers.
+    - **Testing:** force a rescue or a count with `debugForceRescue` / `debugForceCount` on `AlienLanding`.
+    - **Status:** not rebuilt or played. The 14 new voice lines (~650 NL chars) are not generated.
   - `LettersLesson` (contract `Docs/specs/letters-and-parent-area-contract.md`): shares `ClassroomLesson` with `NumbersLesson`; the classroom zone alternates subjects via `ClassroomActivitySelector`. Dutch letter SOUNDS, lowercase, drawn from stroke data; the child's name letters first; exercises NewLetter, FindLetter, StartsWith (76 word props), Trace, SpellName. Sound spellings live in `Editor/Lessons/LetterWordTable.cs`; to fix one, edit it, delete its mp3 and regenerate.
   - **Parent area** (`Scripts/Parent`): hold the gear top-left 3 s; pauses the game (`ParentGate.IsOpen` must gate any direct pointer/keyboard polling); child name + level sliders per subject that set the current level (adaptive continues).
   - `IceCreamShop` (`Scripts/Shop`, contract `Docs/specs/ice-cream-shop-contract.md`): stall in the NW of the playground facing south; five customers (kid, knight, kid, alien, small dragon) order with picture bubbles; he drags or taps scoops from four colour tubs onto the cone (counting + colours), serves it, then taps the coins into the register; adaptive `shopLevel` 1–3.
@@ -108,10 +118,15 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
 - **Voice** (`Scripts/Voice`): a `LineTable` asset of keys and groups with NL/EN text and clips.
   - `VoicePlayer.Say(group)` handles the queue; the teacher has priority; a missing clip falls back to a debug subtitle.
   - The seed list lives in `Editor/Voice/VoiceLineSeeder.cs`. Add new lines there, rebuild or seed, then generate.
-- **Audio** (`Scripts/Audio`): `Sfx.Play(cue, pos)` and `Sfx.PlayMusic(cue)`, with about 55 named cues listed in `Editor/Audio/SoundCues.cs`.
-  - Every action already calls its cue, but **no audio clips exist yet**.
-  - When the user imports audio packs, use **CoolSchool → Audio → Auto-Assign Clips From Folder…**, which matches by keyword through the synonyms in `SoundAutoAssign.cs`.
+- **Audio** (`Scripts/Audio`): `Sfx.Play(cue, pos)` and `Sfx.PlayMusic(cue)`, with the named cues listed in `Editor/Audio/SoundCues.cs`. Every action already calls its cue.
+  - The source of truth is the picks file `Assets/CoolSchool/Audio/SoundPackPicks.txt` (cue, volume, pitch, clips from the Asset Store packs). The contract is `Docs/specs/audio-packs-contract.md`.
+  - `python -I Tools/import-audio-clips.py` copies only the picked clips, with their package GUIDs, into `Assets/Imported/Audio/<Pack>/`.
+  - **CoolSchool → Audio → Apply Sound Pack Picks** (or batch `-Method CoolSchool.EditorTools.SoundPackPicks.ApplyFromCommandLine`) fills `SoundLibrary.asset`. A scene rebuild runs it too, and the picks file wins over hand edits for the cues it lists.
+  - Import settings (Android tablet) are applied by `Apply` and by `ImportedAudioPostprocessor`: clips under `Ambient Loops` stream as stereo Vorbis 0.5; all others are Decompress On Load, mono, Vorbis 0.6; sample rate 44100.
+  - **Ambience layer:** `PlayMusic("music.X")` also starts `ambience.X`, crossfading two looping sources; the classroom has none, so it is quiet. Ambience follows `SfxVolume` and ducks to 60% while a voice line plays; `StopMusic` does not stop it.
   - Music ducks to 40% while a voice line plays.
+  - **No music exists yet:** none of the installed packs (Phantom Magic, Action RPG SFX, Environment Sounds, Bestiary, Monster Sounds, plus stray clips from Feel and the Ultimate Clean GUI Pack) has music.
+  - **Status:** the picks were made from file names and are not auditioned, and have not been applied in Unity yet. Audition first: `battle.giggle` and `aliens.giggle` (monster laughs pitched up), `dragon.roar`, `shop.scoop`, `ui.card_wrong`.
 - **Rewards** (`Scripts/Rewards`): `ProgressStore` saves to `persistentDataPath/progress.json`.
   - Stars fill the jar; 10 stars give a present, which opens in a popup with a 3D reveal; items come from the `RewardCatalog` in order.
   - The equipped sword is applied automatically.
@@ -134,6 +149,14 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
     - camera framing of the party line
     - the carried baby plays a run animation
     - counting close-up (`CountCameraHeight/Back/Pitch` in `AlienFieldBuilder`); the baby waits at `BabyWaitPoint` behind that camera and is not counted
+    - variety (2026-10-12, untested):
+      - trampoline scale (2.4 m) and launch speeds, and `JumpPad.aimStandOff`
+      - whether the rocket-nose baby is reachable (the perch is 1 m south of the rocket's centre, the pad about 2.3 m south)
+      - bubble height (4.5 m)
+      - shy cover hide/peek points
+      - count-camera framing for 8 aliens
+      - tree, rock and bush model choices and their bounds scaling
+      - field bounds stop at across −8 (`BoundsAcrossMin`), so tiny aliens stay on screen
   - **Golden sword reward (untested):** size, height and orientation above the lesson table (`GoldenSwordHeight` in `NumbersLesson`, `displayLength` on `GoldenSwordReward`)
   - **Ice cream shop (untested):** shop camera pose and framing (the dragon is 2.8 m tall), Synty prop facing (counter, sign, register may need a 180° turn), cone-in-hand offsets (`ShopCustomerBuilder`), drag/drop radii (`IceCreamShop.Touch.cs`), order bubble size. Customers have no talk/lick clips (procedural nods).
   - **Pirate cove (untested):** ship bow direction and helm/crew/wheel heights (deck found at 2.38 m), skeleton-boat seat height (no deck found, 2.19 m fallback), `PirateShip.sailSpeed` (0.9, ~15 s trip), map icons in `Assets/CoolSchool/Pirates/MapIcons/` (delete a PNG to re-render), parrot shoulder offset, chest lid hinge, camera near the main north fence at the dock.
@@ -160,7 +183,7 @@ The user chose and ordered the play-section focus as: pretend battles plus creat
 - **Learning:** letters (starting with his name, which is not known yet), colours and shapes, then first words and sums. Reuse the lesson framework in `Scripts/Lessons`.
 - **Character creator and parent area:** he builds his own kid and the teacher says his name. A locked parent area holds language, an optional time limit, progress, and volume.
 - **Tablet:** install Android Build Support through Unity Hub, prepare a batch APK build, and test touch and performance on his tablet.
-- **Audio:** the user will import "a lot of audio packs" later. Then run auto-assign and fill in the remaining cues.
+- **Audio:** apply the picks in Unity and audition them (see the Audio bullet above), then find music; `SoundAutoAssign` can fill any cues the picks file leaves empty.
 - **Later:** the neighbourhood (safe street, houses, his home, shops), soapbox racing, the English language track.
 
 ## Memory

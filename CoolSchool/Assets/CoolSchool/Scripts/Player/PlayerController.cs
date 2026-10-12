@@ -44,6 +44,9 @@ namespace CoolSchool.Player
         /// <summary>Up (positive) or down (negative) speed in metres per second.</summary>
         public float VerticalVelocity => verticalVelocity;
 
+        /// <summary>The pull of gravity in metres per second squared (negative), for working out how hard a trampoline must launch.</summary>
+        public float Gravity => gravity;
+
         /// <summary>True from RideOn until the hop off in StopRiding has landed. The kid does not walk while riding.</summary>
         public bool IsRiding => riding;
 
@@ -64,7 +67,7 @@ namespace CoolSchool.Player
         Coroutine rideRoutine;
 
         // How fast a launch's sideways push fades, in metres per second per second.
-        const float CarryDecay = 5f;
+        public const float CarryDecay = 5f;
         const float LandSoundMinAirSeconds = 0.2f;
         const float StepSeconds = 0.35f;
 

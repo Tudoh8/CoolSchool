@@ -25,6 +25,7 @@ namespace CoolSchool.EditorTools
             // Aliens
             "aliens.rocket_land", "aliens.rocket_takeoff", "aliens.zap", "aliens.zap_hit", "aliens.slime_throw",
             "aliens.slime_splat", "aliens.dance_party", "aliens.jump_pad", "aliens.rescue",
+            "aliens.spawn", "aliens.giggle", "aliens.shrink", "aliens.peek", "aliens.robot_beep", "aliens.bubble_pop", "aliens.slime_pop",
             // Ice cream shop
             "shop.bell", "shop.scoop", "shop.plop", "shop.bounce", "shop.cone_pop", "shop.slurp",
             "shop.coin_drop", "shop.coin_tap", "shop.register",
@@ -36,8 +37,12 @@ namespace CoolSchool.EditorTools
             "race.go_horn", "race.ramp_whoosh", "race.spinout", "race.cheer", "race.brake",
             // Music
             "music.playground", "music.knights", "music.aliens", "music.classroom", "music.victory", "music.shop", "music.pirates", "music.race",
+            // Ambience (a quiet looping bed under the music of each area)
+            "ambience.playground", "ambience.knights", "ambience.aliens", "ambience.classroom", "ambience.shop", "ambience.pirates", "ambience.race",
         };
 
         public static bool IsMusic(string cue) => cue.StartsWith("music.");
+
+        public static bool IsAmbience(string cue) => cue.StartsWith("ambience.");
     }
 }

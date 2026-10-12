@@ -11,6 +11,8 @@ namespace CoolSchool.EditorTools
     /// Menu CoolSchool/Audio/Auto-Assign Clips From Folder...: pick a folder with an imported sound pack and every
     /// empty cue gets up to four clips whose file names contain one of the cue's keywords. Cues that already
     /// have clips are left alone. A report of assigned and unassigned cues is printed in the console.
+    /// The main way to assign clips is now Assets/CoolSchool/Audio/SoundPackPicks.txt (see SoundPackPicks); this tool
+    /// only fills cues the picks file leaves empty, and never touches the ambience cues.
     /// </summary>
     public static class SoundAutoAssign
     {
@@ -174,6 +176,7 @@ namespace CoolSchool.EditorTools
             foreach (SoundEntry entry in library.Entries)
             {
                 if (entry == null || string.IsNullOrEmpty(entry.cue)) continue;
+                if (SoundCues.IsAmbience(entry.cue)) continue;
 
                 if (entry.clips != null && entry.clips.Any(c => c != null))
                 {

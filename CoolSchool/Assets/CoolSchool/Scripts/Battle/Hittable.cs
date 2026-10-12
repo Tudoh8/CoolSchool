@@ -101,6 +101,12 @@ namespace CoolSchool.Battle
             canBeDefeated = true;
         }
 
+        /// <summary>Puts this one on a team (the slime blobs make sure they are opponents, whatever the builder set).</summary>
+        public void SetTeam(BattleTeam newTeam)
+        {
+            team = newTeam;
+        }
+
         public void ResetState()
         {
             HitsTaken = 0;

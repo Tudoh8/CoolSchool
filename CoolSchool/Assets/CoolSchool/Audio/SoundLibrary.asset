@@ -14,284 +14,398 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CoolSchool.Audio.SoundLibrary
   entries:
   - cue: ui.tap
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 03e34bacb3a314345847211dcdba933d, type: 3}
+    - {fileID: 8300000, guid: ee409ffd1d3504cc39b34b055a95e404, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 0
     cooldown: 0.05
   - cue: ui.button
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 21d2dd36629bf406daad2064370e68fe, type: 3}
+    - {fileID: 8300000, guid: 647fb2ccb476142d983746bc965c736f, type: 3}
+    - {fileID: 8300000, guid: b3a6f3d60fb044edc9b63b5186179c36, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 0
     cooldown: 0.05
   - cue: ui.card_right
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 38e52ce8d09d448f48c9ec37b7810bb6, type: 3}
+    - {fileID: 8300000, guid: 1c579193ab7f34a1ebdb3a06e65d172b, type: 3}
+    - {fileID: 8300000, guid: 30fd2f1b7543a4e03a9d7ec9314fbfe6, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 0
     cooldown: 0.05
   - cue: ui.card_wrong
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: d1d69f0958c724d8b9af1f98108facbc, type: 3}
+    - {fileID: 8300000, guid: 357984fc32eaa4f90a2c17f08f97df07, type: 3}
+    volume: 0.5
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 0
     cooldown: 0.05
   - cue: ui.popup_open
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: cd03fd95469564fd9975877d4975e2ec, type: 3}
+    - {fileID: 8300000, guid: 7dd668ea1cb3b433ead4f1b5bb4b9e22, type: 3}
+    - {fileID: 8300000, guid: 37b1cc23ccd6d4382a26dd64daa12be1, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 0
     cooldown: 0.05
   - cue: ui.popup_close
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: c201f1dfd9d8345c7913a8662735c920, type: 3}
+    - {fileID: 8300000, guid: 4559098c3750d437b8ed8ab629e0e692, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 0
     cooldown: 0.05
   - cue: player.step
-    clips: []
-    volume: 1
-    pitchRange: {x: 0.95, y: 1.05}
+    clips:
+    - {fileID: 8300000, guid: ebbcbfff273fb437d9bb5b10069a7901, type: 3}
+    - {fileID: 8300000, guid: 7f25e4d1fb85541e5b86dd24eec1b76a, type: 3}
+    - {fileID: 8300000, guid: 5a67c3ebaba314bdcb3ae080147fdda7, type: 3}
+    - {fileID: 8300000, guid: 6e1d8040e40fb784a9f28e58fca6680a, type: 3}
+    volume: 0.3
+    pitchRange: {x: 0.9, y: 1.1}
     spatial: 1
     cooldown: 0.05
   - cue: player.jump
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: ca77d13bf4f3b7442b324e68259c72e1, type: 3}
+    - {fileID: 8300000, guid: 0e1cdc7f6b06dd846bc02bdee92c0bea, type: 3}
+    volume: 0.6
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: player.land
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: cc685207a46826746af448ba3a0eaa07, type: 3}
+    - {fileID: 8300000, guid: 1976843318cd543a39a5b8d3fd34dd05, type: 3}
+    volume: 0.6
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: player.bump
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 357984fc32eaa4f90a2c17f08f97df07, type: 3}
+    - {fileID: 8300000, guid: eb59881a2d674454c9c6386405dde990, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: zone.enter
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 669ef16a0477249f394e7288526a1c4d, type: 3}
+    - {fileID: 8300000, guid: 30676fa46fc8b403e9b4846139b2a64a, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: zone.invite_chime
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: c3dad9a5cab004c1fa307d0dce020311, type: 3}
+    - {fileID: 8300000, guid: 6abc9743fd7f3479b97a652dbdbfec01, type: 3}
+    - {fileID: 8300000, guid: 5f79ffd8d727c475182479edf9593490, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: activity.start
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 914fbf5386b7c4644a7b3cad5578fb61, type: 3}
+    - {fileID: 8300000, guid: be7217bc78c7e419195e7d5685c35b3e, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: activity.end_cheer
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: cb3a0951e05bf4c15b41f200418a5a39, type: 3}
+    - {fileID: 8300000, guid: c68ebb302ff6e42baa3fac5326816f4a, type: 3}
+    volume: 0.9
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: tag.tagged
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: b8b10f5a6e06a47d78b51290ea3d09dd, type: 3}
+    - {fileID: 8300000, guid: f99f1ad323ade4062af8fdbc342678ad, type: 3}
+    - {fileID: 8300000, guid: f34121d90774d4af1bba75348be3dfd1, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: tag.whoosh
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 1397ae1e2036f44a198d024510f7dee9, type: 3}
+    - {fileID: 8300000, guid: 87e74a119822c4334b36b051e3d259c5, type: 3}
+    - {fileID: 8300000, guid: 73efdfdac706e474aa6975021720f851, type: 3}
+    volume: 0.6
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: battle.sword_swing
-    clips: []
-    volume: 1
-    pitchRange: {x: 0.95, y: 1.05}
+    clips:
+    - {fileID: 8300000, guid: a632ba7b006f73e40b6205f9cbcfdd05, type: 3}
+    - {fileID: 8300000, guid: fe50b588b358f1b4e995509db9f3eb54, type: 3}
+    - {fileID: 8300000, guid: 7036c14502113f1469fe3c955d474c52, type: 3}
+    volume: 0.6
+    pitchRange: {x: 1, y: 1.2}
     spatial: 1
     cooldown: 0.05
   - cue: battle.hit_confetti
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 3a1d963e077a64a5293f5281768e3293, type: 3}
+    - {fileID: 8300000, guid: 7da95b25cb28c4a7daac5588700f7619, type: 3}
+    - {fileID: 8300000, guid: 7f3d9261b7d2b45c59a41eff99e32734, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: battle.shield_block
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 139e6b848d991b44ca24ea8d2dafa732, type: 3}
+    - {fileID: 8300000, guid: 90ebebf4432deee4593601355d5648c5, type: 3}
+    - {fileID: 8300000, guid: eeac5956b862e49348ef329e9721937d, type: 3}
+    volume: 0.6
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: battle.tumble
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 217e9fcadb3204e8287d078e9a8cff80, type: 3}
+    - {fileID: 8300000, guid: 0d9125b88a2cf4711ad09f56c39e5bf9, type: 3}
+    - {fileID: 8300000, guid: 357984fc32eaa4f90a2c17f08f97df07, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: battle.giggle
-    clips: []
-    volume: 1
-    pitchRange: {x: 0.95, y: 1.05}
+    clips:
+    - {fileID: 8300000, guid: 3156184df582e0b4eb6f6fbd609e1a25, type: 3}
+    - {fileID: 8300000, guid: 91be51960eb55124ab5630efb2b5f2c6, type: 3}
+    - {fileID: 8300000, guid: 800cdc630dc21b74e97df76066c62e34, type: 3}
+    volume: 0.7
+    pitchRange: {x: 1.2, y: 1.35}
     spatial: 1
     cooldown: 0.05
   - cue: battle.goblin_appear
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: fc77543d2b86046609b225aef5bc3733, type: 3}
+    - {fileID: 8300000, guid: ae2fb3767dd6544dcaec2f7cdb6a290d, type: 3}
+    - {fileID: 8300000, guid: e235c08236f1c4a70890735f9870f379, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: battle.wave_horn
-    clips: []
-    volume: 1
-    pitchRange: {x: 0.95, y: 1.05}
+    clips:
+    - {fileID: 8300000, guid: 2d9b53b0000784f2784eee2ee29e2ff7, type: 3}
+    volume: 0.8
+    pitchRange: {x: 1, y: 1}
     spatial: 1
     cooldown: 0.05
   - cue: dragon.roar
-    clips: []
-    volume: 1
-    pitchRange: {x: 0.95, y: 1.05}
+    clips:
+    - {fileID: 8300000, guid: 39b6cab65e793cb4bbe21a301845d336, type: 3}
+    - {fileID: 8300000, guid: 4dca6d8bc16d1e947812a30c1de24a5f, type: 3}
+    - {fileID: 8300000, guid: fc674f6ecb3b27047b2e33a09f117bfb, type: 3}
+    volume: 0.6
+    pitchRange: {x: 1.1, y: 1.25}
     spatial: 1
     cooldown: 0.05
   - cue: dragon.fire
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: ef20d5b9436d4437c82d04f248c89536, type: 3}
+    - {fileID: 8300000, guid: 9d446b81c208c45aca2911cf935b2046, type: 3}
+    - {fileID: 8300000, guid: bfd7e2c30da5d48e2b0ec8326a9ce210, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: dragon.wing_flap
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 1a19144ab0633d44fabcb4506dddb9b5, type: 3}
+    - {fileID: 8300000, guid: 0e92e0d5edd3d904a92ee5b74cf2ac27, type: 3}
+    - {fileID: 8300000, guid: 585ec16105cc38649a3775bdc55bb788, type: 3}
+    volume: 0.6
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: dragon.happy
-    clips: []
-    volume: 1
-    pitchRange: {x: 0.95, y: 1.05}
+    clips:
+    - {fileID: 8300000, guid: 5e90315075676c44cb44c42243cad110, type: 3}
+    - {fileID: 8300000, guid: 4b8fbbe8d349faf4580afbf0518a57fb, type: 3}
+    volume: 0.7
+    pitchRange: {x: 1.15, y: 1.3}
     spatial: 1
     cooldown: 0.05
   - cue: imagination.sparkle
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 4add81f653156475999c93c8e7f20746, type: 3}
+    - {fileID: 8300000, guid: 663821756f4e54748b8fbf25b5186ca5, type: 3}
+    - {fileID: 8300000, guid: 700aadbab40e14d15a6e78c518cdb353, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: reward.star_fly
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 9467c67176a2046fdb62cc64c6f5afe2, type: 3}
+    - {fileID: 8300000, guid: 92236ec5a1342439cac44dac0a67dda0, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 0
     cooldown: 0.05
   - cue: reward.star_land
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: ed8abf8b8dd4c4822b7946f79447a7ae, type: 3}
+    - {fileID: 8300000, guid: 68648c6bcfffe4a459c46f2620151255, type: 3}
+    - {fileID: 8300000, guid: 1414118332f1a4b6cb969ef55595cf0e, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 0
     cooldown: 0.05
   - cue: reward.jar_full
-    clips: []
-    volume: 1
-    pitchRange: {x: 0.95, y: 1.05}
+    clips:
+    - {fileID: 8300000, guid: ac5da28325b154c12b958a7e51a398fe, type: 3}
+    - {fileID: 8300000, guid: 5e4dd3000a4c8489389a55109f71305f, type: 3}
+    volume: 0.9
+    pitchRange: {x: 1, y: 1}
     spatial: 0
     cooldown: 0.05
   - cue: reward.present_shake
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: dd62569cf51c44a9b9ef84d8a171ad97, type: 3}
+    - {fileID: 8300000, guid: 6f4d8f45f29ff432babdda1490d101f6, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 0
     cooldown: 0.05
   - cue: reward.present_open
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: bf047a90f000f4ab5b22c674858e5026, type: 3}
+    - {fileID: 8300000, guid: 3d950f2def1cf4d61822cffe6bc71e48, type: 3}
+    volume: 0.9
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 0
     cooldown: 0.05
   - cue: reward.item_reveal
-    clips: []
-    volume: 1
-    pitchRange: {x: 0.95, y: 1.05}
+    clips:
+    - {fileID: 8300000, guid: 4f2c81874909440979d4432bc8486c7e, type: 3}
+    - {fileID: 8300000, guid: 442045114655742918ab3206cb042d54, type: 3}
+    volume: 0.9
+    pitchRange: {x: 1, y: 1}
     spatial: 0
     cooldown: 0.05
   - cue: lesson.toy_pop
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 24fdaac9fcb7b415a9ae19f9f0bed1b4, type: 3}
+    - {fileID: 8300000, guid: 68ec471dea9bb4633909af0c18185a14, type: 3}
+    - {fileID: 8300000, guid: 0fb1da01b345a411c84b6367fc0c2e69, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: lesson.toy_into_basket
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: e315003e25a384d41a8aa728330c41fa, type: 3}
+    - {fileID: 8300000, guid: 8eb571d89aec54814a2ebca5be3e82d1, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: lesson.chalk
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 0a4d3aae2b26b4e14aecb823eb10eb85, type: 3}
+    - {fileID: 8300000, guid: 3a3b8357a971e974e91a198b188f1fa7, type: 3}
+    volume: 0.5
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: lesson.bell
-    clips: []
-    volume: 1
-    pitchRange: {x: 0.95, y: 1.05}
+    clips:
+    - {fileID: 8300000, guid: cc52685b417754455b2d5800fa83c96b, type: 3}
+    - {fileID: 8300000, guid: 50ac7f41eb3d86a4d87beee73cae4491, type: 3}
+    volume: 0.8
+    pitchRange: {x: 1, y: 1}
     spatial: 1
     cooldown: 0.05
   - cue: aliens.rocket_land
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: e02536b6a9edc44249f957726f9bc792, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: aliens.rocket_takeoff
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 6f9a0dd323e37471e8981c4cc1a66668, type: 3}
+    - {fileID: 8300000, guid: ff5fd1b1967f9417198be178145d6267, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: aliens.zap
-    clips: []
-    volume: 1
-    pitchRange: {x: 0.95, y: 1.05}
+    clips:
+    - {fileID: 8300000, guid: 7098607f0ba0840beac52738be3de452, type: 3}
+    - {fileID: 8300000, guid: 444c72e35fbefef45bc50447123c6225, type: 3}
+    volume: 0.6
+    pitchRange: {x: 1, y: 1.15}
     spatial: 1
     cooldown: 0.05
   - cue: aliens.zap_hit
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: da430cced7ab7445387092785e08889e, type: 3}
+    - {fileID: 8300000, guid: e5feeb4894eaa457db54fb473fb9eb88, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: aliens.slime_throw
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 4b9f44cfff1944ba5a93fe7409d93d3f, type: 3}
+    - {fileID: 8300000, guid: daea1fe90d9c57644888ea0df9ebbabe, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: aliens.slime_splat
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: c54e22333977178418087aa4596bcfdb, type: 3}
+    - {fileID: 8300000, guid: d261496c1c1c82641811169125db9739, type: 3}
+    - {fileID: 8300000, guid: a9b8d577257c348db985ce166925089e, type: 3}
+    - {fileID: 8300000, guid: 77366f7997bcb46d091904e3bd595175, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: aliens.dance_party
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 5a3cdd60ea8b2429298f626cf10234df, type: 3}
+    - {fileID: 8300000, guid: 49272311fa3424f2e8223cb45a2cb2e8, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: aliens.jump_pad
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 7fde4c9141938aa43bb4719fda47aad8, type: 3}
+    - {fileID: 8300000, guid: 97dbb411b910b4c339a2a34340a07a76, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: aliens.rescue
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 5a798e026ef654cc8be468707ad3a7fb, type: 3}
+    - {fileID: 8300000, guid: 8c4656b53b2a94f61b7d283f933628ae, type: 3}
+    volume: 0.9
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
@@ -326,56 +440,74 @@ MonoBehaviour:
     spatial: 0
     cooldown: 0
   - cue: shop.bell
-    clips: []
-    volume: 1
-    pitchRange: {x: 0.95, y: 1.05}
+    clips:
+    - {fileID: 8300000, guid: ade095a3099f64afe9a46ee37d136d16, type: 3}
+    - {fileID: 8300000, guid: 8d63b4da4b6ad4b0aa01fc7d3c20a85b, type: 3}
+    volume: 0.8
+    pitchRange: {x: 1, y: 1}
     spatial: 1
     cooldown: 0.05
   - cue: shop.scoop
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 697b6de63f7f44c7792e3cde21222dc9, type: 3}
+    volume: 0.5
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: shop.plop
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 2c4e6105b43fc474aae8c626b07655eb, type: 3}
+    - {fileID: 8300000, guid: a349634dc61604b4cb533f4cd9ca9d14, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: shop.bounce
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 7fde4c9141938aa43bb4719fda47aad8, type: 3}
+    - {fileID: 8300000, guid: 357984fc32eaa4f90a2c17f08f97df07, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: shop.cone_pop
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 37279dc15e54247b390692d2c7366084, type: 3}
+    - {fileID: 8300000, guid: 7a2586f8b4726436bae3d5889e28273d, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: shop.slurp
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 0e04573e9d98a4415b07480a1028cce8, type: 3}
+    - {fileID: 8300000, guid: 56811046da01d42f6a70d2c949368f74, type: 3}
+    volume: 0.6
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: shop.coin_drop
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 0cc8b736879e846a19b851eb815591a8, type: 3}
+    - {fileID: 8300000, guid: f0a0e30b878024715bc0e4289cdb1eaf, type: 3}
+    - {fileID: 8300000, guid: 5236c3b1017649d4cac043cae4983e3e, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: shop.coin_tap
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: bc5cdd0c67a3b4aedaa3aba5008a0dfa, type: 3}
+    - {fileID: 8300000, guid: 9d296578dba0242a2a9ad913d7d39348, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: shop.register
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: dcb02f28cff3445d390346c407d9a425, type: 3}
+    - {fileID: 8300000, guid: bdea7835016ba4eff9e2ded269563cc8, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
@@ -386,92 +518,128 @@ MonoBehaviour:
     spatial: 0
     cooldown: 0
   - cue: lesson.trace_progress
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 757ac35cd7df3414b864e6629417695f, type: 3}
+    - {fileID: 8300000, guid: c2e6dc7d795124eadbae78ca536b396c, type: 3}
+    volume: 0.5
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: lesson.letter_pop
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: b0a62cca641db4388b5e9b742fcf0268, type: 3}
+    - {fileID: 8300000, guid: 7f3d9261b7d2b45c59a41eff99e32734, type: 3}
+    - {fileID: 8300000, guid: 074409eaaae7a4a5993a0ebcc3c31c88, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: pirates.waves
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 133910bf3736740069038d0ead9e28b9, type: 3}
+    - {fileID: 8300000, guid: 1af3d5796bc3d4ed9a548eaa9dba13ba, type: 3}
+    volume: 0.6
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: pirates.wheel
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 59bf3b7904827431991df5ce1ee54144, type: 3}
+    - {fileID: 8300000, guid: 49718c5d60d064941a159c4bd088eabf, type: 3}
+    - {fileID: 8300000, guid: 79da571c32ac14db983739bf85795e50, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: pirates.cannon
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 1739ff78014ab3f44a5757aede3c7ea9, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: pirates.balloon_pop
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 0fb1da01b345a411c84b6367fc0c2e69, type: 3}
+    - {fileID: 8300000, guid: 7336cd5e6e4f74693ac6c4b607b671ef, type: 3}
+    - {fileID: 8300000, guid: b0a62cca641db4388b5e9b742fcf0268, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: pirates.bones_rattle
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 8d919f00d9bcf874f904a5ce803a0fee, type: 3}
+    - {fileID: 8300000, guid: 15b1d746828acec418761d2263ae8ade, type: 3}
+    - {fileID: 8300000, guid: 308ff789a73d7c14ea8845ad36818dbe, type: 3}
+    - {fileID: 8300000, guid: 22e070e21139c514e8e3a22373aec23d, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: pirates.bones_rebuild
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: a62c70f85672b4c15897c1c5ba43d817, type: 3}
+    - {fileID: 8300000, guid: 5d6ae132a741b42faa1cc7987fc83024, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: pirates.parrot
-    clips: []
-    volume: 1
-    pitchRange: {x: 0.95, y: 1.05}
+    clips:
+    - {fileID: 8300000, guid: 69c386fc5619541f7887a3e54e82c5e2, type: 3}
+    - {fileID: 8300000, guid: 861bbabfb12ac4300ae1768e484d5261, type: 3}
+    - {fileID: 8300000, guid: d379d402f8ce9418dba15ad7d107a6ad, type: 3}
+    volume: 0.7
+    pitchRange: {x: 1.1, y: 1.3}
     spatial: 1
     cooldown: 0.05
   - cue: pirates.map_tick
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: cd5c1cca97be8483987ef442a60e3329, type: 3}
+    - {fileID: 8300000, guid: fb160574986cb4a918beb0225b39cac0, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: pirates.dig
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: be9c7e87c36374a498bf29c48f26fccc, type: 3}
+    - {fileID: 8300000, guid: 1976843318cd543a39a5b8d3fd34dd05, type: 3}
+    - {fileID: 8300000, guid: 768709158a2d8489f9afb17d974282fd, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: pirates.chest_rise
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: bced37b837e564cbca3f3f32eae59390, type: 3}
+    - {fileID: 8300000, guid: 99a40f27c460c476690aa76bccf202f1, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: pirates.lock_open
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 1a7f08b70044743ccb892d335a24d509, type: 3}
+    - {fileID: 8300000, guid: 4ef74b79e645175449f6daec4803d628, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: pirates.coin
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: bc5cdd0c67a3b4aedaa3aba5008a0dfa, type: 3}
+    - {fileID: 8300000, guid: 0cc8b736879e846a19b851eb815591a8, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: pirates.party
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: cbc5daa3ae3d348a98040452d2b6829b, type: 3}
+    - {fileID: 8300000, guid: 51677a1ede86c4d0fa836528686508b3, type: 3}
+    volume: 0.9
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
@@ -482,80 +650,104 @@ MonoBehaviour:
     spatial: 0
     cooldown: 0
   - cue: race.lane
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 4559098c3750d437b8ed8ab629e0e692, type: 3}
+    - {fileID: 8300000, guid: 333ce8752b9daec43be8f4e629bbd9f3, type: 3}
+    volume: 0.5
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: race.jump
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: ca77d13bf4f3b7442b324e68259c72e1, type: 3}
+    - {fileID: 8300000, guid: 07e2a16e5282443afa2c71fd617e0879, type: 3}
+    volume: 0.6
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: race.land
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: cc685207a46826746af448ba3a0eaa07, type: 3}
+    - {fileID: 8300000, guid: 7b37c2fc5443441db84bee3473c63ba5, type: 3}
+    volume: 0.6
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: race.bonk
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: eb59881a2d674454c9c6386405dde990, type: 3}
+    - {fileID: 8300000, guid: 4e72116c6eb914481b88f9771610f49d, type: 3}
+    - {fileID: 8300000, guid: 357984fc32eaa4f90a2c17f08f97df07, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: race.splash
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 911836e9b9efc4e1bac9afbc34a24479, type: 3}
+    - {fileID: 8300000, guid: 6d55888e6190b4ecd9d69a9120fbc7a3, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: race.coin
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: de7221d6118ba451eae5198f416c760e, type: 3}
+    - {fileID: 8300000, guid: 0cc8b736879e846a19b851eb815591a8, type: 3}
+    volume: 0.6
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: race.gate_ding
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 1c579193ab7f34a1ebdb3a06e65d172b, type: 3}
+    - {fileID: 8300000, guid: 786e8c90982544013857507ca91acf00, type: 3}
+    volume: 0.8
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: race.countdown_beep
-    clips: []
-    volume: 1
-    pitchRange: {x: 0.95, y: 1.05}
+    clips:
+    - {fileID: 8300000, guid: adb24518d159048ca9cb62d63113784f, type: 3}
+    volume: 0.7
+    pitchRange: {x: 1, y: 1}
     spatial: 1
     cooldown: 0.05
   - cue: race.go_horn
-    clips: []
-    volume: 1
-    pitchRange: {x: 0.95, y: 1.05}
+    clips:
+    - {fileID: 8300000, guid: ff4e450393ffb449fb3f80af1e394e5f, type: 3}
+    volume: 0.8
+    pitchRange: {x: 1, y: 1}
     spatial: 1
     cooldown: 0.05
   - cue: race.ramp_whoosh
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: c3b92b5182f109540b803bdbaa78ba4e, type: 3}
+    - {fileID: 8300000, guid: 1397ae1e2036f44a198d024510f7dee9, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: race.spinout
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 217e9fcadb3204e8287d078e9a8cff80, type: 3}
+    - {fileID: 8300000, guid: 0d9125b88a2cf4711ad09f56c39e5bf9, type: 3}
+    volume: 0.7
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: race.cheer
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: cb3a0951e05bf4c15b41f200418a5a39, type: 3}
+    - {fileID: 8300000, guid: cbc5daa3ae3d348a98040452d2b6829b, type: 3}
+    volume: 0.9
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
   - cue: race.brake
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 8484d859781934d68aeb95578a86949f, type: 3}
+    volume: 0.35
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
@@ -563,5 +755,111 @@ MonoBehaviour:
     clips: []
     volume: 1
     pitchRange: {x: 0.95, y: 1.05}
+    spatial: 0
+    cooldown: 0
+  - cue: aliens.spawn
+    clips:
+    - {fileID: 8300000, guid: 205b9a4dffa154234b58ecd6c36c91c2, type: 3}
+    - {fileID: 8300000, guid: fc77543d2b86046609b225aef5bc3733, type: 3}
+    volume: 0.8
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: aliens.giggle
+    clips:
+    - {fileID: 8300000, guid: 3156184df582e0b4eb6f6fbd609e1a25, type: 3}
+    - {fileID: 8300000, guid: 800cdc630dc21b74e97df76066c62e34, type: 3}
+    volume: 0.7
+    pitchRange: {x: 1.4, y: 1.6}
+    spatial: 1
+    cooldown: 0.05
+  - cue: aliens.shrink
+    clips:
+    - {fileID: 8300000, guid: 217e9fcadb3204e8287d078e9a8cff80, type: 3}
+    - {fileID: 8300000, guid: 0d9125b88a2cf4711ad09f56c39e5bf9, type: 3}
+    volume: 0.8
+    pitchRange: {x: 1.2, y: 1.4}
+    spatial: 1
+    cooldown: 0.05
+  - cue: aliens.peek
+    clips:
+    - {fileID: 8300000, guid: ed097f8d8f2cd447da19c39599ba3e03, type: 3}
+    - {fileID: 8300000, guid: 3ab8d3db7edf2420a82086d147c9ee9f, type: 3}
+    volume: 0.6
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: aliens.robot_beep
+    clips:
+    - {fileID: 8300000, guid: ca5ef34bcb7e84d9ab66bf74d57bff6c, type: 3}
+    - {fileID: 8300000, guid: 0dfe9f9829141478689194368436b534, type: 3}
+    - {fileID: 8300000, guid: ebf4609aed0dc4d82ad954bb603461fd, type: 3}
+    volume: 0.6
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: aliens.bubble_pop
+    clips:
+    - {fileID: 8300000, guid: 0fb1da01b345a411c84b6367fc0c2e69, type: 3}
+    - {fileID: 8300000, guid: fcfd0e2b89e9841428931661f294c625, type: 3}
+    - {fileID: 8300000, guid: e51383bd8a7924ef3ada76e6c9cef4d7, type: 3}
+    volume: 0.8
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: aliens.slime_pop
+    clips:
+    - {fileID: 8300000, guid: ad212b80b2f637d4884e1c692e9607c3, type: 3}
+    - {fileID: 8300000, guid: 24fdaac9fcb7b415a9ae19f9f0bed1b4, type: 3}
+    volume: 0.7
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: ambience.playground
+    clips:
+    - {fileID: 8300000, guid: dc2dc2b927894432da141401ab012659, type: 3}
+    volume: 0.35
+    pitchRange: {x: 1, y: 1}
+    spatial: 0
+    cooldown: 0
+  - cue: ambience.knights
+    clips:
+    - {fileID: 8300000, guid: dc2dc2b927894432da141401ab012659, type: 3}
+    volume: 0.3
+    pitchRange: {x: 1, y: 1}
+    spatial: 0
+    cooldown: 0
+  - cue: ambience.aliens
+    clips:
+    - {fileID: 8300000, guid: a2435911aea764ca6901dc9ff9b774fa, type: 3}
+    volume: 0.3
+    pitchRange: {x: 1, y: 1}
+    spatial: 0
+    cooldown: 0
+  - cue: ambience.classroom
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 0
+    cooldown: 0
+  - cue: ambience.shop
+    clips:
+    - {fileID: 8300000, guid: dc2dc2b927894432da141401ab012659, type: 3}
+    volume: 0.3
+    pitchRange: {x: 1, y: 1}
+    spatial: 0
+    cooldown: 0
+  - cue: ambience.pirates
+    clips:
+    - {fileID: 8300000, guid: 7bc9c72c6c747483997135a839598470, type: 3}
+    volume: 0.45
+    pitchRange: {x: 1, y: 1}
+    spatial: 0
+    cooldown: 0
+  - cue: ambience.race
+    clips:
+    - {fileID: 8300000, guid: dc2dc2b927894432da141401ab012659, type: 3}
+    volume: 0.3
+    pitchRange: {x: 1, y: 1}
     spatial: 0
     cooldown: 0

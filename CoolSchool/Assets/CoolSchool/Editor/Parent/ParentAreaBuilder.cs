@@ -34,8 +34,8 @@ namespace CoolSchool.EditorTools
 
         const float SliderX = 360f;
         const float SliderWidth = 640f;
-        const float SliderHeight = 90f;
-        const float HandleSize = 90f;
+        const float SliderHeight = 84f;
+        const float HandleSize = 84f;
         const float TrackHeight = 30f;
 
         static readonly Color DimColor = new Color(0f, 0f, 0f, 0.65f);
@@ -168,13 +168,15 @@ namespace CoolSchool.EditorTools
             // Difficulty
             Text difficultyLabel = AddText(window, "DifficultyLabel", font, 40, TextColor, TextAnchor.MiddleLeft, Margin, 275f, ContentWidth, 50f);
 
+            // Six rows, 96 px apart from y = 330, so the last one (and the caption under it) ends above the close button (top y = 931).
             var rows = new[]
             {
-                BuildLevelRow(window, sprites, font, 335f, ParentStrings.RowNumbers, "numbers", 5),
-                BuildLevelRow(window, sprites, font, 449f, ParentStrings.RowLetters, "letters", 5),
-                BuildLevelRow(window, sprites, font, 563f, ParentStrings.RowShop, ParentPanel.ShopSkill, 3),
-                BuildLevelRow(window, sprites, font, 677f, ParentStrings.RowPirates, "pirates", 3),
-                BuildLevelRow(window, sprites, font, 791f, ParentStrings.RowRace, "race", 3),
+                BuildLevelRow(window, sprites, font, 330f, ParentStrings.RowNumbers, "numbers", 5),
+                BuildLevelRow(window, sprites, font, 426f, ParentStrings.RowLetters, "letters", 5),
+                BuildLevelRow(window, sprites, font, 522f, ParentStrings.RowShop, ParentPanel.ShopSkill, 3),
+                BuildLevelRow(window, sprites, font, 618f, ParentStrings.RowPirates, "pirates", 3),
+                BuildLevelRow(window, sprites, font, 714f, ParentStrings.RowRace, "race", 3),
+                BuildLevelRow(window, sprites, font, 810f, ParentStrings.RowAliens, "aliens", 3, true),
             };
 
             // Close
@@ -218,7 +220,8 @@ namespace CoolSchool.EditorTools
             public Slider Slider;
         }
 
-        static RowParts BuildLevelRow(RectTransform window, Sprites sprites, Font font, float y, string labelKey, string skill, int maxLevel)
+        static RowParts BuildLevelRow(RectTransform window, Sprites sprites, Font font, float y, string labelKey, string skill, int maxLevel,
+            bool withCaption = false)
         {
             var parts = new RowParts { Skill = skill, LabelKey = labelKey, MaxLevel = maxLevel };
 
@@ -226,8 +229,10 @@ namespace CoolSchool.EditorTools
             parts.Slider = BuildSlider(window, sprites, skill + "Slider", SliderX, y, maxLevel);
             parts.Value = AddText(window, skill + "Value", font, 76, AccentColor, TextAnchor.MiddleCenter,
                 SliderX + SliderWidth + 20f, y, WindowWidth - Margin - (SliderX + SliderWidth + 20f), SliderHeight);
-            parts.Caption = AddText(window, skill + "Caption", font, 28, MutedColor, TextAnchor.MiddleLeft,
-                SliderX, y + SliderHeight - 2f, WindowWidth - Margin - SliderX, 40f);
+            // The rows are too close together for a caption each: one caption under the last row serves them all.
+            if (withCaption)
+                parts.Caption = AddText(window, skill + "Caption", font, 28, MutedColor, TextAnchor.MiddleLeft,
+                    SliderX, y + SliderHeight - 2f, WindowWidth - Margin - SliderX, 34f);
             return parts;
         }
 

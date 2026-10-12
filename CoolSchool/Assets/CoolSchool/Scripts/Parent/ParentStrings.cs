@@ -24,6 +24,7 @@ namespace CoolSchool.Parent
         public const string RowShop = "row.shop";
         public const string RowPirates = "row.pirates";
         public const string RowRace = "row.race";
+        public const string RowAliens = "row.aliens";
         public const string LevelCaption = "level.caption";
         public const string Close = "close";
 
@@ -43,6 +44,7 @@ namespace CoolSchool.Parent
             { RowShop, new[] { "IJswinkel", "Ice cream shop" } },
             { RowPirates, new[] { "Piraten", "Pirates" } },
             { RowRace, new[] { "Zeepkistrace", "Soapbox race" } },
+            { RowAliens, new[] { "Aliens", "Aliens" } },
             { LevelCaption, new[]
                 {
                     "Past zich automatisch aan; de schuif zet het huidige niveau.",

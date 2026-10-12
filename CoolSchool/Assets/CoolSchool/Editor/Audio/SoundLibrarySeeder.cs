@@ -40,9 +40,9 @@ namespace CoolSchool.EditorTools
                 library.Entries.Add(new SoundEntry
                 {
                     cue = cue,
-                    // Music plays flat; so do the UI sounds. Everything else is heard from where it happens.
-                    spatial = !SoundCues.IsMusic(cue) && !cue.StartsWith("ui.") && !cue.StartsWith("reward."),
-                    cooldown = SoundCues.IsMusic(cue) ? 0f : 0.05f,
+                    // Music and ambience play flat; so do the UI sounds. Everything else is heard from where it happens.
+                    spatial = !SoundCues.IsMusic(cue) && !SoundCues.IsAmbience(cue) && !cue.StartsWith("ui.") && !cue.StartsWith("reward."),
+                    cooldown = SoundCues.IsMusic(cue) || SoundCues.IsAmbience(cue) ? 0f : 0.05f,
                 });
             }
 

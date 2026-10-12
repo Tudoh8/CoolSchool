@@ -76,6 +76,22 @@ namespace CoolSchool.EditorTools
             new Seed("aliens.victory.1", Speaker.Teacher, "Hoera! Alle aliens zijn onze vrienden! Feest!", "Hooray! All the aliens are our friends! Party!"),
             new Seed("invite.aliens.1", Speaker.Teacher, "Kom snel! Er zijn aliens geland!", "Come quickly! Aliens have landed!"),
 
+            // Alien landing variety (kinds, spawning everywhere, rescue kinds).
+            new Seed("aliens.arrive.1", Speaker.Teacher, "Kijk goed, ze komen overal vandaan!", "Look closely, they're coming from everywhere!"),
+            new Seed("aliens.big_hint.1", Speaker.Teacher, "Wat een grote alien! Flits hem een paar keer!", "What a big alien! Zap it a few times!"),
+            new Seed("aliens.big_hit.1", Speaker.Alien, "Hihi, ik krimp!", "Hehe, I'm shrinking!"),
+            new Seed("aliens.big_hit.2", Speaker.Alien, "Oei, ik word kleiner!", "Oops, I'm getting smaller!"),
+            new Seed("aliens.tiny_hint.1", Speaker.Teacher, "Die kleine is snel! Als hij moe is, kun je hem flitsen!", "That little one is fast! When he's tired, you can zap him!"),
+            new Seed("aliens.tiny_tease.1", Speaker.Alien, "Hihi, vang me dan!", "Hehe, catch me!"),
+            new Seed("aliens.tiny_tired.1", Speaker.Alien, "Pfoe, ik ben moe!", "Phew, I'm tired!"),
+            new Seed("aliens.shy_hint.1", Speaker.Teacher, "Daar verstopt er eentje! Loop ernaartoe!", "One is hiding there! Walk over to it!"),
+            new Seed("aliens.shy_peek.1", Speaker.Alien, "Kiekeboe!", "Peekaboo!"),
+            new Seed("aliens.robot_zapped.1", Speaker.Alien, "Bliep bliep! Robotdans!", "Beep beep! Robot dance!"),
+            new Seed("aliens.rescue_rocket.1", Speaker.Teacher, "Help! De baby-alien zit bovenop de raket! Spring op de trampoline!", "Help! The baby alien is on top of the rocket! Jump on the trampoline!"),
+            new Seed("aliens.rescue_bubble.1", Speaker.Teacher, "Kijk! De baby-alien zweeft in een bel! Spring omhoog en pak hem!", "Look! The baby alien is floating in a bubble! Jump up and grab him!"),
+            new Seed("aliens.rescue_slime.1", Speaker.Teacher, "Oh nee, de baby-alien zit vast in het slijm! Flits het slijm weg!", "Oh no, the baby alien is stuck in the slime! Zap the slime away!"),
+            new Seed("aliens.slime_free.1", Speaker.Alien, "Dankjewel! Ik ben weer vrij!", "Thank you! I'm free again!"),
+
             // Stopping a game with the back arrow.
             new Seed("quit.ask.1", Speaker.Teacher, "Wil je stoppen met dit spel?", "Do you want to stop this game?"),
             new Seed("quit.bye.1", Speaker.Teacher, "Oké! Dan gaan we weer lekker buiten spelen.", "Okay! Let's go and play outside again."),

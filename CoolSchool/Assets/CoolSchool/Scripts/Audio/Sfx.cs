@@ -21,12 +21,15 @@ namespace CoolSchool.Audio
         const string MusicVolumeKey = "audio.music_volume";
         const string SfxVolumeKey = "audio.sfx_volume";
         const float DuckedMusicLevel = 0.4f;
+        const float DuckedAmbienceLevel = 0.6f;
+        const string MusicPrefix = "music.";
+        const string AmbiencePrefix = "ambience.";
         const float DuckSpeed = 4f;
         const float DefaultFadeSeconds = 1.5f;
         const float MinDistance = 3f;
         const float MaxDistance = 40f;
 
-        /// <summary>One of the two music sources. They swap places to crossfade.</summary>
+        /// <summary>One of the two sources of a looping layer (music or ambience). They swap places to crossfade.</summary>
         class MusicChannel
         {
             public AudioSource source;
@@ -44,9 +47,12 @@ namespace CoolSchool.Audio
         readonly List<AudioSource> pool = new List<AudioSource>();
         readonly Dictionary<string, float> lastPlayedTime = new Dictionary<string, float>();
         readonly MusicChannel[] channels = new MusicChannel[2];
+        readonly MusicChannel[] ambienceChannels = new MusicChannel[2];
         int nextPoolIndex;
         int activeChannel;
+        int activeAmbience;
         float duck = 1f;
+        float ambienceDuck = 1f;
 #if UNITY_EDITOR
         readonly HashSet<string> reportedCues = new HashSet<string>();
 #endif
@@ -110,6 +116,21 @@ namespace CoolSchool.Audio
             if (instance != null) instance.FadeOutMusic(fade);
         }
 
+        /// <summary>
+        /// Starts a looping ambience bed (birds, waves...) with a crossfade from the previous one. A cue with no clips
+        /// fades the current bed out. Music cues call this for their own area, so activities never need to.
+        /// </summary>
+        public static void PlayAmbience(string cue)
+        {
+            if (instance != null) instance.StartAmbience(cue);
+        }
+
+        /// <summary>Fades the ambience out.</summary>
+        public static void StopAmbience(float fade)
+        {
+            if (instance != null) instance.FadeOutAmbience(fade);
+        }
+
         void Awake()
         {
             instance = this;
@@ -119,6 +140,9 @@ namespace CoolSchool.Audio
 
             for (int i = 0; i < channels.Length; i++)
                 channels[i] = new MusicChannel { source = CreateSource("Music " + i, true) };
+
+            for (int i = 0; i < ambienceChannels.Length; i++)
+                ambienceChannels[i] = new MusicChannel { source = CreateSource("Ambience " + i, true) };
         }
 
         void OnDestroy()
@@ -130,6 +154,7 @@ namespace CoolSchool.Audio
         {
             UpdateDuck();
             UpdateMusic();
+            UpdateAmbience();
         }
 
         AudioSource CreateSource(string sourceName, bool music)
@@ -224,6 +249,9 @@ namespace CoolSchool.Audio
         {
             if (string.IsNullOrEmpty(cue)) return;
 
+            // The ambience of the same area follows the music, before any early return below.
+            if (cue.StartsWith(MusicPrefix)) StartAmbience(AmbiencePrefix + cue.Substring(MusicPrefix.Length));
+
             MusicChannel current = channels[activeChannel];
             if (current.cue == cue && current.target > 0f) return;
 
@@ -265,26 +293,92 @@ namespace CoolSchool.Audio
             }
         }
 
-        /// <summary>Music gets quieter while someone is speaking, so the spoken lines are always clear.</summary>
+        /// <summary>Music and ambience get quieter while someone is speaking, so the spoken lines are always clear.</summary>
         void UpdateDuck()
         {
             VoicePlayer voice = VoicePlayer.Instance;
-            float wanted = voice != null && voice.IsSpeaking ? DuckedMusicLevel : 1f;
-            duck = Mathf.MoveTowards(duck, wanted, DuckSpeed * Time.unscaledDeltaTime);
+            bool speaking = voice != null && voice.IsSpeaking;
+            float step = DuckSpeed * Time.unscaledDeltaTime;
+            duck = Mathf.MoveTowards(duck, speaking ? DuckedMusicLevel : 1f, step);
+            ambienceDuck = Mathf.MoveTowards(ambienceDuck, speaking ? DuckedAmbienceLevel : 1f, step);
         }
 
         void UpdateMusic()
         {
-            foreach (MusicChannel channel in channels)
+            FadeChannels(channels, MusicVolume * duck);
+        }
+
+        /// <summary>Moves every channel of a layer towards its fade target and sets its volume.</summary>
+        static void FadeChannels(MusicChannel[] layer, float master)
+        {
+            foreach (MusicChannel channel in layer)
             {
                 if (!channel.source.isPlaying) continue;
 
                 float step = Time.unscaledDeltaTime / Mathf.Max(0.01f, channel.fadeSeconds);
                 channel.level = Mathf.MoveTowards(channel.level, channel.target, step);
-                channel.source.volume = channel.level * channel.entryVolume * MusicVolume * duck;
+                channel.source.volume = channel.level * channel.entryVolume * master;
 
                 if (channel.level <= 0f && channel.target <= 0f) channel.source.Stop();
             }
+        }
+
+        // ---- Ambience ----
+
+        void StartAmbience(string cue)
+        {
+            if (string.IsNullOrEmpty(cue)) return;
+
+            SoundEntry entry = library != null ? library.Find(cue) : null;
+            AudioClip clip = PickClip(entry);
+            MusicChannel current = ambienceChannels[activeAmbience];
+
+            // The same bed is already playing: keep it going without a restart.
+            if (clip != null && current.source.clip == clip && current.source.isPlaying)
+            {
+                current.cue = cue;
+                current.entryVolume = entry.volume;
+                current.target = 1f;
+                current.fadeSeconds = DefaultFadeSeconds;
+                return;
+            }
+
+            // The old bed fades out either way. No clips (the classroom) means quiet.
+            current.target = 0f;
+            current.fadeSeconds = DefaultFadeSeconds;
+            if (clip == null)
+            {
+                current.cue = null;
+                return;
+            }
+
+            activeAmbience = 1 - activeAmbience;
+            MusicChannel next = ambienceChannels[activeAmbience];
+            next.cue = cue;
+            next.entryVolume = entry.volume;
+            next.level = 0f;
+            next.target = 1f;
+            next.fadeSeconds = DefaultFadeSeconds;
+            next.source.Stop();
+            next.source.clip = clip;
+            next.source.pitch = 1f;
+            next.source.volume = 0f;
+            next.source.Play();
+        }
+
+        void FadeOutAmbience(float fade)
+        {
+            foreach (MusicChannel channel in ambienceChannels)
+            {
+                channel.target = 0f;
+                channel.fadeSeconds = Mathf.Max(0.01f, fade);
+                channel.cue = null;
+            }
+        }
+
+        void UpdateAmbience()
+        {
+            FadeChannels(ambienceChannels, SfxVolume * ambienceDuck);
         }
     }
 }

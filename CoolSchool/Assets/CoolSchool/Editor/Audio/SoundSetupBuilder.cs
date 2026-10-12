@@ -12,6 +12,8 @@ namespace CoolSchool.EditorTools
         public static GameObject Setup()
         {
             SoundLibrary library = SoundLibrarySeeder.CreateOrUpdate();
+            // The picks file wins over hand edits, so a scene rebuild keeps the picked clips.
+            Debug.Log(SoundPackPicks.Apply(library));
 
             var sfxObject = new GameObject("Sfx");
             var sfx = sfxObject.AddComponent<Sfx>();

@@ -121,7 +121,7 @@ namespace CoolSchool.Aliens
             nextFireTime = Time.time + cooldownSeconds;
             ShotCount++;
 
-            AlienKidAI target = FindTarget();
+            IZapTarget target = FindTarget();
             if (kidAnimator != null) kidAnimator.PlayShoot();
             Sfx.Play("aliens.zap", transform.position);
 
@@ -130,7 +130,7 @@ namespace CoolSchool.Aliens
             return true;
         }
 
-        IEnumerator FireRoutine(AlienKidAI target)
+        IEnumerator FireRoutine(IZapTarget target)
         {
             float elapsed = 0f;
             while (elapsed < hitDelay)
@@ -148,7 +148,8 @@ namespace CoolSchool.Aliens
             TurnToward(target, 360f);
 
             Vector3 muzzle = MuzzlePosition();
-            bool hasTarget = target != null && target.Hittable.IsAlive;
+            // The target may have turned into a friend or ducked behind its cover while the shot was on its way.
+            bool hasTarget = target != null && target.CanBeZapped && target.Hittable.IsAlive;
             Vector3 end = hasTarget
                 ? target.Hittable.AimPosition
                 : muzzle + FlatForward() * missLength;
@@ -163,23 +164,25 @@ namespace CoolSchool.Aliens
             }
         }
 
-        /// <summary>The nearest alien that has not turned friendly yet, within reach of the gun.</summary>
-        AlienKidAI FindTarget()
+        /// <summary>
+        /// The nearest zap target within reach of the gun: an alien that is not a friend or hiding, or a blob of slime.
+        /// </summary>
+        IZapTarget FindTarget()
         {
-            AlienKidAI best = null;
+            IZapTarget best = null;
             float bestDistance = float.MaxValue;
             foreach (Hittable other in Hittable.All)
             {
                 if (other == null || !other.IsAlive || other.Team != BattleTeam.Opponents) continue;
 
-                var alien = other.GetComponent<AlienKidAI>();
-                if (alien == null || alien.IsFriend) continue;
+                var zapTarget = other.GetComponent<IZapTarget>();
+                if (zapTarget == null || !zapTarget.CanBeZapped) continue;
 
                 float distance = FlatDistance(transform.position, other.transform.position);
                 if (distance > aimRadius + other.HitRadius || distance >= bestDistance) continue;
 
                 bestDistance = distance;
-                best = alien;
+                best = zapTarget;
             }
             return best;
         }
@@ -303,11 +306,11 @@ namespace CoolSchool.Aliens
             return forward.sqrMagnitude < 0.0001f ? Vector3.forward : forward.normalized;
         }
 
-        void TurnToward(AlienKidAI target, float maxDegrees)
+        void TurnToward(IZapTarget target, float maxDegrees)
         {
             if (target == null || !target.Hittable.IsAlive) return;
 
-            Vector3 direction = target.transform.position - transform.position;
+            Vector3 direction = target.Hittable.transform.position - transform.position;
             direction.y = 0f;
             if (direction.sqrMagnitude < 0.0001f) return;
 
