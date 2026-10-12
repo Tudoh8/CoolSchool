@@ -49,7 +49,9 @@ namespace CoolSchool.Activities
 
             if (!IsPlayerInside())
             {
-                armed = true;
+                // Only re-arm while idle: an activity that teleports the kid away and back into the circle
+                // (the ice cream shop) must not count as walking out, or it would start again right away.
+                if (idle) armed = true;
                 return;
             }
 
