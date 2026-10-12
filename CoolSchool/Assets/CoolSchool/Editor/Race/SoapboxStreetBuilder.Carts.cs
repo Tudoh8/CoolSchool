@@ -148,10 +148,10 @@ namespace CoolSchool.EditorTools
 
             using (var probes = new Probes(go))
             {
-                bool noseAtHigh = NoseAtHighZ(probes.Colliders, bounds, label);
+                bool noseAtHigh = NoseAtHighZFromWheels(go, label) ?? NoseAtHighZ(probes.Colliders, bounds, label);
                 if (!noseAtHigh)
                 {
-                    go.transform.rotation = Quaternion.Euler(0f, yaw + 180f, 0f) ;
+                    go.transform.rotation = Quaternion.Euler(0f, yaw + 180f, 0f);
                     AlignToBounds(go, rootWorld.x, rootWorld.z, rootWorld.y, false);
                     TryGetBounds(go, out bounds);
                     Physics.SyncTransforms();
@@ -226,8 +226,40 @@ namespace CoolSchool.EditorTools
         }
 
         /// <summary>
-        /// Which end of the body (long side along Z) is the nose: the narrower end; if both are equally wide, the lower end (the
-        /// back has the backrest); if that tells nothing either, the north end.
+        /// The nose end from the named wheel meshes (Wheel_f* = front, Wheel_r* = rear): true when the front wheels sit at the high-Z
+        /// end. Null when the model has no such wheels or they are less than 5 cm apart along Z.
+        /// </summary>
+        static bool? NoseAtHighZFromWheels(GameObject body, string label)
+        {
+            float frontSum = 0f, rearSum = 0f;
+            int frontCount = 0, rearCount = 0;
+            foreach (Renderer renderer in body.GetComponentsInChildren<Renderer>(true))
+            {
+                string name = renderer.gameObject.name;
+                if (name.IndexOf("Wheel_f", System.StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    frontSum += renderer.bounds.center.z;
+                    frontCount++;
+                }
+                else if (name.IndexOf("Wheel_r", System.StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    rearSum += renderer.bounds.center.z;
+                    rearCount++;
+                }
+            }
+            if (frontCount == 0 || rearCount == 0) return null;
+
+            float frontZ = frontSum / frontCount, rearZ = rearSum / rearCount;
+            if (Mathf.Abs(frontZ - rearZ) < 0.05f) return null;
+
+            bool atHigh = frontZ > rearZ;
+            Debug.Log($"CoolSchool race street: {label} nose from wheels: front z {frontZ:0.00}, rear z {rearZ:0.00} -> {(atHigh ? "north" : "south")}.");
+            return atHigh;
+        }
+
+        /// <summary>
+        /// Fallback for models without named wheels: which end of the body (long side along Z) is the nose: the narrower end; if both
+        /// are equally wide, the lower end (the back has the backrest); if that tells nothing either, the north end.
         /// </summary>
         static bool NoseAtHighZ(Collider[] colliders, Bounds b, string label)
         {

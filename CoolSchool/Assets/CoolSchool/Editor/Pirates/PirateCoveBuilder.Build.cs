@@ -229,7 +229,9 @@ namespace CoolSchool.EditorTools
                 agent.acceleration = 12f;
                 agent.speed = 1.5f;
 
+                // A trigger, so the player walks straight through: a crowd of skeletons must never shove him off a spot he needs.
                 var capsule = root.AddComponent<CapsuleCollider>();
+                capsule.isTrigger = true;
                 capsule.radius = 0.25f;
                 capsule.height = height;
                 capsule.center = new Vector3(0f, height * 0.5f, 0f);
@@ -358,7 +360,9 @@ namespace CoolSchool.EditorTools
 
         /// <summary>
         /// The parchment at the top centre of the touch canvas (about 40% of the screen width): four picture slots, four ticks, the red X
-        /// and twelve dots. The component lays them out each time the map is shown. Pictures only, no words.
+        /// and twelve dots as a starting set. The component lays them out each time the map is shown, for any number of landmarks
+        /// (it copies the first slot or dot when the route needs more, and narrows the parchment on a squarer screen).
+        /// Pictures only, no words.
         /// </summary>
         static TreasureMapUI BuildMapUI()
         {

@@ -15,7 +15,7 @@ namespace CoolSchool.Battle
 {
     /// <summary>
     /// "Knights and the dragon". The player and three classmates become knights, two waves of
-    /// goblins come out of the castle, then the friendly dragon walks in. After the dragon has
+    /// goblins climb over the castle wall on ladders, then the friendly dragon walks in. After the dragon has
     /// been bumped enough times it flies away, everyone cheers, and it is back to free play.
     /// Everything that was changed is put back in OnEnd, so the game can be played again.
     /// </summary>
@@ -29,8 +29,8 @@ namespace CoolSchool.Battle
         [SerializeField] ImaginationEffect imagination;
 
         [Header("Goblins and trolls")]
-        [SerializeField] Transform[] opponentSpawnPoints;
-        [SerializeField] Transform retreatPoint;
+        [Tooltip("The ladders up the outside of the back wall. Goblins climb them, jump down into the courtyard and run home to them.")]
+        [SerializeField] WallLadder[] ladders;
         [Tooltip("The pool of goblins and trolls. They are reused for each wave.")]
         [SerializeField] BattleOpponentAI[] opponents;
         [Tooltip("How many goblins come out in each wave.")]
@@ -64,6 +64,8 @@ namespace CoolSchool.Battle
         const float SpawnGapSeconds = 0.6f;
         const float WaveRestSeconds = 2.5f;
         const float WaitForFreeOpponentSeconds = 4f;
+        // How long goblins that were sent home get to run to their ladder and vanish.
+        const float SendHomeSeconds = 6f;
         // Safety net: if a wave somehow never finishes, send the rest home so the game goes on.
         const float WaveTimeoutSeconds = 120f;
 
@@ -177,6 +179,8 @@ namespace CoolSchool.Battle
             Sfx.Play("battle.wave_horn");
 
             var wave = new List<BattleOpponentAI>();
+            // Each wave starts on another ladder, so the goblins don't always climb the same ones.
+            int firstLadder = ladders != null && ladders.Length > 0 ? Random.Range(0, ladders.Length) : 0;
             for (int i = 0; i < count; i++)
             {
                 BattleOpponentAI opponent = PickOpponent(wave, true);
@@ -190,15 +194,22 @@ namespace CoolSchool.Battle
                 if (opponent == null) opponent = PickOpponent(wave, false);
                 if (opponent == null) break;
 
-                Vector3 spawnPosition = SpawnPosition(i);
-                opponent.Activate(spawnPosition, retreatPoint);
-                BattleEffects.Sparkle(spawnPosition + Vector3.up);
+                // The goblin starts behind the wall at the ladder's foot; the sparkle comes when it pops up over the wall.
+                opponent.Activate(LadderFor(firstLadder + i), arenaCenter != null ? arenaCenter.position : PlayerPosition());
                 wave.Add(opponent);
                 yield return new WaitForSeconds(SpawnGapSeconds);
             }
 
             float timeout = Time.time + WaveTimeoutSeconds;
             while (!AllOut(wave) && Time.time < timeout)
+                yield return null;
+
+            // Anyone left (the wave dragged on) runs home to a ladder and vanishes in a sparkle.
+            foreach (BattleOpponentAI opponent in wave)
+                if (!opponent.IsOut) opponent.SendHome();
+
+            float sendHomeTimeout = Time.time + SendHomeSeconds;
+            while (!AllOut(wave) && Time.time < sendHomeTimeout)
                 yield return null;
 
             foreach (BattleOpponentAI opponent in wave)
@@ -262,14 +273,12 @@ namespace CoolSchool.Battle
             return null;
         }
 
-        Vector3 SpawnPosition(int index)
+        /// <summary>The ladder for the n-th goblin of a wave, or null when there are none (the goblin then just appears).</summary>
+        WallLadder LadderFor(int index)
         {
-            if (opponentSpawnPoints != null && opponentSpawnPoints.Length > 0)
-            {
-                Transform point = opponentSpawnPoints[index % opponentSpawnPoints.Length];
-                if (point != null) return point.position;
-            }
-            return arenaCenter != null ? arenaCenter.position : transform.position;
+            if (ladders == null || ladders.Length == 0) return null;
+
+            return ladders[index % ladders.Length];
         }
 
         static bool AllOut(List<BattleOpponentAI> wave)

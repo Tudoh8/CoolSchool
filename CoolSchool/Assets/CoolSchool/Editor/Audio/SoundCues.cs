@@ -32,6 +32,8 @@ namespace CoolSchool.EditorTools
             // Pirate cove
             "pirates.waves", "pirates.wheel", "pirates.cannon", "pirates.balloon_pop", "pirates.bones_rattle", "pirates.bones_rebuild",
             "pirates.parrot", "pirates.map_tick", "pirates.dig", "pirates.chest_rise", "pirates.lock_open", "pirates.coin", "pirates.party",
+            // Castle gate (the portcullis rising and landing)
+            "castle.gate_rise", "castle.gate_drop",
             // Soapbox race
             "race.lane", "race.jump", "race.land", "race.bonk", "race.splash", "race.coin", "race.gate_ding", "race.countdown_beep",
             "race.go_horn", "race.ramp_whoosh", "race.spinout", "race.cheer", "race.brake",

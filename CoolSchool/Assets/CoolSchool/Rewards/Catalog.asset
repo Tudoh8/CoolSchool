@@ -65,7 +65,7 @@ MonoBehaviour:
     revealScale: 1
   - id: cart.stickers
     kind: 5
-    prefab: {fileID: 7076254036061003176, guid: ca493500d205c1f468c334d7865e91cc, type: 3}
+    prefab: {fileID: 1331861384701118646, guid: ca493500d205c1f468c334d7865e91cc, type: 3}
     revealEuler: {x: 15, y: 0, z: 0}
     revealScale: 1
   - id: sword.pirate
@@ -95,6 +95,6 @@ MonoBehaviour:
     revealScale: 1
   - id: cart.gold
     kind: 5
-    prefab: {fileID: 1177772506791519980, guid: ed0e1acc3409c714797f49c8e5a20eaf, type: 3}
+    prefab: {fileID: 7915174046580787027, guid: ed0e1acc3409c714797f49c8e5a20eaf, type: 3}
     revealEuler: {x: 15, y: 0, z: 0}
     revealScale: 1

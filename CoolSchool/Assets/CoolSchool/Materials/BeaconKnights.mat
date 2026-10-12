@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4941113928366013226
+--- !u!114 &-1533005528516202995
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -113,6 +113,7 @@ Material:
     - _UVSec: 0
     - _Use_View_Edge_Compensation: 1
     - _ViewEdgePower: 1
+    - _XRMotionVectorsPass: 1
     - _ZTest: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
@@ -124,7 +125,7 @@ Material:
     - _TintColor: {r: 0.4393531, g: 0.3890229, b: 0.31204724, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &3587074574394500624
+--- !u!114 &1255893037122201350
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

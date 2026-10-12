@@ -444,9 +444,17 @@ namespace CoolSchool.EditorTools
                 grass.Encapsulate(new Vector3(schoolArea.max.x, 0f, schoolArea.max.z));
             }
 
-            // Rubber sits 1 cm above the grass; grass tiles hidden under it are skipped to avoid z-fighting.
-            float rubberCover = BuildTileGrid(LoadPrefab(RubberPrefab), groundGroup, -rubberHalf, rubberHalf, -rubberHalf, rubberHalf, 0.01f, 0f);
-            BuildTileGrid(LoadPrefab(GrassPrefab), groundGroup, grass.min.x, grass.max.x, grass.min.z, grass.max.z, 0f, rubberCover);
+            // Grass tufts stand about 10 cm above the grass surface, so grass must not lie under any floor: the rubber (1 cm above
+            // the grass) and the classroom floor (2 cm). The grass grid leaves their rectangles out, and the tiles that straddle an
+            // edge are cut down to the part outside, stretched to fit, so the lawn meets the floors without a gap.
+            Rect rubberArea = BuildTileGrid(LoadPrefab(RubberPrefab), groundGroup, -rubberHalf, rubberHalf, -rubberHalf, rubberHalf, 0.01f, null);
+            var floors = new List<Rect> { rubberArea };
+            if (info.School.floorArea.size.sqrMagnitude > 0f)
+            {
+                Bounds floor = info.School.floorArea;
+                floors.Add(Rect.MinMaxRect(floor.min.x, floor.min.z, floor.max.x, floor.max.z));
+            }
+            BuildTileGrid(LoadPrefab(GrassPrefab), groundGroup, grass.min.x, grass.max.x, grass.min.z, grass.max.z, 0f, floors);
 
             BuildFence(LoadPrefab(FencePrefab), fenceGroup, info, SchoolDirection, SchoolBuilder.FenceGapWidth);
 
@@ -568,21 +576,22 @@ namespace CoolSchool.EditorTools
         }
 
         /// <summary>
-        /// Lays a grid of tiles covering x in xMin..xMax and z in zMin..zMax with their top surfaces at topY.
-        /// Tiles fully inside the square of half-size skipHalf around the origin are left out.
-        /// Returns the smaller half-size actually covered around the grid's middle (for a grid centred on the origin,
-        /// the half-size of the square it covers).
+        /// Lays a grid of tiles covering x in xMin..xMax and z in zMin..zMax with their flat surfaces at topY.
+        /// Nothing is laid inside the avoid rectangles (x, z in world space): a tile that lies wholly inside one is left out, and a
+        /// tile that straddles an edge is replaced by tiles cut down to the part outside, stretched to fit it exactly. (Lumpy tiles
+        /// such as grass poke through a floor that lies only a few centimetres above them.)
+        /// Returns the rectangle (x, z) that the grid covers.
         /// </summary>
-        static float BuildTileGrid(GameObject prefab, Transform parent, float xMin, float xMax, float zMin, float zMax, float topY, float skipHalf)
+        static Rect BuildTileGrid(GameObject prefab, Transform parent, float xMin, float xMax, float zMin, float zMax, float topY, IList<Rect> avoid)
         {
-            if (prefab == null) return 0f;
+            if (prefab == null) return new Rect();
 
             GameObject probe = Spawn(prefab, parent);
             if (!TryGetBounds(probe, out Bounds probeBounds))
             {
                 Debug.LogWarning($"CoolSchool: tile has no renderers, skipping: {prefab.name}");
                 Object.DestroyImmediate(probe);
-                return 0f;
+                return new Rect();
             }
             Vector3 baseScale = probe.transform.localScale;
 
@@ -605,6 +614,8 @@ namespace CoolSchool.EditorTools
             float centreX = (xMin + xMax) * 0.5f;
             float centreZ = (zMin + zMax) * 0.5f;
 
+            int cut = 0;
+            int skipped = 0;
             for (int ix = 0; ix < countX; ix++)
             {
                 for (int iz = 0; iz < countZ; iz++)
@@ -612,22 +623,76 @@ namespace CoolSchool.EditorTools
                     float x = centreX - coverX + sizeX * (ix + 0.5f);
                     float z = centreZ - coverZ + sizeZ * (iz + 0.5f);
 
-                    bool hidden = skipHalf > 0f
-                        && Mathf.Abs(x) + sizeX * 0.5f <= skipHalf + 0.001f
-                        && Mathf.Abs(z) + sizeZ * 0.5f <= skipHalf + 0.001f;
-                    if (hidden) continue;
+                    var whole = Rect.MinMaxRect(x - sizeX * 0.5f, z - sizeZ * 0.5f, x + sizeX * 0.5f, z + sizeZ * 0.5f);
+                    List<Rect> pieces = SubtractRects(whole, avoid);
+                    if (pieces.Count == 1 && pieces[0] == whole)
+                    {
+                        PlaceGroundTile(prefab, parent, baseScale, scaleX, scaleZ, x, z, topY, bumpHeight, surface);
+                        continue;
+                    }
 
-                    GameObject tile = Spawn(prefab, parent);
-                    tile.transform.localScale = Vector3.Scale(baseScale, new Vector3(scaleX, 1f, scaleZ));
-                    AlignToBounds(tile, x, z, topY + bumpHeight, true);
-                    // A lumpy tile (grass) gets a flat collider at the surface, so kids and the NavMesh stand on the surface
-                    // and not on the tufts. Flat tiles (rubber) keep their own mesh.
-                    if (surface.Valid && surface.FlatShare < 0.9f) GroundSurface.UseFlatCollider(tile, topY);
-                    FinishEnvironmentObject(tile);
+                    if (pieces.Count == 0) skipped++;
+                    else cut++;
+                    foreach (Rect piece in pieces)
+                    {
+                        // The tile is stretched (x and z only; the tufts keep their height) to exactly the width and depth of the piece.
+                        PlaceGroundTile(prefab, parent, baseScale, scaleX * piece.width / sizeX, scaleZ * piece.height / sizeZ,
+                            piece.center.x, piece.center.y, topY, bumpHeight, surface);
+                    }
                 }
             }
 
-            return Mathf.Min(coverX, coverZ);
+            if (avoid != null && avoid.Count > 0)
+                Debug.Log($"CoolSchool ground: {prefab.name} grid left out {skipped} tiles under floors and cut {cut} tiles at their edges.");
+
+            return Rect.MinMaxRect(centreX - coverX, centreZ - coverZ, centreX + coverX, centreZ + coverZ);
+        }
+
+        /// <summary>One ground tile of a grid, centred on (x, z), with its flat surface at topY. scaleX and scaleZ are the final scale factors.</summary>
+        static void PlaceGroundTile(GameObject prefab, Transform parent, Vector3 baseScale, float scaleX, float scaleZ, float x, float z,
+            float topY, float bumpHeight, GroundSurface.Measurement surface)
+        {
+            GameObject tile = Spawn(prefab, parent);
+            tile.transform.localScale = Vector3.Scale(baseScale, new Vector3(scaleX, 1f, scaleZ));
+            AlignToBounds(tile, x, z, topY + bumpHeight, true);
+            // A lumpy tile (grass) gets a flat collider at the surface, so kids and the NavMesh stand on the surface
+            // and not on the tufts. Flat tiles (rubber) keep their own mesh.
+            if (surface.Valid && surface.FlatShare < 0.9f) GroundSurface.UseFlatCollider(tile, topY);
+            FinishEnvironmentObject(tile);
+        }
+
+        /// <summary>
+        /// What is left of the rectangle after cutting out the avoid rectangles: the rectangle itself when none touches it (by
+        /// more than a millimetre), nothing when it is covered, otherwise up to four strips per cut. Pieces under 1 cm are dropped.
+        /// </summary>
+        static List<Rect> SubtractRects(Rect whole, IList<Rect> avoid)
+        {
+            var pieces = new List<Rect> { whole };
+            if (avoid == null) return pieces;
+
+            const float tolerance = 0.001f;
+            const float smallest = 0.01f;
+            foreach (Rect cut in avoid)
+            {
+                var next = new List<Rect>();
+                foreach (Rect p in pieces)
+                {
+                    float ox0 = Mathf.Max(p.xMin, cut.xMin), ox1 = Mathf.Min(p.xMax, cut.xMax);
+                    float oz0 = Mathf.Max(p.yMin, cut.yMin), oz1 = Mathf.Min(p.yMax, cut.yMax);
+                    if (ox1 - ox0 <= tolerance || oz1 - oz0 <= tolerance)
+                    {
+                        next.Add(p);
+                        continue;
+                    }
+
+                    if (ox0 - p.xMin > smallest) next.Add(Rect.MinMaxRect(p.xMin, p.yMin, ox0, p.yMax));
+                    if (p.xMax - ox1 > smallest) next.Add(Rect.MinMaxRect(ox1, p.yMin, p.xMax, p.yMax));
+                    if (oz0 - p.yMin > smallest) next.Add(Rect.MinMaxRect(ox0, p.yMin, ox1, oz0));
+                    if (p.yMax - oz1 > smallest) next.Add(Rect.MinMaxRect(ox0, oz1, ox1, p.yMax));
+                }
+                pieces = next;
+            }
+            return pieces;
         }
 
         /// <summary>Tiles smaller than half a metre are scaled up to 4 m so the grid stays a sane size.</summary>

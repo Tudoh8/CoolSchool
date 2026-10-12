@@ -16,6 +16,9 @@ namespace CoolSchool.EditorTools
         /// <summary>The building's footprint in world space (walls plus the roof overhang), so the ground can be extended under it.</summary>
         public Bounds footprint;
 
+        /// <summary>The floor tiles' bounds in world space (size 0 when there is no floor). Grass must not lie under it: its tufts poke through.</summary>
+        public Bounds floorArea;
+
         /// <summary>The middle of the doorway on the floor line, in world space.</summary>
         public Vector3 doorPoint;
 
@@ -82,6 +85,7 @@ namespace CoolSchool.EditorTools
         // Blackboard.
         const float BlackboardScale = 1.5f;
         const float BlackboardBottomY = 0.85f;
+        const string BlackboardMaterialPath = "Assets/Imported/Synty/PolygonKids/Materials/PolygonKids_Material_04_A.mat";
         /// <summary>How far in front of the board's back plane the chalk surface (the canvas) is.</summary>
         const float BlackboardFaceOffset = 0.08f;
 
@@ -229,7 +233,8 @@ namespace CoolSchool.EditorTools
             var wallsBySide = new Dictionary<Side, List<GameObject>>();
             BuildWalls(NewGroup("Walls", shell), kit, plan, wallsBySide);
             BuildCornerPillars(NewGroup("Pillars", shell), kit, plan);
-            BuildFloor(NewGroup("Floor", shell), kit, plan);
+            Transform floorGroup = NewGroup("Floor", shell);
+            BuildFloor(floorGroup, kit, plan);
             List<Renderer> roof = BuildRoof(NewGroup("Roof", shell), kit, plan);
 
             Furniture furniture = BuildFurniture(props, plan);
@@ -242,6 +247,7 @@ namespace CoolSchool.EditorTools
             AddInteriorReveal(root, plan, roof, wallsBySide, doorFacing);
 
             PlaceRoot(root, plan, fenceGapPoint, doorFacing, result);
+            if (TryGetBounds(floorGroup.gameObject, out Bounds floorBounds)) result.floorArea = floorBounds;
 
             LogSummary(kit, plan, result);
             return result;
@@ -674,6 +680,7 @@ namespace CoolSchool.EditorTools
             GameObject board = PlaceProp(parent, BlackboardPrefab, Vector3.one * BlackboardScale, 0f, 0f, plan.InnerBoard, 0f);
             if (board == null) return;
 
+            ApplyBlackboardMaterial(board);
             PushAgainstWall(board, Vector3.forward, plan.InnerBoard, 0.01f);
             SetBottomY(board, BlackboardBottomY);
             if (TryGetBounds(board, out Bounds bounds))
@@ -681,6 +688,25 @@ namespace CoolSchool.EditorTools
                 furniture.Board = bounds;
                 furniture.HasBoard = true;
             }
+        }
+
+        /// <summary>The board's one MeshRenderer gets the hand-picked Kids material (slot 0), as tweaked in the saved scene.</summary>
+        static void ApplyBlackboardMaterial(GameObject board)
+        {
+            var material = AssetDatabase.LoadAssetAtPath<Material>(BlackboardMaterialPath);
+            if (material == null)
+            {
+                Debug.LogWarning("CoolSchool: blackboard material not found at " + BlackboardMaterialPath + "; the board keeps its prefab material.");
+                return;
+            }
+
+            MeshRenderer renderer = board.GetComponentInChildren<MeshRenderer>(true);
+            if (renderer == null) return;
+
+            Material[] materials = renderer.sharedMaterials;
+            if (materials.Length == 0) return;
+            materials[0] = material;
+            renderer.sharedMaterials = materials;
         }
 
         /// <summary>A clock on the blackboard wall, right of the board as seen from the door.</summary>

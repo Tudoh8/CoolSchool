@@ -16,12 +16,12 @@ namespace CoolSchool.EditorTools
     /// <summary>
     /// Builds the knights arena at the far end of the playground (east, +X): a big walk-in cardboard castle
     /// (the PolygonKids castle pieces scaled 5x: four corner towers, a front wall with a gate that faces the camera,
-    /// two side walls and a back wall with a goblin door), imagination props (flags and torches), the courtyard's
-    /// spawn/retreat/dragon points, the glowing castle zone, the opponent pool, the dragon and the KnightsGame that
+    /// two side walls and a back wall with goblin ladders leaning against its outside), imagination props (flags, braziers
+    /// and the ladders), the ladder/dragon points, the glowing castle zone, the opponent pool, the dragon and the KnightsGame that
     /// ties it all together. The whole battle happens in the courtyard; the front wall turns see-through
     /// (CastleCutaway) while the kid is inside, and the dragon flies in over the back wall.
     /// The camera always looks north (+Z) and the arena lies east, so the castle is laid out directly in world X/Z:
-    /// the gate wall is the south one, the goblin door is on the north wall. Only the ArenaLayout axis helpers
+    /// the gate wall is the south one, the goblin ladders are on the north wall. Only the ArenaLayout axis helpers
     /// (which the alien field reuses for its mirror-image field) stay axis-generic.
     /// Two steps, because the NavMesh must be baked after the castle exists but before any character:
     /// BuildCastle (static geometry) and Build (everything alive).
@@ -49,8 +49,24 @@ namespace CoolSchool.EditorTools
         const float PanelOverlap = 0.04f;
         /// <summary>Half the width of the gate's arch opening, as a fraction of the gate piece's width (0.63 m of 1.27 m at 1x).</summary>
         const float GateOpeningHalfFraction = 0.25f;
+        /// <summary>
+        /// The gate piece is laid out (width, spans, gate position) from its 5x, 180 degree measurement, then, as tweaked by hand
+        /// in the scene, shown at 6x and unturned with its pivot kept where it was.
+        /// </summary>
+        const float GateFinalScale = 6f;
+        /// <summary>The portcullis (the door piece in the gate arch): scale on top of the piece's own, and its offset from the gate's pivot (hand-tuned).</summary>
+        static readonly Vector3 PortcullisScale = new Vector3(8f, 6.5f, 6f);
+        const float PortcullisZOffset = -0.0281562f;
+        /// <summary>Fallback for how high the arch opening is (3.3 m at 5x, so 3.96 m at 6x) when the gate mesh can't be measured.</summary>
+        const float GateArchFallbackHeight = 3.96f;
+        /// <summary>The raised portcullis' bottom ends this far above the top of the arch.</summary>
+        const float PortcullisClearance = 0.05f;
         const float FlagHeight = 2.2f;
-        const float TorchHeight = 2.0f;
+        /// <summary>A brazier (fire bowl on a stand) at this height reads as a torch beside the 5x cardboard gate.</summary>
+        const float BrazierHeight = 1.4f;
+        /// <summary>The braziers stand this far (metres) beside the gate's arch opening, and this far in front of the wall.</summary>
+        const float BrazierGateClearance = 1.0f;
+        const float BrazierFrontClearance = 1.2f;
 
         // Dragon.
         const float DragonEntryHeight = 9f;
@@ -70,11 +86,29 @@ namespace CoolSchool.EditorTools
         };
         static readonly PrefabRef CastlePanel = Kids("SM_Prop_Cardboard_Castle_Piece_04");
         static readonly PrefabRef CastleGate = Kids("SM_Prop_Cardboard_Castle_Piece_05");
-        static readonly PrefabRef GoblinDoor = Kids("SM_Prop_Cardboard_Castle_Piece_06");
+        static readonly PrefabRef CastlePortcullis = Kids("SM_Prop_Cardboard_Castle_Piece_06");
 
         static readonly PrefabRef FlagA = Kids("SM_Prop_Flag_01");
         static readonly PrefabRef FlagB = Kids("SM_Prop_Flag_02");
-        static readonly PrefabRef Torch = Kids("SM_Prop_Torch_01");
+        // Synty's SM_Prop_Torch_01 is a flashlight, so the gate "torches" are PolygonTown braziers.
+        static readonly PrefabRef Brazier = new PrefabRef("SM_Prop_Brazier_01", "PolygonTown");
+
+        // Goblins climb ladders up the outside of the back (north) wall. The first prefab that loads is used.
+        const int LadderCount = 3;
+        /// <summary>How far the ladder tops stick up above the wall, so the kid sees them from the camera side.</summary>
+        const float LadderPoke = 0.65f;
+        const float LadderLeanDegrees = 12f;
+        /// <summary>No ladder gets wider than this (metres), whatever the model's proportions are.</summary>
+        const float LadderMaxWidth = 1.1f;
+        /// <summary>The climber stands this far in front of the ladder's middle line (towards the outside).</summary>
+        const float LadderClimberOffset = 0.12f;
+        /// <summary>How far inside the back wall's inner face a goblin lands after jumping down.</summary>
+        const float LadderLandingDistance = 1.8f;
+        static readonly PrefabRef[] LadderPrefabs =
+        {
+            new PrefabRef("SM_Prop_Ladder_01", "PolygonTown"),
+            new PrefabRef("SM_Gen_Bld_Ladder_01", "PolygonGeneric"),
+        };
 
         static readonly PrefabRef[] OpponentPrefabs =
         {
@@ -121,9 +155,11 @@ namespace CoolSchool.EditorTools
             public Bounds Footprint;
             public Bounds Courtyard;
 
-            /// <summary>The gate's centre on the ground, and the middle of the goblin door's courtyard-facing side on the ground.</summary>
+            /// <summary>The gate's centre on the ground.</summary>
             public Vector3 GatePosition;
-            public Vector3 GoblinDoorFront;
+
+            /// <summary>The goblin ladders against the back wall's outside, west to east.</summary>
+            public readonly List<LadderSpot> Ladders = new List<LadderSpot>();
 
             /// <summary>The z of the back wall's outer (north) face.</summary>
             public float BackWallOuterZ;
@@ -131,6 +167,10 @@ namespace CoolSchool.EditorTools
             /// <summary>The front (south) wall's pieces and all their renderers: they go see-through while the kid is inside.</summary>
             public readonly List<GameObject> FrontPieces = new List<GameObject>();
             public readonly List<Renderer> FrontRenderers = new List<Renderer>();
+
+            /// <summary>The portcullis in the gate arch (it rises when the kid comes near) and how far it rises, in metres.</summary>
+            public GameObject Portcullis;
+            public float PortcullisLift;
 
             public readonly List<GameObject> ImaginationProps = new List<GameObject>();
 
@@ -152,6 +192,18 @@ namespace CoolSchool.EditorTools
             {
                 return Axis * along + Lateral * across;
             }
+        }
+
+        /// <summary>
+        /// One goblin ladder as world points: the foot on the ground outside the wall, the shoulder (on the ladder, as high as the
+        /// wall top), the rim (on top of the wall) and the landing inside the courtyard.
+        /// </summary>
+        internal sealed class LadderSpot
+        {
+            public Vector3 Foot;
+            public Vector3 Shoulder;
+            public Vector3 Rim;
+            public Vector3 Landing;
         }
 
         /// <summary>What the second step wires into the KnightsGame.</summary>
@@ -182,7 +234,7 @@ namespace CoolSchool.EditorTools
 
         /// <summary>
         /// The big cardboard castle (pieces scaled 5x) plus the inactive imagination props (flags on the north towers,
-        /// torches at the gate and the goblin door).
+        /// braziers at the gate, and the goblin ladders against the back wall's outside).
         /// The castle is a rectangle in world X/Z: corner towers, a south (front) wall of tower, panel, gate, panel, tower
         /// facing the camera, three stretched panels for each side wall, and stretched panels filling the back (north) wall.
         /// The towers' outer faces sit CastleNorthMargin inside the north fence (northFenceZ) and CastleEastMargin inside
@@ -204,7 +256,6 @@ namespace CoolSchool.EditorTools
             GameObject[] towerPrefabs = CastleTowers.Select(LoadPrefab).ToArray();
             GameObject panelPrefab = LoadPrefab(CastlePanel);
             GameObject gatePrefab = LoadPrefab(CastleGate);
-            GameObject doorPrefab = LoadPrefab(GoblinDoor);
             if (towerPrefabs.Any(t => t == null) || panelPrefab == null || gatePrefab == null)
                 Debug.LogError("CoolSchool: some castle pieces are missing; the castle will have gaps (the layout uses the expected sizes).");
 
@@ -215,7 +266,6 @@ namespace CoolSchool.EditorTools
                 towerSize = Vector3.Max(towerSize, MeasureCastlePiece(towerPrefab, castleGroup, southFacing, new Vector3(2.85f, 5.47f, 2.85f)));
             Vector3 panelSize = MeasureCastlePiece(panelPrefab, castleGroup, Quaternion.identity, new Vector3(0.4f, 3.9f, 5f));
             Vector3 gateSize = MeasureCastlePiece(gatePrefab, castleGroup, southFacing, new Vector3(6.35f, 4.3f, 0.26f));
-            Vector3 doorSize = MeasureCastlePiece(doorPrefab, castleGroup, southFacing, new Vector3(2.1f, 3.1f, 0.15f));
 
             // The panel is long along one local axis (Z for the real piece); its length fills the spans, its thickness sets the wall.
             bool panelLongZ = panelSize.z >= panelSize.x;
@@ -276,14 +326,26 @@ namespace CoolSchool.EditorTools
             if (gatePrefab != null)
             {
                 GameObject gate = Spawn(gatePrefab, castleGroup);
-                gate.transform.localScale *= CastleScale;
+                Vector3 gateBaseScale = gate.transform.localScale;
+                gate.transform.localScale = gateBaseScale * CastleScale;
                 gate.transform.rotation = southFacing;
                 AlignToBounds(gate, centreX, wallSouth, 0f, false);
-                // The prefab's collider is convex, and its hull fills the arch: walking and the NavMesh need the real shape.
-                foreach (MeshCollider collider in gate.GetComponentsInChildren<MeshCollider>(true))
-                    collider.convex = false;
+                // Hand tweak, kept: the piece is shown 6x and unturned, but its pivot stays where the 5x, 180 degree
+                // placement put it (the layout above is based on that measurement, so nothing else moves).
+                gate.transform.localScale = gateBaseScale * GateFinalScale;
+                gate.transform.rotation = Quaternion.identity;
+                // The prefab's MeshCollider points at a pre-generated convex hull asset ("Generated convex submesh"), and a
+                // hull of a wall with an arch is a solid slab. Clearing "convex" on it is not enough (the mesh itself is the
+                // hull), so drop the prefab's colliders and let FinishEnvironmentObject build them from the real render mesh:
+                // the arch stays open for the player and the NavMesh.
+                foreach (Collider collider in gate.GetComponentsInChildren<Collider>(true))
+                    Object.DestroyImmediate(collider);
                 FinishEnvironmentObject(gate);
                 frontPieces.Add(gate);
+
+                // The portcullis hangs in the arch; it rises when the kid comes near (CastlePortcullis).
+                GameObject portcullis = PlacePortcullis(layout, castleGroup, gate, southFacing);
+                if (portcullis != null) frontPieces.Add(portcullis);
             }
             frontPieces.AddRange(towers.Skip(2).Where(t => t != null));
 
@@ -302,23 +364,187 @@ namespace CoolSchool.EditorTools
             }
             layout.FrontPieces.AddRange(frontPieces);
 
-            // The goblin door: decoration against the back wall's inner face at its middle, facing the courtyard (south).
-            // No colliders, so the NavMesh reaches right up to the wall.
-            float doorFrontZ = wallNorth - panelHalfThickness - doorSize.z - 0.02f;
-            if (doorPrefab != null)
-            {
-                GameObject door = Spawn(doorPrefab, castleGroup);
-                door.transform.localScale *= CastleScale;
-                door.transform.rotation = southFacing;
-                AlignToBounds(door, centreX, wallNorth - panelHalfThickness - doorSize.z * 0.5f - 0.02f, 0f, false);
-                foreach (Collider collider in door.GetComponentsInChildren<Collider>(true))
-                    Object.DestroyImmediate(collider);
-                if (TryGetBounds(door, out Bounds doorBounds)) doorFrontZ = doorBounds.min.z;
-            }
-            layout.GoblinDoorFront = new Vector3(centreX, 0f, doorFrontZ);
+            PlaceImaginationProps(layout, propsGroup, towers[0], towers[1], gateSize.x, wallSouth - panelHalfThickness);
 
-            PlaceImaginationProps(layout, propsGroup, towers[0], towers[1], gateSize.x, doorSize.x, wallSouth - panelHalfThickness);
+            // The goblins' ladders against the back wall's outside, spread between the two north towers.
+            float backSpan = (east - towerSize.x) - (west + towerSize.x);
+            PlaceLadders(layout, propsGroup, centreX, backSpan, wallNorth, panelHalfThickness, panelSize.y);
             return layout;
+        }
+
+        /// <summary>
+        /// LadderCount ladders leaning against the outside of the back (north) wall, spread over its width, their tops sticking
+        /// LadderPoke above the wall so the kid sees them from the camera side. They are imagination props (hidden in free play,
+        /// shown during the battle), have no colliders (so they stay out of the NavMesh bake) and each one records the points a
+        /// climbing goblin uses (LadderSpot).
+        /// </summary>
+        static void PlaceLadders(ArenaLayout layout, Transform parent, float centreX, float backSpan, float wallNorthZ, float wallHalfThickness, float wallHeight)
+        {
+            GameObject prefab = null;
+            foreach (PrefabRef reference in LadderPrefabs)
+            {
+                prefab = LoadPrefab(reference);
+                if (prefab != null) break;
+            }
+            if (prefab == null) Debug.LogWarning("CoolSchool: no ladder prefab found; the goblins' ladders are built from boxes.");
+
+            float outerZ = wallNorthZ + wallHalfThickness;
+            float innerZ = wallNorthZ - wallHalfThickness;
+            float spacing = backSpan / (LadderCount + 1f) * 1.1f;
+            float tan = Mathf.Tan(LadderLeanDegrees * Mathf.Deg2Rad);
+            float slopeLength = (wallHeight + LadderPoke) / Mathf.Cos(LadderLeanDegrees * Mathf.Deg2Rad);
+
+            for (int i = 0; i < LadderCount; i++)
+            {
+                float x = centreX + (i - (LadderCount - 1) * 0.5f) * spacing;
+
+                // The wrapper carries the scale and the lean; the model inside is stood upright and square to the wall first.
+                Transform wrapper = NewGroup($"GoblinLadder_{i + 1}", parent);
+                GameObject model = prefab != null ? Spawn(prefab, wrapper) : CreateBoxLadder(wrapper);
+                model.transform.localPosition = Vector3.zero;
+                UprightLadder(model);
+
+                if (!TryGetBounds(model, out Bounds upright) || upright.size.y < 0.01f)
+                {
+                    Debug.LogWarning("CoolSchool: the ladder model has no size; skipping this ladder.");
+                    Object.DestroyImmediate(wrapper.gameObject);
+                    continue;
+                }
+
+                float scaleY = slopeLength / upright.size.y;
+                float scaleXZ = Mathf.Min(scaleY, LadderMaxWidth / Mathf.Max(0.01f, upright.size.x));
+                wrapper.localScale = new Vector3(scaleXZ, scaleY, scaleXZ);
+                // Leaning with its top toward the wall (south).
+                wrapper.rotation = Quaternion.Euler(-LadderLeanDegrees, 0f, 0f);
+
+                // Feet on the ground, its top edge touching the wall's outer face.
+                AlignToBounds(wrapper.gameObject, x, 0f, 0f, false);
+                TryGetBounds(wrapper.gameObject, out Bounds leaning);
+                wrapper.position += new Vector3(0f, 0f, outerZ + 0.02f - leaning.min.z);
+                TryGetBounds(wrapper.gameObject, out Bounds placed);
+
+                // The middle line of the leaning box (through its centre) is where a goblin climbs, a little in front of it.
+                float lineZ(float y) => placed.center.z + (placed.center.y - y) * tan + LadderClimberOffset;
+                layout.Ladders.Add(new LadderSpot
+                {
+                    Foot = new Vector3(x, 0f, lineZ(0f)),
+                    Shoulder = new Vector3(x, wallHeight, lineZ(wallHeight)),
+                    Rim = new Vector3(x, wallHeight, wallNorthZ),
+                    Landing = new Vector3(x, 0f, innerZ - LadderLandingDistance),
+                });
+
+                HideProp(layout, wrapper.gameObject);
+            }
+        }
+
+        /// <summary>Stands a ladder model upright (its longest side up) and turns it so its width runs along X and its thin side along Z.</summary>
+        static void UprightLadder(GameObject model)
+        {
+            if (!TryGetBounds(model, out Bounds bounds)) return;
+
+            Vector3 size = bounds.size;
+            Quaternion fix = Quaternion.identity;
+            if (size.x > size.y && size.x > size.z) fix = Quaternion.Euler(0f, 0f, 90f);
+            else if (size.z > size.y && size.z > size.x) fix = Quaternion.Euler(90f, 0f, 0f);
+            model.transform.rotation = fix;
+
+            if (TryGetBounds(model, out bounds) && bounds.size.x < bounds.size.z)
+                model.transform.rotation = Quaternion.Euler(0f, 90f, 0f) * fix;
+        }
+
+        /// <summary>A plain ladder (two rails and rungs, 1 m wide, 3 m tall, upright and square to Z) for when no model loads.</summary>
+        static GameObject CreateBoxLadder(Transform parent)
+        {
+            var root = new GameObject("BoxLadder");
+            root.transform.SetParent(parent, false);
+            Material wood = null;
+            Shader lit = Shader.Find("Universal Render Pipeline/Lit");
+            if (lit != null)
+            {
+                var woodMaterial = new Material(lit) { name = "LadderWood" };
+                woodMaterial.SetColor("_BaseColor", new Color(0.55f, 0.36f, 0.18f));
+                woodMaterial.SetFloat("_Smoothness", 0.1f);
+                wood = SaveMaterial(woodMaterial, RootFolder + "/Materials/LadderWood.mat");
+            }
+
+            void Box(Vector3 position, Vector3 scale)
+            {
+                GameObject box = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                Object.DestroyImmediate(box.GetComponent<Collider>());
+                box.transform.SetParent(root.transform, false);
+                box.transform.localPosition = position;
+                box.transform.localScale = scale;
+                if (wood != null) box.GetComponent<MeshRenderer>().sharedMaterial = wood;
+            }
+
+            Box(new Vector3(-0.5f, 1.5f, 0f), new Vector3(0.1f, 3f, 0.1f));
+            Box(new Vector3(0.5f, 1.5f, 0f), new Vector3(0.1f, 3f, 0.1f));
+            for (int i = 0; i < 9; i++)
+                Box(new Vector3(0f, 0.3f + i * 0.3f, 0f), new Vector3(1f, 0.07f, 0.07f));
+            return root;
+        }
+
+        /// <summary>
+        /// The portcullis: castle piece 06 (a flat arched panel) standing in the gate arch, just in front of the gate wall,
+        /// turned to face the camera. No colliders (so the gate stays walkable and out of the NavMesh) and not static (it
+        /// moves at run time). Stores it and how far it must rise to clear the arch in the layout.
+        /// </summary>
+        static GameObject PlacePortcullis(ArenaLayout layout, Transform castleGroup, GameObject gate, Quaternion southFacing)
+        {
+            GameObject prefab = LoadPrefab(CastlePortcullis);
+            if (prefab == null) return null;
+
+            GameObject portcullis = Spawn(prefab, castleGroup);
+            portcullis.name = "CastlePortcullis";
+            portcullis.transform.localScale = Vector3.Scale(portcullis.transform.localScale, PortcullisScale);
+            portcullis.transform.rotation = southFacing;
+            Vector3 gateLocal = gate.transform.localPosition;
+            portcullis.transform.localPosition = new Vector3(gateLocal.x, 0f, gateLocal.z + PortcullisZOffset);
+
+            foreach (Collider collider in portcullis.GetComponentsInChildren<Collider>(true))
+                Object.DestroyImmediate(collider);
+            foreach (Transform child in portcullis.GetComponentsInChildren<Transform>(true))
+                GameObjectUtility.SetStaticEditorFlags(child.gameObject, 0);
+
+            float archTop = MeasureGateArchTop(gate);
+            float bottom = TryGetBounds(portcullis, out Bounds bounds) ? bounds.min.y : 0f;
+            layout.Portcullis = portcullis;
+            layout.PortcullisLift = Mathf.Max(0.5f, archTop - bottom + PortcullisClearance);
+
+            if (TryGetBounds(gate, out Bounds gateBounds))
+                Debug.Log($"CoolSchool portcullis: arch top {archTop:0.00} m, panel {bounds.size.y:0.00} m tall, rises {layout.PortcullisLift:0.00} m "
+                    + $"(raised top {bounds.max.y + layout.PortcullisLift:0.00} m, gate wall top {gateBounds.max.y:0.00} m).");
+            return portcullis;
+        }
+
+        /// <summary>
+        /// The height of the top of the gate's arch opening: the lowest vertex above the lower quarter of the wall in a
+        /// narrow strip down the middle (the arch apex). Falls back to the 6x estimate when that isn't plausible.
+        /// </summary>
+        static float MeasureGateArchTop(GameObject gate)
+        {
+            if (!TryGetBounds(gate, out Bounds bounds)) return GateArchFallbackHeight;
+
+            float halfStrip = bounds.size.x * 0.03f;
+            float floor = bounds.min.y + bounds.size.y * 0.25f;
+            float best = float.MaxValue;
+            foreach (MeshFilter filter in gate.GetComponentsInChildren<MeshFilter>(false))
+            {
+                Mesh mesh = filter.sharedMesh;
+                if (mesh == null) continue;
+
+                foreach (Vector3 vertex in mesh.vertices)
+                {
+                    Vector3 world = filter.transform.TransformPoint(vertex);
+                    if (Mathf.Abs(world.x - bounds.center.x) > halfStrip || world.y < floor) continue;
+                    best = Mathf.Min(best, world.y);
+                }
+            }
+
+            if (best > 2.5f && best < bounds.max.y - 0.3f) return best;
+
+            Debug.LogWarning($"CoolSchool: could not measure the gate arch (got {best:0.00} m); using {GateArchFallbackHeight} m for the portcullis lift.");
+            return GateArchFallbackHeight;
         }
 
         /// <summary>
@@ -375,15 +601,15 @@ namespace CoolSchool.EditorTools
         }
 
         /// <summary>
-        /// Flags on the two north towers, torches on each side of the gate (outside) and of the goblin door (inside).
+        /// Flags on the two north towers and braziers on each side of the gate (outside).
         /// All face the camera (south) and start hidden.
         /// </summary>
         static void PlaceImaginationProps(ArenaLayout layout, Transform parent, GameObject towerNorthWest, GameObject towerNorthEast,
-            float gateWidth, float doorWidth, float frontFaceZ)
+            float gateWidth, float frontFaceZ)
         {
             GameObject flagA = LoadPrefab(FlagA);
             GameObject flagB = LoadPrefab(FlagB);
-            GameObject torch = LoadPrefab(Torch);
+            GameObject brazier = LoadPrefab(Brazier);
 
             Quaternion south = Quaternion.Euler(0f, 180f, 0f);
 
@@ -406,16 +632,15 @@ namespace CoolSchool.EditorTools
             PlaceFlag(flagA, towerNorthWest);
             PlaceFlag(flagB, towerNorthEast);
 
-            if (torch == null) return;
+            if (brazier == null) return;
 
+            // gateWidth is measured at CastleScale but the gate is shown at GateFinalScale, so the arch opening is wider than
+            // the layout thinks; the braziers stand a clear step beside the real opening, in front of the wall.
             float gateX = layout.GatePosition.x;
-            float gateSide = gateWidth * GateOpeningHalfFraction + 0.8f;
-            float doorSide = doorWidth * 0.5f + 0.8f;
+            float openingHalf = gateWidth * (GateFinalScale / CastleScale) * GateOpeningHalfFraction;
+            float gateSide = openingHalf + BrazierGateClearance;
             foreach (float side in new[] { -1f, 1f })
-            {
-                PlaceAt(torch, TorchHeight, new Vector3(gateX + side * gateSide, 0f, frontFaceZ - 1f));
-                PlaceAt(torch, TorchHeight, new Vector3(gateX + side * doorSide, 0f, layout.GoblinDoorFront.z - 0.5f));
-            }
+                PlaceAt(brazier, BrazierHeight, new Vector3(gateX + side * gateSide, 0f, frontFaceZ - BrazierFrontClearance));
         }
 
         /// <summary>Props are decoration only: no colliders, hidden until the imagination effect shows them.</summary>
@@ -440,15 +665,15 @@ namespace CoolSchool.EditorTools
             Transform arena = layout.Root != null ? layout.Root : new GameObject("Arena").transform;
             Transform points = NewGroup("Points", arena);
 
-            // Goblins pop out of the door in the back wall and run home through it. The dragon lands in the middle of
-            // the courtyard (a little north of centre) and starts high up behind the back wall, so it flies in over it.
+            // Goblins climb the ladders up the back wall's outside, jump down at the ladders' landing points and run home to them.
+            // The dragon lands in the middle of the courtyard (a little north of centre) and starts high up behind the back wall,
+            // so it flies in over it.
             float courtyardX = layout.Courtyard.center.x;
-            Vector3 doorFront = layout.GoblinDoorFront;
-            var spawns = new Transform[4];
-            for (int i = 0; i < spawns.Length; i++)
-                spawns[i] = NewPoint($"OpponentSpawn_{i + 1}", points, new Vector3(courtyardX - 1.5f + i, 0f, doorFront.z - 1.8f));
+            WallLadder[] ladders = CreateLadders(layout, points);
+            Vector3[] opponentStarts = ladders.Length > 0
+                ? ladders.Select(l => l.Landing).ToArray()
+                : new[] { new Vector3(courtyardX, 0f, layout.Courtyard.center.z) };
 
-            Transform retreat = NewPoint("RetreatPoint", points, new Vector3(doorFront.x, 0f, doorFront.z - 0.8f));
             Transform entry = NewPoint("DragonEntry", points, new Vector3(courtyardX, DragonEntryHeight, layout.BackWallOuterZ + 8f));
             Transform center = NewPoint("ArenaCenter", points, new Vector3(courtyardX, 0f, layout.Courtyard.center.z + 1f));
 
@@ -461,24 +686,66 @@ namespace CoolSchool.EditorTools
             ActivityZone castleZone = CreateActivityZone("CastleZone", arena, zonePosition, 2.0f, game, ringMaterial,
                 ActivityBeaconBuilder.KnightsBeacon);
 
-            BuildCutaway(layout);
+            WarnIfGateIsBlocked(layout, zonePosition);
 
-            BattleOpponentAI[] opponents = CreateOpponents(arena, spawns, inputs, out WeaponHolder[] opponentHolders);
+            BuildCutaway(layout);
+            BuildPortcullis(layout, game, inputs);
+
+            BattleOpponentAI[] opponents = CreateOpponents(arena, opponentStarts, inputs, out WeaponHolder[] opponentHolders);
 
             // The dragon waits high behind the castle, facing the courtyard (south).
             DragonBoss dragon = CreateDragon(arena, entry, Vector3.back, inputs, result);
 
-            WireGame(game, layout, inputs, spawns, retreat, entry, center, opponents, dragon,
+            WireGame(game, layout, inputs, ladders, entry, center, opponents, dragon,
                 inputs.HeroWeaponHolders.Concat(opponentHolders).ToArray());
 
             Bounds footprint = layout.Footprint;
             Debug.Log($"CoolSchool arena: castle footprint x {footprint.min.x:0.0}..{footprint.max.x:0.0}, z {footprint.min.z:0.0}..{footprint.max.z:0.0} "
-                + $"(gate {layout.GatePosition.ToString("0.0")} facing south, goblin door {doorFront.ToString("0.0")}), "
+                + $"(gate {layout.GatePosition.ToString("0.0")} facing south, {ladders.Length} goblin ladders, landings {string.Join(" ", ladders.Select(l => l.Landing.ToString("0.0")))}), "
                 + $"courtyard x {layout.Courtyard.min.x:0.0}..{layout.Courtyard.max.x:0.0}, z {layout.Courtyard.min.z:0.0}..{layout.Courtyard.max.z:0.0}, "
                 + $"castle zone {castleZone.transform.position.ToString("0.0")}, dragon lands at {center.position.ToString("0.0")} "
                 + $"and enters at {entry.position.ToString("0.0")}, arena from {layout.Point(layout.Start, 0f).ToString("0.0")} "
                 + $"to {layout.Point(layout.End, 0f).ToString("0.0")}.");
             return result;
+        }
+
+        /// <summary>
+        /// A WallLadder with its four points for each ladder the castle step recorded. The landing is snapped onto the NavMesh,
+        /// because a goblin's agent is warped there after the jump.
+        /// </summary>
+        static WallLadder[] CreateLadders(ArenaLayout layout, Transform points)
+        {
+            var ladders = new List<WallLadder>();
+            for (int i = 0; i < layout.Ladders.Count; i++)
+            {
+                LadderSpot spot = layout.Ladders[i];
+                var root = new GameObject($"Ladder_{i + 1}");
+                root.transform.SetParent(points, false);
+                var ladder = root.AddComponent<WallLadder>();
+
+                SetObject(ladder, "foot", NewPoint("Foot", root.transform, spot.Foot));
+                SetObject(ladder, "shoulder", NewPoint("Shoulder", root.transform, spot.Shoulder));
+                SetObject(ladder, "rim", NewPoint("Rim", root.transform, spot.Rim));
+                SetObject(ladder, "landing", NewPoint("Landing", root.transform, SnapToNavMesh(spot.Landing)));
+                ladders.Add(ladder);
+            }
+            return ladders.ToArray();
+        }
+
+        /// <summary>Logs an error when the baked NavMesh has no complete path from in front of the gate to the castle zone inside.</summary>
+        static void WarnIfGateIsBlocked(ArenaLayout layout, Vector3 zonePosition)
+        {
+            Vector3 outside = layout.GatePosition + Vector3.back * 4f;
+            if (!NavMesh.SamplePosition(outside, out NavMeshHit from, 3f, NavMesh.AllAreas)
+                || !NavMesh.SamplePosition(zonePosition, out NavMeshHit to, 3f, NavMesh.AllAreas))
+            {
+                Debug.LogError("CoolSchool: no NavMesh in front of the castle gate or at the castle zone.");
+                return;
+            }
+
+            var path = new NavMeshPath();
+            if (!NavMesh.CalculatePath(from.position, to.position, NavMesh.AllAreas, path) || path.status != NavMeshPathStatus.PathComplete)
+                Debug.LogError("CoolSchool: the castle gate is blocked: no complete NavMesh path from the approach to the castle zone.");
         }
 
         /// <summary>
@@ -492,6 +759,25 @@ namespace CoolSchool.EditorTools
             SetObjectArray(cutaway, "frontRenderers", layout.FrontRenderers);
             SetObject(cutaway, "ghostMaterial", CreateCastleGhostMaterial(layout.FrontRenderers[0].sharedMaterial));
             SetBounds(cutaway, "insideArea", layout.Courtyard);
+        }
+
+        /// <summary>
+        /// The rising behaviour on the portcullis. The camera looks north from 7 m behind and 6.5 m above the kid at about
+        /// 39 degrees down, so a closed gate (3-4 m high) is fully on screen only when he is within about 6 m of it south of
+        /// the gate, but its lower 2 m are still seen at 11 m. It lowers beyond 11.5 m, so its bottom edge is still in view
+        /// when it lands, and it rises from 7 m, so it is already up before he reaches it.
+        /// </summary>
+        static void BuildPortcullis(ArenaLayout layout, KnightsGame game, ArenaInputs inputs)
+        {
+            if (layout.Portcullis == null) return;
+
+            var portcullis = layout.Portcullis.AddComponent<CastlePortcullis>();
+            SetObject(portcullis, "player", inputs.Player != null ? inputs.Player.transform : null);
+            SetBounds(portcullis, "courtyard", layout.Courtyard);
+            SetObject(portcullis, "keepOpenWhileRunning", game);
+            SetFloat(portcullis, "openRadius", 7f);
+            SetFloat(portcullis, "closeRadius", 11.5f);
+            SetFloat(portcullis, "liftHeight", layout.PortcullisLift);
         }
 
         /// <summary>
@@ -544,7 +830,7 @@ namespace CoolSchool.EditorTools
             return point;
         }
 
-        static void WireGame(KnightsGame game, ArenaLayout layout, ArenaInputs inputs, Transform[] spawns, Transform retreat,
+        static void WireGame(KnightsGame game, ArenaLayout layout, ArenaInputs inputs, WallLadder[] ladders,
             Transform entry, Transform center, BattleOpponentAI[] opponents, DragonBoss dragon, WeaponHolder[] holders)
         {
             SetObject(game, "player", inputs.Player);
@@ -552,8 +838,7 @@ namespace CoolSchool.EditorTools
             SetObject(game, "actionButton", inputs.ActionButton);
             SetObject(game, "swordIcon", inputs.SwordIcon);
             SetObject(game, "imagination", inputs.Imagination);
-            SetObjectArray(game, "opponentSpawnPoints", spawns);
-            SetObject(game, "retreatPoint", retreat);
+            SetObjectArray(game, "ladders", ladders);
             SetObjectArray(game, "opponents", opponents);
             SetIntArray(game, "waveSizes", new[] { 2, 3 });
             SetObject(game, "dragon", dragon);
@@ -615,7 +900,7 @@ namespace CoolSchool.EditorTools
         // ----- Opponents -----------------------------------------------------------------------
 
         /// <summary>Four inactive goblin/troll kids with a club each, ready for KnightsGame to wake up in waves.</summary>
-        static BattleOpponentAI[] CreateOpponents(Transform arena, Transform[] spawns, ArenaInputs inputs, out WeaponHolder[] holders)
+        static BattleOpponentAI[] CreateOpponents(Transform arena, Vector3[] starts, ArenaInputs inputs, out WeaponHolder[] holders)
         {
             Transform group = NewGroup("Opponents", arena);
             Material telegraphMaterial = CreateEmissiveMaterial(TelegraphMaterialPath, new Color(1f, 0.35f, 0.1f));
@@ -624,7 +909,7 @@ namespace CoolSchool.EditorTools
 
             for (int i = 0; i < OpponentPrefabs.Length; i++)
             {
-                Vector3 position = SnapToNavMesh(spawns[i % spawns.Length].position);
+                Vector3 position = SnapToNavMesh(starts[i % starts.Length]);
                 string kidName = OpponentPrefabs[i].Name.Replace("SM_Chr_", "");
                 GameObject root = CreateKid("Opponent_" + kidName + "_" + (i + 1), OpponentPrefabs[i],
                     inputs.OpponentController != null ? inputs.OpponentController : inputs.KidController,
@@ -649,6 +934,7 @@ namespace CoolSchool.EditorTools
                 SetBool(hittable, "canBeDefeated", true);
 
                 root.AddComponent<SwordFighter>();
+                root.AddComponent<LadderClimb>();
 
                 var ai = root.AddComponent<BattleOpponentAI>();
                 SetObject(ai, "telegraph", CreateTelegraph(root.transform, height, telegraphMaterial));

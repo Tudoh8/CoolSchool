@@ -8,9 +8,11 @@ using UnityEngine.AI;
 namespace CoolSchool.Battle
 {
     /// <summary>
-    /// A goblin or troll classmate in the knights game. Slow and very clear about what it will do:
+    /// A goblin or troll classmate in the knights game. It climbs a ladder up the outside of the castle wall and
+    /// jumps down into the courtyard (LadderClimb). Then it is slow and very clear about what it will do:
     /// it walks up, stands still and shows a "!" while winding up, swings, then steps back.
-    /// When the knights bump it enough it tumbles, giggles and runs off to hide until the next wave.
+    /// When the knights bump it enough it tumbles, giggles and runs back to its ladder's landing, where it
+    /// vanishes in a sparkle until the next wave.
     /// </summary>
     [RequireComponent(typeof(NavMeshAgent), typeof(Hittable), typeof(SwordFighter))]
     public class BattleOpponentAI : MonoBehaviour
@@ -30,15 +32,18 @@ namespace CoolSchool.Battle
         const float HitPauseSeconds = 0.8f;
         const float GiveUpApproachSeconds = 10f;
         const float DefeatedRunSpeed = 3f;
+        const float GoHomeTimeoutSeconds = 8f;
+        const float GoHomeArriveDistance = 0.6f;
 
         NavMeshAgent agent;
         Hittable hittable;
         SwordFighter fighter;
         KidAnimator kidAnimator;
+        LadderClimb ladderClimb;
         Transform visualRoot;
         Vector3 visualBaseScale = Vector3.one;
         PlayerController player;
-        Transform retreatPoint;
+        WallLadder ladder;
         Coroutine routine;
         float hitPauseUntil;
 
@@ -56,6 +61,7 @@ namespace CoolSchool.Battle
             hittable = GetComponent<Hittable>();
             fighter = GetComponent<SwordFighter>();
             kidAnimator = GetComponent<KidAnimator>();
+            ladderClimb = GetComponent<LadderClimb>();
 
             Animator animator = GetComponentInChildren<Animator>(true);
             if (animator != null && animator.transform != transform)
@@ -84,44 +90,87 @@ namespace CoolSchool.Battle
             RestoreScale();
         }
 
-        /// <summary>Appears at the spawn point and starts looking for a knight to challenge.</summary>
-        public void Activate(Vector3 spawnPosition, Transform retreat)
+        /// <summary>
+        /// Starts at the foot of the ladder outside the wall, climbs over and jumps down into the courtyard, then starts
+        /// looking for a knight to challenge. Without a ladder (or a LadderClimb) it just appears at the fallback position.
+        /// </summary>
+        public void Activate(WallLadder wallLadder, Vector3 fallbackPosition)
         {
             CacheReferences();
-            retreatPoint = retreat;
-
-            // Place it on the floor before switching on, so the agent starts on the NavMesh.
-            if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit hit, 2f, NavMesh.AllAreas))
-                spawnPosition = hit.position;
+            ladder = wallLadder;
+            bool climbs = ladder != null && ladderClimb != null;
 
             if (routine != null) StopCoroutine(routine);
             routine = null;
-
-            if (AgentReady) agent.Warp(spawnPosition);
-            else transform.position = spawnPosition;
-            gameObject.SetActive(true);
-
-            // The knights game could not show our weapon while we were switched off, so do it now.
-            WeaponHolder weapons = GetComponent<WeaponHolder>();
-            if (weapons != null) weapons.ShowWeapons(true);
 
             hittable.ResetState();
             hitPauseUntil = 0f;
             SetTelegraph(false);
             RestoreScale();
 
-            if (agent.enabled && !agent.isOnNavMesh) agent.Warp(spawnPosition);
-            if (AgentReady)
+            if (climbs)
             {
-                agent.speed = moveSpeed;
-                agent.isStopped = false;
-                agent.updateRotation = true;
+                // The climber switches the agent off and stands at the ladder's foot, so the agent never wakes up off the NavMesh.
+                ladderClimb.Begin(ladder);
+                gameObject.SetActive(true);
+            }
+            else
+            {
+                // Place it on the floor before switching on, so the agent starts on the NavMesh.
+                if (NavMesh.SamplePosition(fallbackPosition, out NavMeshHit hit, 2f, NavMesh.AllAreas))
+                    fallbackPosition = hit.position;
+
+                if (AgentReady) agent.Warp(fallbackPosition);
+                else transform.position = fallbackPosition;
+                gameObject.SetActive(true);
+                if (agent.enabled && !agent.isOnNavMesh) agent.Warp(fallbackPosition);
             }
 
-            routine = StartCoroutine(FightRoutine());
+            // The knights game could not show our weapon while we were switched off, so do it now.
+            WeaponHolder weapons = GetComponent<WeaponHolder>();
+            if (weapons != null) weapons.ShowWeapons(true);
+
+            if (!climbs) PrepareAgent();
+            routine = StartCoroutine(climbs ? ClimbThenFight() : FightRoutine());
+        }
+
+        /// <summary>Sends a goblin that is still on the field home (a round that dragged on): it runs to its ladder and vanishes in a sparkle.</summary>
+        public void SendHome()
+        {
+            if (!gameObject.activeInHierarchy || hittable.IsDefeated) return;
+
+            if (routine != null) StopCoroutine(routine);
+            routine = null;
+
+            // Still on the ladder or in the air: just vanish where it is.
+            if (ladderClimb != null && ladderClimb.IsClimbing)
+            {
+                BattleEffects.Sparkle(transform.position + Vector3.up * 0.8f);
+                gameObject.SetActive(false);
+                return;
+            }
+
+            routine = StartCoroutine(GoHomeThenVanish());
         }
 
         bool AgentReady => agent != null && agent.isActiveAndEnabled && agent.isOnNavMesh;
+
+        void PrepareAgent()
+        {
+            if (!AgentReady) return;
+
+            agent.speed = moveSpeed;
+            agent.isStopped = false;
+            agent.updateRotation = true;
+        }
+
+        IEnumerator ClimbThenFight()
+        {
+            yield return ladderClimb.Run(ladder);
+
+            PrepareAgent();
+            yield return FightRoutine();
+        }
 
         IEnumerator FightRoutine()
         {
@@ -252,19 +301,29 @@ namespace CoolSchool.Battle
             Sfx.Play("battle.giggle", transform.position);
             yield return new WaitForSeconds(0.8f);
 
-            // Run off and hide behind the castle.
-            if (retreatPoint != null && AgentReady)
+            yield return GoHomeThenVanish();
+        }
+
+        /// <summary>Runs to the ladder's landing spot (away from the wall, never into it) and vanishes in a sparkle.</summary>
+        IEnumerator GoHomeThenVanish()
+        {
+            StopMoving();
+            SetTelegraph(false);
+            RestoreScale();
+
+            if (ladder != null && AgentReady)
             {
                 agent.updateRotation = true;
                 agent.speed = DefeatedRunSpeed;
                 agent.isStopped = false;
-                agent.SetDestination(retreatPoint.position);
+                agent.SetDestination(ladder.Landing);
 
-                float timeout = Time.time + 8f;
-                while (Time.time < timeout && (agent.pathPending || agent.remainingDistance > 1f))
+                float timeout = Time.time + GoHomeTimeoutSeconds;
+                while (Time.time < timeout && (agent.pathPending || agent.remainingDistance > GoHomeArriveDistance))
                     yield return null;
             }
 
+            BattleEffects.Sparkle(transform.position + Vector3.up * 0.8f);
             routine = null;
             gameObject.SetActive(false);
         }

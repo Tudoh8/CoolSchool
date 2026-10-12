@@ -165,6 +165,23 @@ namespace CoolSchool.Player
             Jumped?.Invoke();
         }
 
+        /// <summary>
+        /// Puts the kid somewhere else at once. The character controller sleeps for the move (it would fight a teleport) and
+        /// all speed is cleared, so he lands standing still. While riding the controller stays off.
+        /// </summary>
+        public void Teleport(Vector3 position, Quaternion rotation)
+        {
+            if (controller == null) controller = GetComponent<CharacterController>();
+
+            controller.enabled = false;
+            transform.SetPositionAndRotation(position, rotation);
+            verticalVelocity = -2f;
+            carryVelocity = Vector3.zero;
+            launchPending = false;
+            airSeconds = 0f;
+            if (!riding) controller.enabled = true;
+        }
+
         /// <summary>Sets the up/down speed directly, e.g. to hang for a moment at the top of a jump.</summary>
         public void SetVerticalVelocity(float value)
         {

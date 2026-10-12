@@ -57,6 +57,9 @@ namespace CoolSchool.Characters
         /// <summary>While true the kid stands still in the animator even though the transform moves (riding a ship or a boat).</summary>
         public bool ForceIdle { get; set; }
 
+        /// <summary>When 0 or more, the animator gets this speed instead of the measured one (a goblin climbing a ladder runs on the spot).</summary>
+        public float SpeedOverride { get; set; } = -1f;
+
         void Awake()
         {
             if (animator == null) animator = GetComponentInChildren<Animator>();
@@ -76,6 +79,7 @@ namespace CoolSchool.Characters
             delta.y = 0f;
 
             float speed = Time.deltaTime > 0f && !ForceIdle ? delta.magnitude / Time.deltaTime : 0f;
+            if (SpeedOverride >= 0f && !ForceIdle) speed = SpeedOverride;
             animator.SetFloat(SpeedId, speed, speedDamping, Time.deltaTime);
 
             RefreshCache();

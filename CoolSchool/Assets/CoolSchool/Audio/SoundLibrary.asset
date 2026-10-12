@@ -863,3 +863,19 @@ MonoBehaviour:
     pitchRange: {x: 1, y: 1}
     spatial: 0
     cooldown: 0
+  - cue: castle.gate_rise
+    clips:
+    - {fileID: 8300000, guid: 3a3b8357a971e974e91a198b188f1fa7, type: 3}
+    - {fileID: 8300000, guid: 99a40f27c460c476690aa76bccf202f1, type: 3}
+    volume: 0.7
+    pitchRange: {x: 0.9, y: 1}
+    spatial: 1
+    cooldown: 0.05
+  - cue: castle.gate_drop
+    clips:
+    - {fileID: 8300000, guid: 4e72116c6eb914481b88f9771610f49d, type: 3}
+    - {fileID: 8300000, guid: 1976843318cd543a39a5b8d3fd34dd05, type: 3}
+    volume: 0.7
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05

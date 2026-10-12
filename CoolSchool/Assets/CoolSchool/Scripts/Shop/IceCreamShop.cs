@@ -75,9 +75,6 @@ namespace CoolSchool.Shop
         bool quitting;
         bool hudHidden;
         bool savedJumpEnabled = true;
-        bool hasReturnPoint;
-        Vector3 returnPosition;
-        Quaternion returnRotation;
 
         // The customer being served right now.
         ShopCustomer current;
@@ -664,10 +661,7 @@ namespace CoolSchool.Shop
         {
             if (player == null) return;
 
-            returnPosition = player.transform.position;
-            returnRotation = player.transform.rotation;
-            hasReturnPoint = true;
-            BattleEffects.Sparkle(returnPosition + Vector3.up * 0.8f);
+            BattleEffects.Sparkle(player.transform.position + Vector3.up * 0.8f);
 
             savedJumpEnabled = player.JumpEnabled;
             MovePlayer(shopkeeperSpot.position, shopkeeperSpot.rotation);
@@ -675,21 +669,25 @@ namespace CoolSchool.Shop
             player.JumpEnabled = false;
         }
 
+        /// <summary>
+        /// The kid ends where he made the ice cream: behind the counter at the shopkeeper's spot, facing the playground. The zone
+        /// is on the other side of the stall, so he does not start the shop again, and the counter's end is open to walk out.
+        /// </summary>
         void ReturnPlayer()
         {
-            if (player == null || !hasReturnPoint) return;
+            if (player == null || shopkeeperSpot == null) return;
 
-            hasReturnPoint = false;
-            MovePlayer(returnPosition, returnRotation);
+            MovePlayer(shopkeeperSpot.position, shopkeeperSpot.rotation);
         }
 
         void MovePlayer(Vector3 position, Quaternion rotation)
         {
-            // A CharacterController would fight a teleport, so it sleeps for a moment.
-            var controller = player.GetComponent<CharacterController>();
-            if (controller != null) controller.enabled = false;
-            player.transform.SetPositionAndRotation(position, rotation);
-            if (controller != null) controller.enabled = true;
+            // Stand on the real ground under the point, in case it floats or sinks a little (not on a roof or a counter top).
+            if (Physics.Raycast(position + Vector3.up * 2f, Vector3.down, out RaycastHit hit, 4f, ~0, QueryTriggerInteraction.Ignore)
+                && Mathf.Abs(hit.point.y - position.y) < 0.5f && !hit.transform.IsChildOf(player.transform))
+                position.y = hit.point.y;
+
+            player.Teleport(position, rotation);
         }
 
         void PlayerCheer()
