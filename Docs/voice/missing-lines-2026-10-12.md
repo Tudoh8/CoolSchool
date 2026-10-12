@@ -1,5 +1,7 @@
 # Missing voice lines: handover
 
+> **Done (2026-10-12):** all 55 lines were generated and linked in one batch (55 generated, 0 failed, 1,456 characters). No Dutch line is left without a clip. This file is kept as a record.
+
 Written 2026-10-12. These **55 Dutch lines (1,456 characters of DeepVoice quota)** have text in `Assets/CoolSchool/Voice/Lines.asset` but no clip yet. In the game they fall back to a subtitle. They could not be generated on the first PC because its fresh checkout has no DeepVoice invoice number. English is not generated for any line yet, and is not part of this job.
 
 The list below is everything with no Dutch clip after the 2026-10-12 scene rebuild. The generator skips lines that already have a clip, so running it is safe even if some of these were made in the meantime.
