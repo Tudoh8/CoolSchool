@@ -1,4 +1,6 @@
+using System.Collections;
 using CoolSchool.Audio;
+using CoolSchool.Characters;
 using CoolSchool.Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -42,6 +44,9 @@ namespace CoolSchool.Player
         /// <summary>Up (positive) or down (negative) speed in metres per second.</summary>
         public float VerticalVelocity => verticalVelocity;
 
+        /// <summary>True from RideOn until the hop off in StopRiding has landed. The kid does not walk while riding.</summary>
+        public bool IsRiding => riding;
+
         /// <summary>Raised when the kid leaves the ground, so the animator can play a jump.</summary>
         public event System.Action Jumped;
 
@@ -53,6 +58,10 @@ namespace CoolSchool.Player
         bool launchPending;
         float airSeconds;
         float nextStepTime;
+        bool riding;
+        Transform ridingSeat;
+        Transform ridingOriginalParent;
+        Coroutine rideRoutine;
 
         // How fast a launch's sideways push fades, in metres per second per second.
         const float CarryDecay = 5f;
@@ -99,7 +108,12 @@ namespace CoolSchool.Player
 
         void Update()
         {
-            Vector2 input = InputEnabled ? ReadMoveInput() : Vector2.zero;
+            // On a ship the seat carries the kid; walking, gravity and the controller are all off.
+            if (riding) return;
+
+            // The parent panel freezes the game; keys typed into its name field must not queue a move or a jump.
+            bool inputOn = InputEnabled && !CoolSchool.Parent.ParentGate.InputBlocked;
+            Vector2 input = inputOn ? ReadMoveInput() : Vector2.zero;
             Vector3 direction = CameraRelative(input);
 
             // Any real push makes the kid run; a gentle push walks.
@@ -121,7 +135,7 @@ namespace CoolSchool.Player
             {
                 verticalVelocity = -2f;
                 carryVelocity = Vector3.zero;
-                if (InputEnabled && JumpEnabled && WantsToJump())
+                if (inputOn && JumpEnabled && WantsToJump())
                 {
                     verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
                     Sfx.Play("player.jump", transform.position);
@@ -152,6 +166,76 @@ namespace CoolSchool.Player
         public void SetVerticalVelocity(float value)
         {
             verticalVelocity = value;
+        }
+
+        /// <summary>
+        /// Hops onto a seat (a short arc), then rides there: the character controller and walking are off and the kid is
+        /// parented to the seat (size kept), standing still in the animator. Used for the pirate ship's wheel.
+        /// </summary>
+        public void RideOn(Transform seat)
+        {
+            if (seat == null) return;
+
+            if (rideRoutine != null) StopCoroutine(rideRoutine);
+            rideRoutine = null;
+
+            if (!riding) ridingOriginalParent = transform.parent;
+            else transform.SetParent(ridingOriginalParent, true);
+
+            riding = true;
+            ridingSeat = seat;
+            controller.enabled = false;
+            verticalVelocity = 0f;
+            carryVelocity = Vector3.zero;
+            launchPending = false;
+            SetRidingIdle(true);
+
+            rideRoutine = StartCoroutine(RideRoutine(seat));
+        }
+
+        /// <summary>Hops off the seat to the ground point and walks again. Does nothing when not riding.</summary>
+        public void StopRiding(Vector3 groundPoint)
+        {
+            if (!riding) return;
+
+            if (rideRoutine != null) StopCoroutine(rideRoutine);
+            rideRoutine = null;
+
+            SeatUtil.Dismount(transform, ridingOriginalParent);
+            rideRoutine = StartCoroutine(DismountRoutine(groundPoint));
+        }
+
+        IEnumerator RideRoutine(Transform seat)
+        {
+            GetComponent<KidAnimator>()?.PlayJump();
+            yield return SeatUtil.HopTo(transform, () => seat.position, 0.4f, 0.7f, () => seat.rotation);
+
+            SeatUtil.Mount(transform, seat);
+            rideRoutine = null;
+        }
+
+        IEnumerator DismountRoutine(Vector3 groundPoint)
+        {
+            Vector3 flat = groundPoint - transform.position;
+            flat.y = 0f;
+            Quaternion facing = flat.sqrMagnitude > 0.01f ? Quaternion.LookRotation(flat, Vector3.up) : transform.rotation;
+
+            GetComponent<KidAnimator>()?.PlayJump();
+            yield return SeatUtil.HopTo(transform, () => groundPoint, 0.4f, 0.7f, () => facing);
+
+            verticalVelocity = -2f;
+            carryVelocity = Vector3.zero;
+            controller.enabled = true;
+            riding = false;
+            ridingSeat = null;
+            SetRidingIdle(false);
+            rideRoutine = null;
+        }
+
+        void SetRidingIdle(bool idle)
+        {
+            var kid = GetComponent<KidAnimator>();
+            if (kid != null) kid.ForceIdle = idle;
         }
 
         /// <summary>A thump when landing after a real jump, and a footstep every 0.35 s while running.</summary>

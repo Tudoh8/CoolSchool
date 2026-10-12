@@ -13,6 +13,8 @@ namespace CoolSchool.EditorTools
         public string kidVoice = "Freya";
         public string goblinVoice = "Clyde";
         public string alienVoice = "Freya";
+        public string parrotVoice = "Clyde";
+        public string announcerVoice = "Dave";
 
         [Range(0f, 1f)] public float variability = 0.3f;
         [Range(0f, 1f)] public float clarity = 0.75f;

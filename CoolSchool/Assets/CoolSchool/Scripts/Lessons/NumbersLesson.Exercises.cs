@@ -12,13 +12,6 @@ namespace CoolSchool.Lessons
     /// </summary>
     public partial class NumbersLesson
     {
-        // A child who does nothing for this long hears the prompt again.
-        const float IdleSeconds = 8f;
-        const int RepeatsBeforeHelp = 2;
-        // After this many quiet rounds the teacher does the exercise herself, a little faster each time.
-        const int CyclesBeforeAutoHelp = 6;
-        const float AutoHelpIdleSeconds = 3f;
-
         const float ToyAppearGapSeconds = 0.12f;
         const float SpeechEndPauseSeconds = 1f;
         const float CelebrationPauseSeconds = 0.8f;
@@ -33,52 +26,6 @@ namespace CoolSchool.Lessons
         readonly List<CountableObject> basketToys = new List<CountableObject>();
         Bounds basketBounds;
         int countedAlong;
-
-        /// <summary>Watches for a child who has gone quiet. Tick returns true once each time the quiet has lasted long enough.</summary>
-        sealed class IdleTimer
-        {
-            float quietSince = Time.time;
-
-            public int Cycles { get; private set; }
-
-            public bool Tick(bool busy, float lastActivity)
-            {
-                if (busy) quietSince = Time.time;
-                else if (lastActivity > quietSince) quietSince = lastActivity;
-
-                float limit = Cycles >= CyclesBeforeAutoHelp ? AutoHelpIdleSeconds : IdleSeconds;
-                if (Time.time - quietSince < limit) return false;
-
-                quietSince = Time.time;
-                Cycles++;
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// What to do when the child has been quiet: repeat the prompt twice, then make the right card or toy
-        /// pulse, and in the end let the teacher do it. Anything that needed this does not count as a first try.
-        /// </summary>
-        void HandleIdle(int cycles, System.Action prompt, System.Action help, System.Action autoSolve)
-        {
-            if (cycles > RepeatsBeforeHelp)
-            {
-                exerciseNeededHelp = true;
-                help();
-            }
-
-            if (cycles >= CyclesBeforeAutoHelp)
-            {
-                autoSolve();
-                return;
-            }
-            prompt();
-        }
-
-        static bool IsBusy()
-        {
-            return IsSpeaking();
-        }
 
         // ----- Tap and count ---------------------------------------------------------------------
 
@@ -467,11 +414,12 @@ namespace CoolSchool.Lessons
             }
         }
 
-        /// <summary>(x, z) on the table for each toy. Table x grows toward the left of the screen, so it is mirrored.</summary>
+        /// <summary>(x, z) on the table for each toy. Table x grows toward the left of the screen, so it is mirrored. With two equal rows, the back row is nudged sideways so it peeks through the gaps.</summary>
         Vector2[] ToyLayout(int count, float centerZ)
         {
             int perRow = count <= SingleRowMaxToys ? count : Mathf.CeilToInt(count * 0.5f);
             float spacing = perRow > 1 ? Mathf.Min(toySpacing, maxRowWidth / (perRow - 1)) : 0f;
+            bool equalRows = perRow < count && count == perRow * 2;
 
             var layout = new Vector2[count];
             for (int i = 0; i < count; i++)
@@ -481,6 +429,7 @@ namespace CoolSchool.Lessons
                 int column = i % perRow;
 
                 float x = ((inRow - 1) * 0.5f - column) * spacing;
+                if (equalRows) x += (row == 0 ? -0.25f : 0.25f) * spacing;
                 float z = centerZ + (perRow == count ? 0f : (row == 0 ? -0.5f : 0.5f) * rowSpacing);
                 layout[i] = new Vector2(x, z);
             }
@@ -492,23 +441,11 @@ namespace CoolSchool.Lessons
             return count * ToyAppearGapSeconds + 0.5f;
         }
 
-        static void Pulse(CountableObject toy)
-        {
-            if (toy != null) toy.Highlight(true);
-        }
-
         /// <summary>Lets the last number word finish, then a beat of quiet so the next line is not mistaken for a repeat.</summary>
         IEnumerator SettleAfterLastNumber()
         {
             yield return WaitForSpeech();
             yield return new WaitForSeconds(SpeechEndPauseSeconds);
-        }
-
-        /// <summary>Confetti over the table.</summary>
-        void Cheer()
-        {
-            BattleEffects.Confetti(stage.TablePoint(0f, 0f) + Vector3.up * 0.8f);
-            stage.TeacherWave();
         }
     }
 }

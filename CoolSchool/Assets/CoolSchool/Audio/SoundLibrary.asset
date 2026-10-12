@@ -385,3 +385,183 @@ MonoBehaviour:
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 0
     cooldown: 0
+  - cue: lesson.trace_progress
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: lesson.letter_pop
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.waves
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.wheel
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.cannon
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.balloon_pop
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.bones_rattle
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.bones_rebuild
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.parrot
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.map_tick
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.dig
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.chest_rise
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.lock_open
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.coin
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.party
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: music.pirates
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 0
+    cooldown: 0
+  - cue: race.lane
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.jump
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.land
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.bonk
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.splash
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.coin
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.gate_ding
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.countdown_beep
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.go_horn
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.ramp_whoosh
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.spinout
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.cheer
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.brake
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: music.race
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 0
+    cooldown: 0

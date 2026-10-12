@@ -275,9 +275,9 @@ MonoBehaviour:
   - key: invite.lesson.2
     group: invite.lesson
     speaker: 0
-    dutch: Kom, we gaan tellen in de klas! Volg de sterretjes!
-    english: Come on, let's count in class! Follow the stars!
-    dutchClip: {fileID: 8300000, guid: 5b707c5b2e34a464aa048f0678c72daf, type: 3}
+    dutch: Kom naar de klas, we gaan leren! Volg de sterretjes!
+    english: Come to class, let's learn! Follow the stars!
+    dutchClip: {fileID: 8300000, guid: 81bbb766032b24c47a7a402a1098a507, type: 3}
     englishClip: {fileID: 0}
   - key: lesson.intro.1
     group: lesson.intro
@@ -880,4 +880,1243 @@ MonoBehaviour:
     dutch: Wat ben jij een goede ijsverkoper! Hier zijn je sterren.
     english: What a good ice cream seller you are! Here are your stars.
     dutchClip: {fileID: 8300000, guid: 63f446f64e79e2549b7e082a3c5b9efb, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.letters.intro.1
+    group: lesson.letters.intro
+    speaker: 0
+    dutch: Welkom in de klas! Vandaag gaan we letters leren.
+    english: Welcome to class! Today we're learning letters.
+    dutchClip: {fileID: 8300000, guid: d76023d9c298e174ebbff3cc6ce1ae57, type: 3}
+    englishClip: {fileID: 0}
+  - key: lesson.letters.outro.1
+    group: lesson.letters.outro
+    speaker: 0
+    dutch: Wat heb jij goed geleerd! Hier zijn je sterren.
+    english: You learned so well! Here are your stars.
+    dutchClip: {fileID: 8300000, guid: 47c9735209097d94fb5e20af6ed5eb36, type: 3}
+    englishClip: {fileID: 0}
+  - key: letters.new.1
+    group: letters.new
+    speaker: 0
+    dutch: Dit is een nieuwe letter!
+    english: This is a new letter!
+    dutchClip: {fileID: 8300000, guid: 6e42576134b14b4439461fb1a92c7803, type: 3}
+    englishClip: {fileID: 0}
+  - key: letters.find.1
+    group: letters.find
+    speaker: 0
+    dutch: "Waar is de\u2026"
+    english: "Where is the\u2026"
+    dutchClip: {fileID: 8300000, guid: d9f831d27dfce73488109412fb4048df, type: 3}
+    englishClip: {fileID: 0}
+  - key: letters.starts_with.1
+    group: letters.starts_with
+    speaker: 0
+    dutch: "Wat begint met\u2026"
+    english: "What starts with\u2026"
+    dutchClip: {fileID: 8300000, guid: 930305f389b243a4b8ff339b3a3eafd2, type: 3}
+    englishClip: {fileID: 0}
+  - key: letters.begins_with.1
+    group: letters.begins_with
+    speaker: 0
+    dutch: "\u2026begint met\u2026"
+    english: "\u2026starts with\u2026"
+    dutchClip: {fileID: 8300000, guid: 102c0f268ef28394a9d3555e14a19fe4, type: 3}
+    englishClip: {fileID: 0}
+  - key: letters.trace.1
+    group: letters.trace
+    speaker: 0
+    dutch: Teken de letter met je vinger. Volg de stippen!
+    english: Draw the letter with your finger. Follow the dots!
+    dutchClip: {fileID: 8300000, guid: 20a3eb7a2500c2448abb6076856afccf, type: 3}
+    englishClip: {fileID: 0}
+  - key: letters.trace_done.1
+    group: letters.trace_done
+    speaker: 0
+    dutch: Wat mooi getekend!
+    english: Beautifully drawn!
+    dutchClip: {fileID: 8300000, guid: d51dfa8f7286f434a9814d47128a37b2, type: 3}
+    englishClip: {fileID: 0}
+  - key: letters.name.1
+    group: letters.name
+    speaker: 0
+    dutch: Weet je wat hier komt te staan? Jouw naam! Zoek de letters.
+    english: Do you know what goes here? Your name! Find the letters.
+    dutchClip: {fileID: 8300000, guid: fd2ed0b6c084ad14e88156307c915615, type: 3}
+    englishClip: {fileID: 0}
+  - key: letters.name_done.1
+    group: letters.name_done
+    speaker: 0
+    dutch: Dat is jouw naam! Knap gedaan!
+    english: That's your name! Well done!
+    dutchClip: {fileID: 8300000, guid: 88d6f1114dc2907439c49d45b8e00eba, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.a.1
+    group: letter.sound.a
+    speaker: 0
+    dutch: Ah.
+    english: Ah.
+    dutchClip: {fileID: 8300000, guid: 0032a928f332e2b4ab29a4c013f991b8, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.b.1
+    group: letter.sound.b
+    speaker: 0
+    dutch: Buh.
+    english: Buh.
+    dutchClip: {fileID: 8300000, guid: 513924ba82b23784aac710e4804a1469, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.c.1
+    group: letter.sound.c
+    speaker: 0
+    dutch: Kuh.
+    english: Kuh.
+    dutchClip: {fileID: 8300000, guid: 3db5e7fdfc0a8d544b0a76e62610e1b9, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.d.1
+    group: letter.sound.d
+    speaker: 0
+    dutch: Duh.
+    english: Duh.
+    dutchClip: {fileID: 8300000, guid: 370db473fc40260448d205e6a1b1f758, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.e.1
+    group: letter.sound.e
+    speaker: 0
+    dutch: Eh.
+    english: Eh.
+    dutchClip: {fileID: 8300000, guid: 8199542d5e7944b4897f0e0b3d19585b, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.f.1
+    group: letter.sound.f
+    speaker: 0
+    dutch: Fff.
+    english: Fff.
+    dutchClip: {fileID: 8300000, guid: 99d89a4857627c043baca6d05340d278, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.g.1
+    group: letter.sound.g
+    speaker: 0
+    dutch: Ggg.
+    english: Guh.
+    dutchClip: {fileID: 8300000, guid: 062dca3921eb0484684f654a5f417348, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.h.1
+    group: letter.sound.h
+    speaker: 0
+    dutch: Hhh.
+    english: Hhh.
+    dutchClip: {fileID: 8300000, guid: a4bbe8df9a2b8194ead600762042dcf0, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.i.1
+    group: letter.sound.i
+    speaker: 0
+    dutch: Ih.
+    english: Ih.
+    dutchClip: {fileID: 8300000, guid: 9df4305d49fa7f04fbea93be30757c89, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.j.1
+    group: letter.sound.j
+    speaker: 0
+    dutch: Juh.
+    english: Juh.
+    dutchClip: {fileID: 8300000, guid: 1c4cd7c02b016ea4f913cdf03efde35c, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.k.1
+    group: letter.sound.k
+    speaker: 0
+    dutch: Kuh.
+    english: Kuh.
+    dutchClip: {fileID: 8300000, guid: b8e4982dbcc8fa3458e3f7876e7e409e, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.l.1
+    group: letter.sound.l
+    speaker: 0
+    dutch: Lll.
+    english: Lll.
+    dutchClip: {fileID: 8300000, guid: 21244fb6b7bd75649ae33bfc0e42c9d4, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.m.1
+    group: letter.sound.m
+    speaker: 0
+    dutch: Mmm.
+    english: Mmm.
+    dutchClip: {fileID: 8300000, guid: 40a128c642a752e4e9c49ec332e8c9e1, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.n.1
+    group: letter.sound.n
+    speaker: 0
+    dutch: Nnn.
+    english: Nnn.
+    dutchClip: {fileID: 8300000, guid: 0f3c1a4fc51764e4f8f9b03efe8673dd, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.o.1
+    group: letter.sound.o
+    speaker: 0
+    dutch: Oh.
+    english: Oh.
+    dutchClip: {fileID: 8300000, guid: ab4c66b7ae261dc4897aa67c8d73cb8e, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.p.1
+    group: letter.sound.p
+    speaker: 0
+    dutch: Puh.
+    english: Puh.
+    dutchClip: {fileID: 8300000, guid: 316bd39f7c0950c4c9218962b856228f, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.q.1
+    group: letter.sound.q
+    speaker: 0
+    dutch: Kuh.
+    english: Kwuh.
+    dutchClip: {fileID: 8300000, guid: b62b4498ef4153643afce0ddb3c935b8, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.r.1
+    group: letter.sound.r
+    speaker: 0
+    dutch: Rrr.
+    english: Rrr.
+    dutchClip: {fileID: 8300000, guid: f38d7b2b743b7dd42a6d0d1c7c9080fa, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.s.1
+    group: letter.sound.s
+    speaker: 0
+    dutch: Sss.
+    english: Sss.
+    dutchClip: {fileID: 8300000, guid: 71ef515c2747d9148a8d667f91b2601f, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.t.1
+    group: letter.sound.t
+    speaker: 0
+    dutch: Tuh.
+    english: Tuh.
+    dutchClip: {fileID: 8300000, guid: b2b8d47f3e0065143a7f0fbf6c9374e8, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.u.1
+    group: letter.sound.u
+    speaker: 0
+    dutch: Uh.
+    english: Uh.
+    dutchClip: {fileID: 8300000, guid: 9273f27dc1fe14240a78eabf8eb6e256, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.v.1
+    group: letter.sound.v
+    speaker: 0
+    dutch: Vvv.
+    english: Vvv.
+    dutchClip: {fileID: 8300000, guid: be7acddda5b2739438b0c1b780e3b895, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.w.1
+    group: letter.sound.w
+    speaker: 0
+    dutch: Www.
+    english: Www.
+    dutchClip: {fileID: 8300000, guid: bcc968e00e9b426459066052ec9afa35, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.x.1
+    group: letter.sound.x
+    speaker: 0
+    dutch: Ks.
+    english: Ks.
+    dutchClip: {fileID: 8300000, guid: 7cf3308a3bac5aa46989b02afa620129, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.y.1
+    group: letter.sound.y
+    speaker: 0
+    dutch: Ie.
+    english: Yuh.
+    dutchClip: {fileID: 8300000, guid: 1df627001cf60d043beb1e07d014bf90, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.sound.z.1
+    group: letter.sound.z
+    speaker: 0
+    dutch: Zzz.
+    english: Zzz.
+    dutchClip: {fileID: 8300000, guid: 8f7ac44588d65914896872509329bf2d, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.anker.1
+    group: letter.word.anker
+    speaker: 0
+    dutch: Anker.
+    english: Anchor.
+    dutchClip: {fileID: 8300000, guid: 12542ca82f0ff8c4cb0f40c63917c743, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.ambulance.1
+    group: letter.word.ambulance
+    speaker: 0
+    dutch: Ambulance.
+    english: Ambulance.
+    dutchClip: {fileID: 8300000, guid: 428046bcabd81f74d88a372e71e32de9, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.bal.1
+    group: letter.word.bal
+    speaker: 0
+    dutch: Bal.
+    english: Ball.
+    dutchClip: {fileID: 8300000, guid: 7ebdd96452743354d8c782e3972a4df7, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.beer.1
+    group: letter.word.beer
+    speaker: 0
+    dutch: Beer.
+    english: Bear.
+    dutchClip: {fileID: 8300000, guid: 8a1b9a4bab2be444ca04ce265884dc22, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.boom.1
+    group: letter.word.boom
+    speaker: 0
+    dutch: Boom.
+    english: Tree.
+    dutchClip: {fileID: 8300000, guid: 124d82f96e424bc4d932ad89252feb6c, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.bank.1
+    group: letter.word.bank
+    speaker: 0
+    dutch: Bank.
+    english: Bench.
+    dutchClip: {fileID: 8300000, guid: 125e4f88c5f7e09438d59a7b1dae3c3b, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.boot.1
+    group: letter.word.boot
+    speaker: 0
+    dutch: Boot.
+    english: Boat.
+    dutchClip: {fileID: 8300000, guid: 3e3a861ef260a1840b00ebdde16cf56b, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.brood.1
+    group: letter.word.brood
+    speaker: 0
+    dutch: Brood.
+    english: Bread.
+    dutchClip: {fileID: 8300000, guid: b222915cabcb4f347b4b64ae7c594a35, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.bus.1
+    group: letter.word.bus
+    speaker: 0
+    dutch: Bus.
+    english: Bus.
+    dutchClip: {fileID: 8300000, guid: 772a645e57032d849b651bb93eb97e7e, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.bloem.1
+    group: letter.word.bloem
+    speaker: 0
+    dutch: Bloem.
+    english: Flower.
+    dutchClip: {fileID: 8300000, guid: 344d69b1f68964843bf18deb37fe15cd, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.boek.1
+    group: letter.word.boek
+    speaker: 0
+    dutch: Boek.
+    english: Book.
+    dutchClip: {fileID: 8300000, guid: b2cccbb7511fec74eb8a4c7ac819f9a9, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.bed.1
+    group: letter.word.bed
+    speaker: 0
+    dutch: Bed.
+    english: Bed.
+    dutchClip: {fileID: 8300000, guid: 452635646a4c817468a61038a7ce60f9, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.camera.1
+    group: letter.word.camera
+    speaker: 0
+    dutch: Camera.
+    english: Camera.
+    dutchClip: {fileID: 8300000, guid: 503fbdce3a3bc9844956031cb7c10c37, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.cake.1
+    group: letter.word.cake
+    speaker: 0
+    dutch: Cake.
+    english: Cake.
+    dutchClip: {fileID: 8300000, guid: d9204ea3bf793e84ca5636471733212d, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.deur.1
+    group: letter.word.deur
+    speaker: 0
+    dutch: Deur.
+    english: Door.
+    dutchClip: {fileID: 8300000, guid: bca91e642287bb742973ead79c4a29f7, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.doos.1
+    group: letter.word.doos
+    speaker: 0
+    dutch: Doos.
+    english: Box.
+    dutchClip: {fileID: 8300000, guid: f11d62fdf0703d048afb2547abdeae1f, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.draak.1
+    group: letter.word.draak
+    speaker: 0
+    dutch: Draak.
+    english: Dragon.
+    dutchClip: {fileID: 8300000, guid: 565d360681e4f4845b608b83a70a0c80, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.dino.1
+    group: letter.word.dino
+    speaker: 0
+    dutch: Dino.
+    english: Dinosaur.
+    dutchClip: {fileID: 8300000, guid: 9ab34b8f3e2361b42b370061ca006cd1, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.eend.1
+    group: letter.word.eend
+    speaker: 0
+    dutch: Eend.
+    english: Duck.
+    dutchClip: {fileID: 8300000, guid: 6241e8b36314ecd48961b2a3622b2da0, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.emmer.1
+    group: letter.word.emmer
+    speaker: 0
+    dutch: Emmer.
+    english: Bucket.
+    dutchClip: {fileID: 8300000, guid: 8aabec4ae17466747a112d83d1ef6eb6, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.fiets.1
+    group: letter.word.fiets
+    speaker: 0
+    dutch: Fiets.
+    english: Bike.
+    dutchClip: {fileID: 8300000, guid: 1f2fef9e0e1a49b4d8209fcf70e7ca41, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.fles.1
+    group: letter.word.fles
+    speaker: 0
+    dutch: Fles.
+    english: Bottle.
+    dutchClip: {fileID: 8300000, guid: 83c68ddab13a2f446ae5b1f35ebddc98, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.fluit.1
+    group: letter.word.fluit
+    speaker: 0
+    dutch: Fluit.
+    english: Flute.
+    dutchClip: {fileID: 8300000, guid: e5782489a44e55246a18a8e9a1f78253, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.glas.1
+    group: letter.word.glas
+    speaker: 0
+    dutch: Glas.
+    english: Glass.
+    dutchClip: {fileID: 8300000, guid: c69c918c28073dc43bf650b4cec256bb, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.gieter.1
+    group: letter.word.gieter
+    speaker: 0
+    dutch: Gieter.
+    english: Watering can.
+    dutchClip: {fileID: 8300000, guid: 73b63049591b5d849b73c61faf4c1db2, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.globe.1
+    group: letter.word.globe
+    speaker: 0
+    dutch: Globe.
+    english: Globe.
+    dutchClip: {fileID: 8300000, guid: d0db5d5da90024944b75a4605f1a9d27, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.huis.1
+    group: letter.word.huis
+    speaker: 0
+    dutch: Huis.
+    english: House.
+    dutchClip: {fileID: 8300000, guid: 6e4283d25c4064546a8256ddff6a7224, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.hoed.1
+    group: letter.word.hoed
+    speaker: 0
+    dutch: Hoed.
+    english: Hat.
+    dutchClip: {fileID: 8300000, guid: eb42274818559b54d83a233e2b14d05e, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.helm.1
+    group: letter.word.helm
+    speaker: 0
+    dutch: Helm.
+    english: Helmet.
+    dutchClip: {fileID: 8300000, guid: fc3a14cb45669ff4196afa3a297443aa, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.hamer.1
+    group: letter.word.hamer
+    speaker: 0
+    dutch: Hamer.
+    english: Hammer.
+    dutchClip: {fileID: 8300000, guid: 2b8a395b443f3bd4eb56d6df900b5f86, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.kaas.1
+    group: letter.word.kaas
+    speaker: 0
+    dutch: Kaas.
+    english: Cheese.
+    dutchClip: {fileID: 8300000, guid: 45583eed4faa4ed41b16a2e1749239d9, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.kist.1
+    group: letter.word.kist
+    speaker: 0
+    dutch: Kist.
+    english: Chest.
+    dutchClip: {fileID: 8300000, guid: 5da63e439d0d0f9449d77b642c376b73, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.kroon.1
+    group: letter.word.kroon
+    speaker: 0
+    dutch: Kroon.
+    english: Crown.
+    dutchClip: {fileID: 8300000, guid: 4c6ad4ed4ff9c894290f4c6a8424137e, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.kaars.1
+    group: letter.word.kaars
+    speaker: 0
+    dutch: Kaars.
+    english: Candle.
+    dutchClip: {fileID: 8300000, guid: f6b0c2efaa5fcbf418d9b5e6b3cfcfe3, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.kasteel.1
+    group: letter.word.kasteel
+    speaker: 0
+    dutch: Kasteel.
+    english: Castle.
+    dutchClip: {fileID: 8300000, guid: c9a16a241ce46614ab8f8fee9a27ac92, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.lamp.1
+    group: letter.word.lamp
+    speaker: 0
+    dutch: Lamp.
+    english: Lamp.
+    dutchClip: {fileID: 8300000, guid: ae36c1be08c1f264895295694f728997, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.lepel.1
+    group: letter.word.lepel
+    speaker: 0
+    dutch: Lepel.
+    english: Spoon.
+    dutchClip: {fileID: 8300000, guid: b43ae026661ab824fb933e6398002566, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.ladder.1
+    group: letter.word.ladder
+    speaker: 0
+    dutch: Ladder.
+    english: Ladder.
+    dutchClip: {fileID: 8300000, guid: 1b887753983f10c4185dd47c7359a48b, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.leeuw.1
+    group: letter.word.leeuw
+    speaker: 0
+    dutch: Leeuw.
+    english: Lion.
+    dutchClip: {fileID: 8300000, guid: 2ee2959515081de44a494399da9becaf, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.muts.1
+    group: letter.word.muts
+    speaker: 0
+    dutch: Muts.
+    english: Woolly hat.
+    dutchClip: {fileID: 8300000, guid: ea7e5a1815be91748b710b7306454e69, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.mok.1
+    group: letter.word.mok
+    speaker: 0
+    dutch: Mok.
+    english: Mug.
+    dutchClip: {fileID: 8300000, guid: fc2ee9f61da62db43890e0ad587952b6, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.munt.1
+    group: letter.word.munt
+    speaker: 0
+    dutch: Munt.
+    english: Coin.
+    dutchClip: {fileID: 8300000, guid: 9a18ea5f7d4698042b799ea1e63b5c4f, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.muis.1
+    group: letter.word.muis
+    speaker: 0
+    dutch: Muis.
+    english: Mouse.
+    dutchClip: {fileID: 8300000, guid: ccab9f18c3ba36246915c6358840e5c1, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.net.1
+    group: letter.word.net
+    speaker: 0
+    dutch: Net.
+    english: Net.
+    dutchClip: {fileID: 8300000, guid: 4e01ca0b78fa4fe4db5e35cb3dd01edb, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.oven.1
+    group: letter.word.oven
+    speaker: 0
+    dutch: Oven.
+    english: Oven.
+    dutchClip: {fileID: 8300000, guid: 2c0a8e01050ed4f4d9a965948bb85021, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.olifant.1
+    group: letter.word.olifant
+    speaker: 0
+    dutch: Olifant.
+    english: Elephant.
+    dutchClip: {fileID: 8300000, guid: 5952b93990b1d964a9fe92297cf3f5e5, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.pet.1
+    group: letter.word.pet
+    speaker: 0
+    dutch: Pet.
+    english: Cap.
+    dutchClip: {fileID: 8300000, guid: 78c65859f93432b4e9b264835fff0794, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.paraplu.1
+    group: letter.word.paraplu
+    speaker: 0
+    dutch: Paraplu.
+    english: Umbrella.
+    dutchClip: {fileID: 8300000, guid: 57c9f9f2427d7bc40938293557e2ec02, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.pan.1
+    group: letter.word.pan
+    speaker: 0
+    dutch: Pan.
+    english: Pan.
+    dutchClip: {fileID: 8300000, guid: 657282a0297aee94bb485f650bafbd74, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.pompoen.1
+    group: letter.word.pompoen
+    speaker: 0
+    dutch: Pompoen.
+    english: Pumpkin.
+    dutchClip: {fileID: 8300000, guid: c495484f2f18e104190640fefa241f67, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.paard.1
+    group: letter.word.paard
+    speaker: 0
+    dutch: Paard.
+    english: Horse.
+    dutchClip: {fileID: 8300000, guid: 8be94652f9b272f4c8749e12ff10f184, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.raket.1
+    group: letter.word.raket
+    speaker: 0
+    dutch: Raket.
+    english: Rocket.
+    dutchClip: {fileID: 8300000, guid: 169975fdae7928d46aa17ec49a5f5cce, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.radio.1
+    group: letter.word.radio
+    speaker: 0
+    dutch: Radio.
+    english: Radio.
+    dutchClip: {fileID: 8300000, guid: 2dd93ada6d9d34b4da543fcb28e6ecd1, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.slee.1
+    group: letter.word.slee
+    speaker: 0
+    dutch: Slee.
+    english: Sled.
+    dutchClip: {fileID: 8300000, guid: 21228f9ce48adb2479172a9c1ee07484, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.step.1
+    group: letter.word.step
+    speaker: 0
+    dutch: Step.
+    english: Scooter.
+    dutchClip: {fileID: 8300000, guid: fb24b53f78c2b72469eb7d5849cceb16, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.sleutel.1
+    group: letter.word.sleutel
+    speaker: 0
+    dutch: Sleutel.
+    english: Key.
+    dutchClip: {fileID: 8300000, guid: 0f267ab23caa3f34e812dc72bb93162c, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.stoel.1
+    group: letter.word.stoel
+    speaker: 0
+    dutch: Stoel.
+    english: Chair.
+    dutchClip: {fileID: 8300000, guid: 26b7a0da1ad3a7f4fa256b8ada0e8058, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.taart.1
+    group: letter.word.taart
+    speaker: 0
+    dutch: Taart.
+    english: Cake.
+    dutchClip: {fileID: 8300000, guid: ac2f69b6ac457e74396811aa3f1efee5, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.tafel.1
+    group: letter.word.tafel
+    speaker: 0
+    dutch: Tafel.
+    english: Table.
+    dutchClip: {fileID: 8300000, guid: ac02270259bcaf746af2646008a8f037, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.trein.1
+    group: letter.word.trein
+    speaker: 0
+    dutch: Trein.
+    english: Train.
+    dutchClip: {fileID: 8300000, guid: 9f68dd70ab0b82c4591e12c2d8c6a961, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.tent.1
+    group: letter.word.tent
+    speaker: 0
+    dutch: Tent.
+    english: Tent.
+    dutchClip: {fileID: 8300000, guid: f471492cda44b0244b6ed54121ac0ae0, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.tas.1
+    group: letter.word.tas
+    speaker: 0
+    dutch: Tas.
+    english: Bag.
+    dutchClip: {fileID: 8300000, guid: d31137b92fa24934c808efc5661f9563, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.trommel.1
+    group: letter.word.trommel
+    speaker: 0
+    dutch: Trommel.
+    english: Drum.
+    dutchClip: {fileID: 8300000, guid: 323e24bbe815de34d986670d9b87c4df, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.tomaat.1
+    group: letter.word.tomaat
+    speaker: 0
+    dutch: Tomaat.
+    english: Tomato.
+    dutchClip: {fileID: 8300000, guid: 0365d6dd2553376419f4385aa445323f, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.vlag.1
+    group: letter.word.vlag
+    speaker: 0
+    dutch: Vlag.
+    english: Flag.
+    dutchClip: {fileID: 8300000, guid: 5d641d723395a8f499ac10ec85fbbb2d, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.vork.1
+    group: letter.word.vork
+    speaker: 0
+    dutch: Vork.
+    english: Fork.
+    dutchClip: {fileID: 8300000, guid: 42b9286422864294d84c6f58de548833, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.vliegtuig.1
+    group: letter.word.vliegtuig
+    speaker: 0
+    dutch: Vliegtuig.
+    english: Plane.
+    dutchClip: {fileID: 8300000, guid: ce5875e86e298b74ab70480d84efed3d, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.vlieger.1
+    group: letter.word.vlieger
+    speaker: 0
+    dutch: Vlieger.
+    english: Kite.
+    dutchClip: {fileID: 8300000, guid: c414ddc50530c5843927e7edbb9a63c2, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.vuur.1
+    group: letter.word.vuur
+    speaker: 0
+    dutch: Vuur.
+    english: Fire.
+    dutchClip: {fileID: 8300000, guid: 323dc42cb5f68874dac903d8abc9b15d, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.wolk.1
+    group: letter.word.wolk
+    speaker: 0
+    dutch: Wolk.
+    english: Cloud.
+    dutchClip: {fileID: 8300000, guid: 3d095bf24f178534fa49f10fd4a53eb2, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.worst.1
+    group: letter.word.worst
+    speaker: 0
+    dutch: Worst.
+    english: Sausage.
+    dutchClip: {fileID: 8300000, guid: 4de7ab82343d0904ca4be6fa53007a1a, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.wagen.1
+    group: letter.word.wagen
+    speaker: 0
+    dutch: Wagen.
+    english: Wagon.
+    dutchClip: {fileID: 8300000, guid: d69023895b014f84c98540137a8c86cc, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.xylofoon.1
+    group: letter.word.xylofoon
+    speaker: 0
+    dutch: Xylofoon.
+    english: Xylophone.
+    dutchClip: {fileID: 8300000, guid: b7cf13e320f8b0d4a87d7f7ade95ea46, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.zwaard.1
+    group: letter.word.zwaard
+    speaker: 0
+    dutch: Zwaard.
+    english: Sword.
+    dutchClip: {fileID: 8300000, guid: f0f9ba0407096834ca3b41000f222511, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.zeep.1
+    group: letter.word.zeep
+    speaker: 0
+    dutch: Zeep.
+    english: Soap.
+    dutchClip: {fileID: 8300000, guid: dac20f4d59290374c8a5307b235830df, type: 3}
+    englishClip: {fileID: 0}
+  - key: letter.word.zak.1
+    group: letter.word.zak
+    speaker: 0
+    dutch: Zak.
+    english: Sack.
+    dutchClip: {fileID: 8300000, guid: 14f0c79289963b04a9d7b5ea78763cbb, type: 3}
+    englishClip: {fileID: 0}
+  - key: invite.pirates.1
+    group: invite.pirates
+    speaker: 0
+    dutch: Ahoi! Het piratenschip wacht op jou!
+    english: Ahoy! The pirate ship is waiting for you!
+    dutchClip: {fileID: 8300000, guid: ed56f9c3938256d489ef5b7758b34525, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.start.1
+    group: pirates.start
+    speaker: 5
+    dutch: Ahoi, kapitein! Ik ben Lorre de papegaai. Kom aan boord!
+    english: Ahoy, captain! I'm Lorre the parrot. Come aboard!
+    dutchClip: {fileID: 8300000, guid: 70060ebb6129a7d43a9c94960dbb6e61, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.crew.1
+    group: pirates.crew
+    speaker: 1
+    dutch: Ahoi! Wij varen mee!
+    english: Ahoy! We're sailing with you!
+    dutchClip: {fileID: 8300000, guid: 50edfee7a0bf77d41aaed13b8b0d1ca7, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.steer.1
+    group: pirates.steer
+    speaker: 5
+    dutch: Jij bent de kapitein! Stuur het schip naar het eiland!
+    english: You're the captain! Steer the ship to the island!
+    dutchClip: {fileID: 8300000, guid: 56334159c7a881940a4ec7e8f771a10f, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.balloons.1
+    group: pirates.balloons
+    speaker: 5
+    dutch: Kijk! Een skelettenboot vol ballonnen! Tik op de knop. Boem!
+    english: Look! A skeleton boat full of balloons! Tap the button. Boom!
+    dutchClip: {fileID: 8300000, guid: 43e9928c69b0c89418ca5db421a57aaf, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.cannon_hint.1
+    group: pirates.cannon_hint
+    speaker: 5
+    dutch: Tik op de knop, dan schiet het kanon!
+    english: Tap the button to fire the cannon!
+    dutchClip: {fileID: 8300000, guid: a7756701ffc1fa54d86acb1547d17357, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.balloons_done.1
+    group: pirates.balloons_done
+    speaker: 5
+    dutch: Alle ballonnen zijn knal! De skeletten varen naar het eiland!
+    english: All the balloons popped! The skeletons are sailing to the island!
+    dutchClip: {fileID: 8300000, guid: 96ceab25f6e33264dbf5a14fdf9a290b, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.arrive.1
+    group: pirates.arrive
+    speaker: 5
+    dutch: Land in zicht! Iedereen van boord!
+    english: Land ahoy! Everybody off the ship!
+    dutchClip: {fileID: 8300000, guid: f84eabaf4634cc34d956552fa12580cd, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.skeletons.1
+    group: pirates.skeletons
+    speaker: 2
+    dutch: Arrr! Wij zijn de skelettenpiraten!
+    english: Arrr! We're the skeleton pirates!
+    dutchClip: {fileID: 8300000, guid: 5fd42f73ef0c42e47b1d20a4c98aa176, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.fight_hint.1
+    group: pirates.fight_hint
+    speaker: 5
+    dutch: Tik op de knop en zwaai met je zwaard!
+    english: Tap the button and swing your sword!
+    dutchClip: {fileID: 8300000, guid: 3513030c04bf9014a918b4e070abb82c, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.skeleton_friend.1
+    group: pirates.skeleton_friend
+    speaker: 2
+    dutch: Hihi, mijn botjes kriebelen!
+    english: Hehe, my bones tickle!
+    dutchClip: {fileID: 8300000, guid: c5e998a48170ed94d945d7f2124f6266, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.skeleton_friend.2
+    group: pirates.skeleton_friend
+    speaker: 2
+    dutch: Oeps, ik val uit elkaar! Mag ik bij jullie?
+    english: Oops, I fell apart! Can I join you?
+    dutchClip: {fileID: 8300000, guid: d99d4c987ca5a5a4db4808658fe58980, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.skeleton_friend.3
+    group: pirates.skeleton_friend
+    speaker: 2
+    dutch: Klik klak, ik ben weer heel! Vrienden?
+    english: Clickety-clack, I'm back together! Friends?
+    dutchClip: {fileID: 8300000, guid: a13aa8bb8d3bccf4caff67f3ffdcb1b3, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.map.1
+    group: pirates.map
+    speaker: 5
+    dutch: Een schatkaart! Volg de plaatjes naar de schat!
+    english: A treasure map! Follow the pictures to the treasure!
+    dutchClip: {fileID: 8300000, guid: 2f14fb37358654a4aa9ceb39bea4a286, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.landmark.1
+    group: pirates.landmark
+    speaker: 5
+    dutch: Goed zo! Nu de volgende!
+    english: Well done! Now the next one!
+    dutchClip: {fileID: 8300000, guid: 27748d7092648b543b3e9d6c37c67419, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.landmark.2
+    group: pirates.landmark
+    speaker: 5
+    dutch: Gevonden! Verder maar!
+    english: Found it! Keep going!
+    dutchClip: {fileID: 8300000, guid: 81aa32373962b284496a0f189cf26a03, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.dig.1
+    group: pirates.dig
+    speaker: 5
+    dutch: Hier is de X! Tik op de knop om te graven!
+    english: Here's the X! Tap the button to dig!
+    dutchClip: {fileID: 8300000, guid: 76494fa8735eeb84ab15fb749112d557, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.lock.1
+    group: pirates.lock
+    speaker: 5
+    dutch: "De kist zit op slot! Het slot gaat open met de\u2026"
+    english: "The chest is locked! The lock opens with the\u2026"
+    dutchClip: {fileID: 8300000, guid: cc0382ff592d9274bb13f995945daf89, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.lock_new.1
+    group: pirates.lock_new
+    speaker: 5
+    dutch: 'Dit is een nieuwe letter! Luister maar:'
+    english: 'This is a new letter! Listen:'
+    dutchClip: {fileID: 8300000, guid: b8417f98598a41641a709a97e4a1bfcd, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.lock_right.1
+    group: pirates.lock_right
+    speaker: 5
+    dutch: Klik! Het slot is open!
+    english: Click! The lock is open!
+    dutchClip: {fileID: 8300000, guid: 7eea4be9abf679b4494f9cb4bb8228fe, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.lock_wrong.1
+    group: pirates.lock_wrong
+    speaker: 5
+    dutch: 'Bijna! Luister nog eens:'
+    english: 'Almost! Listen again:'
+    dutchClip: {fileID: 8300000, guid: f1f35367cb939c84bb821bd4baa6c68d, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.count.1
+    group: pirates.count
+    speaker: 5
+    dutch: Goud! Tik op elke munt, dan tellen we samen!
+    english: Gold! Tap every coin and we'll count together!
+    dutchClip: {fileID: 8300000, guid: 7711562c590353b409296af71af4635b, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.how_many.1
+    group: pirates.how_many
+    speaker: 5
+    dutch: Hoeveel munten hebben we gevonden?
+    english: How many coins did we find?
+    dutchClip: {fileID: 8300000, guid: dc174e8d00bc36645a75afc5b27ae449, type: 3}
+    englishClip: {fileID: 0}
+  - key: pirates.victory.1
+    group: pirates.victory
+    speaker: 5
+    dutch: Hoera! We hebben de schat! Piratenfeest!
+    english: Hooray! We found the treasure! Pirate party!
+    dutchClip: {fileID: 8300000, guid: 008a192d9f6d37544961e7341fb06468, type: 3}
+    englishClip: {fileID: 0}
+  - key: quit.ask.1
+    group: quit.ask
+    speaker: 0
+    dutch: Wil je stoppen met dit spel?
+    english: Do you want to stop this game?
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: quit.bye.1
+    group: quit.bye
+    speaker: 0
+    dutch: "Ok\xE9! Dan gaan we weer lekker buiten spelen."
+    english: Okay! Let's go and play outside again.
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: quit.bye.2
+    group: quit.bye
+    speaker: 0
+    dutch: Prima! Je mag altijd weer terugkomen.
+    english: Fine! You can always come back.
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: invite.race.1
+    group: invite.race
+    speaker: 0
+    dutch: Wie doet er mee met de zeepkistrace?
+    english: Who wants to join the soapbox race?
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.welcome.1
+    group: race.welcome
+    speaker: 6
+    dutch: Welkom bij de grote zeepkistrace! Stap maar in je kar!
+    english: Welcome to the big soapbox race! Hop into your cart!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.howto.1
+    group: race.howto
+    speaker: 6
+    dutch: Tik links of rechts om te sturen. Tik op de knop om te springen!
+    english: Tap left or right to steer. Tap the button to jump!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.count3.1
+    group: race.count3
+    speaker: 6
+    dutch: Drie!
+    english: Three!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.count2.1
+    group: race.count2
+    speaker: 6
+    dutch: Twee!
+    english: Two!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.count1.1
+    group: race.count1
+    speaker: 6
+    dutch: "E\xE9n!"
+    english: One!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.go.1
+    group: race.go
+    speaker: 6
+    dutch: Start!
+    english: Go!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.1.1
+    group: race.gate_number.1
+    speaker: 6
+    dutch: "Rij door de \xE9\xE9n!"
+    english: Drive through the one!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.2.1
+    group: race.gate_number.2
+    speaker: 6
+    dutch: Rij door de twee!
+    english: Drive through the two!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.3.1
+    group: race.gate_number.3
+    speaker: 6
+    dutch: Rij door de drie!
+    english: Drive through the three!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.4.1
+    group: race.gate_number.4
+    speaker: 6
+    dutch: Rij door de vier!
+    english: Drive through the four!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.5.1
+    group: race.gate_number.5
+    speaker: 6
+    dutch: Rij door de vijf!
+    english: Drive through the five!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.6.1
+    group: race.gate_number.6
+    speaker: 6
+    dutch: Rij door de zes!
+    english: Drive through the six!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.7.1
+    group: race.gate_number.7
+    speaker: 6
+    dutch: Rij door de zeven!
+    english: Drive through the seven!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.8.1
+    group: race.gate_number.8
+    speaker: 6
+    dutch: Rij door de acht!
+    english: Drive through the eight!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.9.1
+    group: race.gate_number.9
+    speaker: 6
+    dutch: Rij door de negen!
+    english: Drive through the nine!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.10.1
+    group: race.gate_number.10
+    speaker: 6
+    dutch: Rij door de tien!
+    english: Drive through the ten!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_letter.1
+    group: race.gate_letter
+    speaker: 6
+    dutch: "Rij door de letter\u2026"
+    english: "Drive through the letter\u2026"
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_right.1
+    group: race.gate_right
+    speaker: 6
+    dutch: Ja, goed zo!
+    english: Yes, well done!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_right.2
+    group: race.gate_right
+    speaker: 6
+    dutch: Super! Precies goed!
+    english: Super! Exactly right!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_right.3
+    group: race.gate_right
+    speaker: 6
+    dutch: Knap gedaan!
+    english: Nicely done!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_wrong.1
+    group: race.gate_wrong
+    speaker: 6
+    dutch: Bijna! Kijk, daar was hij!
+    english: Almost! Look, there it was!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.crash.1
+    group: race.crash
+    speaker: 6
+    dutch: Boem! Gelukkig is het zacht!
+    english: Boom! Good thing it's soft!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.crash.2
+    group: race.crash
+    speaker: 6
+    dutch: Oeps! Rij maar door!
+    english: Oops! Keep going!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.splash.1
+    group: race.splash
+    speaker: 6
+    dutch: Plons! Lekker nat!
+    english: Splash! Nice and wet!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.animal_cat.1
+    group: race.animal_cat
+    speaker: 6
+    dutch: Kijk uit, een poes!
+    english: Watch out, a cat!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.animal_dog.1
+    group: race.animal_dog
+    speaker: 6
+    dutch: Kijk uit, een hond!
+    english: Watch out, a dog!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.animal_hen.1
+    group: race.animal_hen
+    speaker: 6
+    dutch: Kijk uit, een kip met kuikentjes!
+    english: Watch out, a hen with her chicks!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.animal_rabbit.1
+    group: race.animal_rabbit
+    speaker: 6
+    dutch: Kijk uit, een konijn!
+    english: Watch out, a rabbit!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.ramp.1
+    group: race.ramp
+    speaker: 6
+    dutch: Een schans! Hup, de lucht in!
+    english: A ramp! Up into the air!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.final.1
+    group: race.final
+    speaker: 6
+    dutch: Bijna bij de finish! Zet hem op!
+    english: Almost at the finish! Go for it!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.win.1
+    group: race.win
+    speaker: 6
+    dutch: Jij hebt gewonnen! Hoera voor de kampioen!
+    english: You won! Hooray for the champion!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.second.1
+    group: race.second
+    speaker: 6
+    dutch: Wat een spannende race! Jullie waren allemaal supersnel!
+    english: What an exciting race! You were all super fast!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.end.1
+    group: race.end
+    speaker: 6
+    dutch: Tot de volgende race!
+    english: See you at the next race!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.rival.1
+    group: race.rival
+    speaker: 1
+    dutch: Ik ga je inhalen!
+    english: I'm going to catch you!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.rival.2
+    group: race.rival
+    speaker: 1
+    dutch: Wie is er het snelst?
+    english: Who's the fastest?
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.bump.1
+    group: race.bump
+    speaker: 1
+    dutch: Wiee! Ik draai rondjes!
+    english: Wheee! I'm spinning!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.bump.2
+    group: race.bump
+    speaker: 1
+    dutch: Hihi, botsauto!
+    english: Hehe, bumper car!
+    dutchClip: {fileID: 0}
     englishClip: {fileID: 0}

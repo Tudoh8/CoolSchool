@@ -62,8 +62,10 @@ namespace CoolSchool.Battle
         /// Somebody swings at this one. Returns true when it was a real (confetti) hit,
         /// false when it was blocked, too soon after the last hit, or this one is already down.
         /// Amount is how many hits it counts for (2 with the golden sword).
+        /// With canDefeat false (friendly fighters) it is a wobble only: it never takes the last hit, so only the
+        /// player's sword can make an opponent tumble.
         /// </summary>
-        public bool TakeHit(Vector3 attackerPosition, int amount = 1)
+        public bool TakeHit(Vector3 attackerPosition, int amount = 1, bool canDefeat = true)
         {
             if (!IsAlive || IsStunned) return false;
 
@@ -76,6 +78,7 @@ namespace CoolSchool.Battle
             }
 
             HitsTaken += Mathf.Max(1, amount);
+            if (!canDefeat && canBeDefeated) HitsTaken = Mathf.Min(HitsTaken, hitsToDefeat - 1);
             stunnedUntil = Time.time + stunSeconds;
 
             // Decide first, so a Hit listener can already see IsDefeated and skip its wobble.
@@ -89,6 +92,13 @@ namespace CoolSchool.Battle
 
             if (defeated) Defeated?.Invoke(this);
             return true;
+        }
+
+        /// <summary>Makes this one defeatable after this many hits (the skeleton pirates set it per level).</summary>
+        public void SetHitsToDefeat(int hits)
+        {
+            hitsToDefeat = Mathf.Max(1, hits);
+            canBeDefeated = true;
         }
 
         public void ResetState()

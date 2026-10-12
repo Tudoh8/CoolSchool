@@ -35,6 +35,7 @@ namespace CoolSchool.Characters
         static readonly int DanceId = Animator.StringToHash("Dance");
         static readonly int DancingId = Animator.StringToHash("Dancing");
         static readonly int DanceVariantId = Animator.StringToHash("DanceVariant");
+        static readonly int SittingId = Animator.StringToHash("Sitting");
 
         [SerializeField] Animator animator;
         [SerializeField] float speedDamping = 0.1f;
@@ -52,6 +53,9 @@ namespace CoolSchool.Characters
         float attackLayerUntil = -1f;
         bool blocking;
         Vector3 lastPosition;
+
+        /// <summary>While true the kid stands still in the animator even though the transform moves (riding a ship or a boat).</summary>
+        public bool ForceIdle { get; set; }
 
         void Awake()
         {
@@ -71,7 +75,7 @@ namespace CoolSchool.Characters
             lastPosition = transform.position;
             delta.y = 0f;
 
-            float speed = Time.deltaTime > 0f ? delta.magnitude / Time.deltaTime : 0f;
+            float speed = Time.deltaTime > 0f && !ForceIdle ? delta.magnitude / Time.deltaTime : 0f;
             animator.SetFloat(SpeedId, speed, speedDamping, Time.deltaTime);
 
             RefreshCache();
@@ -142,6 +146,16 @@ namespace CoolSchool.Characters
                 // A trigger nobody used yet would start the dance again.
                 if (HasParameter(DanceId)) animator.ResetTrigger(DanceId);
             }
+        }
+
+        /// <summary>
+        /// Sit on the ground (true), for example in a soapbox cart, or get up again (false). The sit pose wins over
+        /// ForceIdle and walking: it is entered from any state while Sitting is true.
+        /// </summary>
+        public void SetSitting(bool sitting)
+        {
+            if (!HasParameter(SittingId)) return;
+            animator.SetBool(SittingId, sitting);
         }
 
         void SetTrigger(int id)

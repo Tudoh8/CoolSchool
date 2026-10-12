@@ -7,6 +7,7 @@ namespace CoolSchool.Rewards
         Shield,
         Costume,
         Hat,
-        PlushToy
+        PlushToy,
+        Cart
     }
 }

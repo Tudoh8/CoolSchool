@@ -4,6 +4,7 @@ using CoolSchool.Activities;
 using CoolSchool.Battle;
 using CoolSchool.Input;
 using CoolSchool.Player;
+using CoolSchool.World;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
@@ -13,12 +14,15 @@ using static CoolSchool.EditorTools.PlaygroundPrototypeBuilder;
 namespace CoolSchool.EditorTools
 {
     /// <summary>
-    /// Builds the knights arena at the far end of the playground (east, +X): a cardboard castle wall with a gate,
-    /// imagination props, spawn/retreat/entry points, the glowing castle zone, the opponent pool,
-    /// the dragon and the KnightsGame that ties it all together.
-    /// The arena lies along an axis (a flat unit vector pointing from the playground into the arena): every position is
-    /// worked out as a distance along that axis and a distance across it, so the arena can point any cardinal way.
-    /// The castle faces back along the axis, toward the playground, and the dragon waits behind it.
+    /// Builds the knights arena at the far end of the playground (east, +X): a big walk-in cardboard castle
+    /// (the PolygonKids castle pieces scaled 5x: four corner towers, a front wall with a gate that faces the camera,
+    /// two side walls and a back wall with a goblin door), imagination props (flags and torches), the courtyard's
+    /// spawn/retreat/dragon points, the glowing castle zone, the opponent pool, the dragon and the KnightsGame that
+    /// ties it all together. The whole battle happens in the courtyard; the front wall turns see-through
+    /// (CastleCutaway) while the kid is inside, and the dragon flies in over the back wall.
+    /// The camera always looks north (+Z) and the arena lies east, so the castle is laid out directly in world X/Z:
+    /// the gate wall is the south one, the goblin door is on the north wall. Only the ArenaLayout axis helpers
+    /// (which the alien field reuses for its mirror-image field) stay axis-generic.
     /// Two steps, because the NavMesh must be baked after the castle exists but before any character:
     /// BuildCastle (static geometry) and Build (everything alive).
     /// </summary>
@@ -32,20 +36,41 @@ namespace CoolSchool.EditorTools
         const string TelegraphMaterialPath = RootFolder + "/Materials/Telegraph.mat";
         const string FireWarningMeshPath = MeshFolder + "/FireWarningFan.asset";
 
-        // Castle layout. CastleYaw is the extra turn the pieces need to face the playground when the arena lies along +Z
-        // (the pieces face local +Z by default); other axes add their own angle on top.
-        const int CastlePieceCount = 6;
-        const float CastleYaw = 180f;
-        const float GateWidth = 5f;
-        const float PieceGap = 0.05f;
-        const float CastleBackMargin = 10f;
+        const string CastleGhostMaterialPath = RootFolder + "/Materials/CastleGhost.mat";
+
+        // Castle layout. The pieces are PolygonKids cardboard castle pieces, scaled up. Their pivots are at the bottom
+        // centre and "front" is local +Z. Piece 04 (wall panel) is long along local Z; 05 (gate) and 06 (door) are wide along X.
+        const float CastleScale = 5f;
+        /// <summary>Gap between the castle's north edge (tower faces) and the north fence.</summary>
+        const float CastleNorthMargin = 1.5f;
+        /// <summary>Gap between the castle's east edge and the east fence; the rest of the arena's width is room on the playground side.</summary>
+        const float CastleEastMargin = 2f;
+        /// <summary>Panels are stretched this much (metres) beyond their slot so neighbours overlap instead of leaving gaps.</summary>
+        const float PanelOverlap = 0.04f;
+        /// <summary>Half the width of the gate's arch opening, as a fraction of the gate piece's width (0.63 m of 1.27 m at 1x).</summary>
+        const float GateOpeningHalfFraction = 0.25f;
+        const float FlagHeight = 2.2f;
+        const float TorchHeight = 2.0f;
 
         // Dragon.
+        const float DragonEntryHeight = 9f;
         const float DragonHeight = 3.5f;
         const float FireRange = 5f;
         const float FireAngle = 50f;
 
         static readonly PrefabRef DragonPrefab = new PrefabRef("Dragon_LP", "Magic Pig");
+
+        /// <summary>Corner towers in the order north-west, north-east, south-west, south-east.</summary>
+        static readonly PrefabRef[] CastleTowers =
+        {
+            Kids("SM_Prop_Cardboard_Castle_Piece_01"),
+            Kids("SM_Prop_Cardboard_Castle_Piece_02"),
+            Kids("SM_Prop_Cardboard_Castle_Piece_03"),
+            Kids("SM_Prop_Cardboard_Castle_Piece_01"),
+        };
+        static readonly PrefabRef CastlePanel = Kids("SM_Prop_Cardboard_Castle_Piece_04");
+        static readonly PrefabRef CastleGate = Kids("SM_Prop_Cardboard_Castle_Piece_05");
+        static readonly PrefabRef GoblinDoor = Kids("SM_Prop_Cardboard_Castle_Piece_06");
 
         static readonly PrefabRef FlagA = Kids("SM_Prop_Flag_01");
         static readonly PrefabRef FlagB = Kids("SM_Prop_Flag_02");
@@ -68,8 +93,9 @@ namespace CoolSchool.EditorTools
         };
 
         /// <summary>
-        /// Numbers from the castle step that the later steps need. Positions are worked out along the arena's axis
-        /// (from the playground into the arena) and across it; Point turns a pair of them into a world position.
+        /// Numbers from the castle step that the later steps need. The castle itself is described in world X/Z; the
+        /// axis helpers (Axis, Lateral, Point, AxisYaw) turn "along the arena, across it" pairs into world positions,
+        /// which the alien field reuses for its mirror-image layout.
         /// </summary>
         internal sealed class ArenaLayout
         {
@@ -85,9 +111,26 @@ namespace CoolSchool.EditorTools
             public float Start;
             public float End;
 
-            /// <summary>The castle wall's playground-side face and its back, as distances along the axis.</summary>
-            public float CastleFront;
-            public float CastleBack;
+            /// <summary>The "Castle" group that holds every castle piece (the CastleCutaway component goes on it).</summary>
+            public Transform CastleGroup;
+
+            /// <summary>
+            /// The castle in world X/Z: the whole footprint (towers included) and the courtyard inside the four walls
+            /// (any height; used as the cutaway's inside area).
+            /// </summary>
+            public Bounds Footprint;
+            public Bounds Courtyard;
+
+            /// <summary>The gate's centre on the ground, and the middle of the goblin door's courtyard-facing side on the ground.</summary>
+            public Vector3 GatePosition;
+            public Vector3 GoblinDoorFront;
+
+            /// <summary>The z of the back wall's outer (north) face.</summary>
+            public float BackWallOuterZ;
+
+            /// <summary>The front (south) wall's pieces and all their renderers: they go see-through while the kid is inside.</summary>
+            public readonly List<GameObject> FrontPieces = new List<GameObject>();
+            public readonly List<Renderer> FrontRenderers = new List<Renderer>();
 
             public readonly List<GameObject> ImaginationProps = new List<GameObject>();
 
@@ -108,21 +151,6 @@ namespace CoolSchool.EditorTools
             public Vector3 Point(float along, float across)
             {
                 return Axis * along + Lateral * across;
-            }
-
-            /// <summary>How wide the bounds are across the arena.</summary>
-            public float AcrossSize(Bounds bounds)
-            {
-                return Mathf.Abs(Lateral.x) * bounds.size.x + Mathf.Abs(Lateral.z) * bounds.size.z;
-            }
-
-            /// <summary>The nearest and farthest extent of the bounds along the axis.</summary>
-            public void AlongRange(Bounds bounds, out float near, out float far)
-            {
-                float centre = Vector3.Dot(bounds.center, Axis);
-                float half = Mathf.Abs(Axis.x) * bounds.extents.x + Mathf.Abs(Axis.z) * bounds.extents.z;
-                near = centre - half;
-                far = centre + half;
             }
         }
 
@@ -153,107 +181,240 @@ namespace CoolSchool.EditorTools
         // ----- Step 1: static geometry ---------------------------------------------------------
 
         /// <summary>
-        /// The cardboard castle as a wall across the far end of the arena with a gate gap in the middle,
-        /// plus the inactive imagination props (flags on top, torches at the gate).
-        /// axis points from the playground into the arena (flat; snapped to the nearest cardinal direction);
-        /// startDistance and endDistance are where the arena begins and ends along it, measured from the world origin.
+        /// The big cardboard castle (pieces scaled 5x) plus the inactive imagination props (flags on the north towers,
+        /// torches at the gate and the goblin door).
+        /// The castle is a rectangle in world X/Z: corner towers, a south (front) wall of tower, panel, gate, panel, tower
+        /// facing the camera, three stretched panels for each side wall, and stretched panels filling the back (north) wall.
+        /// The towers' outer faces sit CastleNorthMargin inside the north fence (northFenceZ) and CastleEastMargin inside
+        /// the east end of the arena (endDistance, which is the east fence because the arena lies along +X), so the playground
+        /// side gets the extra room. The footprint and the approach strip in front of the gate are reserved (ReservedAreas),
+        /// so no bench or tree ends up there. Pieces are placed by their measured bounds after scaling and turning.
         /// </summary>
-        internal static ArenaLayout BuildCastle(Transform environmentRoot, Vector3 axis, float startDistance, float endDistance)
+        internal static ArenaLayout BuildCastle(Transform environmentRoot, Vector3 axis, float startDistance, float endDistance, float northFenceZ)
         {
             var layout = new ArenaLayout(axis) { Start = startDistance, End = endDistance };
-            float castleDistance = endDistance - CastleBackMargin;
-            layout.CastleFront = castleDistance;
-            layout.CastleBack = castleDistance;
+            if (layout.Axis != Vector3.right)
+                Debug.LogWarning($"CoolSchool: the castle is laid out for an arena along +X, but the axis is {layout.Axis.ToString("0.0")}.");
 
             layout.Root = NewGroup("Arena", environmentRoot);
             Transform castleGroup = NewGroup("Castle", layout.Root);
             Transform propsGroup = NewGroup("ImaginationProps", layout.Root);
+            layout.CastleGroup = castleGroup;
 
-            // The pieces face the playground (back along the axis).
-            Quaternion castleRotation = Quaternion.Euler(0f, CastleYaw + layout.AxisYaw, 0f);
+            GameObject[] towerPrefabs = CastleTowers.Select(LoadPrefab).ToArray();
+            GameObject panelPrefab = LoadPrefab(CastlePanel);
+            GameObject gatePrefab = LoadPrefab(CastleGate);
+            GameObject doorPrefab = LoadPrefab(GoblinDoor);
+            if (towerPrefabs.Any(t => t == null) || panelPrefab == null || gatePrefab == null)
+                Debug.LogError("CoolSchool: some castle pieces are missing; the castle will have gaps (the layout uses the expected sizes).");
 
-            var pieces = new List<GameObject>();
-            var widths = new List<float>();
-            for (int i = 1; i <= CastlePieceCount; i++)
+            // Measure the pieces at their final scale and turn (fallbacks are the 5x sizes of the real pieces).
+            Quaternion southFacing = Quaternion.Euler(0f, 180f, 0f);
+            var towerSize = Vector3.zero;
+            foreach (GameObject towerPrefab in towerPrefabs)
+                towerSize = Vector3.Max(towerSize, MeasureCastlePiece(towerPrefab, castleGroup, southFacing, new Vector3(2.85f, 5.47f, 2.85f)));
+            Vector3 panelSize = MeasureCastlePiece(panelPrefab, castleGroup, Quaternion.identity, new Vector3(0.4f, 3.9f, 5f));
+            Vector3 gateSize = MeasureCastlePiece(gatePrefab, castleGroup, southFacing, new Vector3(6.35f, 4.3f, 0.26f));
+            Vector3 doorSize = MeasureCastlePiece(doorPrefab, castleGroup, southFacing, new Vector3(2.1f, 3.1f, 0.15f));
+
+            // The panel is long along one local axis (Z for the real piece); its length fills the spans, its thickness sets the wall.
+            bool panelLongZ = panelSize.z >= panelSize.x;
+            float panelLength = Mathf.Max(panelSize.x, panelSize.z);
+            float panelHalfThickness = Mathf.Min(panelSize.x, panelSize.z) * 0.5f;
+
+            // The front wall (tower, panel, gate, panel, tower) sets the width, three side panels set the depth.
+            float width = 2f * towerSize.x + 2f * panelLength + gateSize.x;
+            float depth = 2f * towerSize.z + 3f * panelLength;
+            float east = endDistance - CastleEastMargin;
+            float west = east - width;
+            float north = northFenceZ - CastleNorthMargin;
+            float south = north - depth;
+            float centreX = (west + east) * 0.5f;
+
+            // The walls run through the middles of the corner towers.
+            float wallWest = west + towerSize.x * 0.5f;
+            float wallEast = east - towerSize.x * 0.5f;
+            float wallSouth = south + towerSize.z * 0.5f;
+            float wallNorth = north - towerSize.z * 0.5f;
+
+            layout.Footprint = new Bounds(new Vector3(centreX, towerSize.y * 0.5f, (south + north) * 0.5f), new Vector3(width, towerSize.y, depth));
+            Vector3 courtyardMin = new Vector3(wallWest + panelHalfThickness, 0f, wallSouth + panelHalfThickness);
+            Vector3 courtyardMax = new Vector3(wallEast - panelHalfThickness, 20f, wallNorth - panelHalfThickness);
+            layout.Courtyard = new Bounds((courtyardMin + courtyardMax) * 0.5f, courtyardMax - courtyardMin);
+            layout.GatePosition = new Vector3(centreX, 0f, wallSouth);
+            layout.BackWallOuterZ = wallNorth + panelHalfThickness;
+
+            // Nothing from the scatter steps may stand on the castle (plus a margin) or in the way up to the gate.
+            ReservedAreas.Add(new Rect(west - 2f, south - 2f, width + 4f, depth + 4f));
+            float approachWidth = gateSize.x + 2f;
+            ReservedAreas.Add(new Rect(centreX - approachWidth * 0.5f, south - 6f, approachWidth, 6f));
+
+            // Corner towers: north-west, north-east, south-west, south-east.
+            var towerSpots = new[]
             {
-                GameObject prefab = LoadPrefab(Kids($"SM_Prop_Cardboard_Castle_Piece_{i:00}"));
-                if (prefab == null) continue;
+                new Vector2(wallWest, wallNorth), new Vector2(wallEast, wallNorth),
+                new Vector2(wallWest, wallSouth), new Vector2(wallEast, wallSouth),
+            };
+            var towers = new GameObject[towerSpots.Length];
+            for (int i = 0; i < towers.Length; i++)
+            {
+                if (towerPrefabs[i] == null) continue;
 
-                GameObject piece = Spawn(prefab, castleGroup);
-                piece.transform.rotation = castleRotation;
-                pieces.Add(piece);
-                widths.Add(TryGetBounds(piece, out Bounds bounds) ? layout.AcrossSize(bounds) : 2f);
+                towers[i] = Spawn(towerPrefabs[i], castleGroup);
+                towers[i].transform.localScale *= CastleScale;
+                towers[i].transform.rotation = southFacing;
+                AlignToBounds(towers[i], towerSpots[i].x, towerSpots[i].y, 0f, false);
+                FinishEnvironmentObject(towers[i]);
             }
 
-            if (pieces.Count == 0) return layout;
-
-            // Half the pieces on each side of the gate, in order outwards.
-            int leftCount = pieces.Count / 2;
-            float leftTotal = 0f;
-            for (int i = 0; i < leftCount; i++) leftTotal += widths[i] + PieceGap;
-
-            float cursor = -GateWidth * 0.5f - leftTotal;
-            for (int i = 0; i < pieces.Count; i++)
+            // Front wall: panels on both sides of the gate. The gate's front is local +Z, so it turns to face the camera (south, -Z).
+            float gateLeft = centreX - gateSize.x * 0.5f;
+            float gateRight = centreX + gateSize.x * 0.5f;
+            var frontPieces = new List<GameObject>();
+            frontPieces.AddRange(FillSpan(panelPrefab, castleGroup, new Vector3(west + towerSize.x, 0f, wallSouth), new Vector3(gateLeft, 0f, wallSouth), panelLength, panelLongZ));
+            frontPieces.AddRange(FillSpan(panelPrefab, castleGroup, new Vector3(gateRight, 0f, wallSouth), new Vector3(east - towerSize.x, 0f, wallSouth), panelLength, panelLongZ));
+            if (gatePrefab != null)
             {
-                if (i == leftCount) cursor = GateWidth * 0.5f;
-
-                Vector3 spot = layout.Point(castleDistance, cursor + widths[i] * 0.5f);
-                AlignToBounds(pieces[i], spot.x, spot.z, 0f, false);
-                FinishEnvironmentObject(pieces[i]);
-                cursor += widths[i] + PieceGap;
+                GameObject gate = Spawn(gatePrefab, castleGroup);
+                gate.transform.localScale *= CastleScale;
+                gate.transform.rotation = southFacing;
+                AlignToBounds(gate, centreX, wallSouth, 0f, false);
+                // The prefab's collider is convex, and its hull fills the arch: walking and the NavMesh need the real shape.
+                foreach (MeshCollider collider in gate.GetComponentsInChildren<MeshCollider>(true))
+                    collider.convex = false;
+                FinishEnvironmentObject(gate);
+                frontPieces.Add(gate);
             }
+            frontPieces.AddRange(towers.Skip(2).Where(t => t != null));
 
-            // The wall's real front (playground side) and back, measured after placement.
-            float front = float.MaxValue;
-            float back = float.MinValue;
-            foreach (GameObject piece in pieces)
+            // Side walls (north to south between the towers) and the back wall (east to west).
+            FillSpan(panelPrefab, castleGroup, new Vector3(wallWest, 0f, south + towerSize.z), new Vector3(wallWest, 0f, north - towerSize.z), panelLength, panelLongZ);
+            FillSpan(panelPrefab, castleGroup, new Vector3(wallEast, 0f, south + towerSize.z), new Vector3(wallEast, 0f, north - towerSize.z), panelLength, panelLongZ);
+            FillSpan(panelPrefab, castleGroup, new Vector3(west + towerSize.x, 0f, wallNorth), new Vector3(east - towerSize.x, 0f, wallNorth), panelLength, panelLongZ);
+
+            // The front wall is see-through while the kid is inside: the camera must not pull in against it, so it goes on the
+            // Ignore Raycast layer (colliders stay, so it still blocks walking and is still baked into the NavMesh).
+            int ignoreRaycast = LayerMask.NameToLayer("Ignore Raycast");
+            foreach (GameObject piece in frontPieces)
             {
-                if (!TryGetBounds(piece, out Bounds bounds)) continue;
-                layout.AlongRange(bounds, out float near, out float far);
-                front = Mathf.Min(front, near);
-                back = Mathf.Max(back, far);
+                SetLayerRecursive(piece, ignoreRaycast);
+                layout.FrontRenderers.AddRange(piece.GetComponentsInChildren<Renderer>(true));
             }
-            if (front < back)
-            {
-                layout.CastleFront = front;
-                layout.CastleBack = back;
-            }
+            layout.FrontPieces.AddRange(frontPieces);
 
-            PlaceImaginationProps(layout, propsGroup, pieces);
+            // The goblin door: decoration against the back wall's inner face at its middle, facing the courtyard (south).
+            // No colliders, so the NavMesh reaches right up to the wall.
+            float doorFrontZ = wallNorth - panelHalfThickness - doorSize.z - 0.02f;
+            if (doorPrefab != null)
+            {
+                GameObject door = Spawn(doorPrefab, castleGroup);
+                door.transform.localScale *= CastleScale;
+                door.transform.rotation = southFacing;
+                AlignToBounds(door, centreX, wallNorth - panelHalfThickness - doorSize.z * 0.5f - 0.02f, 0f, false);
+                foreach (Collider collider in door.GetComponentsInChildren<Collider>(true))
+                    Object.DestroyImmediate(collider);
+                if (TryGetBounds(door, out Bounds doorBounds)) doorFrontZ = doorBounds.min.z;
+            }
+            layout.GoblinDoorFront = new Vector3(centreX, 0f, doorFrontZ);
+
+            PlaceImaginationProps(layout, propsGroup, towers[0], towers[1], gateSize.x, doorSize.x, wallSouth - panelHalfThickness);
             return layout;
         }
 
-        /// <summary>Flags on the two outer pieces, a torch on each side of the gate. All start hidden.</summary>
-        static void PlaceImaginationProps(ArenaLayout layout, Transform parent, List<GameObject> pieces)
+        /// <summary>
+        /// The size of a castle piece at its final scale and turn, measured on a temporary instance;
+        /// the fallback is used when the prefab is missing.
+        /// </summary>
+        static Vector3 MeasureCastlePiece(GameObject prefab, Transform parent, Quaternion rotation, Vector3 fallback)
+        {
+            if (prefab == null) return fallback;
+
+            GameObject probe = Spawn(prefab, parent);
+            probe.transform.localScale *= CastleScale;
+            probe.transform.rotation = rotation;
+            Vector3 size = TryGetBounds(probe, out Bounds bounds) ? bounds.size : fallback;
+            Object.DestroyImmediate(probe);
+            return size;
+        }
+
+        /// <summary>
+        /// Fills a straight wall span between two ground points with n = round(span / panelLength) panels, each stretched
+        /// along its length so the span is exactly filled. Walls running north-south are yaw 0 and east-west ones yaw 90,
+        /// because the real panel is long along its local Z.
+        /// </summary>
+        static List<GameObject> FillSpan(GameObject prefab, Transform parent, Vector3 from, Vector3 to, float panelLength, bool panelLongZ)
+        {
+            var panels = new List<GameObject>();
+            Vector3 delta = to - from;
+            float span = delta.magnitude;
+            if (prefab == null || span < 0.1f) return panels;
+
+            Vector3 direction = delta / span;
+            bool eastWest = Mathf.Abs(direction.x) > Mathf.Abs(direction.z);
+            float yaw = eastWest == panelLongZ ? 90f : 0f;
+
+            int count = Mathf.Max(1, Mathf.RoundToInt(span / panelLength));
+            float slot = span / count;
+            float stretch = (slot + PanelOverlap) / panelLength;
+
+            for (int i = 0; i < count; i++)
+            {
+                GameObject panel = Spawn(prefab, parent);
+                Vector3 scale = panel.transform.localScale * CastleScale;
+                if (panelLongZ) scale.z *= stretch;
+                else scale.x *= stretch;
+                panel.transform.localScale = scale;
+                panel.transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+
+                Vector3 centre = from + direction * (slot * (i + 0.5f));
+                AlignToBounds(panel, centre.x, centre.z, 0f, false);
+                FinishEnvironmentObject(panel);
+                panels.Add(panel);
+            }
+            return panels;
+        }
+
+        /// <summary>
+        /// Flags on the two north towers, torches on each side of the gate (outside) and of the goblin door (inside).
+        /// All face the camera (south) and start hidden.
+        /// </summary>
+        static void PlaceImaginationProps(ArenaLayout layout, Transform parent, GameObject towerNorthWest, GameObject towerNorthEast,
+            float gateWidth, float doorWidth, float frontFaceZ)
         {
             GameObject flagA = LoadPrefab(FlagA);
             GameObject flagB = LoadPrefab(FlagB);
             GameObject torch = LoadPrefab(Torch);
 
-            // The props were made facing +Z; turn them with the arena.
-            Quaternion turn = Quaternion.Euler(0f, layout.AxisYaw, 0f);
+            Quaternion south = Quaternion.Euler(0f, 180f, 0f);
 
-            void PlaceFlag(GameObject prefab, GameObject piece)
+            void PlaceAt(GameObject prefab, float height, Vector3 spot)
             {
-                if (prefab == null || !TryGetBounds(piece, out Bounds bounds)) return;
-
-                GameObject flag = Spawn(prefab, parent);
-                flag.transform.rotation = turn;
-                AlignToBounds(flag, bounds.center.x, bounds.center.z, bounds.max.y, false);
-                HideProp(layout, flag);
+                GameObject prop = Spawn(prefab, parent);
+                prop.transform.rotation = south;
+                if (TryGetBounds(prop, out Bounds bounds) && bounds.size.y > 0.01f)
+                    prop.transform.localScale *= height / bounds.size.y;
+                AlignToBounds(prop, spot.x, spot.z, spot.y, false);
+                HideProp(layout, prop);
             }
 
-            PlaceFlag(flagA, pieces[0]);
-            if (pieces.Count > 1) PlaceFlag(flagB, pieces[pieces.Count - 1]);
+            void PlaceFlag(GameObject prefab, GameObject tower)
+            {
+                if (prefab == null || tower == null || !TryGetBounds(tower, out Bounds bounds)) return;
+                PlaceAt(prefab, FlagHeight, new Vector3(bounds.center.x, bounds.max.y, bounds.center.z));
+            }
+
+            PlaceFlag(flagA, towerNorthWest);
+            PlaceFlag(flagB, towerNorthEast);
 
             if (torch == null) return;
+
+            float gateX = layout.GatePosition.x;
+            float gateSide = gateWidth * GateOpeningHalfFraction + 0.8f;
+            float doorSide = doorWidth * 0.5f + 0.8f;
             foreach (float side in new[] { -1f, 1f })
             {
-                GameObject item = Spawn(torch, parent);
-                item.transform.rotation = turn;
-                Vector3 spot = layout.Point(layout.CastleFront - 0.5f, side * (GateWidth * 0.5f + 0.6f));
-                AlignToBounds(item, spot.x, spot.z, 0f, false);
-                HideProp(layout, item);
+                PlaceAt(torch, TorchHeight, new Vector3(gateX + side * gateSide, 0f, frontFaceZ - 1f));
+                PlaceAt(torch, TorchHeight, new Vector3(gateX + side * doorSide, 0f, layout.GoblinDoorFront.z - 0.5f));
             }
         }
 
@@ -270,7 +431,7 @@ namespace CoolSchool.EditorTools
         // ----- Step 2: everything alive --------------------------------------------------------
 
         /// <summary>
-        /// Creates the points, the castle zone, the opponent pool, the dragon and the KnightsGame.
+        /// Creates the points, the castle zone, the cutaway, the opponent pool, the dragon and the KnightsGame.
         /// Call after the NavMesh is baked and after the player and allies exist.
         /// </summary>
         internal static ArenaResult Build(ArenaLayout layout, ArenaInputs inputs)
@@ -279,40 +440,100 @@ namespace CoolSchool.EditorTools
             Transform arena = layout.Root != null ? layout.Root : new GameObject("Arena").transform;
             Transform points = NewGroup("Points", arena);
 
-            // Spawn points just inside the gate, retreat and dragon entry behind the castle (further along the axis).
-            float spawnAlong = layout.CastleBack + 1.2f;
+            // Goblins pop out of the door in the back wall and run home through it. The dragon lands in the middle of
+            // the courtyard (a little north of centre) and starts high up behind the back wall, so it flies in over it.
+            float courtyardX = layout.Courtyard.center.x;
+            Vector3 doorFront = layout.GoblinDoorFront;
             var spawns = new Transform[4];
             for (int i = 0; i < spawns.Length; i++)
-                spawns[i] = NewPoint($"OpponentSpawn_{i + 1}", points, layout.Point(spawnAlong, -1.5f + i));
+                spawns[i] = NewPoint($"OpponentSpawn_{i + 1}", points, new Vector3(courtyardX - 1.5f + i, 0f, doorFront.z - 1.8f));
 
-            float retreatAlong = Mathf.Min(layout.CastleBack + 4f, layout.End - 1.5f);
-            float entryAlong = Mathf.Min(layout.CastleBack + 6.5f, layout.End - 0.8f);
-            Transform retreat = NewPoint("RetreatPoint", points, layout.Point(retreatAlong, 0f));
-            Transform entry = NewPoint("DragonEntry", points, layout.Point(entryAlong, 0f));
-            float centerAlong = Mathf.Lerp(layout.Start, layout.CastleFront, 0.55f);
-            Transform center = NewPoint("ArenaCenter", points, layout.Point(centerAlong, 0f));
+            Transform retreat = NewPoint("RetreatPoint", points, new Vector3(doorFront.x, 0f, doorFront.z - 0.8f));
+            Transform entry = NewPoint("DragonEntry", points, new Vector3(courtyardX, DragonEntryHeight, layout.BackWallOuterZ + 8f));
+            Transform center = NewPoint("ArenaCenter", points, new Vector3(courtyardX, 0f, layout.Courtyard.center.z + 1f));
 
             var game = new GameObject("KnightsGame").AddComponent<KnightsGame>();
             game.transform.SetParent(arena, false);
 
-            // In front of the castle, on the playground side: the first thing the kid walks into when coming from the playground.
+            // Inside the courtyard, a few steps past the gate: walking in through the gate starts the battle.
             Material ringMaterial = CreateGlowMaterial(ZoneRingMaterialPath, new Color(0.35f, 0.55f, 1f), 0.4f);
-            ActivityZone castleZone = CreateActivityZone("CastleZone", arena, layout.Point(layout.Start + 3.5f, 0f), 1.8f, game, ringMaterial,
+            Vector3 zonePosition = new Vector3(layout.GatePosition.x, 0f, layout.Courtyard.min.z + 3f);
+            ActivityZone castleZone = CreateActivityZone("CastleZone", arena, zonePosition, 2.0f, game, ringMaterial,
                 ActivityBeaconBuilder.KnightsBeacon);
+
+            BuildCutaway(layout);
 
             BattleOpponentAI[] opponents = CreateOpponents(arena, spawns, inputs, out WeaponHolder[] opponentHolders);
 
-            DragonBoss dragon = CreateDragon(arena, entry, -layout.Axis, inputs, result);
+            // The dragon waits high behind the castle, facing the courtyard (south).
+            DragonBoss dragon = CreateDragon(arena, entry, Vector3.back, inputs, result);
 
             WireGame(game, layout, inputs, spawns, retreat, entry, center, opponents, dragon,
                 inputs.HeroWeaponHolders.Concat(opponentHolders).ToArray());
 
-            Debug.Log($"CoolSchool arena: centre {center.position.ToString("0.00")}, castle zone {castleZone.transform.position.ToString("0.00")}, "
-                + $"castle at {layout.Point(layout.CastleFront, 0f).ToString("0.00")}..{layout.Point(layout.CastleBack, 0f).ToString("0.00")} "
-                + $"facing {(-layout.Axis).ToString("0.0")} (toward the playground), arena from {layout.Point(layout.Start, 0f).ToString("0.0")} "
-                + $"to {layout.Point(layout.End, 0f).ToString("0.0")} along {layout.Axis.ToString("0.0")}, dragon enters at {entry.position.ToString("0.00")} "
-                + $"facing {(-layout.Axis).ToString("0.0")}.");
+            Bounds footprint = layout.Footprint;
+            Debug.Log($"CoolSchool arena: castle footprint x {footprint.min.x:0.0}..{footprint.max.x:0.0}, z {footprint.min.z:0.0}..{footprint.max.z:0.0} "
+                + $"(gate {layout.GatePosition.ToString("0.0")} facing south, goblin door {doorFront.ToString("0.0")}), "
+                + $"courtyard x {layout.Courtyard.min.x:0.0}..{layout.Courtyard.max.x:0.0}, z {layout.Courtyard.min.z:0.0}..{layout.Courtyard.max.z:0.0}, "
+                + $"castle zone {castleZone.transform.position.ToString("0.0")}, dragon lands at {center.position.ToString("0.0")} "
+                + $"and enters at {entry.position.ToString("0.0")}, arena from {layout.Point(layout.Start, 0f).ToString("0.0")} "
+                + $"to {layout.Point(layout.End, 0f).ToString("0.0")}.");
             return result;
+        }
+
+        /// <summary>
+        /// The CastleCutaway on the castle group: the front wall's renderers, the ghost material and the courtyard as the inside area.
+        /// </summary>
+        static void BuildCutaway(ArenaLayout layout)
+        {
+            if (layout.CastleGroup == null || layout.FrontRenderers.Count == 0) return;
+
+            var cutaway = layout.CastleGroup.gameObject.AddComponent<CastleCutaway>();
+            SetObjectArray(cutaway, "frontRenderers", layout.FrontRenderers);
+            SetObject(cutaway, "ghostMaterial", CreateCastleGhostMaterial(layout.FrontRenderers[0].sharedMaterial));
+            SetBounds(cutaway, "insideArea", layout.Courtyard);
+        }
+
+        /// <summary>
+        /// An alpha-blended copy of the castle's cardboard material, for the front wall's see-through state.
+        /// If the castle material is not URP/Lit (the material upgrade did not reach it), a URP/Lit one is made
+        /// with the same base texture and colour.
+        /// </summary>
+        static Material CreateCastleGhostMaterial(Material source)
+        {
+            Material ghost;
+            if (source != null && source.shader != null && source.shader.name == "Universal Render Pipeline/Lit")
+            {
+                ghost = new Material(source);
+            }
+            else
+            {
+                Shader lit = Shader.Find("Universal Render Pipeline/Lit");
+                if (lit == null)
+                {
+                    Debug.LogError("CoolSchool: URP/Lit shader not found; the castle has no ghost material.");
+                    return null;
+                }
+
+                Debug.LogWarning($"CoolSchool: the castle material uses '{(source != null && source.shader != null ? source.shader.name : "no shader")}', "
+                    + "not URP/Lit; the ghost material is built from its texture and colour.");
+                ghost = new Material(lit);
+                if (source != null)
+                {
+                    Texture texture = source.HasProperty("_BaseMap") ? source.GetTexture("_BaseMap")
+                        : source.HasProperty("_MainTex") ? source.GetTexture("_MainTex") : null;
+                    ghost.SetTexture("_BaseMap", texture);
+                    if (source.HasProperty("_BaseColor")) ghost.SetColor("_BaseColor", source.GetColor("_BaseColor"));
+                    else if (source.HasProperty("_Color")) ghost.SetColor("_BaseColor", source.GetColor("_Color"));
+                }
+            }
+
+            ghost.name = System.IO.Path.GetFileNameWithoutExtension(CastleGhostMaterialPath);
+            BattleEffectsBuilder.SetAlphaBlended(ghost);
+            Color color = ghost.GetColor("_BaseColor");
+            color.a = 1f;
+            ghost.SetColor("_BaseColor", color);
+            return SaveMaterial(ghost, CastleGhostMaterialPath);
         }
 
         static Transform NewPoint(string name, Transform parent, Vector3 position)
@@ -341,6 +562,7 @@ namespace CoolSchool.EditorTools
             SetObjectArray(game, "allies", inputs.Allies);
             SetObjectArray(game, "weaponHolders", holders);
             SetFloat(game, "victorySeconds", 4f);
+            SetBool(game, "dragonFliesIn", true);
         }
 
         // ----- Zone ----------------------------------------------------------------------------
@@ -540,7 +762,7 @@ namespace CoolSchool.EditorTools
             SetFloat(boss, "fireRange", FireRange);
             SetFloat(boss, "fireAngle", FireAngle);
 
-            // Waiting behind the castle, facing the arena (back along the arena axis, toward the playground).
+            // Waiting high up behind the castle, facing the courtyard.
             root.transform.SetPositionAndRotation(entry.position, Quaternion.LookRotation(facing, Vector3.up));
             SetLayerRecursive(root, inputs.KidsLayer);
             root.SetActive(false);

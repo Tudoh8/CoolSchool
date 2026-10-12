@@ -23,6 +23,8 @@ namespace CoolSchool.Voice
         [SerializeField, Range(0.5f, 2f)] float kidPitch = 1.22f;
         [SerializeField, Range(0.5f, 2f)] float goblinPitch = 1.35f;
         [SerializeField, Range(0.5f, 2f)] float alienPitch = 1.5f;
+        [SerializeField, Range(0.5f, 2f)] float parrotPitch = 1.45f;
+        [SerializeField, Range(0.5f, 2f)] float announcerPitch = 1.0f;
 
         const int MaxWaiting = 2;
         const float RepeatBlockSeconds = 1.5f;
@@ -40,6 +42,9 @@ namespace CoolSchool.Voice
         /// <summary>Who says the line that is playing now. Teacher when nothing is playing (check IsSpeaking first).</summary>
         public Speaker CurrentSpeaker => current != null ? current.speaker : Speaker.Teacher;
 
+        /// <summary>The pitch the teacher is played at, for other audio sources that speak with her voice.</summary>
+        public float TeacherPitch => teacherPitch;
+
         VoiceLine current;
         float currentEndTime;
         readonly Queue<VoiceLine> waiting = new Queue<VoiceLine>();
@@ -53,6 +58,25 @@ namespace CoolSchool.Voice
         public static void Say(string group, bool interrupt = false)
         {
             if (Instance != null) Instance.Request(group, interrupt);
+        }
+
+        /// <summary>
+        /// Looks up a line of the group in the current language without playing it, for a caller with its own audio source
+        /// (the quit prompt, which must speak while the game is frozen). The clip is null when it has not been recorded yet.
+        /// </summary>
+        public static bool TryGetLine(string group, out AudioClip clip, out string text)
+        {
+            clip = null;
+            text = null;
+            if (Instance == null || Instance.table == null) return false;
+
+            VoiceLine line = Instance.table.Pick(group);
+            if (line == null) return false;
+
+            GameLanguage language = LanguageSettings.Current;
+            clip = line.ClipFor(language);
+            text = line.TextFor(language);
+            return true;
         }
 
         void Awake()
@@ -120,7 +144,7 @@ namespace CoolSchool.Voice
         bool IsDrownedOut(VoiceLine line, bool interrupt)
         {
             if (interrupt || current == null || current.speaker != Speaker.Teacher) return false;
-            return line.speaker == Speaker.Kid || line.speaker == Speaker.Goblin || line.speaker == Speaker.Alien;
+            return line.speaker == Speaker.Kid || line.speaker == Speaker.Goblin || line.speaker == Speaker.Alien || line.speaker == Speaker.Parrot || line.speaker == Speaker.Announcer;
         }
 
         void Play(VoiceLine line)
@@ -157,6 +181,8 @@ namespace CoolSchool.Voice
                 case Speaker.Kid: return kidPitch;
                 case Speaker.Goblin: return goblinPitch;
                 case Speaker.Alien: return alienPitch;
+                case Speaker.Parrot: return parrotPitch;
+                case Speaker.Announcer: return announcerPitch;
                 case Speaker.Narrator: return narratorPitch;
                 default: return teacherPitch;
             }

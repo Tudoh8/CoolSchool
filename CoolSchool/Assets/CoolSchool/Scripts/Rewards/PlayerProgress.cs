@@ -29,6 +29,24 @@ namespace CoolSchool.Rewards
         public int shopLevel = 1;
         public bool shopHowtoHeard;
 
+        // Pirate cove: the treasure coins counted so far in total (the trophy chest by the dock fills up with them).
+        public int pirateCoinsTotal;
+
+        // Soapbox race: whether the how-to line has been heard once, and the coins collected in all races so far.
+        public bool raceHowtoHeard;
+        public int raceCoinsTotal;
+
+        // The child's name: lowercase letters a-z only, at most 12. Empty means not set. Set through ProgressStore.SetChildName.
+        public string childName = "";
+
+        // The letters lesson: letters already introduced (in order), first-try-correct counts per letter
+        // (SkillLevel.skill is the letter, SkillLevel.level its count), the lessons since the last new letter,
+        // and which subject the classroom taught last ("numbers" or "letters") so the two alternate.
+        public List<string> lettersIntroduced = new List<string>();
+        public List<SkillLevel> letterScores = new List<SkillLevel>();
+        public int lessonsSinceNewLetter;
+        public string lastLessonSubject = "";
+
         public bool IsUnlocked(string id)
         {
             return unlockedItems != null && unlockedItems.Contains(id);

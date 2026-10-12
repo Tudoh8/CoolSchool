@@ -49,7 +49,9 @@ namespace CoolSchool.Activities
 
             if (!IsPlayerInside())
             {
-                armed = true;
+                // Only re-arm while idle: an activity that teleports the kid away and back into the circle
+                // (the ice cream shop) must not count as walking out, or it would start again right away.
+                if (idle) armed = true;
                 return;
             }
 
@@ -57,8 +59,16 @@ namespace CoolSchool.Activities
             {
                 armed = false;
                 Sfx.Play("zone.enter", transform.position);
-                manager.StartActivity(activity);
+                manager.StartActivity(ChooseActivity());
             }
+        }
+
+        /// <summary>The zone's own activity, unless a selector on this object picks another one (e.g. the other lesson).</summary>
+        Activity ChooseActivity()
+        {
+            var selector = GetComponent<IActivitySelector>();
+            Activity chosen = selector != null ? selector.Select(activity) : null;
+            return chosen != null ? chosen : activity;
         }
 
         void OnDisable()

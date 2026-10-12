@@ -40,6 +40,8 @@ namespace CoolSchool.Battle
         [SerializeField] DragonBoss dragon;
         [SerializeField] Transform dragonEntry;
         [SerializeField] Transform arenaCenter;
+        [Tooltip("The dragon swoops in through the air and lands. Off: it walks in along the ground.")]
+        [SerializeField] bool dragonFliesIn = true;
 
         [Header("Knight classmates")]
         [SerializeField] KnightAllyAI[] allies;
@@ -68,6 +70,8 @@ namespace CoolSchool.Battle
         Coroutine flowRoutine;
         Coroutine goldenRoutine;
         bool dragonFlewAway;
+        bool goldenSwordUsed;
+        bool finished;
         bool quitting;
         DragonBoss subscribedDragon;
 
@@ -79,6 +83,8 @@ namespace CoolSchool.Battle
             if (playerInput != null) playerInput.enabled = true;
             if (actionButton != null) actionButton.SetIcon(swordIcon);
             bool goldenSword = PowerUps.TryConsume(PowerUps.GoldenSword);
+            goldenSwordUsed = goldenSword;
+            finished = false;
             if (goldenSword) SetGoldenSword(true);
             SetWeapons(true);
             if (goldenSword)
@@ -122,6 +128,10 @@ namespace CoolSchool.Battle
             ResetHittables();
 
             if (imagination != null) imagination.Play(false);
+
+            // Stopped early (the back button): the golden sword was not really used, so he keeps it for the next time.
+            if (goldenSwordUsed && !finished) PowerUps.Restore(PowerUps.GoldenSword);
+            goldenSwordUsed = false;
         }
 
         void OnApplicationQuit()
@@ -151,6 +161,7 @@ namespace CoolSchool.Battle
             yield return RunDragon();
 
             // Hooray!
+            finished = true;
             CheerAll();
             BattleEffects.Confetti(PlayerPosition() + Vector3.up * 1.5f);
             onVictory?.Invoke();
@@ -179,7 +190,9 @@ namespace CoolSchool.Battle
                 if (opponent == null) opponent = PickOpponent(wave, false);
                 if (opponent == null) break;
 
-                opponent.Activate(SpawnPosition(i), retreatPoint);
+                Vector3 spawnPosition = SpawnPosition(i);
+                opponent.Activate(spawnPosition, retreatPoint);
+                BattleEffects.Sparkle(spawnPosition + Vector3.up);
                 wave.Add(opponent);
                 yield return new WaitForSeconds(SpawnGapSeconds);
             }
@@ -205,7 +218,8 @@ namespace CoolSchool.Battle
 
             Vector3 center = arenaCenter != null ? arenaCenter.position : PlayerPosition();
             Vector3 entry = dragonEntry != null ? dragonEntry.position : center + Vector3.forward * 10f;
-            dragon.Enter(entry, center);
+            if (dragonFliesIn) dragon.FlyIn(entry, center);
+            else dragon.Enter(entry, center);
 
             while (!dragonFlewAway)
                 yield return null;

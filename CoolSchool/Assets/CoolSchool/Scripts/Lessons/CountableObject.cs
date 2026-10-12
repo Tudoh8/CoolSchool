@@ -22,6 +22,8 @@ namespace CoolSchool.Lessons
         const float AppearSeconds = 0.35f;
         const float PulseSpeed = 7f;
         const float PulseAmount = 0.16f;
+        const float WobbleSeconds = 0.5f;
+        const float WobbleDegrees = 22f;
 
         static readonly Color LabelColor = new Color(1f, 0.93f, 0.45f, 1f);
         static readonly Color LabelOutline = new Color(0.25f, 0.12f, 0.02f, 1f);
@@ -44,6 +46,7 @@ namespace CoolSchool.Lessons
         float topHeight = 0.35f;
         Coroutine motion;
         Coroutine pulse;
+        bool wobbling;
         Transform label;
         Text labelText;
 
@@ -100,6 +103,22 @@ namespace CoolSchool.Lessons
             ShowNumber(shownNumber);
             BattleEffects.Sparkle(transform.position + Vector3.up * topHeight);
             StartMotion(PopRoutine());
+        }
+
+        /// <summary>A happy hop and sparkle without counting: for props that are not counted, like the words of the letters lesson.</summary>
+        public void Hop()
+        {
+            Highlight(false);
+            BattleEffects.Sparkle(transform.position + Vector3.up * topHeight);
+            StartMotion(PopRoutine());
+        }
+
+        /// <summary>A friendly sideways wobble for a wrong pick. Never red, never a buzzer.</summary>
+        public void Wobble()
+        {
+            if (!isActiveAndEnabled || wobbling) return;
+
+            StartCoroutine(WobbleRoutine());
         }
 
         /// <summary>Changes the number above the toy without any fuss.</summary>
@@ -214,6 +233,21 @@ namespace CoolSchool.Lessons
             done?.Invoke();
         }
 
+        IEnumerator WobbleRoutine()
+        {
+            wobbling = true;
+            Quaternion start = transform.rotation;
+            for (float elapsed = 0f; elapsed < WobbleSeconds; elapsed += Time.deltaTime)
+            {
+                float angle = LessonMotion.DampedWobble(elapsed / WobbleSeconds, 3f) * WobbleDegrees;
+                transform.rotation = start * Quaternion.Euler(0f, angle, 0f);
+                yield return null;
+            }
+
+            transform.rotation = start;
+            wobbling = false;
+        }
+
         IEnumerator PulseRoutine()
         {
             while (true)
@@ -276,7 +310,7 @@ namespace CoolSchool.Lessons
 
         // ----- Tap box ---------------------------------------------------------------------------
 
-        /// <summary>Swaps the toy's own colliders for one roomy box, so small fingers do not miss.</summary>
+        /// <summary>Swaps the toy's own colliders for one roomy box, so small fingers do not miss. It is wider but not taller, so it does not cover the toy behind.</summary>
         void BuildHitBox()
         {
             foreach (Collider existing in GetComponentsInChildren<Collider>(true))
@@ -288,9 +322,9 @@ namespace CoolSchool.Lessons
             var box = gameObject.AddComponent<BoxCollider>();
             box.center = transform.InverseTransformPoint(bounds.center);
             box.size = new Vector3(
-                bounds.size.x / Mathf.Max(0.0001f, Mathf.Abs(scale.x)),
+                bounds.size.x / Mathf.Max(0.0001f, Mathf.Abs(scale.x)) * HitBoxGrowth,
                 bounds.size.y / Mathf.Max(0.0001f, Mathf.Abs(scale.y)),
-                bounds.size.z / Mathf.Max(0.0001f, Mathf.Abs(scale.z))) * HitBoxGrowth;
+                bounds.size.z / Mathf.Max(0.0001f, Mathf.Abs(scale.z)) * HitBoxGrowth);
         }
 
         bool TryGetBounds(out Bounds bounds)

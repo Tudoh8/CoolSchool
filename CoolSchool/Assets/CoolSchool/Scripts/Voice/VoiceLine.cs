@@ -11,6 +11,8 @@ namespace CoolSchool.Voice
         Goblin,
         Narrator,
         Alien,
+        Parrot,
+        Announcer,
     }
 
     /// <summary>One spoken sentence, in every language, with its recorded clips once they exist.</summary>

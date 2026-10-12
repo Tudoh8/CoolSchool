@@ -286,6 +286,9 @@ namespace CoolSchool.Aliens
         {
             if (button != null && button.IsHeld) return true;
 
+            // Keys typed into the parent panel's name field are not game input.
+            if (CoolSchool.Parent.ParentGate.InputBlocked) return false;
+
             Keyboard keyboard = Keyboard.current;
             if (keyboard != null && keyboard.spaceKey.isPressed) return true;
 

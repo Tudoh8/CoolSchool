@@ -48,6 +48,23 @@ namespace CoolSchool.Lessons
         /// <summary>The writing area in canvas units.</summary>
         Vector2 BoardUnits => boardSize * UnitsPerMetre;
 
+        /// <summary>The writing surface (made on first use). Other chalk writers, like the LetterBoard, put their drawing on it.</summary>
+        public RectTransform Surface
+        {
+            get
+            {
+                EnsureBoard();
+                return board;
+            }
+        }
+
+        /// <summary>The surface size in its own units, centred on the surface.</summary>
+        public Vector2 SurfaceUnits => BoardUnits;
+
+        public Color ChalkColor => chalkColor;
+
+        public Sprite DotSprite => dotSprite;
+
         void OnDisable()
         {
             animations.Clear();

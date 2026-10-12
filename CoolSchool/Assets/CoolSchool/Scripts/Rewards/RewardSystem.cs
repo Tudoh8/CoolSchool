@@ -2,7 +2,9 @@ using System.Collections;
 using CoolSchool.Aliens;
 using CoolSchool.Audio;
 using CoolSchool.Battle;
+using CoolSchool.Pirates;
 using CoolSchool.Player;
+using CoolSchool.Race;
 using CoolSchool.Tag;
 using UnityEngine;
 
@@ -24,6 +26,10 @@ namespace CoolSchool.Rewards
         [SerializeField] TagGame tagGame;
         [SerializeField] KnightsGame knightsGame;
         [SerializeField] AlienLanding alienLanding;
+        [Tooltip("The treasure hunt gives one star for each coin the child counted (1 to 10).")]
+        [SerializeField] PirateAdventure pirateAdventure;
+        [Tooltip("The soapbox race gives 1 to 5 stars, also for second and third place.")]
+        [SerializeField] SoapboxRace soapboxRace;
         [SerializeField] int starsForTagRound = 3;
         [SerializeField] int starsForKnightsVictory = 5;
         [SerializeField] int starsForAlienVictory = 5;
@@ -56,6 +62,8 @@ namespace CoolSchool.Rewards
             if (tagGame != null) tagGame.onRoundFinished.AddListener(OnTagRoundFinished);
             if (knightsGame != null) knightsGame.onVictory.AddListener(OnKnightsVictory);
             if (alienLanding != null) alienLanding.onVictory.AddListener(OnAlienVictory);
+            if (pirateAdventure != null) pirateAdventure.TreasureCounted += OnTreasureCounted;
+            if (soapboxRace != null) soapboxRace.RaceFinished += OnRaceFinished;
             RefreshHud();
         }
 
@@ -67,6 +75,8 @@ namespace CoolSchool.Rewards
             if (tagGame != null) tagGame.onRoundFinished.RemoveListener(OnTagRoundFinished);
             if (knightsGame != null) knightsGame.onVictory.RemoveListener(OnKnightsVictory);
             if (alienLanding != null) alienLanding.onVictory.RemoveListener(OnAlienVictory);
+            if (pirateAdventure != null) pirateAdventure.TreasureCounted -= OnTreasureCounted;
+            if (soapboxRace != null) soapboxRace.RaceFinished -= OnRaceFinished;
         }
 
         void Start()
@@ -88,6 +98,22 @@ namespace CoolSchool.Rewards
         void OnAlienVictory()
         {
             StartCoroutine(GiveAfterDelay(starsForAlienVictory));
+        }
+
+        void OnTreasureCounted(int coins, Vector3 position)
+        {
+            StartCoroutine(GiveAfterDelay(Mathf.Clamp(coins, 1, 10), position));
+        }
+
+        void OnRaceFinished(int stars, Vector3 position)
+        {
+            StartCoroutine(GiveAfterDelay(Mathf.Clamp(stars, 1, 5), position));
+        }
+
+        IEnumerator GiveAfterDelay(int count, Vector3 position)
+        {
+            yield return new WaitForSeconds(rewardDelaySeconds);
+            GiveStars(count, position);
         }
 
         /// <summary>The reward comes after the game's own cheering, and flies from wherever the player is by then.</summary>

@@ -33,6 +33,9 @@ namespace CoolSchool.Lessons
         const float PulseSpeed = 6f;
         const float PulseAmount = 0.12f;
         const float DimmedAlpha = 0.3f;
+        const float GlyphFill = 0.62f;
+        const float GlyphDotFraction = 0.17f;
+        const float FlyScale = 0.3f;
 
         // One friendly colour per slot: coral, sunshine and sky.
         static readonly Color[] CardColors =
@@ -48,6 +51,8 @@ namespace CoolSchool.Lessons
             public Image Face;
             public Image Glow;
             public Text Label;
+            public RectTransform Glyph;
+            public CanvasGroup GlyphGroup;
             public Button Button;
             public int Number;
             public Coroutine ScaleRoutine;
@@ -69,6 +74,23 @@ namespace CoolSchool.Lessons
         /// <summary>Shows up to three number cards. onPicked gets the number on the card that was tapped.</summary>
         public void ShowNumberCards(int[] numbers, Action<int> onPicked)
         {
+            ShowCards(numbers, onPicked, null);
+        }
+
+        /// <summary>
+        /// Shows up to three cards with a lowercase letter drawn in chalk dots. onPicked gets the letter that was tapped.
+        /// The other card methods (wiggle, pulse, dim, celebrate) take the letter as an int, e.g. (int)'m'.
+        /// </summary>
+        public void ShowLetterCards(LetterEntry[] letters, Action<char> onPicked)
+        {
+            var ids = new int[letters != null ? Mathf.Min(letters.Length, CardSlots) : 0];
+            for (int i = 0; i < ids.Length; i++) ids[i] = letters[i].Char;
+
+            ShowCards(ids, id => onPicked?.Invoke((char)id), letters);
+        }
+
+        void ShowCards(int[] numbers, Action<int> onPicked, LetterEntry[] letters)
+        {
             BuildCards();
             StopAllCoroutines();
             ResetCardRoutines();
@@ -85,7 +107,8 @@ namespace CoolSchool.Lessons
                 if (!used) continue;
 
                 card.Number = numbers[i];
-                card.Label.text = numbers[i].ToString();
+                ShowFace(card, letters != null ? letters[i] : null);
+                if (letters == null) card.Label.text = numbers[i].ToString();
                 card.Rect.anchoredPosition = CardPosition(i, count);
                 card.Rect.localRotation = Quaternion.identity;
                 card.Face.color = CardColors[i];
@@ -146,6 +169,27 @@ namespace CoolSchool.Lessons
             }
         }
 
+        /// <summary>
+        /// The card flies to a point on the screen and shrinks away there. Used to put a letter into its slot on the blackboard.
+        /// done is called when it arrives (not at all when the cards are hidden first).
+        /// </summary>
+        public void FlyCardTo(int number, Vector2 screenPoint, float seconds, Action done)
+        {
+            Card card = Find(number);
+            if (card == null || !isActiveAndEnabled)
+            {
+                done?.Invoke();
+                return;
+            }
+
+            Sfx.Play("lesson.letter_pop");
+            foreach (Card other in cards)
+                if (other != null) other.Button.interactable = false;
+
+            if (card.TurnRoutine != null) StopCoroutine(card.TurnRoutine);
+            StartScale(card, FlyRoutine(card, screenPoint, seconds, done));
+        }
+
         /// <summary>Fades a wrong card out so fewer wrong choices are left. It can not be tapped any more.</summary>
         public void DimCard(int number)
         {
@@ -155,6 +199,7 @@ namespace CoolSchool.Lessons
             card.Button.interactable = false;
             card.Face.color = Dimmed(card.Face.color);
             card.Label.color = Dimmed(card.Label.color);
+            card.GlyphGroup.alpha = DimmedAlpha;
         }
 
         public void HideCards()
@@ -211,6 +256,8 @@ namespace CoolSchool.Lessons
             card.Button.navigation = new Navigation { mode = Navigation.Mode.None };
             card.Button.onClick.AddListener(() => OnCardClicked(card));
 
+            card.Glyph = BuildGlyphHolder(rect);
+            card.GlyphGroup = card.Glyph.GetComponent<CanvasGroup>();
             card.Label = BuildLabel(rect);
             return card;
         }
@@ -289,6 +336,41 @@ namespace CoolSchool.Lessons
 
         // ----- Helpers ---------------------------------------------------------------------------
 
+        /// <summary>The label for a number card, or the chalk dots of a letter card.</summary>
+        void ShowFace(Card card, LetterEntry letter)
+        {
+            card.Label.gameObject.SetActive(letter == null);
+            card.Glyph.gameObject.SetActive(letter != null);
+            if (letter == null) return;
+
+            for (int i = card.Glyph.childCount - 1; i >= 0; i--)
+                Destroy(card.Glyph.GetChild(i).gameObject);
+
+            float side = cardSize * GlyphFill;
+            LetterGlyph.Build(card.Glyph, letter, side, side * GlyphDotFraction, Color.white, cardSprite);
+        }
+
+        /// <summary>An empty holder in the middle of the card where a letter's chalk dots go. It can fade as one.</summary>
+        RectTransform BuildGlyphHolder(RectTransform card)
+        {
+            var go = new GameObject("Letter", typeof(RectTransform), typeof(CanvasGroup));
+            go.layer = gameObject.layer;
+
+            var rect = (RectTransform)go.transform;
+            rect.SetParent(card, false);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = Vector2.one * cardSize * GlyphFill;
+
+            var group = go.GetComponent<CanvasGroup>();
+            group.blocksRaycasts = false;
+            group.interactable = false;
+            go.SetActive(false);
+            return rect;
+        }
+
         void OnCardClicked(Card card)
         {
             if (!IsShowingCards || !card.Button.interactable) return;
@@ -320,6 +402,7 @@ namespace CoolSchool.Lessons
                 card.Rect.localScale = Vector3.one;
                 card.Rect.localRotation = Quaternion.identity;
                 card.Label.color = Color.white;
+                card.GlyphGroup.alpha = 1f;
             }
         }
 
@@ -351,6 +434,35 @@ namespace CoolSchool.Lessons
             }
 
             rect.localScale = Vector3.one;
+        }
+
+        IEnumerator FlyRoutine(Card card, Vector2 screenPoint, float seconds, Action done)
+        {
+            var parent = (RectTransform)card.Rect.parent;
+            Canvas canvas = parent.GetComponentInParent<Canvas>();
+            Camera uiCamera = canvas != null && canvas.rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.rootCanvas.worldCamera : null;
+
+            // The card hangs from the bottom middle of the holder, so its position is measured from there.
+            Vector2 target = card.Rect.anchoredPosition;
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(parent, screenPoint, uiCamera, out Vector2 local))
+            {
+                Rect area = parent.rect;
+                target = local - new Vector2(Mathf.Lerp(area.xMin, area.xMax, 0.5f), area.yMin);
+            }
+
+            Vector2 start = card.Rect.anchoredPosition;
+            float duration = Mathf.Max(0.05f, seconds);
+            for (float elapsed = 0f; elapsed < duration; elapsed += Time.unscaledDeltaTime)
+            {
+                float k = Mathf.SmoothStep(0f, 1f, elapsed / duration);
+                card.Rect.anchoredPosition = Vector2.Lerp(start, target, k) + Vector2.up * (LessonMotion.Hump(k) * 120f);
+                card.Rect.localScale = Vector3.one * Mathf.Lerp(1f, FlyScale, k);
+                yield return null;
+            }
+
+            card.Rect.gameObject.SetActive(false);
+            card.ScaleRoutine = null;
+            done?.Invoke();
         }
 
         IEnumerator WiggleRoutine(Card card)

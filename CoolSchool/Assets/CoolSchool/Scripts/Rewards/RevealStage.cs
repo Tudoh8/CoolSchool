@@ -51,7 +51,8 @@ namespace CoolSchool.Rewards
             model.localRotation = Quaternion.Euler(item.revealEuler);
             PrepareModel(model.gameObject);
 
-            if (standLongThingsUp) StandUp(model);
+            // Carts are long and low too, but they stay on their wheels.
+            if (standLongThingsUp && item.kind != RewardKind.Cart) StandUp(model);
             FitAndCenter(model, item.revealScale);
 
             if (revealCamera != null) revealCamera.enabled = true;

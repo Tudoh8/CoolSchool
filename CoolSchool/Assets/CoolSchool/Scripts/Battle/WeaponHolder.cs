@@ -5,17 +5,22 @@ namespace CoolSchool.Battle
     /// <summary>
     /// Puts a foam sword in the kid's right hand and a shield on the left arm.
     /// The weapons are made the first time they are needed and then just shown or hidden.
+    /// Where they sit is worked out from the rig and the weapon's own bounds (see WeaponFit), so it is right for every
+    /// character and for any sword swapped in later.
     /// </summary>
     public class WeaponHolder : MonoBehaviour
     {
         [SerializeField] GameObject swordPrefab;
         [SerializeField] GameObject shieldPrefab;
-        [Header("Placement (relative to the hand / lower arm bone)")]
+        [Header("Extra tweak on top of the computed fit (in the weapon's own axes, default none)")]
         [SerializeField] Vector3 swordLocalPosition;
         [SerializeField] Vector3 swordLocalEuler;
         [SerializeField] Vector3 shieldLocalPosition;
         [SerializeField] Vector3 shieldLocalEuler;
         [SerializeField] float weaponScale = 1f;
+
+        // Logged once per weapon prefab, so the detected axes can be checked in the console.
+        static readonly System.Collections.Generic.HashSet<string> LoggedFits = new System.Collections.Generic.HashSet<string>();
 
         static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
         static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
@@ -30,6 +35,32 @@ namespace CoolSchool.Battle
         GameObject shield;
         bool shown;
         Color? glow;
+
+        // The rig, measured once before the animator first moves the bones (the wrist is relaxed then).
+        bool measured;
+        WeaponFit.HandFrame rightHand;
+        WeaponFit.ForearmFrame leftForearm;
+
+        void Awake()
+        {
+            MeasureRig();
+        }
+
+        /// <summary>
+        /// Reads the right hand and the left forearm from the bones. Done in Awake (the animator has not moved anything yet);
+        /// anywhere else it is done on first use. Bones may not be available while switched off, so then it tries again later.
+        /// </summary>
+        void MeasureRig()
+        {
+            if (measured) return;
+
+            Animator animator = GetComponentInChildren<Animator>(true);
+            if (animator == null || !animator.isHuman) return;
+
+            WeaponFit.TryMeasureHand(animator, true, out _, out rightHand);
+            WeaponFit.TryMeasureForearm(animator, out _, out leftForearm);
+            measured = true;
+        }
 
         public void ShowWeapons(bool show)
         {
@@ -88,24 +119,47 @@ namespace CoolSchool.Battle
             Animator animator = GetComponentInChildren<Animator>();
             if (animator == null || !animator.isHuman) return;
 
+            MeasureRig();
+
             if (sword == null)
             {
-                sword = Attach(swordPrefab, animator.GetBoneTransform(HumanBodyBones.RightHand), swordLocalPosition, swordLocalEuler);
+                sword = Attach(swordPrefab, animator.GetBoneTransform(HumanBodyBones.RightHand), false);
                 if (sword != null && glow.HasValue) ApplyGlow(sword, glow.Value);
             }
             if (shield == null)
-                shield = Attach(shieldPrefab, animator.GetBoneTransform(HumanBodyBones.LeftLowerArm), shieldLocalPosition, shieldLocalEuler);
+                shield = Attach(shieldPrefab, animator.GetBoneTransform(HumanBodyBones.LeftLowerArm), true);
         }
 
-        GameObject Attach(GameObject prefab, Transform bone, Vector3 position, Vector3 euler)
+        GameObject Attach(GameObject prefab, Transform bone, bool isShield)
         {
             if (prefab == null || bone == null) return null;
 
             GameObject instance = Instantiate(prefab, bone);
-            instance.transform.localPosition = position;
-            instance.transform.localRotation = Quaternion.Euler(euler);
             instance.transform.localScale = Vector3.one * weaponScale;
             RemoveColliders(instance);
+
+            Vector3 position;
+            Quaternion rotation;
+            string report;
+            bool fitted = isShield
+                ? WeaponFit.FitShield(instance, weaponScale, leftForearm, out position, out rotation, out report)
+                : WeaponFit.FitSword(instance, weaponScale, rightHand, out position, out rotation, out report);
+
+            if (!fitted)
+            {
+                position = Vector3.zero;
+                rotation = Quaternion.identity;
+                Debug.LogWarning($"CoolSchool: could not fit {prefab.name} on {name} ({report}); it is left at the bone.");
+            }
+            else if (LoggedFits.Add((isShield ? "shield " : "sword ") + prefab.name))
+            {
+                Debug.Log($"CoolSchool weapon fit: {(isShield ? "shield" : "sword")} {prefab.name}: {report}.");
+            }
+
+            Vector3 tweakPosition = isShield ? shieldLocalPosition : swordLocalPosition;
+            Vector3 tweakEuler = isShield ? shieldLocalEuler : swordLocalEuler;
+            instance.transform.localRotation = rotation * Quaternion.Euler(tweakEuler);
+            instance.transform.localPosition = position + rotation * tweakPosition;
             return instance;
         }
 
@@ -146,7 +200,9 @@ namespace CoolSchool.Battle
             foreach (Collider collider in instance.GetComponentsInChildren<Collider>(true))
             {
                 collider.enabled = false;
-                Destroy(collider);
+                // Destroy is not allowed in edit mode (the preview tools put weapons on there).
+                if (Application.isPlaying) Destroy(collider);
+                else DestroyImmediate(collider);
             }
         }
     }
