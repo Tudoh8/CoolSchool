@@ -97,6 +97,7 @@ namespace CoolSchool.EditorTools
             Sprite[] icons = PirateMapIconRenderer.RenderAll(c.LandmarkPrefabs);
 
             WireAdventure(adventure, c, inputs, ship, cannon, boat, digSpot, chest, picker, trophy, skeletons, crew, parrot, costume, map, icons);
+            SetObject(adventure, "guideMarker", BuildGuideMarker(root));
 
             Material ring = KnightsArenaBuilder.CreateGlowMaterial(MaterialFolder + "/PirateZoneRing.mat", new Color(0.3f, 0.7f, 1f), 0.4f);
             ActivityZone zone = KnightsArenaBuilder.CreateActivityZone("PirateZone", c.Root, c.ZonePosition, ZoneRadius, adventure, ring, PirateBeacon);
@@ -431,6 +432,46 @@ namespace CoolSchool.EditorTools
             return map;
         }
 
+        /// <summary>
+        /// The bouncing arrow and glowing ring the adventure puts over the landmark to go to next. Built from primitives; the
+        /// arrow's cone mesh is made by the component. Inactive at start, on the Ignore Raycast layer so the camera ignores it.
+        /// </summary>
+        static TreasureGuideMarker BuildGuideMarker(Transform parent)
+        {
+            var root = new GameObject("TreasureGuideMarker").transform;
+            root.SetParent(parent, false);
+
+            Material arrowMaterial = KnightsArenaBuilder.CreateEmissiveMaterial(MaterialFolder + "/PirateGuideArrow.mat", new Color(1f, 0.8f, 0.1f));
+            Material ringMaterial = KnightsArenaBuilder.CreateGlowMaterial(MaterialFolder + "/PirateGuideRing.mat", new Color(1f, 0.85f, 0.2f), 0.55f);
+
+            // The arrow points down with its tip at its own origin: the cone (mesh made at runtime) and a shaft on top of it.
+            var arrow = new GameObject("Arrow").transform;
+            arrow.SetParent(root, false);
+            var head = new GameObject("Head");
+            head.transform.SetParent(arrow, false);
+            var headFilter = head.AddComponent<MeshFilter>();
+            var headRenderer = head.AddComponent<MeshRenderer>();
+            headRenderer.sharedMaterial = arrowMaterial;
+            headRenderer.shadowCastingMode = ShadowCastingMode.Off;
+
+            // A cylinder is 2 m tall and 1 m wide at scale 1: a 0.7 m shaft from the cone's top up to 1.7 m in all.
+            float shaftLength = 0.7f;
+            Primitive(PrimitiveType.Cylinder, "Shaft", arrow, new Vector3(0f, TreasureGuideMarker.ConeHeight + shaftLength * 0.5f, 0f),
+                new Vector3(0.5f, shaftLength * 0.5f, 0.5f), Quaternion.identity, arrowMaterial);
+
+            // The ring on the ground: a flat disc one metre across (the component scales it to the landmark).
+            Transform ring = Primitive(PrimitiveType.Cylinder, "Ring", root, Vector3.zero, new Vector3(1f, 0.01f, 1f), Quaternion.identity, ringMaterial);
+
+            var marker = root.gameObject.AddComponent<TreasureGuideMarker>();
+            SetObject(marker, "arrow", arrow);
+            SetObject(marker, "arrowHead", headFilter);
+            SetObject(marker, "ring", ring);
+
+            SetLayerRecursive(root.gameObject, LayerMask.NameToLayer("Ignore Raycast"));
+            root.gameObject.SetActive(false);
+            return marker;
+        }
+
         static RectTransform NewUiRect(string rectName, Transform parent)
         {
             var go = new GameObject(rectName, typeof(RectTransform));
@@ -488,8 +529,6 @@ namespace CoolSchool.EditorTools
             SetObject(adventure, "ship", ship);
             SetObject(adventure, "cannon", cannon);
             SetObject(adventure, "skeletonBoat", boat);
-            SetObject(adventure, "sea", c.Sea);
-            SetObject(adventure, "islandBounds", c.IslandBounds);
             SetObject(adventure, "islandLandingPoint", c.IslandLandingPoint);
             SetObjectArray(adventure, "crewLandingPoints", c.CrewLandingPoints);
             SetObjectArray(adventure, "skeletonLandingPoints", c.SkeletonLandingPoints);

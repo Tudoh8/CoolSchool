@@ -1833,3 +1833,290 @@ MonoBehaviour:
     english: Hooray! We found the treasure! Pirate party!
     dutchClip: {fileID: 8300000, guid: 008a192d9f6d37544961e7341fb06468, type: 3}
     englishClip: {fileID: 0}
+  - key: quit.ask.1
+    group: quit.ask
+    speaker: 0
+    dutch: Wil je stoppen met dit spel?
+    english: Do you want to stop this game?
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: quit.bye.1
+    group: quit.bye
+    speaker: 0
+    dutch: "Ok\xE9! Dan gaan we weer lekker buiten spelen."
+    english: Okay! Let's go and play outside again.
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: quit.bye.2
+    group: quit.bye
+    speaker: 0
+    dutch: Prima! Je mag altijd weer terugkomen.
+    english: Fine! You can always come back.
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: invite.race.1
+    group: invite.race
+    speaker: 0
+    dutch: Wie doet er mee met de zeepkistrace?
+    english: Who wants to join the soapbox race?
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.welcome.1
+    group: race.welcome
+    speaker: 6
+    dutch: Welkom bij de grote zeepkistrace! Stap maar in je kar!
+    english: Welcome to the big soapbox race! Hop into your cart!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.howto.1
+    group: race.howto
+    speaker: 6
+    dutch: Tik links of rechts om te sturen. Tik op de knop om te springen!
+    english: Tap left or right to steer. Tap the button to jump!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.count3.1
+    group: race.count3
+    speaker: 6
+    dutch: Drie!
+    english: Three!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.count2.1
+    group: race.count2
+    speaker: 6
+    dutch: Twee!
+    english: Two!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.count1.1
+    group: race.count1
+    speaker: 6
+    dutch: "E\xE9n!"
+    english: One!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.go.1
+    group: race.go
+    speaker: 6
+    dutch: Start!
+    english: Go!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.1.1
+    group: race.gate_number.1
+    speaker: 6
+    dutch: "Rij door de \xE9\xE9n!"
+    english: Drive through the one!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.2.1
+    group: race.gate_number.2
+    speaker: 6
+    dutch: Rij door de twee!
+    english: Drive through the two!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.3.1
+    group: race.gate_number.3
+    speaker: 6
+    dutch: Rij door de drie!
+    english: Drive through the three!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.4.1
+    group: race.gate_number.4
+    speaker: 6
+    dutch: Rij door de vier!
+    english: Drive through the four!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.5.1
+    group: race.gate_number.5
+    speaker: 6
+    dutch: Rij door de vijf!
+    english: Drive through the five!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.6.1
+    group: race.gate_number.6
+    speaker: 6
+    dutch: Rij door de zes!
+    english: Drive through the six!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.7.1
+    group: race.gate_number.7
+    speaker: 6
+    dutch: Rij door de zeven!
+    english: Drive through the seven!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.8.1
+    group: race.gate_number.8
+    speaker: 6
+    dutch: Rij door de acht!
+    english: Drive through the eight!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.9.1
+    group: race.gate_number.9
+    speaker: 6
+    dutch: Rij door de negen!
+    english: Drive through the nine!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_number.10.1
+    group: race.gate_number.10
+    speaker: 6
+    dutch: Rij door de tien!
+    english: Drive through the ten!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_letter.1
+    group: race.gate_letter
+    speaker: 6
+    dutch: "Rij door de letter\u2026"
+    english: "Drive through the letter\u2026"
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_right.1
+    group: race.gate_right
+    speaker: 6
+    dutch: Ja, goed zo!
+    english: Yes, well done!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_right.2
+    group: race.gate_right
+    speaker: 6
+    dutch: Super! Precies goed!
+    english: Super! Exactly right!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_right.3
+    group: race.gate_right
+    speaker: 6
+    dutch: Knap gedaan!
+    english: Nicely done!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.gate_wrong.1
+    group: race.gate_wrong
+    speaker: 6
+    dutch: Bijna! Kijk, daar was hij!
+    english: Almost! Look, there it was!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.crash.1
+    group: race.crash
+    speaker: 6
+    dutch: Boem! Gelukkig is het zacht!
+    english: Boom! Good thing it's soft!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.crash.2
+    group: race.crash
+    speaker: 6
+    dutch: Oeps! Rij maar door!
+    english: Oops! Keep going!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.splash.1
+    group: race.splash
+    speaker: 6
+    dutch: Plons! Lekker nat!
+    english: Splash! Nice and wet!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.animal_cat.1
+    group: race.animal_cat
+    speaker: 6
+    dutch: Kijk uit, een poes!
+    english: Watch out, a cat!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.animal_dog.1
+    group: race.animal_dog
+    speaker: 6
+    dutch: Kijk uit, een hond!
+    english: Watch out, a dog!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.animal_hen.1
+    group: race.animal_hen
+    speaker: 6
+    dutch: Kijk uit, een kip met kuikentjes!
+    english: Watch out, a hen with her chicks!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.animal_rabbit.1
+    group: race.animal_rabbit
+    speaker: 6
+    dutch: Kijk uit, een konijn!
+    english: Watch out, a rabbit!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.ramp.1
+    group: race.ramp
+    speaker: 6
+    dutch: Een schans! Hup, de lucht in!
+    english: A ramp! Up into the air!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.final.1
+    group: race.final
+    speaker: 6
+    dutch: Bijna bij de finish! Zet hem op!
+    english: Almost at the finish! Go for it!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.win.1
+    group: race.win
+    speaker: 6
+    dutch: Jij hebt gewonnen! Hoera voor de kampioen!
+    english: You won! Hooray for the champion!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.second.1
+    group: race.second
+    speaker: 6
+    dutch: Wat een spannende race! Jullie waren allemaal supersnel!
+    english: What an exciting race! You were all super fast!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.end.1
+    group: race.end
+    speaker: 6
+    dutch: Tot de volgende race!
+    english: See you at the next race!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.rival.1
+    group: race.rival
+    speaker: 1
+    dutch: Ik ga je inhalen!
+    english: I'm going to catch you!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.rival.2
+    group: race.rival
+    speaker: 1
+    dutch: Wie is er het snelst?
+    english: Who's the fastest?
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.bump.1
+    group: race.bump
+    speaker: 1
+    dutch: Wiee! Ik draai rondjes!
+    english: Wheee! I'm spinning!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.bump.2
+    group: race.bump
+    speaker: 1
+    dutch: Hihi, botsauto!
+    english: Hehe, bumper car!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}

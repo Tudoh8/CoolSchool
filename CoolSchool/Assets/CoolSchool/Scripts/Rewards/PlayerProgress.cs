@@ -32,6 +32,10 @@ namespace CoolSchool.Rewards
         // Pirate cove: the treasure coins counted so far in total (the trophy chest by the dock fills up with them).
         public int pirateCoinsTotal;
 
+        // Soapbox race: whether the how-to line has been heard once, and the coins collected in all races so far.
+        public bool raceHowtoHeard;
+        public int raceCoinsTotal;
+
         // The child's name: lowercase letters a-z only, at most 12. Empty means not set. Set through ProgressStore.SetChildName.
         public string childName = "";
 

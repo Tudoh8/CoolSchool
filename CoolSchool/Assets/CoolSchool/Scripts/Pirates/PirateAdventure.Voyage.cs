@@ -11,19 +11,17 @@ namespace CoolSchool.Pirates
     /// <summary>The first half of the adventure: dressing up, sailing, the cannon, landing on the island and the skeleton duel.</summary>
     public partial class PirateAdventure
     {
-        // ----- 1. Begin: the sand turns into sea, the pirate is dressed, the crew comes aboard ----
+        // ----- 1. Begin: imagination, the pirate is dressed, the crew comes aboard ----------
 
         IEnumerator RunBegin()
         {
-            // "Let's imagine...": sparkle and glow, then the sand pit becomes a sea.
+            // "Let's imagine...": sparkle and glow. The ship sails over the sand.
             if (imagination != null) imagination.Play(true);
             Sfx.Play("pirates.waves", ShipPosition());
             Sfx.PlayMusic("music.pirates");
             yield return new WaitForSeconds(0.6f);
 
-            if (sea != null) sea.SetActive(true);
             if (ship != null) ship.Afloat = true;
-            SeaSparkles();
 
             if (costume != null) costume.Show(true);
             if (playerWeapons != null) playerWeapons.ShowWeapons(true);
@@ -44,23 +42,6 @@ namespace CoolSchool.Pirates
             yield return new WaitForSeconds(0.8f);
             VoicePlayer.Say("pirates.steer");
             yield return WaitForVoice();
-        }
-
-        /// <summary>Sparkles all over the new sea.</summary>
-        void SeaSparkles()
-        {
-            Bounds area = new Bounds(ShipPosition(), new Vector3(14f, 1f, 18f));
-            if (sea != null)
-            {
-                Renderer seaRenderer = sea.GetComponentInChildren<Renderer>(true);
-                if (seaRenderer != null && seaRenderer.bounds.size.sqrMagnitude > 1f) area = seaRenderer.bounds;
-            }
-
-            for (int i = 0; i < 12; i++)
-            {
-                Vector3 spot = new Vector3(Random.Range(area.min.x, area.max.x), area.center.y + Random.Range(0.2f, 0.8f), Random.Range(area.min.z, area.max.z));
-                BattleEffects.Sparkle(spot);
-            }
         }
 
         IEnumerator ParrotFliesIn()
@@ -310,7 +291,7 @@ namespace CoolSchool.Pirates
             VoicePlayer.Say("pirates.arrive");
             Sfx.Play("pirates.wheel", ShipPosition());
 
-            // Everybody off: the captain to the landing spot, the crew to the beach. Pretend water is kept out by invisible walls.
+            // Everybody off: the captain to the landing spot, the crew to the beach.
             if (player != null) player.StopRiding(LandingPoint());
             if (crew != null)
                 for (int i = 0; i < crew.Length; i++)
@@ -318,7 +299,6 @@ namespace CoolSchool.Pirates
 
             float hopGiveUp = Time.time + 3f;
             while (player != null && player.IsRiding && Time.time < hopGiveUp) yield return null;
-            if (islandBounds != null) islandBounds.SetActive(true);
 
             // The skeleton boat should be at the beach by now; wait for it a little.
             float boatGiveUp = Time.time + 25f;

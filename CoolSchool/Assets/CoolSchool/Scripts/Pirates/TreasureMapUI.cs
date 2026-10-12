@@ -8,7 +8,8 @@ namespace CoolSchool.Pirates
     /// <summary>
     /// The treasure map in the top centre of the screen: a parchment with a picture for every landmark on the route, a dotted
     /// path between them and a red X at the end. Pictures only, no words. Each landmark that is reached gets a green tick and
-    /// the next picture pulses, so he always sees where to go next.
+    /// a glowing frame slides to the next picture, which pulses big and bright (the others are dimmer), so he always sees where to
+    /// go next. After the last picture the X gets the frame.
     /// The pictures, ticks, dots and the X are laid out along the middle of the parchment by this script every time the map
     /// is shown (the route has two or three landmarks), so the builder only has to create them with the right sizes.
     /// </summary>
@@ -28,6 +29,14 @@ namespace CoolSchool.Pirates
         const float CheckPopSeconds = 0.35f;
         const float PulseSpeed = 7f;
         const float PulseAmount = 0.12f;
+        // The picture to go to is bigger than the rest and pulses around that size; the others are dimmer.
+        const float CurrentScale = 1.3f;
+        const float DoneTint = 0.85f;
+        const float WaitingTint = 0.55f;
+        // The glowing frame behind it: size as a multiple of the picture, how fast it slides over to the next one.
+        const float HighlightSize = 1.9f;
+        const float HighlightFollow = 14f;
+        static readonly Color HighlightColor = new Color(1f, 0.85f, 0.2f, 1f);
         // How far (as a fraction of a picture's size) the tick sits down and right of the picture's middle.
         const float CheckShift = 0.24f;
         const float DotGapPadding = 8f;
@@ -39,6 +48,11 @@ namespace CoolSchool.Pirates
         Vector3[] iconBaseScale;
         Vector3[] checkBaseScale;
         Vector3 finalBaseScale = Vector3.one;
+        Color[] iconBaseColor;
+        Color finalBaseColor = Color.white;
+        Image highlight;
+        bool highlightPlaced;
+        static Sprite glowSprite;
         float[] checkPopTime;
         int[] dotGap;
         Vector3[] dotBaseScale;
@@ -60,7 +74,16 @@ namespace CoolSchool.Pirates
             iconBaseScale = BaseScales(stepIcons);
             checkBaseScale = BaseScales(stepChecks);
             checkPopTime = new float[stepChecks != null ? stepChecks.Length : 0];
-            if (finalX != null) finalBaseScale = finalX.rectTransform.localScale;
+            if (finalX != null)
+            {
+                finalBaseScale = finalX.rectTransform.localScale;
+                finalBaseColor = finalX.color;
+            }
+
+            iconBaseColor = new Color[stepIcons.Length];
+            for (int i = 0; i < iconBaseColor.Length; i++)
+                iconBaseColor[i] = stepIcons[i] != null ? stepIcons[i].color : Color.white;
+            CreateHighlight();
 
             dotGap = new int[dots != null ? dots.Length : 0];
             dotBaseScale = new Vector3[dotGap.Length];
@@ -119,6 +142,10 @@ namespace CoolSchool.Pirates
             panel.gameObject.SetActive(true);
             LayOut();
             RefreshDots();
+
+            // The frame starts on the first picture.
+            highlightPlaced = false;
+            UpdateHighlight(1f);
 
             if (panelRoutine != null) StopCoroutine(panelRoutine);
             panelRoutine = StartCoroutine(UnrollRoutine());
@@ -270,9 +297,11 @@ namespace CoolSchool.Pirates
             {
                 if (stepIcons[i] == null) continue;
 
-                // The picture to go to next pulses.
-                float scale = i == reached ? pulse : 1f;
+                // The picture to go to next is big, bright and pulses; the ones done are a little dimmer, the ones to come dimmer still.
+                bool current = i == reached;
+                float scale = current ? CurrentScale * pulse : 1f;
                 stepIcons[i].rectTransform.localScale = iconBaseScale[i] * scale;
+                stepIcons[i].color = Tinted(iconBaseColor[i], current ? 1f : (i < reached ? DoneTint : WaitingTint));
             }
 
             for (int i = 0; i < reached && stepChecks != null && i < stepChecks.Length; i++)
@@ -285,7 +314,102 @@ namespace CoolSchool.Pirates
 
             // When every picture is done the X is the thing to go to.
             if (finalX != null)
-                finalX.rectTransform.localScale = finalBaseScale * (visibleSteps > 0 && reached >= visibleSteps ? pulse : 1f);
+            {
+                bool xTurn = visibleSteps > 0 && reached >= visibleSteps;
+                finalX.rectTransform.localScale = finalBaseScale * (xTurn ? CurrentScale * pulse : 1f);
+                finalX.color = Tinted(finalBaseColor, xTurn ? 1f : WaitingTint);
+            }
+
+            UpdateHighlight(1f - Mathf.Exp(-HighlightFollow * Time.unscaledDeltaTime));
+        }
+
+        static Color Tinted(Color color, float tint)
+        {
+            return new Color(color.r * tint, color.g * tint, color.b * tint, color.a);
+        }
+
+        // ----- The glowing frame -------------------------------------------------------------------
+
+        /// <summary>A soft glow with a bright ring in it, behind the pictures (in front of the dots), made here so the builder need not supply a sprite.</summary>
+        void CreateHighlight()
+        {
+            if (panel == null) return;
+
+            var go = new GameObject("Highlight", typeof(RectTransform), typeof(Image));
+            go.layer = panel.gameObject.layer;
+            RectTransform rect = go.GetComponent<RectTransform>();
+            rect.SetParent(panel, false);
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0.5f, 0.5f);
+
+            highlight = go.GetComponent<Image>();
+            highlight.sprite = GlowSprite();
+            highlight.raycastTarget = false;
+            highlight.color = HighlightColor;
+            go.SetActive(false);
+
+            if (stepIcons.Length > 0 && stepIcons[0] != null)
+                rect.SetSiblingIndex(stepIcons[0].transform.GetSiblingIndex());
+        }
+
+        /// <summary>
+        /// The frame follows the picture to go to next (the X after the last picture): it slides over when the next picture
+        /// becomes the one, and glows brighter and dimmer. `follow` is how much of the way it goes this frame (1 = jump there).
+        /// </summary>
+        void UpdateHighlight(float follow)
+        {
+            if (highlight == null) return;
+
+            int current = Mathf.Min(reached, visibleSteps);
+            Image target = current < visibleSteps && current < stepIcons.Length ? stepIcons[current] : finalX;
+            bool show = visibleSteps > 0 && target != null && target.gameObject.activeInHierarchy;
+            highlight.gameObject.SetActive(show);
+            if (!show) return;
+
+            RectTransform rect = highlight.rectTransform;
+            Vector3 wanted = target.rectTransform.position;
+            rect.position = highlightPlaced ? Vector3.Lerp(rect.position, wanted, follow) : wanted;
+            highlightPlaced = true;
+
+            float baseSize = Mathf.Max(target.rectTransform.rect.width, target.rectTransform.rect.height);
+            float pulse = 1f + Mathf.Sin(Time.time * PulseSpeed) * PulseAmount;
+            float size = baseSize * HighlightSize * pulse;
+            rect.sizeDelta = new Vector2(size, size);
+
+            Color color = HighlightColor;
+            color.a = 0.75f + Mathf.Sin(Time.time * PulseSpeed) * 0.25f;
+            highlight.color = color;
+        }
+
+        static Sprite GlowSprite()
+        {
+            if (glowSprite != null) return glowSprite;
+
+            const int size = 64;
+            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false)
+            {
+                name = "TreasureMapGlow",
+                wrapMode = TextureWrapMode.Clamp
+            };
+            var pixels = new Color32[size * size];
+            for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    float dx = (x + 0.5f) / size * 2f - 1f;
+                    float dy = (y + 0.5f) / size * 2f - 1f;
+                    float distance = Mathf.Sqrt(dx * dx + dy * dy);
+
+                    float disc = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(1f - distance)) * 0.6f;
+                    float ring = Mathf.Clamp01(1f - Mathf.Abs(distance - 0.8f) / 0.1f);
+                    byte alpha = (byte)(Mathf.Max(disc, ring) * 255f);
+                    pixels[y * size + x] = new Color32(255, 255, 255, alpha);
+                }
+            }
+            texture.SetPixels32(pixels);
+            texture.Apply();
+
+            glowSprite = Sprite.Create(texture, new Rect(0f, 0f, size, size), new Vector2(0.5f, 0.5f), 100f);
+            return glowSprite;
         }
 
         IEnumerator UnrollRoutine()

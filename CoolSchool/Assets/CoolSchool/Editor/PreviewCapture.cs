@@ -29,7 +29,7 @@ namespace CoolSchool.EditorTools
     /// Only some shots: add -ExtraArgs '-previewShots','sword,shield' (a shot or group name containing one of the words).
     /// Log lines start with "PreviewCapture:".
     /// </summary>
-    public static class PreviewCapture
+    public static partial class PreviewCapture
     {
         const string LogPrefix = "PreviewCapture: ";
         const string ScenePath = "Assets/CoolSchool/Scenes/Playground.unity";
@@ -230,6 +230,9 @@ namespace CoolSchool.EditorTools
             cove.Shots.Add(new Shot { Name = "trophy", Frame = () => CoveView("TrophyChest", Vector3.zero, new Vector3(3f, 2.2f, -4f), 40f) });
             cove.Shots.Add(new Shot { Name = "top", Frame = () => CoveView("Sandpit", new Vector3(0f, 0f, 14f), new Vector3(0f, 52f, -6f), 60f) });
             groups.Add(cove);
+
+            // --- The soapbox street (see Race/PreviewCapture.Race.cs). ---
+            AddRaceGroups(groups);
             return groups;
         }
 

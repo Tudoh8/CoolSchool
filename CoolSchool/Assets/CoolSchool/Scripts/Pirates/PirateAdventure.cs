@@ -16,7 +16,7 @@ using UnityEngine.Events;
 namespace CoolSchool.Pirates
 {
     /// <summary>
-    /// "Pirate cove". Imagination turns the sand pit into a sea. The child is the captain: he steers the playground
+    /// "Pirate cove". Imagination sparkles over the sand pit. The child is the captain: he steers the playground
     /// ship to an island (the island pulls the ship in, so he can't get it wrong), shoots balloons off the skeleton boat
     /// with the cannon, duels the silly skeletons on the beach (a bump makes them fall apart into giggling bones and
     /// become friends), follows a picture map to the buried treasure, digs, opens the chest's letter lock and counts the
@@ -42,8 +42,6 @@ namespace CoolSchool.Pirates
         [SerializeField] PirateShip ship;
         [SerializeField] ShipCannon cannon;
         [SerializeField] SkeletonBoat skeletonBoat;
-        [SerializeField] GameObject sea;
-        [SerializeField] GameObject islandBounds;
         [SerializeField] Transform islandLandingPoint;
         [SerializeField] Transform[] crewLandingPoints;
         [SerializeField] Transform[] skeletonLandingPoints;
@@ -63,6 +61,8 @@ namespace CoolSchool.Pirates
 
         [Header("UI")]
         [SerializeField] TreasureMapUI map;
+        [Tooltip("The bouncing arrow and ring over the landmark (and then the X) he has to go to. Optional.")]
+        [SerializeField] TreasureGuideMarker guideMarker;
         [SerializeField] LessonUI lessonUI;
         [SerializeField] LetterSet letters;
 
@@ -71,7 +71,10 @@ namespace CoolSchool.Pirates
         [SerializeField, Range(0.1f, 0.9f)] float cannonAtProgress = 0.4f;
         [SerializeField] float cannonHintSeconds = 6f;
         [SerializeField] float fightHintSeconds = 5f;
-        [SerializeField] float landmarkReachMeters = 2.2f;
+        [Tooltip("A landmark counts as reached when he is this close to its edge (not its middle), so a big rock counts as soon as he touches it.")]
+        [SerializeField] float landmarkEdgeReachMeters = 1.2f;
+        [Tooltip("The right letter card in the chest lock starts to pulse after this long without any tap (any tap starts the wait again).")]
+        [SerializeField] float hintPulseSeconds = 15f;
         [SerializeField] float partySeconds = 4f;
 
         [Header("Hooks for voice lines and sounds")]
@@ -127,6 +130,9 @@ namespace CoolSchool.Pirates
         // Flags the flow waits for.
         bool shipArrived;
 
+        // The size of each landmark (its pictures), worked out once: how close he is to a landmark is measured to its edge.
+        readonly Dictionary<Transform, Bounds> landmarkBounds = new Dictionary<Transform, Bounds>();
+
         protected override void OnBegin()
         {
             if (player == null) player = FindAnyObjectByType<PlayerController>();
@@ -137,6 +143,7 @@ namespace CoolSchool.Pirates
             treasureCounted = false;
             shipArrived = false;
             roundSkeletons.Clear();
+            landmarkBounds.Clear();
             lastActionTime = Time.time;
 
             if (player != null)
@@ -172,6 +179,7 @@ namespace CoolSchool.Pirates
             if (coinPicker != null) coinPicker.Armed = false;
             if (lessonUI != null)
             {
+                lessonUI.StopPulse();
                 lessonUI.HideCards();
                 if (hudHidden) lessonUI.SetGameplayHudVisible(true);
             }
@@ -261,12 +269,13 @@ namespace CoolSchool.Pirates
         }
 
         /// <summary>
-        /// Everything in the cove back to the start: sea and island walls off, ship at the dock, the skeleton boat and the
-        /// skeletons put away, the crew gone, the map, the dig spot and the chest reset. Safe to call at any time.
+        /// Everything in the cove back to the start: ship at the dock, the skeleton boat and the
+        /// skeletons put away, the crew gone, the map, the guide marker, the dig spot and the chest reset. Safe to call at any time.
         /// </summary>
         void ResetWorld()
         {
             if (map != null) map.Hide();
+            if (guideMarker != null) guideMarker.Hide();
             if (digSpot != null) digSpot.ResetSpot();
             if (coinPicker != null)
             {
@@ -283,8 +292,6 @@ namespace CoolSchool.Pirates
             if (skeletonBoat != null) skeletonBoat.ResetBoat();
             if (ship != null) ship.ResetToDock();
 
-            if (sea != null) sea.SetActive(false);
-            if (islandBounds != null) islandBounds.SetActive(false);
         }
 
         void ResetCrew()

@@ -156,6 +156,7 @@ namespace CoolSchool.EditorTools
             public AlienFieldBuilder.FieldLayout AlienField;
             public IceCreamShopBuilder.StallLayout Shop;
             public PirateCoveBuilder.CoveLayout PirateCove;
+            public SoapboxStreetBuilder.StreetLayout RaceStreet;
             public SchoolResult School;
         }
 
@@ -279,6 +280,17 @@ namespace CoolSchool.EditorTools
                     Player = player.GetComponent<PlayerController>(),
                     ActionButton = jumpButton,
                     Imagination = imagination,
+                });
+
+                ShowProgress("Building soapbox street", 0.977f);
+                SoapboxStreetBuilder.Build(environment.RaceStreet, new SoapboxStreetBuilder.RaceInputs
+                {
+                    KidController = controller,
+                    TeacherController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(RootFolder + "/Animation/Teacher.controller"),
+                    KidsLayer = kidsLayer,
+                    Player = player.GetComponent<PlayerController>(),
+                    Joystick = joystick,
+                    ActionButton = jumpButton,
                 });
 
                 // The parent gear goes on the touch UI before the rewards add their popup, so the popup stays on top of it.
@@ -447,6 +459,9 @@ namespace CoolSchool.EditorTools
 
             // The pirate cove lies north of the arena (static geometry, reserves its ground, cuts a gap in the main north fence).
             info.PirateCove = PirateCoveBuilder.BuildCove(root, info);
+
+            // The soapbox street lies north of the playground, west of the school (static geometry, reserves its ground, cuts a gap in the main north fence).
+            info.RaceStreet = SoapboxStreetBuilder.BuildStreet(root, info);
 
             // Nothing may stand on the player's start.
             var occupied = new List<Vector3> { info.PlayerSpawn };

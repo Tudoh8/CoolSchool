@@ -26,6 +26,20 @@ namespace CoolSchool.Race
 
         public event System.Action Jump;
 
+        RectTransform actionRect;
+        Camera actionCamera;
+        readonly Vector3[] corners = new Vector3[4];
+
+        /// <summary>Caches the action button's rect and the camera its canvas needs (none for a Screen Space Overlay canvas).</summary>
+        void Awake()
+        {
+            if (actionButton == null) return;
+
+            actionRect = actionButton.transform as RectTransform;
+            Canvas canvas = actionButton.GetComponentInParent<Canvas>();
+            if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay) actionCamera = canvas.worldCamera;
+        }
+
         void OnEnable()
         {
             if (actionButton != null) actionButton.Pressed += OnJumpPressed;
@@ -86,9 +100,25 @@ namespace CoolSchool.Race
 
         void HandlePress(Vector2 position, int pointerId)
         {
-            if (IsOverUi(pointerId)) return;
+            if (IsOverUi(pointerId) || IsOverActionButton(position)) return;
 
             LaneChange?.Invoke(position.x < Screen.width * 0.5f ? -1 : 1);
+        }
+
+        /// <summary>
+        /// Geometric backup for <see cref="IsOverUi"/>: the EventSystem may not have seen a brand-new touch yet when Update runs,
+        /// so a tap on the jump button must also be recognised by position, with a 10% margin around the button.
+        /// </summary>
+        bool IsOverActionButton(Vector2 position)
+        {
+            if (actionRect == null) return false;
+
+            actionRect.GetWorldCorners(corners);
+            Vector2 min = RectTransformUtility.WorldToScreenPoint(actionCamera, corners[0]);
+            Vector2 max = RectTransformUtility.WorldToScreenPoint(actionCamera, corners[2]);
+            Vector2 margin = (max - min) * 0.1f;
+            var area = Rect.MinMaxRect(min.x - margin.x, min.y - margin.y, max.x + margin.x, max.y + margin.y);
+            return area.Contains(position);
         }
 
         static bool IsOverUi(int pointerId)

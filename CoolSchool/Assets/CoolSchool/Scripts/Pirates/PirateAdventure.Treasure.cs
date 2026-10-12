@@ -18,6 +18,14 @@ namespace CoolSchool.Pirates
         const float DigHintSeconds = 14f;
         const float CoinHintSeconds = 12f;
         const float CoinAutoSeconds = 60f;
+        // After this long on one stretch of the map the stretch counts as done, so he can never be stuck.
+        const float GoToTimeoutSeconds = 90f;
+        // The guide arrow above a landmark: its height, the gap above the landmark, the tallest landmark top it follows, the ring on the ground.
+        const float MarkerArrowHeight = 1.7f;
+        const float MarkerGap = 0.5f;
+        const float MarkerMaxTopHeight = 2.5f;
+        const float MarkerMinRing = 1.3f;
+        const float MarkerMaxRing = 2.6f;
 
         bool dugFlag;
         int coinsCollected;
@@ -45,11 +53,11 @@ namespace CoolSchool.Pirates
                 yield return new WaitForSeconds(1.2f);
             }
 
-            // Follow the pictures: Lorre flies to each landmark and a sparkle trail leads the way.
+            // Follow the pictures: a bouncing arrow marks the landmark, Lorre hovers over it and a sparkle trail leads the way.
             for (int i = 0; i < order.Count; i++)
             {
                 Transform landmark = landmarks[order[i]];
-                yield return GoTo(landmark, () => FlatDistanceToPlayer(landmark.position) <= landmarkReachMeters, landmarkReachMeters, "pirates.map");
+                yield return GoTo(landmark, () => DistanceToLandmarkEdge(landmark) <= landmarkEdgeReachMeters, landmarkEdgeReachMeters, "pirates.map");
 
                 if (map != null) map.SetReached(i + 1);
                 Sfx.Play("pirates.map_tick", landmark.position);
@@ -81,14 +89,25 @@ namespace CoolSchool.Pirates
             return all;
         }
 
-        /// <summary>Lorre hovers over the target and sparkles lead the way, until the player gets there.</summary>
+        /// <summary>
+        /// The arrow and ring mark the target, Lorre hovers over the arrow and sparkles lead the way, until the player gets there.
+        /// After a long time it counts as reached anyway, so he is never stuck.
+        /// </summary>
         IEnumerator GoTo(Transform target, System.Func<bool> arrived, float stopRadius, string hintGroup)
         {
-            if (parrot != null) parrot.FlyTo(target.position + Vector3.up * 2.6f, () => parrot.HoverAbove(target, 2.6f));
+            // The arrow floats above the top of the target (a tall flag no higher than a person), the parrot just above the arrow.
+            Bounds size = LandmarkBounds(target);
+            float topHeight = Mathf.Clamp(size.max.y - target.position.y, 0f, MarkerMaxTopHeight);
+            float ringRadius = Mathf.Clamp(Mathf.Max(size.extents.x, size.extents.z) + 0.7f, MarkerMinRing, MarkerMaxRing);
+            float arrowBase = topHeight + MarkerGap;
+            float parrotHeight = Mathf.Max(2.6f, arrowBase + MarkerArrowHeight + 0.9f);
+            if (guideMarker != null) guideMarker.Show(target.position, arrowBase, ringRadius);
+            if (parrot != null) parrot.FlyTo(target.position + Vector3.up * parrotHeight, () => parrot.HoverAbove(target, parrotHeight));
 
             float nextTrail = 0f;
             float nextHint = Time.time + ArriveHintSeconds;
-            while (!arrived())
+            float giveUp = Time.time + GoToTimeoutSeconds;
+            while (!arrived() && Time.time < giveUp)
             {
                 if (Time.time >= nextTrail)
                 {
@@ -105,9 +124,45 @@ namespace CoolSchool.Pirates
             }
         }
 
-        float FlatDistanceToPlayer(Vector3 point)
+        /// <summary>
+        /// The size of a landmark: its pictures' bounds (or its colliders', or just its point). Big landmarks have colliders he
+        /// cannot walk into, so distances are measured to this box and not to the landmark's middle.
+        /// </summary>
+        Bounds LandmarkBounds(Transform landmark)
         {
-            return Hittable.FlatDistance(PlayerPosition(), point);
+            if (landmarkBounds.TryGetValue(landmark, out Bounds cached)) return cached;
+
+            var bounds = new Bounds(landmark.position, Vector3.zero);
+            bool found = false;
+            foreach (Renderer renderer in landmark.GetComponentsInChildren<Renderer>(false))
+            {
+                if (renderer is ParticleSystemRenderer || renderer is TrailRenderer) continue;
+
+                if (found) bounds.Encapsulate(renderer.bounds);
+                else bounds = renderer.bounds;
+                found = true;
+            }
+            if (!found)
+            {
+                foreach (Collider collider in landmark.GetComponentsInChildren<Collider>(false))
+                {
+                    if (found) bounds.Encapsulate(collider.bounds);
+                    else bounds = collider.bounds;
+                    found = true;
+                }
+            }
+
+            landmarkBounds[landmark] = bounds;
+            return bounds;
+        }
+
+        /// <summary>How far the player is from the nearest side of the landmark on the ground (0 when he stands against it or in it).</summary>
+        float DistanceToLandmarkEdge(Transform landmark)
+        {
+            Bounds bounds = LandmarkBounds(landmark);
+            Vector3 position = PlayerPosition();
+            position.y = bounds.center.y;
+            return Mathf.Sqrt(bounds.SqrDistance(position));
         }
 
         // ----- 7. Digging --------------------------------------------------------------------------
@@ -135,6 +190,7 @@ namespace CoolSchool.Pirates
             }
 
             digSpot.Dug -= OnDug;
+            if (guideMarker != null) guideMarker.Hide();
             digSpot.Armed = false;
             ClearIcon();
             if (map != null) map.Hide();
@@ -189,10 +245,7 @@ namespace CoolSchool.Pirates
             VoicePlayer.Say(soundKey);
             pickedLetter = '\0';
             lessonUI.ShowLetterCards(choices, c => pickedLetter = c);
-            if (teaching) lessonUI.PulseCard(answer);
 
-            int wrong = 0;
-            int wrongLeft = choices.Length - 1;
             bool solved = false;
             float quietSince = Time.time;
             bool reminded = false;
@@ -204,6 +257,7 @@ namespace CoolSchool.Pirates
                     pickedLetter = '\0';
                     quietSince = Time.time;
                     reminded = false;
+                    lessonUI.StopPulse();
 
                     if (picked == answer)
                     {
@@ -211,20 +265,17 @@ namespace CoolSchool.Pirates
                     }
                     else
                     {
-                        // Never a failure: a friendly wiggle, the sound again, and after the second mistake the right card pulses.
+                        // Never a failure: a friendly wiggle and the sound again. The right card never pulses before he has been quiet a while.
                         mistakes++;
-                        wrong++;
-                        wrongLeft--;
                         lessonUI.WiggleCard(picked);
                         lessonUI.DimCard(picked);
                         VoicePlayer.Say("pirates.lock_wrong", true);
                         VoicePlayer.Say(soundKey);
-                        if (wrong >= 2 || wrongLeft <= 0) lessonUI.PulseCard(answer);
                     }
                 }
-                else if (!reminded && Time.time - quietSince > 18f && (VoicePlayer.Instance == null || !VoicePlayer.Instance.IsBusy))
+                else if (!reminded && Time.time - quietSince > hintPulseSeconds && (VoicePlayer.Instance == null || !VoicePlayer.Instance.IsBusy))
                 {
-                    // Stuck: the sound once more, and the right card pulses.
+                    // Nothing tapped for a while: the sound once more, and only now the right card pulses.
                     reminded = true;
                     VoicePlayer.Say(soundKey);
                     lessonUI.PulseCard(answer);

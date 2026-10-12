@@ -26,7 +26,7 @@ namespace CoolSchool.EditorTools
         const float EntranceWidth = 3f;
         const float EntranceFromWest = 2.6f;
 
-        // Heights: the sand sits 1 cm above the grass, the sea 6 cm, the island a hand above the sand.
+        // Heights: the sand sits 1 cm above the grass, the ship and boat 6 cm, the island a hand above the sand.
         const float SandY = 0.01f;
         const float SeaY = 0.06f;
         const float IslandTopY = 0.14f;
@@ -34,7 +34,6 @@ namespace CoolSchool.EditorTools
         const float DockHalfWidth = 6f;
         const float DockSouth = 2f;
         const float DockNorth = 6f;
-        const float SeaSouth = 6.5f;
         // Every plank has its top at this height (the planks differ in thickness), so the dock is flush.
         const float DockSurfaceY = 0.12f;
 
@@ -61,7 +60,6 @@ namespace CoolSchool.EditorTools
         const float BoatLength = 4.5f;
         const float ChestWidth = 0.9f;
         const int BalloonSlots = 7;
-        const int ShoreBoxes = 12;
 
         // Landmarks on the island: (u from the cove's middle, v from its south edge). All north of the landing point, >= 4 m apart.
         static readonly Vector2[] LandmarkSpots =
@@ -84,8 +82,6 @@ namespace CoolSchool.EditorTools
         static readonly PrefabRef AnchorPrefab = new PrefabRef("SM_Gen_Prop_Chain_Anchor_01", "PolygonGeneric");
         static readonly PrefabRef ShipPrefab = Kids("SM_Prop_Playground_Ship_01");
         static readonly PrefabRef WheelPrefab = new PrefabRef("SM_Veh_Steering_Wheel_01", "PolygonCity");
-        static readonly PrefabRef SeaPrefab = Kids("SM_Generic_Water_Plane_01");
-        static readonly PrefabRef SeaFallbackPrefab = new PrefabRef("SM_Gen_Env_Water_Plane_01", "PolygonGeneric");
         static readonly PrefabRef IslandPrefab = Kids("SM_Env_Ground_Round_Sand_01");
         static readonly PrefabRef FlagPrefab = Kids("SM_Prop_Flag_01");
         static readonly PrefabRef SandCastlePrefab = Kids("SM_Prop_Sand_Castle_01");
@@ -128,10 +124,8 @@ namespace CoolSchool.EditorTools
             public float ShipHalfLength = ShipLength * 0.5f;
             public Vector3 ShipStart;
 
-            // Sea and island
-            public GameObject Sea;
+            // Island
             public Vector3 IslandCentre;
-            public GameObject IslandBounds;
             public Transform IslandLandingPoint;
             public Transform[] CrewLandingPoints;
             public Transform[] SkeletonLandingPoints;
@@ -177,8 +171,8 @@ namespace CoolSchool.EditorTools
         // ----- Step 1: static geometry ---------------------------------------------------------
 
         /// <summary>
-        /// The cove: sand, own fence on three sides, the entrance gap in the main north fence, dock, ship, sea (inactive),
-        /// island, landmarks, dig spot with the buried chest, island bounds (inactive), skeleton boat (inactive) and trophy.
+        /// The cove: sand, own fence on three sides, the entrance gap in the main north fence, dock, ship,
+        /// island, landmarks, dig spot with the buried chest, skeleton boat (inactive) and trophy.
         /// Call after the main fence and the castle exist (it needs the final MaxX) and before the NavMesh is baked.
         /// </summary>
         internal static CoveLayout BuildCove(Transform root, EnvironmentInfo info)
@@ -223,20 +217,16 @@ namespace CoolSchool.EditorTools
 
             BuildDock(c, props);
             BuildShip(c, props);
-            BuildSea(c, props);
             BuildIsland(c, props);
             BuildLandmarks(c, props);
             BuildTreasureSpot(c, props);
-            BuildIslandBounds(c, props);
             BuildSkeletonBoat(c, props);
             BuildTrophy(c, props);
             BuildLandingPoints(c, props);
 
             c.ZonePosition = new Vector3(c.CentreX, c.DockTopY, c.SouthWest.z + ZoneV);
 
-            // The sea and the island bounds are inactive when the NavMesh is baked, and stay so until the adventure starts.
-            if (c.Sea != null) c.Sea.SetActive(false);
-            if (c.IslandBounds != null) c.IslandBounds.SetActive(false);
+            // The skeleton boat is inactive when the NavMesh is baked, and stays so until the adventure starts.
             if (c.Boat != null) c.Boat.gameObject.SetActive(false);
 
             // The ship and the boat move, so the follow camera (whose obstacle mask skips Ignore Raycast) must not pull in
@@ -492,7 +482,7 @@ namespace CoolSchool.EditorTools
         // ---- Ship ----
 
         /// <summary>
-        /// The playground ship (a second instance) as a "PirateShip" root: bow north, about 7 m long, standing in the sea and
+        /// The playground ship (a second instance) as a "PirateShip" root: bow north, about 7 m long, standing on the sand and
         /// NOT static (it sails). The helm seat, two crew seats, the steering wheel and the cannon are children of the root.
         /// </summary>
         static void BuildShip(CoveLayout c, Transform parent)
@@ -659,59 +649,9 @@ namespace CoolSchool.EditorTools
             c.CannonMuzzle = NewLocalPoint("Muzzle", barrel, new Vector3(0f, 0f, 0.95f));
         }
 
-        // ---- Sea and island ----
+        // ---- Island ----
 
-        /// <summary>The sea: a water plane over the whole cove except the dock strip, 6 cm above the sand. No collider; inactive at the end.</summary>
-        static void BuildSea(CoveLayout c, Transform parent)
-        {
-            var root = new GameObject("Sea").transform;
-            root.SetParent(parent, false);
-            c.Sea = root.gameObject;
-
-            float x0 = c.Pit.xMin + c.EdgeWidth;
-            float x1 = c.Pit.xMax - c.EdgeWidth;
-            float z0 = Mathf.Max(c.SouthWest.z + SeaSouth, c.Pit.yMin + c.EdgeWidth);
-            float z1 = c.Pit.yMax - c.EdgeWidth;
-
-            GameObject prefab = LoadPrefab(SeaPrefab);
-            if (prefab == null) prefab = LoadPrefab(SeaFallbackPrefab);
-
-            if (prefab != null)
-            {
-                GameObject water = Spawn(prefab, root);
-                if (TryGetBounds(water, out Bounds bounds) && bounds.size.x > 0.01f && bounds.size.z > 0.01f)
-                {
-                    Vector3 scale = water.transform.localScale;
-                    scale.x *= (x1 - x0) / bounds.size.x;
-                    scale.z *= (z1 - z0) / bounds.size.z;
-                    water.transform.localScale = scale;
-                    AlignToBounds(water, (x0 + x1) * 0.5f, (z0 + z1) * 0.5f, SeaY, true);
-                }
-                else
-                {
-                    water.transform.position = new Vector3((x0 + x1) * 0.5f, SeaY, (z0 + z1) * 0.5f);
-                    Debug.LogWarning("CoolSchool pirate cove: the water prefab has no usable size; it is not scaled to the cove.");
-                }
-                foreach (Collider collider in water.GetComponentsInChildren<Collider>(true)) Object.DestroyImmediate(collider);
-                foreach (Renderer renderer in water.GetComponentsInChildren<Renderer>(true)) renderer.shadowCastingMode = ShadowCastingMode.Off;
-                return;
-            }
-
-            // Fallback: a blue see-through quad.
-            Debug.LogWarning("CoolSchool pirate cove: no water plane prefab found; the sea is a plain blue quad.");
-            var quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
-            quad.name = "SeaQuad";
-            Object.DestroyImmediate(quad.GetComponent<Collider>());
-            quad.transform.SetParent(root, false);
-            quad.transform.position = new Vector3((x0 + x1) * 0.5f, SeaY, (z0 + z1) * 0.5f);
-            quad.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-            quad.transform.localScale = new Vector3(x1 - x0, z1 - z0, 1f);
-            var renderer2 = quad.GetComponent<MeshRenderer>();
-            renderer2.sharedMaterial = KnightsArenaBuilder.CreateGlowMaterial(MaterialFolder + "/PirateSea.mat", new Color(0.15f, 0.5f, 0.9f), 0.7f);
-            renderer2.shadowCastingMode = ShadowCastingMode.Off;
-        }
-
-        /// <summary>The island: one round sand disc scaled into an oval, a hand above the sand so it stands out of the sea.</summary>
+        /// <summary>The island: one round sand disc scaled into an oval, a hand above the sand so it stands out of the sand pit.</summary>
         static void BuildIsland(CoveLayout c, Transform parent)
         {
             c.IslandCentre = new Vector3(c.CentreX, IslandTopY, c.SouthWest.z + IslandCentreV);
@@ -765,37 +705,6 @@ namespace CoolSchool.EditorTools
             disc.transform.position = new Vector3(c.IslandCentre.x, IslandTopY - 0.1f, c.IslandCentre.z);
             disc.GetComponent<MeshRenderer>().sharedMaterial = LitMaterial("PirateSand", new Color(0.93f, 0.82f, 0.55f), 0.1f);
             FinishEnvironmentObject(disc);
-        }
-
-        /// <summary>
-        /// Invisible walls around the island shore (12 boxes on an oval, 1.5 m high, layer Ignore Raycast, no renderers), so nobody
-        /// walks into the pretend sea. Inactive until the player lands.
-        /// </summary>
-        static void BuildIslandBounds(CoveLayout c, Transform parent)
-        {
-            var root = new GameObject("IslandBounds").transform;
-            root.SetParent(parent, false);
-            root.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-            c.IslandBounds = root.gameObject;
-
-            float a = IslandWidth * 0.5f + 0.4f;
-            float b = IslandDepth * 0.5f + 0.4f;
-            float perimeter = 2f * Mathf.PI * Mathf.Sqrt((a * a + b * b) * 0.5f);
-            float boxLength = perimeter / ShoreBoxes * 1.3f;
-
-            for (int i = 0; i < ShoreBoxes; i++)
-            {
-                float angle = i * 2f * Mathf.PI / ShoreBoxes;
-                var centre = new Vector3(c.IslandCentre.x + a * Mathf.Cos(angle), IslandTopY + 0.75f, c.IslandCentre.z + b * Mathf.Sin(angle));
-                Vector3 tangent = new Vector3(-a * Mathf.Sin(angle), 0f, b * Mathf.Cos(angle)).normalized;
-
-                var wall = new GameObject($"ShoreWall_{i + 1}");
-                wall.layer = root.gameObject.layer;
-                wall.transform.SetParent(root, false);
-                wall.transform.SetPositionAndRotation(centre, Quaternion.LookRotation(tangent, Vector3.up));
-                var box = wall.AddComponent<BoxCollider>();
-                box.size = new Vector3(0.6f, 1.5f, boxLength);
-            }
         }
 
         // ---- Landmarks, dig spot and chest ----

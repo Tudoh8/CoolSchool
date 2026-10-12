@@ -22,7 +22,7 @@ apart into giggling bones and rebuild as friends. Controls stay one floating joy
 ## User decisions (2026-10-12)
 
 - **Setting:** the Synty playground pirate ship on a big sand pit. When the adventure starts, "imagination mode"
-  turns the sand into sea. Only assets we already have.
+  sparkles; there is no water, the ship sails over the sand. Only assets we already have.
 - **Place:** north-east, behind the castle (north of the arena's north fence).
 - **Skeletons:** silly duel opponents. One sword hit: they fall apart into a pile of bones, giggle, rebuild, and
   join the crew.
@@ -42,8 +42,7 @@ Practical change to the user's order: the duel happens on the island **beach**, 
 ship's deck isn't reliable NavMesh). The skeletons sail ahead to the island after the cannon phase and wait there.
 
 1. **Begin (at the dock).**
-   - `imagination.Play(true)` (sparkle + overlay), then `sea.SetActive(true)` with a few `BattleEffects.Sparkle`
-     bursts over it; `Sfx.Play("pirates.waves")`, `Sfx.PlayMusic("music.pirates")`.
+   - `imagination.Play(true)` (sparkle + overlay); `Sfx.Play("pirates.waves")`, `Sfx.PlayMusic("music.pirates")`. No water.
    - Player costume on (`PirateCostume.Show(true)`): eyepatch, plus the captain hat if `hat.pirate` is unlocked,
      otherwise the bandana. Sword shown (`WeaponHolder.ShowWeapons(true)`), jump disabled.
    - The parrot flies in and perches on the player's shoulder. Voice `pirates.start`.
@@ -61,8 +60,7 @@ ship's deck isn't reliable NavMesh). The skeletons sail ahead to the island afte
    - All popped: voice `pirates.balloons_done`; the skeleton boat sails to the island's west beach
      (`skeletonBoat.SailToIsland()`). `cannon.Armed = false`, sailing resumes.
 4. **Arrive.** `ship.ArrivedAtIsland` → voice `pirates.arrive`. The player hops off to `islandLandingPoint`
-   (`PlayerController.StopRiding(point)`), the crew to `crewLandingPoints` (agents on). `islandBounds` on (invisible
-   walls so nobody walks into the pretend sea).
+   (`PlayerController.StopRiding(point)`), the crew to `crewLandingPoints` (agents on).
 5. **Skeletons.** They hop off the boat to `skeletonLandingPoints` with a sparkle; one says `pirates.skeletons`.
    `playerInput.enabled = true`, button icon = sword. Crew `KnightAllyAI.enabled = true`. Hint
    `pirates.fight_hint` after 5 s without a swing.
@@ -80,19 +78,24 @@ ship's deck isn't reliable NavMesh). The skeletons sail ahead to the island afte
    - When all are friends: `playerInput.enabled = false`, crew AI off (they follow), voice `pirates.map`.
 6. **Map route.** `map.Show(icons)` with the chosen landmarks' icons, then the X. The parrot flies to the first
    landmark and hovers above it; a sparkle trail on the ground (like `ActivityInviter`) leads from the player.
-   Reaching a landmark (within 2.2 m): `map.SetReached(i + 1)`, `Sfx.Play("pirates.map_tick")`, voice
-   `pirates.landmark`, the parrot flies on to the next one. After the last landmark: `digSpot.Show(true)` and the
-   parrot flies to it. Voice `pirates.dig` when the player reaches it.
+   Reaching a landmark (the player within `landmarkEdgeReachMeters` = 1.2 m of its renderer bounds, measured to the edge
+   and not to the centre, so a big rock counts when he touches it; after 90 s it counts anyway): `map.SetReached(i + 1)`,
+   `Sfx.Play("pirates.map_tick")`, voice `pirates.landmark`, the parrot flies on to the next one. After the last landmark:
+   `digSpot.Show(true)` and the parrot flies to it. Voice `pirates.dig` when the player reaches it. The current target
+   (landmark, then the dig spot) carries a `TreasureGuideMarker`: a big bouncing arrow above it and a glowing ring on the
+   ground, which slides on to the next target; the parrot hovers just above the arrow. On the HUD map the current icon is
+   big and pulses, with a glowing frame that slides to the next icon on every tick (the X after the last icon).
 7. **Dig.** Button icon = spade; `digSpot.Armed = true`. Each tap: dig animation (`KidAnimator` attack trigger),
    sand puff, `pirates.dig`. After `tapsNeeded` taps `DigSpot.Dug` fires → `chest.Rise()` (`pirates.chest_rise`).
 8. **Letter lock.** Voice `pirates.lock` then `letter.sound.<x>`, then `lessonUI.ShowLetterCards(...)`.
    Right: `lessonUI.CelebrateCard`, `chest.Unlock()` (lock pops off, lid opens, `pirates.lock_open`), voice
-   `pirates.lock_right`. Wrong: wiggle, voice `pirates.lock_wrong`, the sound again; after the second mistake the
-   right card pulses. Count a mistake for each wrong pick.
+   `pirates.lock_right`. Wrong: wiggle, dim the card, voice `pirates.lock_wrong`, the sound again. The right card may only pulse after
+   `hintPulseSeconds` (15 s) with no card tapped; any tap, right or wrong, stops the pulse and restarts the 15 s. No
+   other early pulse. Count a mistake for each wrong pick.
    - **Letter choice:** take the letters in `ProgressStore.Current.lettersIntroduced`. If the child's name's first
      letter is among them, use it with 50% chance, otherwise pick one at random. If none is introduced yet, use
      `LetterCurriculum.OrderFor(childName)[0]` and teach it first: voice `pirates.lock_new`, the sound, and the right
-     card pulses from the start. Distractors: random from `LetterCurriculum.SchoolOrder` without the target; below
+     card is NOT given away. Distractors: random from `LetterCurriculum.SchoolOrder` without the target; below
      level 3 also skip letters where `LetterCurriculum.AreSimilar(target, d)`. Mirror how `LettersLesson` builds its
      cards from the `LetterSet`.
 9. **Count the treasure.** `chest.SpillCoins(count)` puts the coins in a fan in front of the chest (camera side).
@@ -105,7 +108,7 @@ ship's deck isn't reliable NavMesh). The skeletons sail ahead to the island afte
 10. **Party.** Everyone moves to `partyPoints` and dances (`KidAnimator.SetDancing(true)` with a random variant),
     friend skeletons too; the parrot circles above. Voice `pirates.victory`, `Sfx.Play("pirates.party")`.
     `onVictory.Invoke()` after 4 s, then `End()`.
-11. **OnEnd** restores everything, also when ended early mid-phase: sea off, islandBounds off, costume off, weapons
+11. **OnEnd** restores everything, also when ended early mid-phase: costume off, weapons
     hidden, button icon reset, jump on, `playerInput.enabled = false`, rider detached safely (if still riding,
     `StopRiding` at the ship's side on the dock), ship back at the dock with a sparkle (`ship.ResetToDock()`),
     skeleton boat and skeletons reset and inactive, crew inactive (sparkle), map hidden, dig spot and chest reset,
@@ -149,8 +152,7 @@ x = 20.9 .. `MaxX` (50.9 after the castle change; read it from `EnvironmentInfo`
   place `HelmSeat` on the deck at the back, `CrewSeats` (2) beside it, the steering wheel
   (`SM_Veh_Steering_Wheel_01`, scaled to ~0.8 m, standing upright facing south) in front of the helm seat, and a
   primitive cannon at the bow (see below). Seats are empty children of the ship root.
-- **Sea:** `SM_Generic_Water_Plane_01` (fallback `SM_Gen_Env_Water_Plane_01`, fallback a blue transparent quad),
-  scaled to cover the cove except the dock strip, at y = 0.06, **inactive** at start. No collider.
+- **No sea.** (Changed 2026-10-12: the user does not want any water.) The sand pit stays sand; the ship "sails" over it.
 - **Island (north):** an oval of sand tiles or `SM_Env_Ground_Round_Sand_01` raised 0.05 m, centre
   (cx, SW.z + 31), about 18 m wide × 12 m deep. Its south beach is the ship's arrival point
   `IslandDockPoint` at (cx, SW.z + 23) facing north; `IslandLandingPoint` 1.5 m north of where the bow stops; crew
@@ -161,8 +163,6 @@ x = 20.9 .. `MaxX` (50.9 after the castle change; read it from `EnvironmentInfo`
   (`SM_Gen_Env_Rock_0x`, ~2 m) and a telescope on a barrel (`SM_Prop_Telescope_01` ~1 m). Static.
 - **Dig spot:** `DigSpot` near the island's north middle, with a red X made of two flat red boxes (no colliders),
   hidden at start. The chest (`SM_Gen_Prop_Chest_01`, ~0.9 m wide) is buried under it (see `TreasureChest`).
-- **Island bounds:** an inactive child with 8–12 box colliders around the island shore (1.5 m high, layer
-  Ignore Raycast, no renderers). Inactive at bake time, so the NavMesh ignores it.
 - **Skeleton boat:** `SM_Prop_Cardboard_Boat_01` scaled to ~4.5 m long, with 7 balloon slots: thin sticks
   (cylinders) with `BalloonTarget` spheres (0.6 m, bright colours, URP/Lit with a little emission) on top. Path
   points: start off the west side (x = SW.x + 2, z = SW.z + 17), drift between (cx − 5, SW.z + 17) and
@@ -201,8 +201,6 @@ public class PirateAdventure : Activity
     [SerializeField] PirateShip ship;
     [SerializeField] ShipCannon cannon;
     [SerializeField] SkeletonBoat skeletonBoat;
-    [SerializeField] GameObject sea;
-    [SerializeField] GameObject islandBounds;
     [SerializeField] Transform islandLandingPoint;
     [SerializeField] Transform[] crewLandingPoints;
     [SerializeField] Transform[] skeletonLandingPoints;
@@ -258,7 +256,7 @@ public class PirateAdventure : Activity
   ```
   Sailing: always moves forward; joystick X turns the heading within ±`maxSteerAngle` of "straight at the dock
   point"; the heading eases back toward it by `islandPull`. Inside `arriveRadius`, it glides into the dock pose over
-  1 s and raises `ArrivedAtIsland`. A gentle bob and roll while the sea is active. Never stops at an edge (clamped).
+  1 s and raises `ArrivedAtIsland`. A gentle bob and roll while afloat. Never stops at an edge (clamped).
   Keyboard: A/D or arrows also steer in the editor (use the joystick's value if it already includes keyboard).
 - `ShipCannon` (on the cannon at the bow):
   ```csharp
@@ -369,7 +367,7 @@ public class PirateAdventure : Activity
   [SerializeField] Image finalX;            // the red X at the end
   [SerializeField] RectTransform[] dots;    // the dotted path between the steps
   public void Show(Sprite[] icons);         // unrolls (scale-in), only icons.Length steps visible
-  public void SetReached(int count);        // ticks with a pop; the next icon pulses
+  public void SetReached(int count);        // ticks with a pop; a glowing frame slides to the next icon, which is big and pulses (the X after the last)
   public void Hide();
   ```
 - `DigSpot`:
@@ -468,7 +466,7 @@ internal static class PirateCoveBuilder
   Sprite. Put this in `Editor/Pirates/PirateMapIconRenderer.cs`. Skip re-rendering if the file exists.
 - Materials (`Assets/CoolSchool/Materials/Pirates/`): `PirateBone.mat`, `PirateBalloon_<n>.mat` (or one material +
   `MaterialPropertyBlock` colours, agent F's choice; tell B which), `PirateRedX.mat`, `PirateLock.mat` (gold),
-  `PirateCannon.mat` (dark grey). Sea material only if the water prefab is missing.
+  `PirateCannon.mat` (dark grey). Guide marker: `PirateGuideArrow.mat` (gold, emissive), `PirateGuideRing.mat` (gold, glow).
 - Cannon: primitive cylinder barrel (~0.9 m) on a box base with two cylinder wheels, on the bow, pointing north;
   `muzzle` at the barrel tip.
 - Wire `RewardSystem.pirateAdventure` in `RewardsSetupBuilder` (one line, like `alienLanding`).

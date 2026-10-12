@@ -279,6 +279,9 @@ namespace CoolSchool.EditorTools
                 gate.transform.localScale *= CastleScale;
                 gate.transform.rotation = southFacing;
                 AlignToBounds(gate, centreX, wallSouth, 0f, false);
+                // The prefab's collider is convex, and its hull fills the arch: walking and the NavMesh need the real shape.
+                foreach (MeshCollider collider in gate.GetComponentsInChildren<MeshCollider>(true))
+                    collider.convex = false;
                 FinishEnvironmentObject(gate);
                 frontPieces.Add(gate);
             }

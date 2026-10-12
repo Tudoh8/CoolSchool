@@ -110,3 +110,6 @@ InitTestScene*.unity*
 
 # Command-line Unity batch logs (Tools/unity-batch.ps1)
 /Logs/
+
+# Burst debug info written next to player builds
+*_BurstDebugInformation_DoNotShip/

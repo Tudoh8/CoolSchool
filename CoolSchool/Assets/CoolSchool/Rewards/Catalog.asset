@@ -28,6 +28,11 @@ MonoBehaviour:
     prefab: {fileID: 576831500808881760, guid: c1fb3cce51613414d9dc446f6f7d53af, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+  - id: cart.flag
+    kind: 5
+    prefab: {fileID: 4324879067095937195, guid: 11138c63af0c545459f47999d977c004, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
   - id: sword.wood
     kind: 0
     prefab: {fileID: 3185189667651922555, guid: 6b374ed581a1a724d957249c7d3e7854, type: 3}
@@ -37,6 +42,11 @@ MonoBehaviour:
     kind: 1
     prefab: {fileID: 3466557726058760119, guid: 018ac46aa02b90445bc455e3ce3af3af, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+  - id: cart.racer_2
+    kind: 5
+    prefab: {fileID: 6431105003458190973, guid: d8bb925d7e46e2340bf37173c0834366, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
     revealScale: 1
   - id: plush.parrot
     kind: 4
@@ -53,6 +63,11 @@ MonoBehaviour:
     prefab: {fileID: 3523754109741742598, guid: 09febf92b31c7d54ab3e5504c0e5b2a3, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+  - id: cart.stickers
+    kind: 5
+    prefab: {fileID: 5740924496675605690, guid: ca493500d205c1f468c334d7865e91cc, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
   - id: sword.pirate
     kind: 0
     prefab: {fileID: 4845071059551229268, guid: 3087ae39d63cded47a57622195132c7f, type: 3}
@@ -68,8 +83,18 @@ MonoBehaviour:
     prefab: {fileID: 6285028938098056976, guid: bbb1a5c01ffd5b34b84e6ee8d7e3f540, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+  - id: cart.racer_3
+    kind: 5
+    prefab: {fileID: 5588319514320211083, guid: 41675f0548589e045ba5676a786dd5a0, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
   - id: hat.pirate
     kind: 3
     prefab: {fileID: 6143756539287377912, guid: afce7dd8f017c9f4690b726aa021dd46, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+  - id: cart.gold
+    kind: 5
+    prefab: {fileID: 2295925410022414001, guid: ed0e1acc3409c714797f49c8e5a20eaf, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
     revealScale: 1
