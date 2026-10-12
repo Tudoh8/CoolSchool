@@ -5,6 +5,7 @@ using CoolSchool.Player;
 using CoolSchool.Rewards;
 using CoolSchool.Voice;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace CoolSchool.Activities
 {
@@ -27,8 +28,10 @@ namespace CoolSchool.Activities
         const float TrailStartDistance = 1f;
         const float TrailHeight = 0.3f;
         const int MaxTrailPoints = 16;
+        const float NavSampleDistance = 2f;
 
         PlayerController player;
+        NavMeshPath trailPath;
         float secondsUntilInvite;
         int lastInvited = -1;
         ActivityZone trailZone;
@@ -98,7 +101,10 @@ namespace CoolSchool.Activities
             return group;
         }
 
-        /// <summary>Sparkles every few metres along the straight line from the player toward the zone.</summary>
+        /// <summary>
+        /// Sparkles every few metres along the walking route from the player to the zone (so the trail goes through
+        /// gates instead of walls). Without a route it falls back to the straight line.
+        /// </summary>
         void ShowTrail()
         {
             nextTrailTime = Time.time + TrailRefreshSeconds;
@@ -106,6 +112,54 @@ namespace CoolSchool.Activities
             if (player == null) player = FindAnyObjectByType<PlayerController>();
             if (player == null) return;
 
+            if (ShowPathTrail()) return;
+            ShowStraightTrail();
+        }
+
+        /// <summary>Sparkles along the NavMesh path. Returns false when there is no usable path.</summary>
+        bool ShowPathTrail()
+        {
+            if (!NavMesh.SamplePosition(player.transform.position, out NavMeshHit from, NavSampleDistance, NavMesh.AllAreas) ||
+                !NavMesh.SamplePosition(trailZone.transform.position, out NavMeshHit to, NavSampleDistance, NavMesh.AllAreas))
+                return false;
+
+            if (trailPath == null) trailPath = new NavMeshPath();
+            if (!NavMesh.CalculatePath(from.position, to.position, NavMesh.AllAreas, trailPath)) return false;
+            if (trailPath.status == NavMeshPathStatus.PathInvalid) return false;
+
+            Vector3[] corners = trailPath.corners;
+            if (corners.Length < 2) return false;
+
+            float totalLength = 0f;
+            for (int i = 1; i < corners.Length; i++) totalLength += Vector3.Distance(corners[i - 1], corners[i]);
+
+            // Stop a zone radius before the end, measured along the path.
+            float end = Mathf.Max(0f, totalLength - trailZone.Radius);
+            float along = TrailStartDistance;
+            float segmentStart = 0f;
+            int segment = 1;
+            for (int i = 0; i < MaxTrailPoints && along <= end && segment < corners.Length; i++)
+            {
+                // Move on to the path segment that contains this distance.
+                float segmentLength = Vector3.Distance(corners[segment - 1], corners[segment]);
+                while (along > segmentStart + segmentLength && segment < corners.Length - 1)
+                {
+                    segmentStart += segmentLength;
+                    segment++;
+                    segmentLength = Vector3.Distance(corners[segment - 1], corners[segment]);
+                }
+
+                float t = segmentLength > 0.0001f ? Mathf.Clamp01((along - segmentStart) / segmentLength) : 1f;
+                Vector3 point = Vector3.Lerp(corners[segment - 1], corners[segment], t);
+                BattleEffects.Sparkle(point + Vector3.up * TrailHeight);
+                along += TrailSpacing;
+            }
+            return true;
+        }
+
+        /// <summary>The old fallback: sparkles along the straight line from the player toward the zone.</summary>
+        void ShowStraightTrail()
+        {
             Vector3 start = player.transform.position;
             Vector3 toZone = trailZone.transform.position - start;
             toZone.y = 0f;

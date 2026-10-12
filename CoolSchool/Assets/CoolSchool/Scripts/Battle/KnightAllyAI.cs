@@ -18,8 +18,8 @@ namespace CoolSchool.Battle
         [SerializeField] float followMax = 4f;
         [Tooltip("An opponent closer than this gets challenged.")]
         [SerializeField] float engageRadius = 5f;
-        [SerializeField] float minAttackInterval = 1.5f;
-        [SerializeField] float maxAttackInterval = 2.5f;
+        [SerializeField] float minAttackInterval = 1.8f;
+        [SerializeField] float maxAttackInterval = 3f;
         [SerializeField] float hitPauseSeconds = 0.6f;
 
         NavMeshAgent agent;
@@ -39,6 +39,9 @@ namespace CoolSchool.Battle
             hittable = GetComponent<Hittable>();
             fighter = GetComponent<SwordFighter>();
             kidAnimator = GetComponent<KidAnimator>();
+
+            // Allies only make opponents wobble and giggle; the player's sword is the only one that defeats.
+            fighter.CanDefeat = false;
         }
 
         void OnEnable()

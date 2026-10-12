@@ -79,6 +79,8 @@ namespace CoolSchool.EditorTools
             { "lesson.toy_into_basket", new[] { "basket", "drop", "plop", "thud", "toss", "bloop" } },
             { "lesson.chalk", new[] { "chalk", "scribble", "scratch", "write", "draw", "pencil" } },
             { "lesson.bell", new[] { "bell", "school", "ring", "chime", "ding" } },
+            { "lesson.trace_progress", new[] { "scratch", "chalk", "scribble", "draw", "pencil", "rub" } },
+            { "lesson.letter_pop", new[] { "pop", "ding", "chime", "bubble", "sparkle", "twinkle" } },
 
             // Aliens
             { "aliens.rocket_land", new[] { "land", "rocket", "spaceship", "ship", "thruster", "descend" } },
@@ -102,7 +104,39 @@ namespace CoolSchool.EditorTools
             { "shop.coin_tap", new[] { "coin", "collect", "pickup", "ding", "tap", "gold" } },
             { "shop.register", new[] { "register", "kaching", "ka-ching", "cha-ching", "ching", "cash", "till", "money" } },
 
+            // Pirate cove
+            { "pirates.waves", new[] { "wave", "sea", "ocean", "water" } },
+            { "pirates.wheel", new[] { "wheel", "creak", "ship", "rope", "wood" } },
+            { "pirates.cannon", new[] { "cannon", "boom", "blast", "explosion" } },
+            { "pirates.balloon_pop", new[] { "pop", "balloon" } },
+            { "pirates.bones_rattle", new[] { "bone", "rattle", "skeleton", "clatter" } },
+            { "pirates.bones_rebuild", new[] { "bone", "assemble", "build", "clatter", "rattle" } },
+            { "pirates.parrot", new[] { "parrot", "bird", "squawk" } },
+            { "pirates.map_tick", new[] { "tick", "ding", "check", "chime", "map" } },
+            { "pirates.dig", new[] { "dig", "shovel", "sand" } },
+            { "pirates.chest_rise", new[] { "chest", "rise", "emerge", "dirt", "sand", "magic" } },
+            { "pirates.lock_open", new[] { "unlock", "lock", "click" } },
+            { "pirates.coin", new[] { "coin", "gold", "pickup" } },
+            { "pirates.party", new[] { "party", "cheer", "pirate", "fanfare", "celebration" } },
+
+            // Soapbox race
+            { "race.lane", new[] { "whoosh", "swish", "swipe" } },
+            { "race.jump", new[] { "jump", "hop", "boing" } },
+            { "race.land", new[] { "land", "thud" } },
+            { "race.bonk", new[] { "bonk", "cardboard", "box", "hit", "impact" } },
+            { "race.splash", new[] { "splash", "water", "puddle" } },
+            { "race.coin", new[] { "coin", "pickup", "collect" } },
+            { "race.gate_ding", new[] { "ding", "chime", "correct", "success" } },
+            { "race.countdown_beep", new[] { "beep", "countdown", "tick" } },
+            { "race.go_horn", new[] { "horn", "start", "air horn" } },
+            { "race.ramp_whoosh", new[] { "whoosh", "swoosh", "ramp" } },
+            { "race.spinout", new[] { "spin", "skid", "tyre" } },
+            { "race.cheer", new[] { "cheer", "crowd", "applause" } },
+            { "race.brake", new[] { "brake", "skid", "squeak" } },
+
             // Music
+            { "music.race", new[] { "race", "fast", "upbeat", "chase" } },
+            { "music.pirates", new[] { "pirate", "sea", "shanty", "ship", "adventure", "sailing" } },
             { "music.shop", new[] { "shop", "store", "market", "ukulele", "bouncy", "cheerful", "happy" } },
             { "music.playground", new[] { "playground", "happy", "cheerful", "playful", "fun", "bright", "kids" } },
             { "music.knights", new[] { "knight", "medieval", "adventure", "castle", "heroic", "epic" } },

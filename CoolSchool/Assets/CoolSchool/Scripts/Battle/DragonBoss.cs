@@ -11,7 +11,8 @@ namespace CoolSchool.Battle
     /// <summary>
     /// The friendly dragon. It walks into the arena, shows a clear warning, then breathes
     /// confetti fire or whips its tail. After a few bumps from the knights it does a happy
-    /// dance and flies away. It moves by transform only (no NavMesh) and stays on the ground.
+    /// dance and flies away. It moves by transform only (no NavMesh) and stays on the ground
+    /// once it has arrived (it either walks in or flies in and lands).
     /// </summary>
     [RequireComponent(typeof(Hittable))]
     public class DragonBoss : MonoBehaviour
@@ -49,6 +50,7 @@ namespace CoolSchool.Battle
         const float FlySeconds = 4f;
         const float FlyUpSpeed = 3.5f;
         const float FlyAwaySpeed = 4f;
+        const float FlyInSpeed = 5f;
 
         Hittable hittable;
         PlayerController player;
@@ -105,6 +107,27 @@ namespace CoolSchool.Battle
         /// <summary>Appears at "from", walks to the middle of the arena and starts fighting.</summary>
         public void Enter(Vector3 from, Vector3 arenaCenterPosition)
         {
+            from.y = arenaCenterPosition.y;
+            Prepare(from, arenaCenterPosition);
+            Sfx.Play("dragon.roar", from);
+
+            routine = StartCoroutine(EnterRoutine());
+        }
+
+        /// <summary>
+        /// Appears in the air at "from" (keeping its height), flies down to land in the middle of the arena and
+        /// starts fighting. At the end it still flies away in the direction it came from.
+        /// </summary>
+        public void FlyIn(Vector3 from, Vector3 arenaCenterPosition)
+        {
+            Prepare(from, arenaCenterPosition);
+
+            routine = StartCoroutine(FlyInRoutine(from.y));
+        }
+
+        /// <summary>The shared start of Enter and FlyIn: reset, place and face the dragon, and switch it on.</summary>
+        void Prepare(Vector3 from, Vector3 arenaCenterPosition)
+        {
             CacheReferences();
             StopAllCoroutines();
             StopFireEffects();
@@ -114,7 +137,6 @@ namespace CoolSchool.Battle
             defeated = false;
             nextGotHitTime = 0f;
 
-            from.y = groundY;
             Vector3 toCenter = Hittable.FlatDirection(from, arenaCenterPosition);
             awayDirection = toCenter == Vector3.zero ? Vector3.back : -toCenter;
 
@@ -122,11 +144,8 @@ namespace CoolSchool.Battle
             if (toCenter != Vector3.zero) transform.rotation = Quaternion.LookRotation(toCenter, Vector3.up);
 
             gameObject.SetActive(true);
-            Sfx.Play("dragon.roar", from);
             hittable.ResetState();
             ResetAnimator();
-
-            routine = StartCoroutine(EnterRoutine());
         }
 
         /// <summary>Puts everything back and switches the dragon off, ready for another game.</summary>
@@ -157,6 +176,44 @@ namespace CoolSchool.Battle
                 yield return null;
             }
             SetFloat(SpeedId, 0f);
+
+            Arrived?.Invoke();
+            routine = StartCoroutine(FightRoutine());
+        }
+
+        IEnumerator FlyInRoutine(float startHeight)
+        {
+            SetBool(FlyingId, true);
+            SetFloat(SpeedId, 0f);
+            Sfx.Play("dragon.wing_flap", transform.position);
+
+            // Fly straight toward the landing spot; the height follows a smoothstep of the distance left,
+            // so the dragon touches down exactly in the middle of the arena.
+            float startDistance = Hittable.FlatDistance(transform.position, arenaCenter);
+            while (startDistance > 0.01f)
+            {
+                float remaining = Hittable.FlatDistance(transform.position, arenaCenter);
+                if (remaining <= 0.05f) break;
+
+                Vector3 direction = Hittable.FlatDirection(transform.position, arenaCenter);
+                float travelled = Mathf.Min(FlyInSpeed * Time.deltaTime, remaining);
+                Vector3 position = transform.position + direction * travelled;
+
+                float fraction = Mathf.Clamp01((remaining - travelled) / startDistance);
+                float eased = fraction * fraction * (3f - 2f * fraction);
+                position.y = Mathf.Lerp(groundY, startHeight, eased);
+
+                transform.position = position;
+                RotateToward(direction, turnSpeed * 2f);
+                yield return null;
+            }
+
+            // Touch down exactly in the middle.
+            transform.position = new Vector3(arenaCenter.x, groundY, arenaCenter.z);
+            SetBool(FlyingId, false);
+            BattleEffects.Confetti(transform.position);
+            Sfx.Play("dragon.roar", transform.position);
+            yield return new WaitForSeconds(0.4f);
 
             Arrived?.Invoke();
             routine = StartCoroutine(FightRoutine());

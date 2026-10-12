@@ -38,6 +38,11 @@ MonoBehaviour:
     prefab: {fileID: 3466557726058760119, guid: 018ac46aa02b90445bc455e3ce3af3af, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+  - id: plush.parrot
+    kind: 4
+    prefab: {fileID: 9039543982116785190, guid: 03c6b6a13a8811f49bcf30e4e2f9e77f, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
   - id: plush.unicorn
     kind: 4
     prefab: {fileID: 342286626370472532, guid: 4cc2c406508a814468fcd83b7c77173a, type: 3}
@@ -46,6 +51,11 @@ MonoBehaviour:
   - id: hat.cap
     kind: 3
     prefab: {fileID: 3523754109741742598, guid: 09febf92b31c7d54ab3e5504c0e5b2a3, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+  - id: sword.pirate
+    kind: 0
+    prefab: {fileID: 4845071059551229268, guid: 3087ae39d63cded47a57622195132c7f, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
   - id: sword.foam_big

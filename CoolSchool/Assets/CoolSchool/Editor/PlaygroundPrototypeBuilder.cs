@@ -95,7 +95,7 @@ namespace CoolSchool.EditorTools
         const float EquipmentGap = 1.5f;
 
         /// <summary>How far the playground rectangle is extended toward the arena to make room for the knights arena.</summary>
-        const float ArenaDepth = 26f;
+        const float ArenaDepth = 30f;
 
         /// <summary>How far the playground rectangle is extended toward the alien landing field.</summary>
         const float AlienFieldDepth = 24f;
@@ -114,11 +114,12 @@ namespace CoolSchool.EditorTools
         /// <summary>The player starts this far inside the fence on the side opposite the school, facing the school.</summary>
         const float SpawnFromFence = 4f;
 
-        // Weapon offsets relative to the hand / forearm bone. These are guesses: tune them on the WeaponHolder components.
-        internal static readonly Vector3 SwordLocalPosition = new Vector3(0.05f, 0.02f, 0f);
-        internal static readonly Vector3 SwordLocalEuler = new Vector3(0f, 0f, -90f);
-        internal static readonly Vector3 ShieldLocalPosition = new Vector3(0f, 0.05f, 0.1f);
-        internal static readonly Vector3 ShieldLocalEuler = new Vector3(0f, 90f, 0f);
+        // Weapon placement is computed at runtime from the rig and the weapon's bounds (WeaponFit). These are only an extra
+        // tweak on top of that, in the weapon's own axes; leave them at zero.
+        internal static readonly Vector3 SwordLocalPosition = Vector3.zero;
+        internal static readonly Vector3 SwordLocalEuler = Vector3.zero;
+        internal static readonly Vector3 ShieldLocalPosition = Vector3.zero;
+        internal static readonly Vector3 ShieldLocalEuler = Vector3.zero;
         const float WeaponScale = 1f;
 
         const string DragonControllerPath = RootFolder + "/Animation/Dragon.controller";
@@ -154,6 +155,7 @@ namespace CoolSchool.EditorTools
             public KnightsArenaBuilder.ArenaLayout Arena;
             public AlienFieldBuilder.FieldLayout AlienField;
             public IceCreamShopBuilder.StallLayout Shop;
+            public PirateCoveBuilder.CoveLayout PirateCove;
             public SchoolResult School;
         }
 
@@ -269,7 +271,23 @@ namespace CoolSchool.EditorTools
                     Imagination = imagination,
                 });
 
+                ShowProgress("Building pirate cove", 0.975f);
+                PirateCoveBuilder.Build(environment.PirateCove, new PirateCoveBuilder.PirateInputs
+                {
+                    KidController = controller,
+                    KidsLayer = kidsLayer,
+                    Player = player.GetComponent<PlayerController>(),
+                    ActionButton = jumpButton,
+                    Imagination = imagination,
+                });
+
+                // The parent gear goes on the touch UI before the rewards add their popup, so the popup stays on top of it.
+                ParentAreaBuilder.Build();
+                QuitButtonBuilder.Build();
+
                 RewardsSetupBuilder.Setup(player);
+
+                ColorGradingSetup.ApplyToProfile();
 
                 ShowProgress("Saving scene", 0.98f);
                 EditorSceneManager.MarkSceneDirty(scene);
@@ -423,13 +441,17 @@ namespace CoolSchool.EditorTools
             // The ice cream stall in the north-west corner. It reserves its ground, so the benches and trees below keep clear.
             info.Shop = IceCreamShopBuilder.BuildStall(root, info);
 
+            // The castle is static geometry, so it goes in before the NavMesh bake. Like the stall it reserves its ground
+            // (footprint and the approach to the gate), so it goes in before the benches and trees.
+            info.Arena = KnightsArenaBuilder.BuildCastle(root, ArenaDirection, info.ArenaStart, info.ArenaEnd, info.MaxZ);
+
+            // The pirate cove lies north of the arena (static geometry, reserves its ground, cuts a gap in the main north fence).
+            info.PirateCove = PirateCoveBuilder.BuildCove(root, info);
+
             // Nothing may stand on the player's start.
             var occupied = new List<Vector3> { info.PlayerSpawn };
             PlaceBenchesAndBins(propsGroup, benchDistance, occupied);
             ScatterGreenery(greeneryGroup, benchDistance, info, occupied);
-
-            // The castle is static geometry, so it goes in before the NavMesh bake.
-            info.Arena = KnightsArenaBuilder.BuildCastle(root, ArenaDirection, info.ArenaStart, info.ArenaEnd);
 
             // The rocket and the tree are static too. The field mirrors the arena on the other side (west).
             info.AlienField = AlienFieldBuilder.BuildField(root, AlienFieldDirection, info.FenceHalf, info.FenceHalf + AlienFieldDepth);
@@ -548,6 +570,12 @@ namespace CoolSchool.EditorTools
                 return 0f;
             }
             Vector3 baseScale = probe.transform.localScale;
+
+            // The walking surface is not the bounds top: grass tufts and bumps stick up above it. Aligning the bounds top to
+            // topY would leave the real surface lower, and every object placed "on the ground" would float above it.
+            GroundSurface.Measurement surface = GroundSurface.Measure(probe);
+            Debug.Log("CoolSchool ground: " + GroundSurface.Describe(prefab.name, surface));
+            float bumpHeight = surface.Valid ? Mathf.Max(0f, surface.BumpHeight) : 0f;
             Object.DestroyImmediate(probe);
 
             float sizeX = GuardTileSize(probeBounds.size.x, out float scaleX);
@@ -576,7 +604,10 @@ namespace CoolSchool.EditorTools
 
                     GameObject tile = Spawn(prefab, parent);
                     tile.transform.localScale = Vector3.Scale(baseScale, new Vector3(scaleX, 1f, scaleZ));
-                    AlignToBounds(tile, x, z, topY, true);
+                    AlignToBounds(tile, x, z, topY + bumpHeight, true);
+                    // A lumpy tile (grass) gets a flat collider at the surface, so kids and the NavMesh stand on the surface
+                    // and not on the tufts. Flat tiles (rubber) keep their own mesh.
+                    if (surface.Valid && surface.FlatShare < 0.9f) GroundSurface.UseFlatCollider(tile, topY);
                     FinishEnvironmentObject(tile);
                 }
             }
@@ -907,6 +938,8 @@ namespace CoolSchool.EditorTools
             var surface = go.AddComponent<NavMeshSurface>();
             surface.collectObjects = CollectObjects.All;
             surface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
+            // Agents are put at the real surface height instead of the voxel grid's (which floats them up to several cm).
+            surface.buildHeightMesh = true;
             Physics.SyncTransforms();
             surface.BuildNavMesh();
 
@@ -1250,6 +1283,7 @@ namespace CoolSchool.EditorTools
             Camera camera = FindMainCamera();
             camera.fieldOfView = 50f;
             camera.farClipPlane = 200f;
+            ColorGradingSetup.EnablePostProcessing(camera);
 
             // The camera ignores kids (so they never block the view) and Ignore Raycast.
             int ignored = 1 << LayerMask.NameToLayer("Ignore Raycast");
@@ -1484,6 +1518,11 @@ namespace CoolSchool.EditorTools
         internal static void SetVector3(Object target, string field, Vector3 value)
         {
             SetField(target, field, property => property.vector3Value = value);
+        }
+
+        internal static void SetBounds(Object target, string field, Bounds value)
+        {
+            SetField(target, field, property => property.boundsValue = value);
         }
 
         /// <summary>Sets an enum field by its index in the declaration order.</summary>

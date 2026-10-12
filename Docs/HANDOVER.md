@@ -58,8 +58,10 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
   - Voices per speaker are set in `Assets/CoolSchool/Voice/VoiceGenerationSettings.asset`: Teacher/Narrator Lily, Kid/Alien Freya, Goblin Clyde.
   - At runtime the pitch is raised per speaker (Kid 1.22, Goblin 1.35, Alien 1.5).
   - To redo a line, delete its mp3 and re-run.
-  - Quota used so far: about 3,695 characters.
+  - Quota used so far: about 4,650 characters, plus 926 for the pirate lines (2026-10-12).
 - **Batch logs:** `Logs/batch-<Method>.log`.
+- **Preview pictures + grounding check** (editor closed): `-Method CoolSchool.EditorTools.PreviewCapture.BuildAndCaptureFromCommandLine` builds and saves the scene, runs `SceneGroundCheck` (`SceneGround:` log lines, also menu **CoolSchool → Check Scene Grounding**) and renders named shots (weapons on characters, ground contact, ship helm, skeleton boat, cove) to `Logs/preview/*.png`. `CaptureFromCommandLine` renders the saved scene without rebuilding; filter with `-ExtraArgs '-previewShots','ship,ground'`. Add shots in `BuildGroups()`. Look at the PNGs to verify visual changes before asking the user.
+- **Weapons** are placed by `Scripts/Battle/WeaponFit.cs` from the hand/forearm bone positions and the weapon's mesh bounds (the old hand-guessed offsets were wrong). **Ground tiles** are aligned by their measured flat surface (`Editor/GroundSurface.cs`), not their bounds top; lumpy tiles get a flat collider.
 - **Shop preview pictures** (editor closed): builds and saves the scene, then renders the shop camera (kid and dragon, 16:9 and 4:3) and the follow-camera view of the stall to `Logs/shop-preview/*.png`, and logs where key points land on screen (`ShopPreview:` lines). The staging is not saved.
   ```
   powershell -ExecutionPolicy Bypass -File Tools/unity-batch.ps1 -Method CoolSchool.EditorTools.ShopPreviewCapture.BuildAndCaptureFromCommandLine
@@ -86,12 +88,17 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
   - Walking into an `ActivityZone` starts its activity. Each zone has a ring, a light-beam beacon and a billboard icon.
   - `ActivityInviter` speaks invitations with a sparkle trail when he is idle for a while (order: classroom, tag, castle, aliens).
   - `Activity` has `onBegan`/`onEnded` UnityEvents.
+  - **Back button** (contract `Docs/specs/quit-button-contract.md`): `QuitButton` (top-left, right of the parent gear) shows during any non-default activity; a tap (or Android back) freezes the game via `QuitPrompt` (teacher asks `quit.ask`, red cross = continue, green check = `Current.End()` + `quit.bye`). It is generic, so every activity's `OnEnd` must survive being called at any moment. Gameplay pointer polling checks `ParentGate.InputBlocked` (parent panel or quit prompt open).
 - **Activities built so far:**
   - `TagGame`: 40 s rounds.
   - `KnightsGame`: goblin waves, then a confetti dragon. Tap swings the sword (auto-aim); hold raises the shield.
+    Since 2026-10-12 (contract `Docs/specs/big-castle-contract.md`) it plays inside a 5× walk-in cardboard castle (gate facing the camera, zone just inside the gate, goblins pop out of a door in the back wall, the dragon flies in over the back wall). `CastleCutaway` (`Scripts/World`) ghosts the front wall while the player is inside. The inviter's sparkle trail now follows the NavMesh path. **Not yet rebuilt or played.**
   - `NumbersLesson`: in the classroom; four exercise types and adaptive levels 1–5, stored in progress.
   - `AlienLanding`: ray gun zaps aliens into dancing friends; slime; trampoline rescue of the baby alien; a counting moment; then a party.
+  - `LettersLesson` (contract `Docs/specs/letters-and-parent-area-contract.md`): shares `ClassroomLesson` with `NumbersLesson`; the classroom zone alternates subjects via `ClassroomActivitySelector`. Dutch letter SOUNDS, lowercase, drawn from stroke data; the child's name letters first; exercises NewLetter, FindLetter, StartsWith (76 word props), Trace, SpellName. Sound spellings live in `Editor/Lessons/LetterWordTable.cs`; to fix one, edit it, delete its mp3 and regenerate.
+  - **Parent area** (`Scripts/Parent`): hold the gear top-left 3 s; pauses the game (`ParentGate.IsOpen` must gate any direct pointer/keyboard polling); child name + level sliders per subject that set the current level (adaptive continues).
   - `IceCreamShop` (`Scripts/Shop`, contract `Docs/specs/ice-cream-shop-contract.md`): stall in the NW of the playground facing south; five customers (kid, knight, kid, alien, small dragon) order with picture bubbles; he drags or taps scoops from four colour tubs onto the cone (counting + colours), serves it, then taps the coins into the register; adaptive `shopLevel` 1–3.
+  - `PirateAdventure` (`Scripts/Pirates`, builder `Editor/Pirates/PirateCoveBuilder*.cs`, contract `Docs/specs/pirate-cove-contract.md`): a sand cove north of the arena (x 20.9..MaxX, z 20.9..60.9), entered through a gap in the north fence at x ≈ 21–26. Imagination turns the sand into sea. He steers the playground ship at the wheel, pops balloons on a skeleton boat with the cannon (the parrot Lorre counts), duels skeletons on the island beach (they fall apart into giggling bones and join the crew), follows a picture map, digs up the chest, opens a letter lock and counts the coins (coins = stars). Adaptive `pirates` skill level 1–3 with a parent-area row. The trophy chest at the dock fills with `pirateCoinsTotal`; unlocking `plush.parrot` puts Lorre on his shoulder in free play.
 - **Battle system** (`Scripts/Battle`): `Hittable` (team, hits, stun, block), `SwordFighter`, `PlayerBattleInput`, `WeaponHolder` (bone attachments), `BattleOpponentAI`, `KnightAllyAI`, `DragonBoss`, `BattleEffects` (particle prefabs), `ImaginationEffect` (subtle "pretend" sparkle).
 - **Characters.** Synty kids use a humanoid rig.
   - `KidAnimator` drives `Kid.controller` with Speed, Jump, Cheer, Attack(+Variant), Hit, Tumble, Laugh, Blocking, BlockHit, Shoot, Throw, Dance/Dancing/DanceVariant, and an "UpperBody" layer.
@@ -115,6 +122,7 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
 - **Committed** as `1fb2a23e`, locally: everything up to and including the classroom, the lesson, the north re-layout and 73 Dutch voice clips.
 - **Second commit**, on 2026-10-11 (the commit after `1fb2a23e`): the sound-cue system, the Alien Landing, 11 alien voice clips (84 in total), the rebuilt scene, `Docs/specs/aliens-and-sound-contract.md` and this file. The user has **not played the aliens section yet**, so ask him how it plays.
 - **Played and approved by the user in the editor:** tag (rounds shortened to 40 s), knights ("good enough for now"), the school and lesson after the north re-layout ("looks good"), and the voices.
+- **Back button (2026-10-12):** code done and compile-clean; the scene has **not** been rebuilt yet and the three `quit.*` voice lines are not generated.
 - **Known rough edges and tuning candidates:**
   - **Alien Landing (untested):**
     - ray-gun hand offset `RayGunShooter.GunLocalPosition/Euler`
@@ -126,6 +134,7 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
     - counting close-up (`CountCameraHeight/Back/Pitch` in `AlienFieldBuilder`); the baby waits at `BabyWaitPoint` behind that camera and is not counted
   - **Golden sword reward (untested):** size, height and orientation above the lesson table (`GoldenSwordHeight` in `NumbersLesson`, `displayLength` on `GoldenSwordReward`)
   - **Ice cream shop (untested):** shop camera pose and framing (the dragon is 2.8 m tall), Synty prop facing (counter, sign, register may need a 180° turn), cone-in-hand offsets (`ShopCustomerBuilder`), drag/drop radii (`IceCreamShop.Touch.cs`), order bubble size. Customers have no talk/lick clips (procedural nods).
+  - **Pirate cove (untested):** ship bow direction and helm/crew/wheel heights (deck found at 2.38 m), skeleton-boat seat height (no deck found, 2.19 m fallback), `PirateShip.sailSpeed` (0.9, ~15 s trip), map icons in `Assets/CoolSchool/Pirates/MapIcons/` (delete a PNG to re-render), parrot shoulder offset, chest lid hinge, camera near the main north fence at the dock.
   - **Knights:** sword and shield hand offsets are constants at the top of `PlaygroundPrototypeBuilder`; trees may stand close to the castle wall ends.
   - **Teacher:** stands angled beside the board, but turns toward the player at runtime.
   - **Lesson UI:** check that the number cards don't cover the toys.
@@ -133,6 +142,7 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
 
 ## Asset notes and gotchas
 - **Kids pack:** its materials were Built-in Standard. `KidsMaterialUpgrader` converts them to URP/Lit, and it's idempotent. Town, City and Generic already use Synty URP shader graphs.
+- **Colour grading:** only the Amplify **LUT Pack** textures are imported (`Assets/Imported/AmplifyColor/LUT/`, original package GUIDs). Amplify Color itself is a Built-in-pipeline camera effect and does nothing in URP, so it is not imported. `Editor/ColorGradingSetup.cs` puts a URP Color Lookup (`LutPath` Vibrance_B, `LutContribution` 0.75) on `Assets/Settings/SampleSceneProfile.asset` (the default profile of both RP assets) and turns on `renderPostProcessing` for the main camera. Both run on every rebuild, or use the menu item **CoolSchool → Apply Color Grading**. Turning post-processing on also brings in the profile's existing Neutral tonemapping, Bloom and Vignette.
 - **Gestures MoCap pack:** contains rude taunts. **Only** use `Chicken_Dance_Taunt`, `Dance_Taunt`, `Robo_Taunt` and `Victory_Taunt`. `AlienFieldBuilder` enforces a whitelist.
 - **Building scenes in batch mode:** `EditorUtility.DisplayDialog` and `SaveCurrentModifiedScenesIfUserWantsTo` are skipped when `Application.isBatchMode`.
 - **Placing prefabs:** use `PrefabUtility.InstantiatePrefab`. To strip vendor scripts from a prefab instance, unpack it first (as is done for the dragon).
@@ -143,7 +153,7 @@ Tools/unity-batch.ps1            runs Unity -batchmode -executeMethod (editor mu
 
 ## Roadmap and next options
 The user chose and ordered the play-section focus as: pretend battles plus create & role-play first; racing and other things later.
-- **Battles:** Knights done; Aliens & superheroes built but untested; **Pirates** next (playground ship, sword duels, cannon at balloons, treasure map).
+- **Battles:** Knights done; Aliens & superheroes built but untested; Pirates built 2026-10-12, untested.
 - **Create & role-play (chosen):** **Shopkeeper** (ice cream shop built, untested; bakery or pizza could follow), **Builder** (build the cardboard castle, then defend it), **Band & dress-up** (instruments, costume parade, photos).
 - **Learning:** letters (starting with his name, which is not known yet), colours and shapes, then first words and sums. Reuse the lesson framework in `Scripts/Lessons`.
 - **Character creator and parent area:** he builds his own kid and the teacher says his name. A locked parent area holds language, an optional time limit, progress, and volume.

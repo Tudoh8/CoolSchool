@@ -7,10 +7,10 @@ using UnityEngine.UI;
 namespace CoolSchool.EditorTools
 {
     /// <summary>
-    /// Adds the numbers lesson to the playground scene: the lesson activity with its stage, camera rig and
-    /// blackboard writing, the lesson UI on the touch canvas, a basket, the classroom's glowing zone, and an
-    /// invitation to it. Finds the school's anchors by name and skips everything (with a warning) when the
-    /// school is not in the scene. Called once by the playground builder, after the voice setup.
+    /// Adds the numbers lesson and the letters lesson to the playground scene: the lesson activities with their shared stage,
+    /// camera rig and blackboard writing, the lesson UI on the touch canvas, a basket, the classroom's glowing zone (which
+    /// alternates the two lessons through a ClassroomActivitySelector), and an invitation to it. Finds the school's anchors by name and
+    /// skips everything (with a warning) when the school is not in the scene. Called once by the playground builder, after the voice setup.
     /// </summary>
     public static class LessonSetupBuilder
     {
@@ -58,9 +58,15 @@ namespace CoolSchool.EditorTools
             BlackboardDisplay blackboard = BuildBlackboard(anchors, font, round);
             GameObject basket = BuildBasket(anchors);
             NumbersLesson lesson = BuildLesson(anchors, ui, blackboard, countables, basket, font);
+            LettersLesson letters = BuildLettersLesson(lesson, blackboard);
 
             ActivityZone zone = KnightsArenaBuilder.CreateActivityZone("LessonZone", null, anchors.ClassroomZone.position,
                 ZoneRadius, lesson, KnightsArenaBuilder.CreateLessonZoneMaterial(), LessonBeacon);
+
+            // Walking into the classroom starts numbers or letters, taking turns.
+            var selector = zone.gameObject.AddComponent<ClassroomActivitySelector>();
+            PlaygroundPrototypeBuilder.SetObject(selector, "numbersLesson", lesson);
+            PlaygroundPrototypeBuilder.SetObject(selector, "lettersLesson", letters);
             AddToInviter(zone);
         }
 
@@ -265,6 +271,38 @@ namespace CoolSchool.EditorTools
             PlaygroundPrototypeBuilder.SetObject(lesson, "countables", countables);
             PlaygroundPrototypeBuilder.SetObject(lesson, "basket", basket);
             PlaygroundPrototypeBuilder.SetObject(lesson, "numberFont", font);
+            PlaygroundPrototypeBuilder.SetInt(lesson, "exercisesPerLesson", 4);
+            PlaygroundPrototypeBuilder.SetInt(lesson, "starsPerCorrect", 1);
+            PlaygroundPrototypeBuilder.SetInt(lesson, "minStars", 3);
+            return lesson;
+        }
+
+        // ----- The letters lesson ----------------------------------------------------------------
+
+        /// <summary>
+        /// The letters lesson next to the numbers lesson. It shares the stage and the camera rig (they sit on the numbers lesson's
+        /// object), and brings its own chalk letter board on the blackboard's object and the seeded letter set.
+        /// Returns null, with a warning, when the letter set could not be made.
+        /// </summary>
+        static LettersLesson BuildLettersLesson(NumbersLesson numbers, BlackboardDisplay blackboard)
+        {
+            LetterSet letterSet = LetterSetSeeder.CreateOrUpdate();
+            if (letterSet == null || blackboard == null)
+            {
+                Debug.LogWarning("CoolSchool: no letter set or blackboard, so the letters lesson was not built.");
+                return null;
+            }
+
+            var board = blackboard.gameObject.AddComponent<LetterBoard>();
+            PlaygroundPrototypeBuilder.SetObject(board, "display", blackboard);
+
+            var root = new GameObject("LettersLesson");
+            var lesson = root.AddComponent<LettersLesson>();
+            PlaygroundPrototypeBuilder.SetObject(lesson, "stage", numbers.GetComponent<LessonStage>());
+            PlaygroundPrototypeBuilder.SetObject(lesson, "cameraRig", numbers.GetComponent<LessonCameraRig>());
+            PlaygroundPrototypeBuilder.SetObject(lesson, "blackboard", blackboard);
+            PlaygroundPrototypeBuilder.SetObject(lesson, "letterSet", letterSet);
+            PlaygroundPrototypeBuilder.SetObject(lesson, "letterBoard", board);
             PlaygroundPrototypeBuilder.SetInt(lesson, "exercisesPerLesson", 4);
             PlaygroundPrototypeBuilder.SetInt(lesson, "starsPerCorrect", 1);
             PlaygroundPrototypeBuilder.SetInt(lesson, "minStars", 3);

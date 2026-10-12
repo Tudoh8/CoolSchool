@@ -88,8 +88,8 @@ namespace CoolSchool.EditorTools
             return result;
         }
 
-        /// <summary>The uniform scale that makes the prefab's biggest side about 0.35 m.</summary>
-        static float ScaleForSize(GameObject prefab)
+        /// <summary>The uniform scale that makes the prefab's biggest side about 0.35 m (or the given size).</summary>
+        internal static float ScaleForSize(GameObject prefab, float targetSize = TargetSize)
         {
             var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
             instance.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
@@ -98,7 +98,7 @@ namespace CoolSchool.EditorTools
             if (PlaygroundPrototypeBuilder.TryGetBounds(instance, out Bounds bounds))
             {
                 float biggest = Mathf.Max(bounds.size.x, bounds.size.y, bounds.size.z);
-                if (biggest > 0.0001f) scale = TargetSize / biggest;
+                if (biggest > 0.0001f) scale = targetSize / biggest;
             }
             else
             {

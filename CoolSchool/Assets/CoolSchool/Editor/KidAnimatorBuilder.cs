@@ -29,6 +29,12 @@ namespace CoolSchool.EditorTools
         public const string StandUpClip = "HumanM@Knockdown01 - StandUp";
         public const string LaughClip = "HumanM@Laugh01";
 
+        /// <summary>Sitting on the ground (soapbox cart): the first clip that is found is used.</summary>
+        public static readonly string[] SitClips =
+        {
+            "HumanM@SitGround01 - Loop", "HumanF@SitGround01 - Loop", "HumanM@SitLow01 - Loop",
+        };
+
         /// <summary>The pack the sword, shield and mace clips come from (used in messages).</summary>
         public const string CombatPackName = "RPG Character Mecanim Animation Pack";
         public const string ShieldBlockClip = "Armed-Shield-Block";
@@ -115,6 +121,14 @@ namespace CoolSchool.EditorTools
                 if (dances[i] == null) missingClips.Add(DanceClips[i]);
             }
 
+            AnimationClip sit = null;
+            foreach (string sitName in SitClips)
+            {
+                sit = clips.TryGetValue(sitName, out AnimationClip found) ? found : FindModelClip(sitName);
+                if (sit != null) break;
+            }
+            if (sit == null) missingClips.Add(SitClips[0]);
+
             AvatarMask upperMask = FindAvatarMask(UpperMaskName);
             bool wantUpperBody = attacks.Any(a => a != null) || block != null || shoot != null || throwArm != null;
             if (wantUpperBody && upperMask == null) missingClips.Add(UpperMaskName);
@@ -136,6 +150,7 @@ namespace CoolSchool.EditorTools
             controller.AddParameter("Dance", AnimatorControllerParameterType.Trigger);
             controller.AddParameter("Dancing", AnimatorControllerParameterType.Bool);
             controller.AddParameter("DanceVariant", AnimatorControllerParameterType.Int);
+            controller.AddParameter("Sitting", AnimatorControllerParameterType.Bool);
 
             AnimatorStateMachine machine = controller.layers[0].stateMachine;
 
@@ -156,6 +171,7 @@ namespace CoolSchool.EditorTools
             if (laugh != null) AddOneShot(machine, locomotion, "Laugh", laugh, exitTime: 0.9f);
             AddTumble(machine, locomotion, fall, ground, standUp);
             AddDances(machine, locomotion, dances);
+            AddSit(machine, locomotion, sit);
 
             if (wantUpperBody && upperMask != null)
                 AddUpperBodyLayer(controller, upperMask, attacks, block, blockHit, shoot, throwArm);
@@ -359,6 +375,55 @@ namespace CoolSchool.EditorTools
                     again.duration = 0.1f;
                 }
             }
+        }
+
+        /// <summary>
+        /// Sitting in a soapbox cart: the Sitting bool enters the loop from any state and clearing it goes back to
+        /// locomotion. It is added after the one-shots on purpose: a base layer cheer or dance asked for while sitting
+        /// is cut short by the sit pose (the upper body layer, with its sword and shield moves, still plays on top).
+        /// </summary>
+        static void AddSit(AnimatorStateMachine machine, AnimatorState returnTo, AnimationClip sit)
+        {
+            if (sit == null) return;
+
+            AnimatorState state = machine.AddState("Sit");
+            state.motion = sit;
+
+            AnimatorStateTransition enter = machine.AddAnyStateTransition(state);
+            enter.AddCondition(AnimatorConditionMode.If, 0f, "Sitting");
+            enter.canTransitionToSelf = false;
+            enter.hasExitTime = false;
+            enter.duration = 0.15f;
+
+            AnimatorStateTransition stop = state.AddTransition(returnTo);
+            stop.AddCondition(AnimatorConditionMode.IfNot, 0f, "Sitting");
+            stop.hasExitTime = false;
+            stop.duration = 0.2f;
+
+            // The clip should loop. If it does not, restart it from its own end so the pose never freezes.
+            if (!sit.isLooping)
+            {
+                AnimatorStateTransition again = state.AddTransition(state);
+                again.hasExitTime = true;
+                again.exitTime = 1f;
+                again.duration = 0.1f;
+            }
+        }
+
+        /// <summary>The first clip of the model (FBX) with exactly this file name, from any Human Animations folder.</summary>
+        static AnimationClip FindModelClip(string fileName)
+        {
+            foreach (string guid in AssetDatabase.FindAssets(fileName + " t:Model"))
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                if (IsRootMotionOrNotFbx(path) || Path.GetFileNameWithoutExtension(path) != fileName) continue;
+
+                foreach (UnityEngine.Object asset in AssetDatabase.LoadAllAssetsAtPath(path))
+                {
+                    if (asset is AnimationClip clip && !clip.name.StartsWith("__preview__")) return clip;
+                }
+            }
+            return null;
         }
 
         /// <summary>

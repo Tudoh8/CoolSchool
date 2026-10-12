@@ -71,6 +71,8 @@ namespace CoolSchool.EditorTools
                 case Speaker.Kid: return "use a young voice";
                 case Speaker.Goblin: return "use a silly voice";
                 case Speaker.Alien: return "use a young voice, sped up a little for a squeaky alien";
+                case Speaker.Parrot: return "use a silly voice, sped up for a squawky parrot";
+                case Speaker.Announcer: return "use a friendly, cheerful male voice (Dave)";
                 default: return "use a clear, friendly voice";
             }
         }

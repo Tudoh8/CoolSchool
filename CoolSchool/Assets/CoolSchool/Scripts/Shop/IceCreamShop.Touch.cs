@@ -37,7 +37,7 @@ namespace CoolSchool.Shop
 
         void Update()
         {
-            if (!IsRunning || inputMode == InputMode.Off) return;
+            if (!IsRunning || inputMode == InputMode.Off || CoolSchool.Parent.ParentGate.InputBlocked) return;
 
             Pointer pointer = Pointer.current;
             if (pointer == null) return;

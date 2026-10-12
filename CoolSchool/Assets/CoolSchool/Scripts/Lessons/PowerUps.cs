@@ -20,5 +20,15 @@ namespace CoolSchool.Lessons
             ProgressStore.Save();
             return true;
         }
+
+        /// <summary>Gives a consumed power-up back, for a game that was stopped before it could be enjoyed.</summary>
+        public static void Restore(string id)
+        {
+            PlayerProgress progress = ProgressStore.Current;
+            if (string.IsNullOrEmpty(id) || !string.IsNullOrEmpty(progress.pendingPowerUp)) return;
+
+            progress.pendingPowerUp = id;
+            ProgressStore.Save();
+        }
     }
 }

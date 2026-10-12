@@ -385,3 +385,99 @@ MonoBehaviour:
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 0
     cooldown: 0
+  - cue: lesson.trace_progress
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: lesson.letter_pop
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.waves
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.wheel
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.cannon
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.balloon_pop
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.bones_rattle
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.bones_rebuild
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.parrot
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.map_tick
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.dig
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.chest_rise
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.lock_open
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.coin
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: pirates.party
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: music.pirates
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 0
+    cooldown: 0

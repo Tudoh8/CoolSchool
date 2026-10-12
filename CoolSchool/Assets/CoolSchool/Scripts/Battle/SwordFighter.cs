@@ -35,6 +35,9 @@ namespace CoolSchool.Battle
         /// <summary>How many hits each swing counts for. 2 with the golden sword.</summary>
         public int HitMultiplier { get; set; } = 1;
 
+        /// <summary>False for allies: their hits make an opponent wobble but never defeat it. Only the player defeats.</summary>
+        public bool CanDefeat { get; set; } = true;
+
         public bool CanAttack => self != null && self.IsAlive && !self.IsStunned && Time.time >= nextAttackTime;
 
         void Awake()
@@ -127,7 +130,7 @@ namespace CoolSchool.Battle
 
                 Vector3 direction = Hittable.FlatDirection(transform.position, other.transform.position);
                 bool inCone = direction == Vector3.zero || Vector3.Angle(forward, direction) <= ConeDegrees * 0.5f;
-                if (inCone) other.TakeHit(transform.position, HitMultiplier);
+                if (inCone) other.TakeHit(transform.position, HitMultiplier, CanDefeat);
             }
         }
 

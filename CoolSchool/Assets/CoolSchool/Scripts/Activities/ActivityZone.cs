@@ -59,8 +59,16 @@ namespace CoolSchool.Activities
             {
                 armed = false;
                 Sfx.Play("zone.enter", transform.position);
-                manager.StartActivity(activity);
+                manager.StartActivity(ChooseActivity());
             }
+        }
+
+        /// <summary>The zone's own activity, unless a selector on this object picks another one (e.g. the other lesson).</summary>
+        Activity ChooseActivity()
+        {
+            var selector = GetComponent<IActivitySelector>();
+            Activity chosen = selector != null ? selector.Select(activity) : null;
+            return chosen != null ? chosen : activity;
         }
 
         void OnDisable()

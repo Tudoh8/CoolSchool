@@ -97,6 +97,41 @@ namespace CoolSchool.Rewards
             Save();
         }
 
+        const int MaxChildNameLength = 12;
+
+        /// <summary>The ice cream shop level (1 to 3). Setting it saves.</summary>
+        public static int ShopLevel
+        {
+            get => Mathf.Clamp(Current.shopLevel, 1, 3);
+            set
+            {
+                Current.shopLevel = Mathf.Clamp(value, 1, 3);
+                Save();
+            }
+        }
+
+        /// <summary>Lowercase letters a to z only, at most 12 of them. Anything else (spaces, digits, accents) is dropped.</summary>
+        public static string NormalizeChildName(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return "";
+
+            var letters = new System.Text.StringBuilder();
+            foreach (char c in name)
+            {
+                char lower = char.ToLowerInvariant(c);
+                if (lower >= 'a' && lower <= 'z') letters.Append(lower);
+                if (letters.Length >= MaxChildNameLength) break;
+            }
+            return letters.ToString();
+        }
+
+        /// <summary>Stores the child's name (normalised), saves, and raises Changed.</summary>
+        public static void SetChildName(string name)
+        {
+            Current.childName = NormalizeChildName(name);
+            Save();
+        }
+
         /// <summary>Forgets everything. For the editor menu and, later, the parent area.</summary>
         public static void ResetAll()
         {
