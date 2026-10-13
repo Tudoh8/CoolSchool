@@ -50,6 +50,12 @@ namespace CoolSchool.Player
         /// <summary>True from RideOn until the hop off in StopRiding has landed. The kid does not walk while riding.</summary>
         public bool IsRiding => riding;
 
+        /// <summary>
+        /// The joystick (or keyboard) push right now, 0 when input is off or a panel covers the game. Also readable while riding,
+        /// so a toy can tell when he pushes the stick to skip.
+        /// </summary>
+        public Vector2 MoveInput => InputEnabled && !CoolSchool.Parent.ParentGate.InputBlocked ? ReadMoveInput() : Vector2.zero;
+
         /// <summary>Raised when the kid leaves the ground, so the animator can play a jump.</summary>
         public event System.Action Jumped;
 

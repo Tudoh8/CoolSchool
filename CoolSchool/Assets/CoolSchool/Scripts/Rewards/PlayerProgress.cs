@@ -77,6 +77,9 @@ namespace CoolSchool.Rewards
         public string babyDragonLetter = "";
         public bool castleNameFlagDone;
 
+        // Playground toys: the stickers earned by playing on each toy once (ToyStickers ids), and whether the sticker board was introduced.
+        public List<string> toyStickers = new List<string>();
+        public bool toyBoardIntroHeard;
 
         // Hide and seek in the zoo park: the animal kinds (ZooAnimalKind ids) he has found at least once (their pens stay filled), and the rounds played.
         public List<string> zooAnimals = new List<string>();

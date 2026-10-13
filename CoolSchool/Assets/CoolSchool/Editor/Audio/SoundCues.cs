@@ -49,6 +49,9 @@ namespace CoolSchool.EditorTools
             "zoo.hide_in", "zoo.party",
             "zoo.call.elephant", "zoo.call.giraffe", "zoo.call.monkey", "zoo.call.penguin", "zoo.call.hippo",
             "zoo.call.lion", "zoo.call.zebra", "zoo.call.crocodile", "zoo.call.flamingo", "zoo.call.tiger",
+            // Playground toys
+            "toys.slide_whoosh", "toys.swing_creak", "toys.spin", "toys.spring_boing", "toys.climb_step", "toys.crawl", "toys.zip",
+            "toys.seesaw_thump", "toys.sticker_pop", "toys.sticker_stick",
             // Music
             "music.playground", "music.knights", "music.aliens", "music.classroom", "music.victory", "music.shop", "music.pirates", "music.race", "music.zoo",
             // Ambience (a quiet looping bed under the music of each area)

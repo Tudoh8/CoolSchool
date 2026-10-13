@@ -243,6 +243,9 @@ namespace CoolSchool.EditorTools
             // --- The Toy Room and the dress-up mirror (see ToyRoom/PreviewCapture.ToyRoom.cs). ---
             AddToyRoomGroups(groups);
 
+            // --- The playground toys and the sticker board (see Playground/PreviewCapture.Toys.cs). ---
+            AddToyGroups(groups);
+
             // --- Costumes and head pieces on the player (see Characters/PreviewCapture.Costumes.cs). ---
             AddCostumeGroups(groups);
 

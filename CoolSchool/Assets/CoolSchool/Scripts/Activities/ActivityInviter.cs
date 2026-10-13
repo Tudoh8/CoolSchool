@@ -62,6 +62,8 @@ namespace CoolSchool.Activities
 
             // Anything but free play running means the kid is busy: start the wait over.
             bool idle = manager.Current == manager.DefaultActivity;
+            // Playing on a playground toy counts as busy too.
+            if (CoolSchool.Playground.ToyPlayer.Instance != null && CoolSchool.Playground.ToyPlayer.Instance.IsPlaying) idle = false;
             if (!idle)
             {
                 secondsUntilInvite = idleSecondsBeforeInvite;

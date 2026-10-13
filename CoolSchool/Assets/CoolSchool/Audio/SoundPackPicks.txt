@@ -165,5 +165,18 @@ zoo.call.lion	0.7	1.25	1.35	POLY/SFX_Bear_Growl.ogg | POLY/SFX_Bear_Growl_2.ogg
 zoo.call.tiger	0.7	1.25	1.35	POLY/SFX_Bear_Growl.ogg | POLY/SFX_Bear_Growl_2.ogg
 ambience.zoo	0.3	1.0	1.0	POLY/SFX_Environment_Jungle.ogg
 
+# ---- Playground toys ----
+# Reuses clips that other cues already pick (so they are imported already). Audition and swap any that sound wrong.
+toys.slide_whoosh	0.6			AR/Movement/Whoosh_Dodge_Heavy_Swish_Delay_Long_01_01.wav | PM/Spell Whooshes/Magic Game Spell Whoosh 3.wav
+toys.swing_creak	0.5			ENV/Wood/Wood 14-3.wav | ENV/Wood/Wood 14-7.wav | ENV/Wood/Wood 16-1.wav
+toys.spin	0.5			PM/Magic Transitions and Whooshes/Magic Essence Whoosh 2.wav | PM/Fantasy Transitions/Fantasy Particle Air Whoosh.wav
+toys.spring_boing	0.7			FEEL/NiceVibrations/Demo/DemoAssets/WobbleDemo/Sounds/NVWobbleSpring.wav
+toys.climb_step	0.5			ENV/Wood/Wood 02.wav
+toys.crawl	0.4			AR/Movement/Whoosh_Dodge_Cloth_Movement_Light_01_01.wav
+toys.zip	0.7			AR/Movement/Whoosh_Dodge_Heavy_Swish_Short_01_03.wav | PM/Magic Essentials/Magic Game Swoosh.wav
+toys.seesaw_thump	0.7			ENV/Wood/Wood 02.wav
+toys.sticker_pop	0.7			PM/Magic Essentials/Magic Game Potion Pop Off 1.wav | PM/Magic Essentials/Magic Game Potion Pop Off 2.wav
+toys.sticker_stick	0.7			PM/Magic Hits/Magic Wobble Game Hit.wav
+
 # ---- Music ----
 # None of the installed packs has music. The music.* cues stay empty until a music pack is added.

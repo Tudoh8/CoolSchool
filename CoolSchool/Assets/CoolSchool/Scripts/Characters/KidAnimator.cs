@@ -36,6 +36,7 @@ namespace CoolSchool.Characters
         static readonly int DancingId = Animator.StringToHash("Dancing");
         static readonly int DanceVariantId = Animator.StringToHash("DanceVariant");
         static readonly int SittingId = Animator.StringToHash("Sitting");
+        static readonly int ToyPoseId = Animator.StringToHash("ToyPose");
 
         [SerializeField] Animator animator;
         [SerializeField] float speedDamping = 0.1f;
@@ -160,6 +161,20 @@ namespace CoolSchool.Characters
         {
             if (!HasParameter(SittingId)) return;
             animator.SetBool(SittingId, sitting);
+        }
+
+        /// <summary>
+        /// Plays a playground toy pose (sitting on a seat, climbing, hanging, crawling...) while it is not None, and goes back to
+        /// locomotion with None. Ignored when the controller has no "ToyPose" int. An int overload exists for callers that
+        /// only hold the number.
+        /// </summary>
+        public void SetToyPose(CoolSchool.Playground.ToyPose pose) => SetToyPose((int)pose);
+
+        /// <summary>The same as SetToyPose with the pose's number (CoolSchool.Playground.ToyPose).</summary>
+        public void SetToyPose(int pose)
+        {
+            if (!HasParameter(ToyPoseId)) return;
+            animator.SetInteger(ToyPoseId, pose);
         }
 
         void SetTrigger(int id)

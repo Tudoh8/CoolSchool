@@ -325,6 +325,9 @@ namespace CoolSchool.EditorTools
                 // After the rewards: the wardrobe needs the catalog, the buddy and the present popup (the picture menu sits below it).
                 ToyRoomBuilder.Build(environment.ToyRoom, new ToyRoomInputs { Player = player.GetComponent<PlayerController>() });
 
+                // The playground toys become playable (and the sticker board goes up); the rewards and the zones exist by now.
+                ShowProgress("Making the playground toys playable", 0.979f);
+                PlaygroundToysBuilder.Build(new PlaygroundToysBuilder.ToyInputs { Player = player.GetComponent<PlayerController>() });
 
                 ColorGradingSetup.ApplyToProfile();
 

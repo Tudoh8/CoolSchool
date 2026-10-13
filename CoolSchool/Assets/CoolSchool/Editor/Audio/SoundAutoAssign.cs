@@ -179,6 +179,17 @@ namespace CoolSchool.EditorTools
             { "zoo.call.flamingo", new[] { "flamingo", "bird", "honk" } },
             { "zoo.call.tiger", new[] { "tiger", "roar", "growl" } },
 
+            // Playground toys
+            { "toys.slide_whoosh", new[] { "slide", "whoosh", "swoosh", "slip" } },
+            { "toys.swing_creak", new[] { "creak", "swing", "rope", "squeak" } },
+            { "toys.spin", new[] { "whirl", "spin", "turn", "wheel" } },
+            { "toys.spring_boing", new[] { "boing", "spring", "bounce", "bonk" } },
+            { "toys.climb_step", new[] { "step", "wood", "climb", "tap" } },
+            { "toys.crawl", new[] { "rustle", "crawl", "cloth", "shuffle" } },
+            { "toys.zip", new[] { "zip", "whoosh", "swoosh", "rope" } },
+            { "toys.seesaw_thump", new[] { "thump", "wood", "thud", "knock" } },
+            { "toys.sticker_pop", new[] { "pop", "bubble", "bloop" } },
+            { "toys.sticker_stick", new[] { "sticker", "slap", "stick", "stamp" } },
 
             // Music
             { "music.race", new[] { "race", "fast", "upbeat", "chase" } },
