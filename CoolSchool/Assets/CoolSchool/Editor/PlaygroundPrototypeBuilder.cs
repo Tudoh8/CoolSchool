@@ -157,6 +157,7 @@ namespace CoolSchool.EditorTools
             public IceCreamShopBuilder.StallLayout Shop;
             public PirateCoveBuilder.CoveLayout PirateCove;
             public SoapboxStreetBuilder.StreetLayout RaceStreet;
+            public ZooParkBuilder.ParkLayout ZooPark;
             public SchoolResult School;
             public ToyRoomLayout ToyRoom;
         }
@@ -292,6 +293,15 @@ namespace CoolSchool.EditorTools
                     Player = player.GetComponent<PlayerController>(),
                     Joystick = joystick,
                     ActionButton = jumpButton,
+                });
+
+                // After the lesson (the "how many" questions use its number cards) and the inviter; before the parent gear and the rewards.
+                ShowProgress("Building zoo park", 0.978f);
+                ZooParkBuilder.Build(environment.ZooPark, new ZooParkBuilder.ZooInputs
+                {
+                    KidController = controller,
+                    KidsLayer = kidsLayer,
+                    Player = player.GetComponent<PlayerController>(),
                 });
 
                 // The parent gear goes on the touch UI before the rewards add their popup, so the popup stays on top of it.
@@ -492,6 +502,9 @@ namespace CoolSchool.EditorTools
 
             // The rocket and the tree are static too. The field mirrors the arena on the other side (west).
             info.AlienField = AlienFieldBuilder.BuildField(root, AlienFieldDirection, info.FenceHalf, info.FenceHalf + AlienFieldDepth);
+
+            // The zoo park lies west of the alien field (static geometry, reserves its ground, cuts a gap in the main west fence).
+            info.ZooPark = ZooParkBuilder.BuildPark(root, info);
 
             Debug.Log($"CoolSchool playground: fence x {info.MinX:0.0}..{info.MaxX:0.0}, z {info.MinZ:0.0}..{info.MaxZ:0.0} "
                 + $"(half {info.FenceHalf:0.0} m, ring {info.RingRadius:0.0} m); arena along {ArenaDirection.ToString("0.0")} from "

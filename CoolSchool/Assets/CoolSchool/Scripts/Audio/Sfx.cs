@@ -131,6 +131,26 @@ namespace CoolSchool.Audio
             if (instance != null) instance.FadeOutAmbience(fade);
         }
 
+        /// <summary>
+        /// The clip a cue would play now, with its loudness and a random pitch from its range, for a caller that plays it on its own
+        /// 3D source (the zoo animals' calls). False when the cue has no clip yet.
+        /// </summary>
+        public static bool TryPickClip(string cue, out AudioClip clip, out float volume, out float pitch)
+        {
+            clip = null;
+            volume = 1f;
+            pitch = 1f;
+            if (instance == null || instance.library == null) return false;
+
+            SoundEntry entry = instance.library.Find(cue);
+            clip = PickClip(entry);
+            if (clip == null) return false;
+
+            volume = entry.volume;
+            pitch = Random.Range(entry.pitchRange.x, entry.pitchRange.y);
+            return true;
+        }
+
         void Awake()
         {
             instance = this;

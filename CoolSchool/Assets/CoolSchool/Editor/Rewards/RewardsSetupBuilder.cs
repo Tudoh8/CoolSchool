@@ -338,6 +338,7 @@ namespace CoolSchool.EditorTools
             PlaygroundPrototypeBuilder.SetObject(system, "alienLanding", Object.FindFirstObjectByType<AlienLanding>());
             PlaygroundPrototypeBuilder.SetObject(system, "pirateAdventure", Object.FindFirstObjectByType<CoolSchool.Pirates.PirateAdventure>());
             PlaygroundPrototypeBuilder.SetObject(system, "soapboxRace", Object.FindFirstObjectByType<CoolSchool.Race.SoapboxRace>());
+            PlaygroundPrototypeBuilder.SetObject(system, "hideAndSeekGame", Object.FindFirstObjectByType<CoolSchool.Zoo.HideAndSeekGame>());
         }
 
         // ----- Helpers -------------------------------------------------------------------------

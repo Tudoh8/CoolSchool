@@ -148,5 +148,15 @@ ambience.aliens	0.3	1.0	1.0	ENV/Ambient Loops/Crickets Loop 01.wav
 ambience.pirates	0.45	1.0	1.0	ENV/Ambient Loops/Waves Loop 1.wav
 # ambience.classroom stays empty on purpose: the classroom is quiet.
 
+# ---- Hide and seek in the zoo park ----
+# Animal calls from the polyperfect pack that is already in the project. Kinds without a pick here (giraffe, hippo, zebra, crocodile,
+# flamingo) stay empty: ZooAnimal.Call() then plays zoo.giggle pitched by size. The monkey is a pitched-up gorilla, lion and tiger a pitched-up bear.
+zoo.call.elephant	0.8			POLY/SFX_Elephant_Trumpeting_1.ogg | POLY/SFX_Elephant_Trumpeting_2.ogg | POLY/SFX_Elephant_Trumpeting_3.ogg
+zoo.call.penguin	0.8			POLY/SFX_Penguin.ogg
+zoo.call.monkey	0.7	1.35	1.45	POLY/SFX_Gorilla_Growl.ogg
+zoo.call.lion	0.7	1.25	1.35	POLY/SFX_Bear_Growl.ogg | POLY/SFX_Bear_Growl_2.ogg
+zoo.call.tiger	0.7	1.25	1.35	POLY/SFX_Bear_Growl.ogg | POLY/SFX_Bear_Growl_2.ogg
+ambience.zoo	0.3	1.0	1.0	POLY/SFX_Environment_Jungle.ogg
+
 # ---- Music ----
 # None of the installed packs has music. The music.* cues stay empty until a music pack is added.

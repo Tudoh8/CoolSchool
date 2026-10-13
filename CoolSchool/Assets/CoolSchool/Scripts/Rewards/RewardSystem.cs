@@ -7,6 +7,7 @@ using CoolSchool.Pirates;
 using CoolSchool.Player;
 using CoolSchool.Race;
 using CoolSchool.Tag;
+using CoolSchool.Zoo;
 using UnityEngine;
 
 namespace CoolSchool.Rewards
@@ -31,6 +32,8 @@ namespace CoolSchool.Rewards
         [SerializeField] PirateAdventure pirateAdventure;
         [Tooltip("The soapbox race gives 1 to 5 stars, also for second and third place.")]
         [SerializeField] SoapboxRace soapboxRace;
+        [Tooltip("Hide and seek in the zoo park gives one star for each animal found, plus one (1 to 10).")]
+        [SerializeField] HideAndSeekGame hideAndSeekGame;
         [SerializeField] int starsForTagRound = 3;
         [SerializeField] int starsForKnightsVictory = 5;
         [SerializeField] int starsForAlienVictory = 5;
@@ -65,6 +68,7 @@ namespace CoolSchool.Rewards
             if (alienLanding != null) alienLanding.onVictory.AddListener(OnAlienVictory);
             if (pirateAdventure != null) pirateAdventure.TreasureCounted += OnTreasureCounted;
             if (soapboxRace != null) soapboxRace.RaceFinished += OnRaceFinished;
+            if (hideAndSeekGame != null) hideAndSeekGame.RoundFinished += OnZooRoundFinished;
             RefreshHud();
         }
 
@@ -78,6 +82,7 @@ namespace CoolSchool.Rewards
             if (alienLanding != null) alienLanding.onVictory.RemoveListener(OnAlienVictory);
             if (pirateAdventure != null) pirateAdventure.TreasureCounted -= OnTreasureCounted;
             if (soapboxRace != null) soapboxRace.RaceFinished -= OnRaceFinished;
+            if (hideAndSeekGame != null) hideAndSeekGame.RoundFinished -= OnZooRoundFinished;
         }
 
         void Start()
@@ -109,6 +114,11 @@ namespace CoolSchool.Rewards
         void OnRaceFinished(int stars, Vector3 position)
         {
             StartCoroutine(GiveAfterDelay(Mathf.Clamp(stars, 1, 5), position));
+        }
+
+        void OnZooRoundFinished(int stars, Vector3 position)
+        {
+            StartCoroutine(GiveAfterDelay(Mathf.Clamp(stars, 1, 10), position));
         }
 
         IEnumerator GiveAfterDelay(int count, Vector3 position)

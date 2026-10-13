@@ -237,6 +237,9 @@ namespace CoolSchool.EditorTools
             // --- The alien field (see Aliens/PreviewCapture.Aliens.cs). ---
             AddAlienGroups(groups);
 
+            // --- The zoo park: entrance, pens, keeper and every hiding spot with an animal in it (see Zoo/PreviewCapture.Zoo.cs). ---
+            AddZooGroups(groups);
+
             // --- The Toy Room and the dress-up mirror (see ToyRoom/PreviewCapture.ToyRoom.cs). ---
             AddToyRoomGroups(groups);
 

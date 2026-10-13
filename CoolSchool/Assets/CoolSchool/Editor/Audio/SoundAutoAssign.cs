@@ -136,6 +136,28 @@ namespace CoolSchool.EditorTools
             { "race.cheer", new[] { "cheer", "crowd", "applause" } },
             { "race.brake", new[] { "brake", "skid", "squeak" } },
 
+            // Hide and seek in the zoo park
+            { "zoo.giggle", new[] { "giggle", "laugh", "chuckle" } },
+            { "zoo.patter", new[] { "footstep", "step", "patter", "run" } },
+            { "zoo.found_pop", new[] { "pop", "surprise", "boing" } },
+            { "zoo.peek", new[] { "rustle", "leaves", "bush" } },
+            { "zoo.shake", new[] { "rustle", "shake", "leaves" } },
+            { "zoo.surprise_pop", new[] { "squeak", "pop", "boing", "surprise" } },
+            { "zoo.gate", new[] { "gate", "creak", "door" } },
+            { "zoo.pen_hop", new[] { "hop", "jump", "boing" } },
+            { "zoo.hide_in", new[] { "rustle", "cloth", "whoosh" } },
+            { "zoo.party", new[] { "party", "fanfare", "celebrate" } },
+            { "zoo.call.elephant", new[] { "elephant", "trumpet" } },
+            { "zoo.call.giraffe", new[] { "giraffe", "hum" } },
+            { "zoo.call.monkey", new[] { "monkey", "chimp", "ape", "gorilla" } },
+            { "zoo.call.penguin", new[] { "penguin" } },
+            { "zoo.call.hippo", new[] { "hippo", "grunt" } },
+            { "zoo.call.lion", new[] { "lion", "roar", "growl" } },
+            { "zoo.call.zebra", new[] { "zebra", "horse", "neigh" } },
+            { "zoo.call.crocodile", new[] { "crocodile", "croc", "hiss" } },
+            { "zoo.call.flamingo", new[] { "flamingo", "bird", "honk" } },
+            { "zoo.call.tiger", new[] { "tiger", "roar", "growl" } },
+
             // Music
             { "music.race", new[] { "race", "fast", "upbeat", "chase" } },
             { "music.pirates", new[] { "pirate", "sea", "shanty", "ship", "adventure", "sailing" } },

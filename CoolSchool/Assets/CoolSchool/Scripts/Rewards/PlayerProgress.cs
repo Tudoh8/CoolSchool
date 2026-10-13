@@ -59,6 +59,10 @@ namespace CoolSchool.Rewards
         public int lessonsSinceNewLetter;
         public string lastLessonSubject = "";
 
+        // Hide and seek in the zoo park: the animal kinds (ZooAnimalKind ids) he has found at least once (their pens stay filled), and the rounds played.
+        public List<string> zooAnimals = new List<string>();
+        public int zooRounds;
+
         public bool IsUnlocked(string id)
         {
             return unlockedItems != null && unlockedItems.Contains(id);

@@ -38,10 +38,15 @@ namespace CoolSchool.EditorTools
             // Soapbox race
             "race.lane", "race.jump", "race.land", "race.bonk", "race.splash", "race.coin", "race.gate_ding", "race.countdown_beep",
             "race.go_horn", "race.ramp_whoosh", "race.spinout", "race.cheer", "race.brake",
+            // Hide and seek in the zoo park (the animal calls are zoo.call.<id>, one per ZooAnimalKind)
+            "zoo.giggle", "zoo.patter", "zoo.found_pop", "zoo.peek", "zoo.shake", "zoo.surprise_pop", "zoo.gate", "zoo.pen_hop",
+            "zoo.hide_in", "zoo.party",
+            "zoo.call.elephant", "zoo.call.giraffe", "zoo.call.monkey", "zoo.call.penguin", "zoo.call.hippo",
+            "zoo.call.lion", "zoo.call.zebra", "zoo.call.crocodile", "zoo.call.flamingo", "zoo.call.tiger",
             // Music
-            "music.playground", "music.knights", "music.aliens", "music.classroom", "music.victory", "music.shop", "music.pirates", "music.race",
+            "music.playground", "music.knights", "music.aliens", "music.classroom", "music.victory", "music.shop", "music.pirates", "music.race", "music.zoo",
             // Ambience (a quiet looping bed under the music of each area)
-            "ambience.playground", "ambience.knights", "ambience.aliens", "ambience.classroom", "ambience.shop", "ambience.pirates", "ambience.race",
+            "ambience.playground", "ambience.knights", "ambience.aliens", "ambience.classroom", "ambience.shop", "ambience.pirates", "ambience.race", "ambience.zoo",
         };
 
         public static bool IsMusic(string cue) => cue.StartsWith("music.");

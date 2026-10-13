@@ -25,6 +25,7 @@ namespace CoolSchool.Parent
         public const string RowPirates = "row.pirates";
         public const string RowRace = "row.race";
         public const string RowAliens = "row.aliens";
+        public const string RowHideSeek = "row.hideseek";
         public const string LevelCaption = "level.caption";
         public const string Close = "close";
 
@@ -45,6 +46,7 @@ namespace CoolSchool.Parent
             { RowPirates, new[] { "Piraten", "Pirates" } },
             { RowRace, new[] { "Zeepkistrace", "Soapbox race" } },
             { RowAliens, new[] { "Aliens", "Aliens" } },
+            { RowHideSeek, new[] { "Verstoppertje", "Hide and seek" } },
             { LevelCaption, new[]
                 {
                     "Past zich automatisch aan; de schuif zet het huidige niveau.",
