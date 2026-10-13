@@ -15,7 +15,7 @@ namespace CoolSchool.Battle
     /// once it has arrived (it either walks in or flies in and lands).
     /// </summary>
     [RequireComponent(typeof(Hittable))]
-    public class DragonBoss : MonoBehaviour
+    public partial class DragonBoss : MonoBehaviour
     {
         static readonly int SpeedId = Animator.StringToHash("Speed");
         static readonly int BreatheFireId = Animator.StringToHash("BreatheFire");
@@ -135,6 +135,7 @@ namespace CoolSchool.Battle
             arenaCenter = arenaCenterPosition;
             groundY = arenaCenterPosition.y;
             defeated = false;
+            friendly = false;
             nextGotHitTime = 0f;
 
             Vector3 toCenter = Hittable.FlatDirection(from, arenaCenterPosition);
@@ -158,6 +159,7 @@ namespace CoolSchool.Battle
             defeated = false;
 
             hittable.ResetState();
+            ResetFriendly();
             if (gameObject.activeSelf) ResetAnimator();
             gameObject.SetActive(false);
         }
@@ -216,7 +218,7 @@ namespace CoolSchool.Battle
             yield return new WaitForSeconds(0.4f);
 
             Arrived?.Invoke();
-            routine = StartCoroutine(FightRoutine());
+            routine = StartCoroutine(friendly ? FriendlyIdleRoutine() : FightRoutine());
         }
 
         IEnumerator FightRoutine()
@@ -326,6 +328,7 @@ namespace CoolSchool.Battle
 
         void OnHit(Hittable who)
         {
+            if (friendly) return;
             if (defeated || who.IsDefeated || Time.time < nextGotHitTime) return;
 
             nextGotHitTime = Time.time + GotHitCooldown;
@@ -334,6 +337,12 @@ namespace CoolSchool.Battle
 
         void OnDefeated(Hittable who)
         {
+            // The friendly dragon never tumbles or flies off because of a bump.
+            if (friendly)
+            {
+                who.ResetState();
+                return;
+            }
             if (defeated) return;
 
             defeated = true;
@@ -363,7 +372,12 @@ namespace CoolSchool.Battle
                 yield return null;
             }
 
-            // Take off: up and away from the arena.
+            yield return TakeOffAndAway();
+        }
+
+        /// <summary>Takes off, flies up and away from the arena, switches the dragon off and raises FlewAway.</summary>
+        IEnumerator TakeOffAndAway()
+        {
             SetBool(FlyingId, true);
             Sfx.Play("dragon.wing_flap", transform.position);
             Vector3 flyDirection = (awayDirection * FlyAwaySpeed + Vector3.up * FlyUpSpeed);
@@ -424,7 +438,10 @@ namespace CoolSchool.Battle
             ResetTrigger(TailWhipId);
             ResetTrigger(GotHitId);
             ResetTrigger(HappyId);
+            ResetTrigger(EatId);
             SetBool(FlyingId, false);
+            SetBool(SittingId, false);
+            SetBool(GlidingId, false);
             SetFloat(SpeedId, 0f);
         }
 

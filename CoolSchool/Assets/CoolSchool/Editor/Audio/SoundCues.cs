@@ -7,6 +7,7 @@ namespace CoolSchool.EditorTools
         {
             // UI
             "ui.tap", "ui.button", "ui.card_right", "ui.card_wrong", "ui.popup_open", "ui.popup_close",
+            "ui.pick", "ui.locked", "wardrobe.equip", "toyroom.sparkle",
             // Player
             "player.step", "player.jump", "player.land", "player.bump",
             // Activities
@@ -32,13 +33,29 @@ namespace CoolSchool.EditorTools
             // Pirate cove
             "pirates.waves", "pirates.wheel", "pirates.cannon", "pirates.balloon_pop", "pirates.bones_rattle", "pirates.bones_rebuild",
             "pirates.parrot", "pirates.map_tick", "pirates.dig", "pirates.chest_rise", "pirates.lock_open", "pirates.coin", "pirates.party",
+            // Castle gate (the portcullis rising and landing)
+            "castle.gate_rise", "castle.gate_drop",
+            // Castle adventure (the moments, the goblin kinds, the baby dragon, the ride)
+            "castle.block_place", "castle.cookie_munch", "castle.tummy_rumble", "castle.egg_crack", "castle.baby_peep",
+            "castle.barrel_wobble", "castle.barrel_tip", "castle.flag_pop", "castle.star_ping", "castle.dizzy_stars",
+            "castle.troll_shrink", "castle.ride_whoosh", "castle.ladder_appear",
             // Soapbox race
             "race.lane", "race.jump", "race.land", "race.bonk", "race.splash", "race.coin", "race.gate_ding", "race.countdown_beep",
             "race.go_horn", "race.ramp_whoosh", "race.spinout", "race.cheer", "race.brake",
+            // The honk button's horns (the cart garage): one cue per horn item, named in the catalog seed's soundCue.
+            "race.horn_bell", "race.horn_cow", "race.horn_dog", "race.horn_cat", "race.horn_elephant", "race.horn_magic",
+            // Hide and seek in the zoo park (the animal calls are zoo.call.<id>, one per ZooAnimalKind)
+            "zoo.giggle", "zoo.patter", "zoo.found_pop", "zoo.peek", "zoo.shake", "zoo.surprise_pop", "zoo.gate", "zoo.pen_hop",
+            "zoo.hide_in", "zoo.party",
+            "zoo.call.elephant", "zoo.call.giraffe", "zoo.call.monkey", "zoo.call.penguin", "zoo.call.hippo",
+            "zoo.call.lion", "zoo.call.zebra", "zoo.call.crocodile", "zoo.call.flamingo", "zoo.call.tiger",
+            // Playground toys
+            "toys.slide_whoosh", "toys.swing_creak", "toys.spin", "toys.spring_boing", "toys.climb_step", "toys.crawl", "toys.zip",
+            "toys.seesaw_thump", "toys.sticker_pop", "toys.sticker_stick",
             // Music
-            "music.playground", "music.knights", "music.aliens", "music.classroom", "music.victory", "music.shop", "music.pirates", "music.race",
+            "music.playground", "music.knights", "music.aliens", "music.classroom", "music.victory", "music.shop", "music.pirates", "music.race", "music.zoo",
             // Ambience (a quiet looping bed under the music of each area)
-            "ambience.playground", "ambience.knights", "ambience.aliens", "ambience.classroom", "ambience.shop", "ambience.pirates", "ambience.race",
+            "ambience.playground", "ambience.knights", "ambience.aliens", "ambience.classroom", "ambience.shop", "ambience.pirates", "ambience.race", "ambience.zoo",
         };
 
         public static bool IsMusic(string cue) => cue.StartsWith("music.");

@@ -6,14 +6,18 @@ namespace CoolSchool.Voice
 {
     /// <summary>
     /// Voice lines for the knights game that need more than a UnityEvent: a goblin giggles when
-    /// it is bumped down, a kid calls out when the dragon shows its fire warning, and the teacher
-    /// explains the shield a few seconds after the first wave starts (once per game).
+    /// it is bumped down (not the thief: it has its own "you got it back" line), a kid calls out when the dragon
+    /// shows its fire warning, and the teacher explains the shield a few seconds after the first wave starts
+    /// (once per game, and only when the child has not raised his shield yet).
     /// </summary>
     public class BattleVoice : MonoBehaviour
     {
         [SerializeField] KnightsGame game;
         [Tooltip("Seconds after the first wave starts before the shield hint is spoken.")]
         [SerializeField] float shieldHintDelaySeconds = 6f;
+
+        // The hint waits for a quiet moment in the fight (not in a counting question), but never longer than this.
+        const float MaxWaitForFightSeconds = 30f;
 
         BattleOpponentAI[] opponents;
         DragonBoss dragon;
@@ -65,6 +69,10 @@ namespace CoolSchool.Voice
 
         void OnOpponentDefeated(Hittable who)
         {
+            // The thief has its own line when the treasure comes back.
+            var opponent = who != null ? who.GetComponent<BattleOpponentAI>() : null;
+            if (opponent != null && opponent.IsThief) return;
+
             VoicePlayer.Say("knights.goblin_down");
         }
 
@@ -85,8 +93,13 @@ namespace CoolSchool.Voice
         {
             yield return new WaitForSeconds(shieldHintDelaySeconds);
 
+            // Not in the middle of a counting question: wait until the goblins are down in the courtyard and he can fight.
+            float giveUp = Time.time + MaxWaitForFightSeconds;
+            while (game != null && game.IsRunning && !game.IsFighting && Time.time < giveUp)
+                yield return null;
+
             hintRoutine = null;
-            if (game != null && game.IsRunning) VoicePlayer.Say("knights.shield_hint");
+            if (game != null && game.IsRunning && !game.PlayerHasBlocked) VoicePlayer.Say("knights.shield_hint");
         }
 
         void CancelHint()

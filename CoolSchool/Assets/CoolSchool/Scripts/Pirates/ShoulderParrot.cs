@@ -6,9 +6,10 @@ using UnityEngine;
 namespace CoolSchool.Pirates
 {
     /// <summary>
-    /// Once the child has won the toy parrot (plush.parrot) from a present, Lorre sits on his shoulder in free play and
-    /// comes along everywhere. During the pirate adventure the adventure uses the parrot itself and this stays out of the
-    /// way; when the adventure is over it flies back to the shoulder. Without the toy the parrot is hidden.
+    /// While the toy parrot (plush.parrot) is his buddy (ProgressStore.EquippedId(EquipSlot.Buddy); automatic once won,
+    /// until he picks another buddy in the wardrobe), Lorre sits on his shoulder in free play and comes along everywhere.
+    /// During the pirate adventure the adventure uses the parrot itself and this stays out of the way; when the adventure
+    /// is over it flies back to the shoulder. When the parrot is not his buddy it is hidden.
     /// Sits on the same object as the ParrotGuide.
     /// </summary>
     public class ShoulderParrot : MonoBehaviour
@@ -17,7 +18,6 @@ namespace CoolSchool.Pirates
 
         [SerializeField] ParrotGuide parrot;
         [SerializeField] Animator playerAnimator;
-        [SerializeField] string unlockId = "plush.parrot";
 
         // Progress changes (and the activity) are checked a few times per second, which is plenty.
         const float PollSeconds = 0.25f;
@@ -69,7 +69,8 @@ namespace CoolSchool.Pirates
             // The adventure just ended: forget where the parrot was left and decide again.
             if (state == State.Adventure) state = State.Unknown;
 
-            bool owned = ProgressStore.Current.IsUnlocked(unlockId);
+            // The parrot sits on his shoulder when it is the buddy he has chosen (the first one by default, once won).
+            bool owned = ProgressStore.EquippedId(EquipSlot.Buddy) == EquipSlots.ParrotId;
             if (owned && state != State.Perched)
             {
                 Animator kid = FindPlayerAnimator();

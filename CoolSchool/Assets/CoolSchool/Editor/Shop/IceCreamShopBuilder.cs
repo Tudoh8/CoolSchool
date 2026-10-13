@@ -71,6 +71,8 @@ namespace CoolSchool.EditorTools
         const float TubEdgeInset = 0.01f;
         const float ConeBehindTubs = 0.12f;
         const float KeeperFromEnd = 0.35f;
+        // The keeper stands this far behind the counter's back edge: a kid is up to 0.35 m wide, so he never overlaps the counter.
+        const float KeeperBehindCounter = 0.55f;
         const float RegisterX = 2.62f;
         const float RegisterWidth = 0.5f;
         const float CoinSpotX = 1.85f;
@@ -648,7 +650,7 @@ namespace CoolSchool.EditorTools
             float front = depth * 0.5f;
 
             // Behind the counter at the left end (east), facing south.
-            layout.ShopkeeperSpot = NewPoint("ShopkeeperSpot", points, stall.TransformPoint(new Vector3(-(width * 0.5f - KeeperFromEnd), 0f, -(front + 0.3f))));
+            layout.ShopkeeperSpot = NewPoint("ShopkeeperSpot", points, stall.TransformPoint(new Vector3(-(width * 0.5f - KeeperFromEnd), 0f, -(front + KeeperBehindCounter))));
             layout.ShopkeeperSpot.rotation = stall.rotation;
 
             // North of and above the counter, looking south and down over it.

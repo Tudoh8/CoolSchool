@@ -6,7 +6,7 @@ namespace CoolSchool.World
     /// <summary>
     /// Makes the front wall of the big castle see-through while the kid is inside the courtyard, so the camera
     /// (which looks north over the front wall) can still see him and the battle. The wall fades back to normal when
-    /// he walks out. Only materials change; colliders are never touched.
+    /// he walks out. Only materials change while it fades (the only collider it touches is the gate's, once, in Awake).
     /// </summary>
     public class CastleCutaway : MonoBehaviour
     {
@@ -37,6 +37,38 @@ namespace CoolSchool.World
             originalMaterials = new Material[frontRenderers.Length][];
             for (int i = 0; i < frontRenderers.Length; i++)
                 originalMaterials[i] = frontRenderers[i] != null ? frontRenderers[i].sharedMaterials : null;
+
+            OpenGateCollider();
+        }
+
+        /// <summary>
+        /// Safety net for scenes built before the builder fixed the gate: the gate prefab's MeshCollider uses a pre-generated
+        /// convex hull, which fills the arch and keeps the kid out. Give it the real (arch-shaped) render mesh instead.
+        /// </summary>
+        void OpenGateCollider()
+        {
+            foreach (Renderer front in frontRenderers)
+            {
+                if (front == null || !IsGatePiece(front.transform)) continue;
+
+                var filter = front.GetComponent<MeshFilter>();
+                foreach (MeshCollider collider in front.GetComponents<MeshCollider>())
+                {
+                    if (filter == null || filter.sharedMesh == null || collider.sharedMesh == filter.sharedMesh) continue;
+
+                    collider.convex = false;
+                    collider.sharedMesh = filter.sharedMesh;
+                }
+            }
+        }
+
+        /// <summary>The gate is the castle piece 05 (a wall with an arch opening).</summary>
+        bool IsGatePiece(Transform piece)
+        {
+            for (Transform t = piece; t != null && t != transform; t = t.parent)
+                if (t.name.Contains("Castle_Piece_05")) return true;
+
+            return false;
         }
 
         void Update()

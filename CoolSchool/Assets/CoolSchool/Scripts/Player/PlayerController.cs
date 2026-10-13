@@ -50,6 +50,12 @@ namespace CoolSchool.Player
         /// <summary>True from RideOn until the hop off in StopRiding has landed. The kid does not walk while riding.</summary>
         public bool IsRiding => riding;
 
+        /// <summary>
+        /// The joystick (or keyboard) push right now, 0 when input is off or a panel covers the game. Also readable while riding,
+        /// so a toy can tell when he pushes the stick to skip.
+        /// </summary>
+        public Vector2 MoveInput => InputEnabled && !CoolSchool.Parent.ParentGate.InputBlocked ? ReadMoveInput() : Vector2.zero;
+
         /// <summary>Raised when the kid leaves the ground, so the animator can play a jump.</summary>
         public event System.Action Jumped;
 
@@ -163,6 +169,23 @@ namespace CoolSchool.Player
             carryVelocity = new Vector3(velocity.x, 0f, velocity.z);
             launchPending = true;
             Jumped?.Invoke();
+        }
+
+        /// <summary>
+        /// Puts the kid somewhere else at once. The character controller sleeps for the move (it would fight a teleport) and
+        /// all speed is cleared, so he lands standing still. While riding the controller stays off.
+        /// </summary>
+        public void Teleport(Vector3 position, Quaternion rotation)
+        {
+            if (controller == null) controller = GetComponent<CharacterController>();
+
+            controller.enabled = false;
+            transform.SetPositionAndRotation(position, rotation);
+            verticalVelocity = -2f;
+            carryVelocity = Vector3.zero;
+            launchPending = false;
+            airSeconds = 0f;
+            if (!riding) controller.enabled = true;
         }
 
         /// <summary>Sets the up/down speed directly, e.g. to hang for a moment at the top of a jump.</summary>

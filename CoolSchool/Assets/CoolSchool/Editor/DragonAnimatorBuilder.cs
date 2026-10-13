@@ -23,6 +23,11 @@ namespace CoolSchool.EditorTools
         public const string HappyClip = "Idle Break";
         public const string TakeoffClip = "Idle Takeoff";
         public const string FlyClip = "Fly";
+        public const string EatClip = "Attack 1";
+        public const string SitClip = "Sit";
+        public const string SittingClip = "Sitting";
+        public const string RiseClip = "Rise";
+        public const string GlideClip = "Fly Glide";
 
         /// <summary>Returns null when Dragon_LP.fbx or its Idle clip can't be found.</summary>
         public static AnimatorController CreateOrReplace(string path, List<string> missingClips)
@@ -49,6 +54,11 @@ namespace CoolSchool.EditorTools
             AnimationClip happy = Get(HappyClip);
             AnimationClip takeoff = Get(TakeoffClip);
             AnimationClip fly = Get(FlyClip);
+            AnimationClip eat = Get(EatClip);
+            AnimationClip sit = Get(SitClip);
+            AnimationClip sitting = Get(SittingClip);
+            AnimationClip rise = Get(RiseClip);
+            AnimationClip glide = Get(GlideClip);
 
             if (idle == null) return null;
 
@@ -60,6 +70,9 @@ namespace CoolSchool.EditorTools
             controller.AddParameter("GotHit", AnimatorControllerParameterType.Trigger);
             controller.AddParameter("Happy", AnimatorControllerParameterType.Trigger);
             controller.AddParameter("Flying", AnimatorControllerParameterType.Bool);
+            controller.AddParameter("Eat", AnimatorControllerParameterType.Trigger);
+            controller.AddParameter("Sitting", AnimatorControllerParameterType.Bool);
+            controller.AddParameter("Gliding", AnimatorControllerParameterType.Bool);
 
             AnimatorStateMachine machine = controller.layers[0].stateMachine;
 
@@ -80,6 +93,28 @@ namespace CoolSchool.EditorTools
                 back.AddCondition(AnimatorConditionMode.IfNot, 0f, "Flying");
                 back.hasExitTime = false;
                 back.duration = 0.3f;
+            }
+
+            // The ride: "Gliding" swaps the flapping Fly for a smooth glide (on the way down), and back.
+            if (glide != null && flyState != null)
+            {
+                AnimatorState glideState = machine.AddState("Glide");
+                glideState.motion = glide;
+
+                AnimatorStateTransition toGlide = flyState.AddTransition(glideState);
+                toGlide.AddCondition(AnimatorConditionMode.If, 0f, "Gliding");
+                toGlide.hasExitTime = false;
+                toGlide.duration = 0.3f;
+
+                AnimatorStateTransition fromGlide = glideState.AddTransition(flyState);
+                fromGlide.AddCondition(AnimatorConditionMode.IfNot, 0f, "Gliding");
+                fromGlide.hasExitTime = false;
+                fromGlide.duration = 0.3f;
+
+                AnimatorStateTransition land = glideState.AddTransition(idleState);
+                land.AddCondition(AnimatorConditionMode.IfNot, 0f, "Flying");
+                land.hasExitTime = false;
+                land.duration = 0.3f;
             }
 
             if (takeoff != null && flyState != null)
@@ -118,9 +153,61 @@ namespace CoolSchool.EditorTools
             if (tail != null) AddOneShot(machine, idleState, airborneEntry, "TailWhip", tail, 0.9f);
             if (gotHit != null) AddOneShot(machine, idleState, airborneEntry, "GotHit", gotHit, 0.85f);
             if (happy != null) AddOneShot(machine, idleState, airborneEntry, "Happy", happy, 0.95f);
+            if (eat != null) AddOneShot(machine, idleState, airborneEntry, "Eat", eat, 0.9f);
+
+            AddSitting(machine, idleState, sit, sitting, rise);
 
             AssetDatabase.SaveAssets();
             return controller;
+        }
+
+        /// <summary>
+        /// Lying down so the knight can climb on: Idle goes to Sit and then to the looping Sitting while the "Sitting" bool is on.
+        /// When it goes off, the dragon gets up (the Rise clip when there is one) and is back in Idle. Missing clips are skipped.
+        /// </summary>
+        static void AddSitting(AnimatorStateMachine machine, AnimatorState idleState, AnimationClip sit, AnimationClip sitting, AnimationClip rise)
+        {
+            AnimationClip first = sit != null ? sit : sitting;
+            if (first == null) return;
+
+            AnimatorState sitState = machine.AddState("Sit");
+            sitState.motion = first;
+            AnimatorStateTransition down = idleState.AddTransition(sitState);
+            down.AddCondition(AnimatorConditionMode.If, 0f, "Sitting");
+            down.hasExitTime = false;
+            down.duration = 0.2f;
+
+            AnimatorState restState = sitState;
+            if (sit != null && sitting != null)
+            {
+                restState = machine.AddState("Sitting");
+                restState.motion = sitting;
+                AnimatorStateTransition settle = sitState.AddTransition(restState);
+                settle.hasExitTime = true;
+                settle.exitTime = 0.95f;
+                settle.duration = 0.15f;
+            }
+
+            // Getting up: through Rise when it exists, else straight to Idle. Also while the Sit clip is still playing.
+            AnimatorState getUp = null;
+            if (rise != null)
+            {
+                getUp = machine.AddState("Rise");
+                getUp.motion = rise;
+                AnimatorStateTransition done = getUp.AddTransition(idleState);
+                done.hasExitTime = true;
+                done.exitTime = 0.9f;
+                done.duration = 0.2f;
+            }
+
+            foreach (AnimatorState from in new[] { sitState, restState })
+            {
+                AnimatorStateTransition up = from.AddTransition(getUp != null ? getUp : idleState);
+                up.AddCondition(AnimatorConditionMode.IfNot, 0f, "Sitting");
+                up.hasExitTime = false;
+                up.duration = 0.2f;
+                if (restState == sitState) break;
+            }
         }
 
         /// <summary>Leaves a ground state for the takeoff (or flight) as soon as "Flying" turns on.</summary>

@@ -35,6 +35,20 @@ namespace CoolSchool.EditorTools
             "HumanM@SitGround01 - Loop", "HumanF@SitGround01 - Loop", "HumanM@SitLow01 - Loop",
         };
 
+        // The playground toy poses (CoolSchool.Playground.ToyPose 1..6): the first clip that is found is used. The HumanM/HumanF
+        // names are Kevin Iglesias FBX names; the others are clips of the RPG Character Mecanim Animation Pack.
+        static readonly string[][] ToyPoseClipNames =
+        {
+            new[] { "HumanM@SitMedium01 - Loop", "HumanF@SitMedium01 - Loop", "HumanM@SitHigh01 - Loop" },   // SitSeat
+            new[] { "HumanM@SitGround01 - Loop", "HumanF@SitGround01 - Loop" },                               // SitSlide
+            new[] { "Climb-Ladder-Up", "Climb-Ladder-Idle" },                                                  // Climb
+            new[] { "Ledge-Idle" },                                                                            // Hang
+            new[] { "Ledge-Right", "Ledge-Left" },                                                             // HangMove
+            new[] { "Crawl-Forward", "Crawl-Idle" },                                                           // Crawl
+        };
+
+        static Dictionary<string, AnimationClip> toyClipCache;
+
         /// <summary>The pack the sword, shield and mace clips come from (used in messages).</summary>
         public const string CombatPackName = "RPG Character Mecanim Animation Pack";
         public const string ShieldBlockClip = "Armed-Shield-Block";
@@ -75,6 +89,7 @@ namespace CoolSchool.EditorTools
         public static AnimatorController CreateOrReplace(string path, List<string> missingClips)
         {
             Dictionary<string, AnimationClip> clips = FindHumanAnimationClips();
+            toyClipCache = clips;
 
             AnimationClip Get(string name)
             {
@@ -151,6 +166,7 @@ namespace CoolSchool.EditorTools
             controller.AddParameter("Dancing", AnimatorControllerParameterType.Bool);
             controller.AddParameter("DanceVariant", AnimatorControllerParameterType.Int);
             controller.AddParameter("Sitting", AnimatorControllerParameterType.Bool);
+            controller.AddParameter("ToyPose", AnimatorControllerParameterType.Int);
 
             AnimatorStateMachine machine = controller.layers[0].stateMachine;
 
@@ -172,6 +188,7 @@ namespace CoolSchool.EditorTools
             AddTumble(machine, locomotion, fall, ground, standUp);
             AddDances(machine, locomotion, dances);
             AddSit(machine, locomotion, sit);
+            AddToyPoses(machine, locomotion, missingClips);
 
             if (wantUpperBody && upperMask != null)
                 AddUpperBodyLayer(controller, upperMask, attacks, block, blockHit, shoot, throwArm);
@@ -408,6 +425,67 @@ namespace CoolSchool.EditorTools
                 again.exitTime = 1f;
                 again.duration = 0.1f;
             }
+        }
+
+        /// <summary>
+        /// Playground toy poses (CoolSchool.Playground.ToyPose 1..6) as states of the base layer. A ToyPose value above 0 enters the pose
+        /// from any state (0.15 s blend, no self transition); ToyPose 0 returns to locomotion (0.2 s). They are added after the sit
+        /// pose, so Jump, Cheer and the rest keep their priority. A pose whose clip cannot be found is skipped (and reported).
+        /// </summary>
+        static void AddToyPoses(AnimatorStateMachine machine, AnimatorState returnTo, List<string> missingClips)
+        {
+            string[] poseNames = { "ToySitSeat", "ToySitSlide", "ToyClimb", "ToyHang", "ToyHangMove", "ToyCrawl" };
+            for (int i = 0; i < poseNames.Length; i++)
+            {
+                int value = i + 1;
+                AnimationClip clip = FindToyPoseClip(value);
+                if (clip == null)
+                {
+                    missingClips.Add(ToyPoseClipNames[i][0]);
+                    continue;
+                }
+
+                AnimatorState state = machine.AddState(poseNames[i]);
+                state.motion = clip;
+
+                AnimatorStateTransition enter = machine.AddAnyStateTransition(state);
+                enter.AddCondition(AnimatorConditionMode.Equals, value, "ToyPose");
+                enter.canTransitionToSelf = false;
+                enter.hasExitTime = false;
+                enter.duration = 0.15f;
+
+                AnimatorStateTransition stop = state.AddTransition(returnTo);
+                stop.AddCondition(AnimatorConditionMode.Equals, 0f, "ToyPose");
+                stop.hasExitTime = false;
+                stop.duration = 0.2f;
+
+                // The clip should loop. If it does not, restart it from its own end so the pose never freezes.
+                if (!clip.isLooping)
+                {
+                    AnimatorStateTransition again = state.AddTransition(state);
+                    again.hasExitTime = true;
+                    again.exitTime = 1f;
+                    again.duration = 0.1f;
+                }
+            }
+        }
+
+        /// <summary>The clip of a toy pose (CoolSchool.Playground.ToyPose value 1..6): the first of its candidates that exists. Null if none.</summary>
+        internal static AnimationClip FindToyPoseClip(int toyPose)
+        {
+            if (toyPose < 1 || toyPose > ToyPoseClipNames.Length) return null;
+
+            toyClipCache ??= FindHumanAnimationClips();
+            foreach (string name in ToyPoseClipNames[toyPose - 1])
+            {
+                AnimationClip clip;
+                if (name.StartsWith("Human"))
+                    clip = toyClipCache.TryGetValue(name, out AnimationClip found) ? found : FindModelClip(name);
+                else
+                    clip = FindCombatClip(name);
+                if (clip != null) return clip;
+            }
+            return null;
         }
 
         /// <summary>The first clip of the model (FBX) with exactly this file name, from any Human Animations folder.</summary>

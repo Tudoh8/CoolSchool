@@ -14,6 +14,8 @@ namespace CoolSchool.Race
     {
         [Tooltip("Where the kid's root sits (the SitGround pose has the hips on the seat).")]
         [SerializeField] Transform seat;
+        [Tooltip("Where a plush buddy sits when it rides along (beside his legs or behind the seat). Under the model, so it wobbles with the cart.")]
+        [SerializeField] Transform buddySeat;
         [Tooltip("The child that wobbles, tilts and spins. The cart bodies live under it.")]
         [SerializeField] Transform model;
         [Tooltip("Optional. Spun by the speed. The Synty carts are one mesh, so this is usually empty.")]
@@ -49,6 +51,9 @@ namespace CoolSchool.Race
         public RaceTrack Track { get; set; }
 
         public Transform Seat => seat;
+
+        /// <summary>Where a riding plush buddy sits. Empty when the cart has none.</summary>
+        public Transform BuddySeat => buddySeat;
 
         /// <summary>The lane the cart is in or heading for, 0..2.</summary>
         public int Lane { get; private set; } = 1;

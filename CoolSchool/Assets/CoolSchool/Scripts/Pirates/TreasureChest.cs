@@ -42,10 +42,21 @@ namespace CoolSchool.Pirates
         const float SpillArcHeight = 1f;
         const float GlowIntensity = 2.2f;
         const float GlowRange = 3.5f;
-        const int FanSize = 10;
+        /// <summary>How many coins the chest can spill at most (one fan).</summary>
+        public const int FanSize = 10;
+        // Two piles side by side (the compare game): rows of up to five coins, each pile centred this far to the left / right of the chest.
+        const int PileColumns = 5;
+        const float PileSpacing = 0.42f;
+        const float PileRowGap = 0.45f;
+        const float PileOffsetX = 1.8f;
+        const float PileDepth = 1.5f;
+        const float PileLift = 0.12f;
 
         /// <summary>Where a coin disappears to: just above the mouth of the chest.</summary>
         public Vector3 IntoChestPoint => risenPosition + mouthOffset;
+
+        /// <summary>The height of the sand under the chest once it has risen.</summary>
+        public float GroundY => risenPosition.y;
 
         Vector3 risenPosition;
         Vector3 baseScale = Vector3.one;
@@ -128,6 +139,31 @@ namespace CoolSchool.Pirates
                 StartCoroutine(SpillOne(coin, SpotFor(i), i * SpillDelaySeconds));
             }
             return result;
+        }
+
+        /// <summary>
+        /// Throws two piles of gold out side by side in front of the chest, as the camera sees them: [0] is the left pile and [1] the
+        /// right one. Rows of five, so a bigger pile is visibly longer. Cleared by the next spill or by ResetChest, like SpillCoins.
+        /// </summary>
+        public TreasureCoin[][] SpillPiles(int left, int right)
+        {
+            DestroyCoins();
+            int[] sizes = { Mathf.Clamp(left, 0, FanSize), Mathf.Clamp(right, 0, FanSize) };
+
+            var piles = new TreasureCoin[2][];
+            for (int pile = 0; pile < 2; pile++)
+            {
+                piles[pile] = new TreasureCoin[sizes[pile]];
+                for (int i = 0; i < sizes[pile]; i++)
+                {
+                    TreasureCoin coin = TreasureCoin.Create(coinPrefab, IntoChestPoint, TreasureCoin.Diameter, false);
+                    coin.gameObject.SetActive(false);
+                    coins.Add(coin);
+                    piles[pile][i] = coin;
+                    StartCoroutine(SpillOne(coin, PileSpot(pile, i, sizes[pile]), i * SpillDelaySeconds));
+                }
+            }
+            return piles;
         }
 
         /// <summary>Back to the start: buried and hidden, locked, closed, no coins.</summary>
@@ -318,6 +354,16 @@ namespace CoolSchool.Pirates
             int row = index / 5;
             Vector3 centre = risenPosition + new Vector3(0f, coinHeight, -1.1f - row * 0.5f);
             return centre + new Vector3((column - 2) * 0.5f, 0f, 0f);
+        }
+
+        /// <summary>Where coin `index` of a pile with `total` coins comes to rest: each row of the pile is centred on the pile.</summary>
+        Vector3 PileSpot(int pile, int index, int total)
+        {
+            int row = index / PileColumns;
+            int inRow = Mathf.Min(PileColumns, total - row * PileColumns);
+            float column = index % PileColumns - (inRow - 1) * 0.5f;
+            float side = pile == 0 ? -1f : 1f;
+            return risenPosition + new Vector3(side * PileOffsetX + column * PileSpacing, PileLift + coinHeight, -PileDepth - row * PileRowGap);
         }
 
         void DestroyCoins()

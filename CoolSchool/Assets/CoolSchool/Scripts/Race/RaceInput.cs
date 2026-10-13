@@ -27,6 +27,7 @@ namespace CoolSchool.Race
         public event System.Action Jump;
 
         RectTransform actionRect;
+        RectTransform extraButtonRect;
         Camera actionCamera;
         readonly Vector3[] corners = new Vector3[4];
 
@@ -100,20 +101,26 @@ namespace CoolSchool.Race
 
         void HandlePress(Vector2 position, int pointerId)
         {
-            if (IsOverUi(pointerId) || IsOverActionButton(position)) return;
+            if (IsOverUi(pointerId) || IsOverRect(actionRect, position) || IsOverRect(extraButtonRect, position)) return;
 
             LaneChange?.Invoke(position.x < Screen.width * 0.5f ? -1 : 1);
         }
 
+        /// <summary>A second button whose taps never change lanes (the honk button). Set by the race.</summary>
+        public void SetExtraButton(RectTransform rect)
+        {
+            extraButtonRect = rect;
+        }
+
         /// <summary>
         /// Geometric backup for <see cref="IsOverUi"/>: the EventSystem may not have seen a brand-new touch yet when Update runs,
-        /// so a tap on the jump button must also be recognised by position, with a 10% margin around the button.
+        /// so a tap on the jump button (or the honk button) must also be recognised by position, with a 10% margin around the button.
         /// </summary>
-        bool IsOverActionButton(Vector2 position)
+        bool IsOverRect(RectTransform rect, Vector2 position)
         {
-            if (actionRect == null) return false;
+            if (rect == null) return false;
 
-            actionRect.GetWorldCorners(corners);
+            rect.GetWorldCorners(corners);
             Vector2 min = RectTransformUtility.WorldToScreenPoint(actionCamera, corners[0]);
             Vector2 max = RectTransformUtility.WorldToScreenPoint(actionCamera, corners[2]);
             Vector2 margin = (max - min) * 0.1f;

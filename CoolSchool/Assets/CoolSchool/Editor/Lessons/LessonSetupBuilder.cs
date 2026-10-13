@@ -8,7 +8,7 @@ namespace CoolSchool.EditorTools
 {
     /// <summary>
     /// Adds the numbers lesson and the letters lesson to the playground scene: the lesson activities with their shared stage,
-    /// camera rig and blackboard writing, the lesson UI on the touch canvas, a basket, the classroom's glowing zone (which
+    /// camera rig and blackboard writing, the lesson UI on the touch canvas, a basket, two ten-frame trays and a hiding cup, the classroom's glowing zone (which
     /// alternates the two lessons through a ClassroomActivitySelector), and an invitation to it. Finds the school's anchors by name and
     /// skips everything (with a warning) when the school is not in the scene. Called once by the playground builder, after the voice setup.
     /// </summary>
@@ -23,6 +23,16 @@ namespace CoolSchool.EditorTools
         const float ZoneRadius = 1.4f;
         const float BasketWidth = 0.5f;
         const float BlackboardLift = 0.02f;
+
+        const int TrayCount = 2;
+        const float CupWidth = 0.35f;
+        const string MaterialFolder = "Assets/CoolSchool/Materials/Lessons";
+        const string TrayBaseMaterial = "LessonTrayBase";
+        const string TrayCellMaterial = "LessonTrayCell";
+        const string CupMaterial = "LessonCup";
+        const string CupPrefabName = "SM_Prop_Pot_01";
+        const string CupFallbackPrefabName = "SM_Gen_Prop_Pot_01";
+        const string CupFallbackPack = "PolygonGeneric";
 
         static readonly ActivityBeaconBuilder.Style LessonBeacon = new ActivityBeaconBuilder.Style(
             "Lesson", new Color(0.5f, 2f, 0.7f, 1f), new[] { "Book", "Abacus", "Star" });
@@ -57,7 +67,9 @@ namespace CoolSchool.EditorTools
             LessonUI ui = BuildLessonUI(canvas.transform, font, round);
             BlackboardDisplay blackboard = BuildBlackboard(anchors, font, round);
             GameObject basket = BuildBasket(anchors);
-            NumbersLesson lesson = BuildLesson(anchors, ui, blackboard, countables, basket, font);
+            TenFrameTray[] tenFrames = BuildTenFrames(anchors);
+            HidingCup cup = BuildHidingCup(anchors);
+            NumbersLesson lesson = BuildLesson(anchors, ui, blackboard, countables, basket, font, tenFrames, cup);
             LettersLesson letters = BuildLettersLesson(lesson, blackboard);
 
             ActivityZone zone = KnightsArenaBuilder.CreateActivityZone("LessonZone", null, anchors.ClassroomZone.position,
@@ -247,10 +259,130 @@ namespace CoolSchool.EditorTools
             return basket;
         }
 
+        // ----- Ten-frame trays and the hiding cup ------------------------------------------------
+
+        /// <summary>
+        /// Two flat trays of 2 x 5 cells, switched off until a count above ten (or a compare game) puts them on the table.
+        /// The tray component sizes the parts from its cell size, so they only need to exist here. Their colliders are removed
+        /// so they never block a tap on a toy.
+        /// </summary>
+        static TenFrameTray[] BuildTenFrames(Anchors anchors)
+        {
+            Material baseMaterial = LoadOrCreateMaterial(TrayBaseMaterial, new Color(0.25f, 0.58f, 0.95f, 1f));
+            Material cellMaterial = LoadOrCreateMaterial(TrayCellMaterial, new Color(1f, 0.95f, 0.72f, 1f));
+
+            var trays = new TenFrameTray[TrayCount];
+            for (int i = 0; i < TrayCount; i++)
+            {
+                var root = new GameObject("LessonTenFrame" + (i + 1));
+                root.transform.SetParent(anchors.School, false);
+                root.transform.position = anchors.TableSurface.position;
+
+                var tray = root.AddComponent<TenFrameTray>();
+                Transform body = CreateTrayPart(root.transform, "Body", baseMaterial);
+                var cells = new System.Collections.Generic.List<Object>();
+                for (int cell = 0; cell < TenFrameTray.Capacity; cell++)
+                    cells.Add(CreateTrayPart(root.transform, "Cell" + (cell + 1), cellMaterial));
+
+                PlaygroundPrototypeBuilder.SetObject(tray, "body", body);
+                PlaygroundPrototypeBuilder.SetObjectArray(tray, "cells", cells);
+
+                root.SetActive(false);
+                trays[i] = tray;
+            }
+            return trays;
+        }
+
+        /// <summary>A unit cube without a collider; the tray stretches it to size.</summary>
+        static Transform CreateTrayPart(Transform parent, string partName, Material material)
+        {
+            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            Object.DestroyImmediate(cube.GetComponent<Collider>());
+            cube.name = partName;
+            cube.transform.SetParent(parent, false);
+            if (material != null) cube.GetComponent<MeshRenderer>().sharedMaterial = material;
+            return cube.transform;
+        }
+
+        /// <summary>
+        /// An upside-down pot (PolygonKids, else PolygonGeneric, else a plain cylinder) about 0.35 m wide, without colliders, switched
+        /// off until the hiding exercise drops it on the table. Never null: the cylinder is the last resort.
+        /// </summary>
+        static HidingCup BuildHidingCup(Anchors anchors)
+        {
+            var root = new GameObject("LessonHidingCup");
+            root.transform.SetParent(anchors.School, false);
+            root.transform.position = anchors.TableSurface.position;
+
+            GameObject prefab = PlaygroundPrototypeBuilder.LoadPrefab(PlaygroundPrototypeBuilder.Kids(CupPrefabName));
+            if (prefab == null)
+                prefab = PlaygroundPrototypeBuilder.LoadPrefab(new PlaygroundPrototypeBuilder.PrefabRef(CupFallbackPrefabName, CupFallbackPack));
+
+            GameObject model;
+            if (prefab != null)
+            {
+                model = PlaygroundPrototypeBuilder.Spawn(prefab, root.transform);
+            }
+            else
+            {
+                model = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                model.transform.SetParent(root.transform, false);
+                model.transform.localScale = new Vector3(CupWidth, CupWidth * 0.4f, CupWidth);
+                Material bright = LoadOrCreateMaterial(CupMaterial, new Color(0.95f, 0.3f, 0.25f, 1f));
+                if (bright != null) model.GetComponent<MeshRenderer>().sharedMaterial = bright;
+            }
+
+            model.name = "CupModel";
+            model.transform.localPosition = Vector3.zero;
+            // Upside down: the opening faces the table.
+            model.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
+
+            foreach (Collider collider in model.GetComponentsInChildren<Collider>(true))
+                Object.DestroyImmediate(collider);
+
+            if (prefab != null && PlaygroundPrototypeBuilder.TryGetBounds(model, out Bounds bounds))
+            {
+                float width = Mathf.Max(bounds.size.x, bounds.size.z);
+                if (width > 0.0001f) model.transform.localScale *= CupWidth / width;
+            }
+
+            var cup = root.AddComponent<HidingCup>();
+            root.SetActive(false);
+            return cup;
+        }
+
+        /// <summary>A URP Lit material saved under Materials/Lessons. An existing one is kept (and recoloured) so its GUID stays the same.</summary>
+        static Material LoadOrCreateMaterial(string materialName, Color color)
+        {
+            string path = MaterialFolder + "/" + materialName + ".mat";
+            var material = AssetDatabase.LoadAssetAtPath<Material>(path);
+
+            if (material == null)
+            {
+                Shader lit = Shader.Find("Universal Render Pipeline/Lit");
+                if (lit == null)
+                {
+                    Debug.LogWarning($"CoolSchool: no URP Lit shader, so the lesson material '{materialName}' was not made.");
+                    return null;
+                }
+
+                if (!AssetDatabase.IsValidFolder(MaterialFolder))
+                    AssetDatabase.CreateFolder("Assets/CoolSchool/Materials", "Lessons");
+
+                material = new Material(lit) { name = materialName };
+                AssetDatabase.CreateAsset(material, path);
+            }
+
+            material.SetColor("_BaseColor", color);
+            material.SetFloat("_Smoothness", 0.25f);
+            EditorUtility.SetDirty(material);
+            return material;
+        }
+
         // ----- The lesson ------------------------------------------------------------------------
 
         static NumbersLesson BuildLesson(Anchors anchors, LessonUI ui, BlackboardDisplay blackboard, CountableSet countables,
-            GameObject basket, Font font)
+            GameObject basket, Font font, TenFrameTray[] tenFrames, HidingCup cup)
         {
             var root = new GameObject("NumbersLesson");
 
@@ -270,6 +402,8 @@ namespace CoolSchool.EditorTools
             PlaygroundPrototypeBuilder.SetObject(lesson, "blackboard", blackboard);
             PlaygroundPrototypeBuilder.SetObject(lesson, "countables", countables);
             PlaygroundPrototypeBuilder.SetObject(lesson, "basket", basket);
+            PlaygroundPrototypeBuilder.SetObjectArray(lesson, "tenFrames", tenFrames);
+            PlaygroundPrototypeBuilder.SetObject(lesson, "hidingCup", cup);
             PlaygroundPrototypeBuilder.SetObject(lesson, "numberFont", font);
             PlaygroundPrototypeBuilder.SetInt(lesson, "exercisesPerLesson", 4);
             PlaygroundPrototypeBuilder.SetInt(lesson, "starsPerCorrect", 1);

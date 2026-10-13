@@ -34,7 +34,7 @@ namespace CoolSchool.Aliens
     /// Every visit is different: 2 to 8 aliens by level, a mix of kinds, other spawn spots and another rescue.
     /// The kid can never fail: every step has a hint and a safety net. Everything that was changed is put back in OnEnd.
     /// </summary>
-    public class AlienLanding : Activity
+    public partial class AlienLanding : Activity
     {
         [Header("Player")]
         [SerializeField] PlayerController player;
@@ -1028,6 +1028,11 @@ namespace CoolSchool.Aliens
             }
 
             yield return new WaitForSeconds(2.2f);
+
+            // Harder numbers (AlienLanding.Numbers.cs): once one more / one less is known, a second little question follows.
+            // It does not change the aliens level.
+            yield return RunFollowUp(correct);
+
             lessonUI.HideCards();
             lessonUI.SetGameplayHudVisible(true);
             hudHidden = false;
@@ -1124,7 +1129,7 @@ namespace CoolSchool.Aliens
             return Mathf.Max(1, count);
         }
 
-        /// <summary>The right answer and two other numbers, shuffled. All between 1 and 9.</summary>
+        /// <summary>The right answer and two other numbers, shuffled. All between 1 and 20.</summary>
         static int[] MakeCards(int correct)
         {
             var cards = new List<int> { correct };
@@ -1132,7 +1137,7 @@ namespace CoolSchool.Aliens
             foreach (int offset in offsets)
             {
                 int candidate = correct + offset;
-                if (candidate < 1 || candidate > 9 || cards.Contains(candidate)) continue;
+                if (candidate < 1 || candidate > NumberCurriculum.HighestNumber || cards.Contains(candidate)) continue;
 
                 cards.Add(candidate);
                 if (cards.Count == 3) break;
@@ -1160,7 +1165,6 @@ namespace CoolSchool.Aliens
 
             VoicePlayer.Say("aliens.victory", true);
             Sfx.Play("aliens.dance_party", PlayerPosition());
-            onVictory?.Invoke();
 
             // Confetti over the dancing crowd.
             for (float elapsed = 0f; elapsed < partySeconds; elapsed += 0.6f)
@@ -1168,6 +1172,12 @@ namespace CoolSchool.Aliens
                 PartyConfetti();
                 yield return new WaitForSeconds(0.6f);
             }
+
+            // Once counting backwards is known, the rocket counts down first (AlienLanding.Numbers.cs).
+            yield return RunCountdown();
+
+            // The stars come after the countdown, so they never fly (or open a present) in the middle of it.
+            onVictory?.Invoke();
 
             // Wave goodbye, then the rocket lifts off and the aliens vanish one by one in a sparkle.
             foreach (AlienKidAI alien in visit)

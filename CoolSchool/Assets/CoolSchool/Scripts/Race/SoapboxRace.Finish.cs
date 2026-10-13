@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using CoolSchool.Audio;
 using CoolSchool.Battle;
+using CoolSchool.Lessons;
 using CoolSchool.Rewards;
 using CoolSchool.Voice;
 using UnityEngine;
@@ -85,6 +86,7 @@ namespace CoolSchool.Race
             }
             if (playerAnimator != null) playerAnimator.PlayCheer();
             for (int i = 0; i < 3; i++) BattleEffects.Confetti(PodiumPoint(i) + Vector3.up * 1.5f);
+            if (NumberCurriculum.IsUnlocked(NumberSkill.Ordinals)) yield return RunPodiumQuestion();
 
             // The stars, even when he was second.
             int stars = Mathf.Clamp(2 + gatesRight, 1, 5);

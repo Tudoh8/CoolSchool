@@ -31,12 +31,33 @@ namespace CoolSchool.Rewards
         [Tooltip("If nobody taps, the teacher reminds the child this often.")]
         [SerializeField] float nudgeSeconds = 7f;
 
+        [Header("Swap question and medal")]
+        [Tooltip("Used to find the picture of what he wears now.")]
+        [SerializeField] RewardCatalog catalog;
+        [Tooltip("Shown after the reveal for wearable items. Inactive by default.")]
+        [SerializeField] RectTransform swapPanel;
+        [Tooltip("Picture of what he wears now (left of the 3D item). The empty-slot sprite when nothing is worn.")]
+        [SerializeField] Image currentIcon;
+        [SerializeField] Sprite emptySlotSprite;
+        [Tooltip("Big green circle with a check mark: use the new one.")]
+        [SerializeField] Button useNewButton;
+        [Tooltip("Big red circle with a cross: keep the old one.")]
+        [SerializeField] Button keepOldButton;
+        [Tooltip("Shown instead of the 3D item when the present holds a medal.")]
+        [SerializeField] Image medalImage;
+        [Tooltip("The teacher repeats the swap question this often until he answers. There is no timeout.")]
+        [SerializeField] float swapNudgeSeconds = 8f;
+
         const float AppearSeconds = 0.45f;
         const float SwellSeconds = 0.3f;
         const float RevealPopSeconds = 0.55f;
         const float TapLockSeconds = 1f;
         const float FadeSeconds = 0.25f;
         const float RaysSpinSpeed = -20f;
+        const float SwapPopSeconds = 0.4f;
+        const float AnswerVoiceMaxSeconds = 3f;
+        const float EmptySlotAlpha = 0.45f;
+        const float HornRevealSeconds = 1.5f;
 
         enum State
         {
@@ -45,7 +66,15 @@ namespace CoolSchool.Rewards
             Waiting,
             Shaking,
             Opening,
+            Asking,
             Revealed
+        }
+
+        enum SwapAnswer
+        {
+            None,
+            UseNew,
+            KeepOld
         }
 
         /// <summary>Raised when the popup has gone away again.</summary>
@@ -55,6 +84,8 @@ namespace CoolSchool.Rewards
         RewardItem item;
         PlayerController player;
         bool tapped;
+        SwapAnswer swapAnswer;
+        bool asked;
 
         public bool IsOpen => state != State.Closed;
 
@@ -71,8 +102,21 @@ namespace CoolSchool.Rewards
             StartCoroutine(Flow());
         }
 
+        void Awake()
+        {
+            if (useNewButton != null) useNewButton.onClick.AddListener(() => Answer(SwapAnswer.UseNew));
+            if (keepOldButton != null) keepOldButton.onClick.AddListener(() => Answer(SwapAnswer.KeepOld));
+        }
+
+        void Answer(SwapAnswer answer)
+        {
+            if (state == State.Asking && swapAnswer == SwapAnswer.None) swapAnswer = answer;
+        }
+
         public void OnPointerClick(PointerEventData eventData)
         {
+            // While the swap question is up only the two buttons answer.
+            if (state == State.Asking) return;
             tapped = true;
         }
 
@@ -105,9 +149,24 @@ namespace CoolSchool.Rewards
             yield return Shake();
             yield return Open();
 
-            // A short pause, so a double tap does not close it before it has been seen.
-            yield return new WaitForSecondsRealtime(TapLockSeconds);
-            yield return WaitForTap(false);
+            asked = false;
+            if (item != null && item.Slot != EquipSlot.None && ProgressStore.EquippedId(item.Slot) != item.id)
+            {
+                // A new sword, shield, hat or buddy: ask whether to use it. The answer closes the popup, no extra tap.
+                asked = true;
+                yield return AskSwap();
+            }
+            else if (item != null && item.kind == RewardKind.Cart)
+            {
+                RewardVoice.Say("reward.cart_new");
+            }
+
+            if (!asked)
+            {
+                // A short pause, so a double tap does not close it before it has been seen.
+                yield return new WaitForSecondsRealtime(TapLockSeconds);
+                yield return WaitForTap(false);
+            }
 
             Sfx.Play("ui.popup_close");
             yield return FadeDim(dimAlpha, 0f, FadeSeconds);
@@ -148,20 +207,31 @@ namespace CoolSchool.Rewards
         IEnumerator Open()
         {
             state = State.Opening;
-            RewardVoice.Say("reward.present_open");
+            // No item means everything is won already: the present holds a medal for the Toy Room wall.
+            bool isMedal = item == null && medalImage != null;
+            RewardVoice.Say(item == null ? "reward.medal" : "reward.present_open");
             Sfx.Play("reward.present_open");
             ProgressStore.OpenPresent(item);
             SpawnConfetti();
 
             bool hasReveal = stage != null && stage.Show(item);
-            yield return Swell(hasReveal);
+            yield return Swell(hasReveal || isMedal);
 
             if (rays != null) rays.gameObject.SetActive(true);
-            if (hasReveal && revealImage != null)
+            if (isMedal)
+            {
+                medalImage.gameObject.SetActive(true);
+                Sfx.Play("reward.item_reveal");
+                yield return Pop(medalImage.rectTransform, RevealPopSeconds);
+            }
+            else if (hasReveal && revealImage != null)
             {
                 revealImage.gameObject.SetActive(true);
                 Sfx.Play("reward.item_reveal");
+                // A horn honks once as it pops in.
+                if (item != null && item.IsCartPart(CartPart.Horn)) Sfx.PlayShort(item.soundCue, HornRevealSeconds);
                 yield return Pop(revealImage.rectTransform, RevealPopSeconds);
+                RewardVoice.Say(ItemVoice.GroupFor(item));
             }
             else
             {
@@ -171,6 +241,94 @@ namespace CoolSchool.Rewards
                 yield return Pop(present, RevealPopSeconds);
             }
             SpawnConfetti();
+        }
+
+        /// <summary>
+        /// "Do you want to use the new one?": the picture of what he wears now, the spinning new item, and a green check
+        /// and a red cross. There is no timeout; the teacher asks again every few seconds. The answer closes the popup.
+        /// </summary>
+        IEnumerator AskSwap()
+        {
+            EquipSlot slot = item.Slot;
+            state = State.Asking;
+            swapAnswer = SwapAnswer.None;
+
+            ShowCurrentIcon(slot);
+            if (swapPanel != null)
+            {
+                swapPanel.gameObject.SetActive(true);
+                Sfx.Play("ui.popup_open");
+                yield return Pop(swapPanel, SwapPopSeconds);
+            }
+
+            string question = IsWand(item) ? "reward.swap_wand" : "reward.swap_" + SlotWord(slot);
+            RewardVoice.Say(question);
+            float nextNudge = Time.unscaledTime + swapNudgeSeconds;
+            while (swapAnswer == SwapAnswer.None)
+            {
+                if (Time.unscaledTime > nextNudge)
+                {
+                    if (!RewardVoice.IsBusy()) RewardVoice.Say(question);
+                    nextNudge = Time.unscaledTime + swapNudgeSeconds;
+                }
+                yield return null;
+            }
+
+            if (swapAnswer == SwapAnswer.UseNew)
+            {
+                ProgressStore.Equip(slot, item.id);
+                Sfx.Play("wardrobe.equip");
+                SpawnConfetti();
+                RewardVoice.Say("reward.swap_yes");
+            }
+            else
+            {
+                RewardVoice.Say("reward.swap_no");
+            }
+
+            if (swapPanel != null) swapPanel.gameObject.SetActive(false);
+            state = State.Revealed;
+
+            // Let the teacher finish, then close without another tap.
+            yield return new WaitForSecondsRealtime(0.3f);
+            float giveUp = Time.unscaledTime + AnswerVoiceMaxSeconds;
+            while (RewardVoice.IsSpeaking() && Time.unscaledTime < giveUp) yield return null;
+        }
+
+        void ShowCurrentIcon(EquipSlot slot)
+        {
+            if (currentIcon == null) return;
+
+            string wornId = ProgressStore.EquippedId(slot);
+            RewardItem worn = catalog != null ? catalog.Find(wornId) : null;
+            if (worn != null && worn.icon != null)
+            {
+                currentIcon.sprite = worn.icon;
+                currentIcon.color = Color.white;
+            }
+            else
+            {
+                currentIcon.sprite = emptySlotSprite;
+                currentIcon.color = new Color(1f, 1f, 1f, EmptySlotAlpha);
+            }
+            currentIcon.enabled = currentIcon.sprite != null;
+        }
+
+        /// <summary>The magic wand and the wizard staff sit in the sword slot, but "sword" would be the wrong word for them.</summary>
+        static bool IsWand(RewardItem item)
+        {
+            return item.id == "sword.wand" || item.id == "sword.staff";
+        }
+
+        static string SlotWord(EquipSlot slot)
+        {
+            switch (slot)
+            {
+                case EquipSlot.Sword: return "sword";
+                case EquipSlot.Shield: return "shield";
+                case EquipSlot.Hat: return "hat";
+                default: return "buddy";
+            }
         }
 
         /// <summary>The present swells and fades away. When there is nothing inside it stays.</summary>
@@ -199,6 +357,12 @@ namespace CoolSchool.Rewards
             SetPresentAlpha(1f);
             if (rays != null) rays.gameObject.SetActive(false);
             if (revealImage != null) revealImage.gameObject.SetActive(false);
+            if (medalImage != null) medalImage.gameObject.SetActive(false);
+            if (swapPanel != null)
+            {
+                swapPanel.gameObject.SetActive(false);
+                swapPanel.localScale = Vector3.zero;
+            }
         }
 
         void Wiggle()
@@ -212,7 +376,10 @@ namespace CoolSchool.Rewards
         {
             if (state == State.Closed) return;
 
+            // Switched off in the middle of the question: nothing is equipped, he keeps the old one.
             state = State.Closed;
+            swapAnswer = SwapAnswer.None;
+            if (swapPanel != null) swapPanel.gameObject.SetActive(false);
             if (stage != null) stage.Hide();
             if (player != null) player.InputEnabled = true;
             Closed?.Invoke();

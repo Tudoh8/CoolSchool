@@ -113,7 +113,7 @@ Player: a 4-year-old who can't read. Everything important is **spoken**, and vis
   - `public RewardItem NextLocked(PlayerProgress p)`: the first item not yet unlocked, or null.
 - `public class RewardSystem : MonoBehaviour` (one per scene)
   - serialized:
-    - `RewardCatalog catalog`, `int jarCapacity` (10)
+    - `RewardCatalog catalog`, `int jarCapacity` (15 since 2026-10-13; the first version used 10)
     - `StarJarHud hud`, `PresentPopup popup`
     - `CoolSchool.Tag.TagGame tagGame`, `CoolSchool.Battle.KnightsGame knightsGame`
     - `int starsForTagRound` (3), `int starsForKnightsVictory` (5)
@@ -159,7 +159,7 @@ Player: a 4-year-old who can't read. Everything important is **spoken**, and vis
   - the StarJarHud and PresentPopup UI on the TouchUI canvas, using ModularGameUIKit sprites found by name: `Star` (prefer `Icon-Symbols/Stars/Star.png`) and `Gift` (prefer `Icons/Gift.png`). Use plain Images built in code, not the kit's popup prefabs;
   - the RevealStage (camera, RenderTexture asset `Assets/CoolSchool/Rewards/Reveal.renderTexture`, a light);
   - EquippedSwordApplier on the player.
-- Menu **CoolSchool/Rewards/Reset Progress** and **CoolSchool/Rewards/Give 10 Stars (test)**. The test menu works in Play mode by calling `RewardSystem.AddStars`.
+- Menu **CoolSchool/Rewards/Reset Progress** and **CoolSchool/Rewards/Give 15 Stars (test)**. The test menu works in Play mode by calling `RewardSystem.AddStars`.
 - Integration: add exactly one call to `RewardsSetupBuilder.Setup(...)` near the end of `PlaygroundPrototypeBuilder.Build`, after TagGame and KnightsGame exist. Re-read the file right before editing; agent A adds a similar call.
 
 ### Coordination note

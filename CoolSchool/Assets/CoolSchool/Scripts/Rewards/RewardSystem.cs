@@ -1,4 +1,5 @@
 using System.Collections;
+using CoolSchool.Activities;
 using CoolSchool.Aliens;
 using CoolSchool.Audio;
 using CoolSchool.Battle;
@@ -6,6 +7,7 @@ using CoolSchool.Pirates;
 using CoolSchool.Player;
 using CoolSchool.Race;
 using CoolSchool.Tag;
+using CoolSchool.Zoo;
 using UnityEngine;
 
 namespace CoolSchool.Rewards
@@ -18,7 +20,7 @@ namespace CoolSchool.Rewards
     {
         [SerializeField] RewardCatalog catalog;
         [Tooltip("How many stars fill the jar. A full jar turns into a present.")]
-        [SerializeField] int jarCapacity = 10;
+        [SerializeField] int jarCapacity = 15;
         [SerializeField] StarJarHud hud;
         [SerializeField] PresentPopup popup;
 
@@ -30,6 +32,8 @@ namespace CoolSchool.Rewards
         [SerializeField] PirateAdventure pirateAdventure;
         [Tooltip("The soapbox race gives 1 to 5 stars, also for second and third place.")]
         [SerializeField] SoapboxRace soapboxRace;
+        [Tooltip("Hide and seek in the zoo park gives one star for each animal found, plus one (1 to 10).")]
+        [SerializeField] HideAndSeekGame hideAndSeekGame;
         [SerializeField] int starsForTagRound = 3;
         [SerializeField] int starsForKnightsVictory = 5;
         [SerializeField] int starsForAlienVictory = 5;
@@ -47,11 +51,52 @@ namespace CoolSchool.Rewards
         PlayerController player;
         int starsInFlight;
         bool presentRoutineRunning;
+        bool earnedRoutineRunning;
+        readonly System.Collections.Generic.List<RewardItem> earnedQueue = new System.Collections.Generic.List<RewardItem>();
 
         /// <summary>Flies stars from this spot in the world to the star jar, one after the other.</summary>
         public static void AddStars(int count, Vector3 worldPosition, bool announce = true)
         {
             if (instance != null) instance.GiveStars(count, worldPosition, announce);
+        }
+
+        /// <summary>
+        /// Gives an item that was earned in an adventure (the baby dragon), not won from the jar. It is unlocked and marked
+        /// as new at once and saved; the reveal popup with the swap question opens back in free play, like a present.
+        /// </summary>
+        public static void GiveEarnedItem(RewardItem item)
+        {
+            if (item == null || string.IsNullOrEmpty(item.id)) return;
+
+            PlayerProgress progress = ProgressStore.Current;
+            if (!progress.IsUnlocked(item.id)) progress.unlockedItems.Add(item.id);
+            if (!progress.unseenItems.Contains(item.id)) progress.unseenItems.Add(item.id);
+            ProgressStore.Save();
+
+            if (instance != null) instance.QueueEarnedReveal(item);
+        }
+
+        void QueueEarnedReveal(RewardItem item)
+        {
+            earnedQueue.Add(item);
+            if (!earnedRoutineRunning) StartCoroutine(EarnedRevealRoutine());
+        }
+
+        IEnumerator EarnedRevealRoutine()
+        {
+            earnedRoutineRunning = true;
+            while (earnedQueue.Count > 0)
+            {
+                // Back in free play, and not while a present from the jar is being opened.
+                yield return WaitForActivityToEnd();
+                while (presentRoutineRunning || (popup != null && popup.IsOpen)) yield return null;
+                yield return new WaitForSeconds(JarFullPauseSeconds);
+
+                RewardItem item = earnedQueue[0];
+                earnedQueue.RemoveAt(0);
+                yield return ShowPresent(item);
+            }
+            earnedRoutineRunning = false;
         }
 
         void OnEnable()
@@ -64,6 +109,7 @@ namespace CoolSchool.Rewards
             if (alienLanding != null) alienLanding.onVictory.AddListener(OnAlienVictory);
             if (pirateAdventure != null) pirateAdventure.TreasureCounted += OnTreasureCounted;
             if (soapboxRace != null) soapboxRace.RaceFinished += OnRaceFinished;
+            if (hideAndSeekGame != null) hideAndSeekGame.RoundFinished += OnZooRoundFinished;
             RefreshHud();
         }
 
@@ -77,6 +123,7 @@ namespace CoolSchool.Rewards
             if (alienLanding != null) alienLanding.onVictory.RemoveListener(OnAlienVictory);
             if (pirateAdventure != null) pirateAdventure.TreasureCounted -= OnTreasureCounted;
             if (soapboxRace != null) soapboxRace.RaceFinished -= OnRaceFinished;
+            if (hideAndSeekGame != null) hideAndSeekGame.RoundFinished -= OnZooRoundFinished;
         }
 
         void Start()
@@ -108,6 +155,11 @@ namespace CoolSchool.Rewards
         void OnRaceFinished(int stars, Vector3 position)
         {
             StartCoroutine(GiveAfterDelay(Mathf.Clamp(stars, 1, 5), position));
+        }
+
+        void OnZooRoundFinished(int stars, Vector3 position)
+        {
+            StartCoroutine(GiveAfterDelay(Mathf.Clamp(stars, 1, 10), position));
         }
 
         IEnumerator GiveAfterDelay(int count, Vector3 position)
@@ -170,6 +222,7 @@ namespace CoolSchool.Rewards
             while (ProgressStore.Current.starsInJar >= jarCapacity)
             {
                 yield return WaitForStarsToLand();
+                yield return WaitForActivityToEnd();
                 yield return new WaitForSeconds(JarFullPauseSeconds);
 
                 RewardVoice.Say("reward.jar_full");
@@ -178,6 +231,9 @@ namespace CoolSchool.Rewards
 
                 ProgressStore.EmptyJar(jarCapacity);
                 RewardItem item = catalog != null ? catalog.NextLocked(ProgressStore.Current) : null;
+
+                // Everything is won: the present holds a medal for the Toy Room wall.
+                if (item == null && catalog != null) ProgressStore.AddMedal();
                 yield return ShowPresent(item);
             }
 
@@ -192,6 +248,8 @@ namespace CoolSchool.Rewards
                 yield break;
             }
 
+            // An earned item may be showing; wait so this present is not lost.
+            while (popup.IsOpen) yield return null;
             popup.Show(item);
             while (popup.IsOpen) yield return null;
         }
@@ -200,6 +258,20 @@ namespace CoolSchool.Rewards
         {
             float giveUp = Time.time + MaxStarWaitSeconds;
             while (starsInFlight > 0 && Time.time < giveUp) yield return null;
+        }
+
+        /// <summary>
+        /// A present only opens back in free play: games can still ask questions after their stars (a countdown, a
+        /// podium question), and the present must never get in the way of those. The stars themselves land straight away.
+        /// </summary>
+        IEnumerator WaitForActivityToEnd()
+        {
+            while (true)
+            {
+                ActivityManager manager = ActivityManager.Instance;
+                if (manager == null || manager.Current == null || manager.Current == manager.DefaultActivity) yield break;
+                yield return null;
+            }
         }
 
         /// <summary>Waits for the teacher to finish talking, but never for long.</summary>

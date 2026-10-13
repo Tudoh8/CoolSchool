@@ -594,3 +594,32 @@ After the build, the main agent runs the batch voice generation for the new line
   local, never reformat or reorder other code. Nobody else changes `PlayerController`; if you need something there,
   report it instead.
 - Nobody runs the batch build or commits; the main agent does.
+
+## Cart garage (added 2026-10-13, contract `cart-garage-contract.md`)
+
+The three fixed cart cards were replaced by a tabbed garage; the race changed like this:
+
+- **Picker.** `CartPicker` has six tabs (body, paint, add-ons, trail, horn, number) and picture cards made at run time from the catalog
+  (`RewardCatalog.ItemsOfPart(CartPart)`). It edits a `CartChoice` (body id, paint id, add-ons switched off, trail id, horn id, number);
+  `ProgressStore.LoadCartChoice()` / `SaveCartChoice()` keep it. The race shows the choice live (`CartLooks.Apply`) and saves it when he leaves the picker.
+- **Looks.** `CartLooks` is data-driven: per body a seat point, buddy-seat point, bounds and 7 anchor points (`CartAnchor`), per add-on a root
+  and an anchor, per paint a set of painted material copies (or one whole material for gold), per trail a root. The builder fills these from
+  `SoapboxStreetBuilder.BodyDefs` and `CartGarageData`. Two number plates (world-space UI Text) are on every cart.
+- **Honk.** A round button on the race HUD (above the jump button) plays the chosen horn (`Sfx.PlayShort`, cut at 1.5 s) with a cooldown of
+  0.6 s; taps on it never change lanes (`RaceInput.SetExtraButton`). Rivals honk back sometimes with their own random horns (`SoapboxRace.Honk.cs`).
+- **Rivals** get a random body, paint, 0-2 add-ons and number (never his body or number, and different from each other) from the whole garage.
+- **Voice.** After the picker the announcer says `race.number.<n>` ("Daar is nummer vijf!") once. New cart presents make the Teacher invite him with
+  `invite.race.new` and are not news in the Toy Room.
+- **Bodies (G2).** A cart has 11 bodies: racers 1-3 and the rocket, fire truck, wagon, rocking horse, police car, boat, trike and convertible
+  (`SoapboxStreetBuilder.BodyDefs`; how each is put together is in `SoapboxStreetBuilder.Bodies.cs`: length, hidden parts, the lying rocket, the
+  boat's clipped hull, the generated plank-and-wheels base for rocket, horse and boat, and the kid's seat). The seat, the collider and the jump
+  behaviour stay the racer's; the seated kid is at most about 1.45 m high so he passes under the gates (boards at 1.66 m). Paint works on every
+  body; transparent materials (car windows) keep their colour. The reveal prefabs are `CS_Cart_Rocket`, `_Firetruck`, `_Wagon`, `_Horse`, `_Police`,
+  `_Boat`, `_Trike`, `_Convertible`; voice lines `item.cart.<name>.1`.
+- **Pit lane (G2).** Eleven painted bays on the east sidewalk beside the start (x -10.9, z 22.9..43.5; the start banner's post at z 30 is skipped),
+  one per body, cars parked nose to the road. `PitLane` (Scripts/Race) shows each body through a `ToyShelfSlot` (model when owned, black silhouette
+  when not) and says its `item.<id>` line once per visit when he walks past (default free play only, voice queue idle). It does not touch the
+  start, the lanes, the zone, the walk in from the gap, the camera or the east houses (which start behind the fence at z 48).
+- **Preview shots (G2).** `race_cart_bodies`, `race_cart_lineup`, `race_cart_looks`, `race_cart_addons_chase`, `race_pit_lane`, `race_pit_lane_locked`,
+  `race_cart_picker_tabs`, `race_cart_picker_locked` (`PreviewCapture.RaceGarage.cs`). The picker shots swap the progress the picker reads for a
+  temporary one (never saved).

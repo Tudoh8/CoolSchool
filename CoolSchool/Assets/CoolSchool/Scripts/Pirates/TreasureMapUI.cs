@@ -11,7 +11,9 @@ namespace CoolSchool.Pirates
     /// a glowing frame slides to the next picture, which pulses big and bright (the others are dimmer), so he always sees where to
     /// go next. After the last picture the X gets the frame.
     /// The pictures, ticks, dots and the X are laid out along the middle of the parchment by this script every time the map
-    /// is shown (the route has two or three landmarks), so the builder only has to create them with the right sizes.
+    /// is shown, for any number of landmarks: the pictures shrink to fit, the dots are shared out over every gap and the
+    /// parchment narrows on a squarer screen so it stays clear of the buttons. The builder only has to create one of each as
+    /// a template (it makes four pictures and twelve dots to start with); this script copies them when the route needs more.
     /// </summary>
     public class TreasureMapUI : MonoBehaviour
     {
@@ -21,7 +23,7 @@ namespace CoolSchool.Pirates
         [Tooltip("The green tick over each picture.")]
         [SerializeField] Image[] stepChecks;
         [SerializeField] Image finalX;
-        [Tooltip("The dotted path between the steps. They are shared out evenly over the gaps.")]
+        [Tooltip("The dotted path between the steps. They are shared out evenly over the gaps; copies are made when the route needs more.")]
         [SerializeField] RectTransform[] dots;
 
         const float UnrollSeconds = 0.5f;
@@ -33,14 +35,27 @@ namespace CoolSchool.Pirates
         const float CurrentScale = 1.3f;
         const float DoneTint = 0.85f;
         const float WaitingTint = 0.55f;
-        // The glowing frame behind it: size as a multiple of the picture, how fast it slides over to the next one.
-        const float HighlightSize = 1.9f;
+        // The glowing frame behind it: size as a multiple of the big picture, how fast it slides over to the next one.
+        const float HighlightSize = 1.4f;
         const float HighlightFollow = 14f;
         static readonly Color HighlightColor = new Color(1f, 0.85f, 0.2f, 1f);
         // How far (as a fraction of a picture's size) the tick sits down and right of the picture's middle.
         const float CheckShift = 0.24f;
         const float DotGapPadding = 8f;
         const float UnwalkedDotAlpha = 0.5f;
+        // How many landmarks the map can show (the adventure uses two or three).
+        const int MaxSteps = 8;
+        // Layout, in the parchment's own units: room kept at the parchment's ends, the smallest a picture may get, and the room a
+        // gap needs between the biggest picture and the next for a few dots (and how far apart they sit).
+        const float EdgePadding = 12f;
+        const float MinPictureSize = 56f;
+        const float MinDotRoom = 54f;
+        const float DotSpacing = 18f;
+        const int MaxDotsPerGap = 6;
+        // The back button reaches 370 from the left edge of the 1920x1080 canvas and the golden sword badge 400 from the right,
+        // so the parchment keeps this much clear on both sides (it only matters on squarer screens).
+        const float SideReserve = 400f;
+        const float MinPanelWidth = 360f;
 
         int visibleSteps;
         int reached;
@@ -56,6 +71,14 @@ namespace CoolSchool.Pirates
         float[] checkPopTime;
         int[] dotGap;
         Vector3[] dotBaseScale;
+        Vector2[] dotTarget;
+        Vector2[] dotCurrent;
+        Vector2[] slotPoint;
+        float[] slotSize;
+        int dotsPerGap;
+        // How much the pictures are shrunk (or not) to fit this route on the parchment.
+        float layoutFit = 1f;
+        float panelBaseWidth;
         Coroutine panelRoutine;
 
         void Awake()
@@ -67,6 +90,7 @@ namespace CoolSchool.Pirates
             if (panel != null)
             {
                 panelBaseScale = panel.localScale;
+                panelBaseWidth = panel.rect.width;
                 // The panel must be a child, or switching it off would stop this script.
                 if (panel.gameObject != gameObject) panel.gameObject.SetActive(false);
             }
@@ -85,7 +109,9 @@ namespace CoolSchool.Pirates
                 iconBaseColor[i] = stepIcons[i] != null ? stepIcons[i].color : Color.white;
             CreateHighlight();
 
-            dotGap = new int[dots != null ? dots.Length : 0];
+            dotGap = new int[dots.Length];
+            dotTarget = new Vector2[dots.Length];
+            dotCurrent = new Vector2[dots.Length];
             dotBaseScale = new Vector3[dotGap.Length];
             for (int i = 0; i < dotGap.Length; i++)
             {
@@ -104,13 +130,15 @@ namespace CoolSchool.Pirates
 
         // ----- The calls ---------------------------------------------------------------------------
 
-        /// <summary>Unrolls the map with a picture for every landmark on the route (at most as many as there are slots), then the X.</summary>
+        /// <summary>Unrolls the map with a picture for every landmark on the route (up to MaxSteps), then the X.</summary>
         public void Show(Sprite[] icons)
         {
             if (panel == null) return;
 
-            int slots = stepIcons != null ? stepIcons.Length : 0;
-            visibleSteps = icons != null ? Mathf.Min(icons.Length, slots) : 0;
+            // More slots are copied from the first one when the route is longer than what the builder made.
+            EnsureSlots(icons != null ? Mathf.Min(icons.Length, MaxSteps) : 0);
+            int slots = stepIcons.Length;
+            visibleSteps = icons != null ? Mathf.Min(icons.Length, Mathf.Min(slots, MaxSteps)) : 0;
             reached = 0;
 
             for (int i = 0; i < slots; i++)
@@ -141,6 +169,7 @@ namespace CoolSchool.Pirates
             panel.localScale = panelBaseScale;
             panel.gameObject.SetActive(true);
             LayOut();
+            PlanDots(true);
             RefreshDots();
 
             // The frame starts on the first picture.
@@ -171,6 +200,9 @@ namespace CoolSchool.Pirates
                 if (stepChecks != null && i < stepChecks.Length && stepChecks[i] != null) stepChecks[i].gameObject.SetActive(false);
 
             reached = count;
+
+            // The big picture is a new one, so the dots around it make room (or close up) by sliding.
+            PlanDots(false);
             RefreshDots();
         }
 
@@ -195,67 +227,164 @@ namespace CoolSchool.Pirates
 
         // ----- Layout ------------------------------------------------------------------------------
 
-        /// <summary>Spreads the pictures and the X evenly along the middle of the parchment and shares the dots out over the gaps.</summary>
+        /// <summary>
+        /// Makes sure there are at least `count` picture slots and ticks by copying the first of each (the builder made a few;
+        /// a longer route needs more). New ones start switched off, like the builder's.
+        /// </summary>
+        void EnsureSlots(int count)
+        {
+            if (stepIcons.Length == 0 || stepIcons[0] == null) return;
+
+            int oldIcons = stepIcons.Length;
+            if (oldIcons < count)
+            {
+                System.Array.Resize(ref stepIcons, count);
+                System.Array.Resize(ref iconBaseScale, count);
+                System.Array.Resize(ref iconBaseColor, count);
+                for (int i = oldIcons; i < count; i++)
+                {
+                    stepIcons[i] = Instantiate(stepIcons[0], stepIcons[0].transform.parent);
+                    stepIcons[i].name = $"Step_{i + 1}";
+                    stepIcons[i].gameObject.SetActive(false);
+                    iconBaseScale[i] = iconBaseScale[0];
+                    iconBaseColor[i] = iconBaseColor[0];
+                }
+            }
+
+            int oldChecks = stepChecks.Length;
+            if (oldChecks > 0 && stepChecks[0] != null && oldChecks < count)
+            {
+                System.Array.Resize(ref stepChecks, count);
+                System.Array.Resize(ref checkBaseScale, count);
+                System.Array.Resize(ref checkPopTime, count);
+                for (int i = oldChecks; i < count; i++)
+                {
+                    stepChecks[i] = Instantiate(stepChecks[0], stepChecks[0].transform.parent);
+                    stepChecks[i].name = $"Tick_{i + 1}";
+                    stepChecks[i].gameObject.SetActive(false);
+                    checkBaseScale[i] = checkBaseScale[0];
+                }
+            }
+
+            // Copies were added at the end of the parchment: pictures, then ticks, then the X, all in front of the dots and frame.
+            for (int i = 0; i < stepIcons.Length; i++)
+                if (stepIcons[i] != null) stepIcons[i].transform.SetAsLastSibling();
+            for (int i = 0; i < stepChecks.Length; i++)
+                if (stepChecks[i] != null) stepChecks[i].transform.SetAsLastSibling();
+            if (finalX != null) finalX.transform.SetAsLastSibling();
+        }
+
+        /// <summary>Makes sure there are at least `count` dots by copying the first one. New ones go right after it, behind the pictures.</summary>
+        void EnsureDots(int count)
+        {
+            if (dots.Length == 0 || dots[0] == null || dots.Length >= count) return;
+
+            int old = dots.Length;
+            System.Array.Resize(ref dots, count);
+            System.Array.Resize(ref dotGap, count);
+            System.Array.Resize(ref dotBaseScale, count);
+            System.Array.Resize(ref dotTarget, count);
+            System.Array.Resize(ref dotCurrent, count);
+            for (int d = old; d < count; d++)
+            {
+                dots[d] = Instantiate(dots[0], dots[0].parent);
+                dots[d].name = $"Dot_{d + 1}";
+                dots[d].SetSiblingIndex(dots[0].GetSiblingIndex() + 1);
+                dots[d].gameObject.SetActive(false);
+                dotGap[d] = -1;
+                dotBaseScale[d] = dotBaseScale[0];
+            }
+        }
+
+        /// <summary>
+        /// Spreads the pictures and the X evenly along the middle of the parchment. The pictures shrink when there are many, so
+        /// that the biggest (pulsing) picture never reaches the next one and every gap keeps room for dots.
+        /// </summary>
         void LayOut()
         {
+            FitPanelWidth();
+
             int slots = visibleSteps + 1;
             Rect rect = panel.rect;
-            float half = ElementHalfSize();
-            float padding = Mathf.Min(half + 24f, rect.width * 0.25f);
-            float left = rect.xMin + padding;
-            float right = rect.xMax - padding;
+            float baseSize = PictureBaseSize();
+            float size = PictureSize(slots, rect, baseSize);
+            layoutFit = size / baseSize;
+
+            // The ends keep room for the biggest a picture gets, so nothing sticks out of the parchment.
+            float peakHalf = 0.5f * size * CurrentScale * (1f + PulseAmount);
+            float left = rect.xMin + EdgePadding + peakHalf;
+            float right = rect.xMax - EdgePadding - peakHalf;
             float y = rect.center.y;
 
-            var points = new Vector2[slots];
+            slotPoint = new Vector2[slots];
+            slotSize = new float[slots];
+            float xSize = finalX != null ? finalX.rectTransform.rect.width * finalBaseScale.x * layoutFit : size;
             for (int i = 0; i < slots; i++)
             {
                 float k = slots > 1 ? i / (float)(slots - 1) : 0.5f;
-                points[i] = new Vector2(Mathf.Lerp(left, right, k), y);
+                slotPoint[i] = new Vector2(Mathf.Lerp(left, right, k), y);
+                slotSize[i] = i < visibleSteps ? size : xSize;
             }
 
             for (int i = 0; i < visibleSteps; i++)
             {
-                Place(stepIcons[i], points[i]);
-                if (stepChecks != null && i < stepChecks.Length && stepChecks[i] != null)
-                {
-                    float size = stepIcons[i].rectTransform.rect.width * stepIcons[i].rectTransform.lossyScale.x
-                        / Mathf.Max(0.0001f, panel.lossyScale.x);
-                    Place(stepChecks[i], points[i] + new Vector2(size * CheckShift, -size * CheckShift));
-                }
+                Place(stepIcons[i], slotPoint[i]);
+                if (stepIcons[i] != null) stepIcons[i].rectTransform.localScale = iconBaseScale[i] * layoutFit;
+                if (i < stepChecks.Length && stepChecks[i] != null)
+                    Place(stepChecks[i], slotPoint[i] + new Vector2(size * CheckShift, -size * CheckShift));
             }
-            if (finalX != null) Place(finalX, points[slots - 1]);
-
-            // The dots: the same number in every gap, between the edges of the two pictures.
-            int gaps = visibleSteps;
-            int perGap = gaps > 0 ? dots.Length / gaps : 0;
-            for (int d = 0; d < dots.Length; d++)
+            if (finalX != null)
             {
-                if (dots[d] == null) continue;
-
-                int gap = perGap > 0 ? d / perGap : gaps;
-                bool used = gap < gaps && perGap > 0;
-                dotGap[d] = used ? gap : -1;
-                dots[d].gameObject.SetActive(used);
-                if (!used) continue;
-
-                int index = d % perGap;
-                Vector2 from = points[gap];
-                Vector2 to = points[gap + 1];
-                Vector2 direction = (to - from).normalized;
-                Vector2 a = from + direction * (half + DotGapPadding);
-                Vector2 b = to - direction * (half + DotGapPadding);
-                dots[d].position = panel.TransformPoint(Vector2.Lerp(a, b, (index + 1f) / (perGap + 1f)));
+                Place(finalX, slotPoint[slots - 1]);
+                finalX.rectTransform.localScale = finalBaseScale * layoutFit;
             }
+
+            // The dots: the same number in every gap, as many as fit in the tightest one (next to the big picture).
+            int gaps = visibleSteps;
+            float spacing = slots > 1 ? (right - left) / gaps : 0f;
+            float tightestGap = spacing - 0.5f * size * (CurrentScale * (1f + PulseAmount) + 1f) - 2f * DotGapPadding;
+            int perGap = Mathf.Clamp(Mathf.FloorToInt(tightestGap / DotSpacing) - 1, 0, MaxDotsPerGap);
+            EnsureDots(gaps * perGap);
+            dotsPerGap = gaps > 0 && dots.Length > 0 ? Mathf.Min(perGap, dots.Length / gaps) : 0;
         }
 
-        /// <summary>Half the size of a picture in the parchment's own units (all pictures are the same size).</summary>
-        float ElementHalfSize()
+        /// <summary>The unshrunk size of a picture in the parchment's own units (all pictures are the same size).</summary>
+        float PictureBaseSize()
         {
-            if (stepIcons == null || stepIcons.Length == 0 || stepIcons[0] == null) return 60f;
+            if (stepIcons.Length == 0 || stepIcons[0] == null) return 130f;
 
-            RectTransform icon = stepIcons[0].rectTransform;
-            float width = icon.rect.width * icon.lossyScale.x / Mathf.Max(0.0001f, panel.lossyScale.x);
-            return Mathf.Max(20f, width * 0.5f);
+            return Mathf.Max(20f, stepIcons[0].rectTransform.rect.width * iconBaseScale[0].x);
+        }
+
+        /// <summary>
+        /// The biggest picture size at which `slots` pictures fit: the pulsing big picture and its neighbour leave a gap with
+        /// room for dots, and the big picture fits the parchment's height. Never more than the builder's size.
+        /// </summary>
+        static float PictureSize(int slots, Rect rect, float baseSize)
+        {
+            float peak = 0.5f * CurrentScale * (1f + PulseAmount);
+            float gaps = Mathf.Max(1, slots - 1);
+            float usable = rect.width - 2f * EdgePadding;
+
+            // The spacing between pictures is (usable - 2 * peak * size) / gaps; it must hold the big picture's half, the
+            // neighbour's half, the two paddings and the room for dots.
+            float size = (usable / gaps - MinDotRoom - 2f * DotGapPadding) / (2f * peak / gaps + peak + 0.5f);
+            size = Mathf.Min(size, (rect.height - 2f * EdgePadding) / (2f * peak));
+            return Mathf.Clamp(size, Mathf.Min(MinPictureSize, baseSize), baseSize);
+        }
+
+        /// <summary>
+        /// Keeps the parchment clear of the back button (left) and the star jar and sword badge (right): on a 16:9 screen the
+        /// builder's width fits, on a squarer one (4:3) it narrows. The screen is the holder this script is on.
+        /// </summary>
+        void FitPanelWidth()
+        {
+            var holder = transform as RectTransform;
+            float screen = holder != null ? holder.rect.width : 0f;
+            if (screen <= 0f || panelBaseWidth <= 0f) return;
+
+            float width = Mathf.Clamp(screen - 2f * SideReserve, MinPanelWidth, panelBaseWidth);
+            panel.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         }
 
         /// <summary>Puts the middle of the element on a point of the parchment (given in the parchment's own units).</summary>
@@ -264,6 +393,40 @@ namespace CoolSchool.Pirates
             if (element == null) return;
 
             element.rectTransform.position = panel.TransformPoint(point);
+        }
+
+        /// <summary>
+        /// Decides where every dot goes: evenly along each gap, from the edge of one picture to the edge of the next. The big
+        /// picture is wider than the others, so its two gaps are shorter. `jump` puts the dots there at once; otherwise they slide.
+        /// </summary>
+        void PlanDots(bool jump)
+        {
+            int current = Mathf.Min(reached, visibleSteps);
+            for (int d = 0; d < dots.Length; d++)
+            {
+                int gap = dotsPerGap > 0 ? d / dotsPerGap : -1;
+                bool used = slotPoint != null && gap >= 0 && gap < visibleSteps;
+                dotGap[d] = used ? gap : -1;
+                if (dots[d] == null) continue;
+
+                dots[d].gameObject.SetActive(used);
+                if (!used) continue;
+
+                Vector2 from = slotPoint[gap];
+                Vector2 to = slotPoint[gap + 1];
+                Vector2 direction = (to - from).normalized;
+                Vector2 a = from + direction * (SlotRadius(gap, current) + DotGapPadding);
+                Vector2 b = to - direction * (SlotRadius(gap + 1, current) + DotGapPadding);
+                dotTarget[d] = Vector2.Lerp(a, b, (d % dotsPerGap + 1f) / (dotsPerGap + 1f));
+                if (jump) dotCurrent[d] = dotTarget[d];
+                dots[d].position = panel.TransformPoint(dotCurrent[d]);
+            }
+        }
+
+        /// <summary>Half the room a picture takes: the big one at its most swollen, the others as they are.</summary>
+        float SlotRadius(int slot, int current)
+        {
+            return 0.5f * slotSize[slot] * (slot == current ? CurrentScale * (1f + PulseAmount) : 1f);
         }
 
         /// <summary>Dots on a stretch that has been walked are fully there; the rest are faint and small.</summary>
@@ -300,7 +463,7 @@ namespace CoolSchool.Pirates
                 // The picture to go to next is big, bright and pulses; the ones done are a little dimmer, the ones to come dimmer still.
                 bool current = i == reached;
                 float scale = current ? CurrentScale * pulse : 1f;
-                stepIcons[i].rectTransform.localScale = iconBaseScale[i] * scale;
+                stepIcons[i].rectTransform.localScale = iconBaseScale[i] * (scale * layoutFit);
                 stepIcons[i].color = Tinted(iconBaseColor[i], current ? 1f : (i < reached ? DoneTint : WaitingTint));
             }
 
@@ -309,18 +472,28 @@ namespace CoolSchool.Pirates
                 if (stepChecks[i] == null) continue;
 
                 float age = (Time.time - checkPopTime[i]) / CheckPopSeconds;
-                stepChecks[i].rectTransform.localScale = checkBaseScale[i] * LessonMotion.OutBack(age);
+                stepChecks[i].rectTransform.localScale = checkBaseScale[i] * (LessonMotion.OutBack(age) * layoutFit);
+            }
+
+            // The dots slide to their new places when the big picture moves on.
+            float follow = 1f - Mathf.Exp(-HighlightFollow * Time.unscaledDeltaTime);
+            for (int d = 0; d < dots.Length; d++)
+            {
+                if (dots[d] == null || dotGap[d] < 0) continue;
+
+                dotCurrent[d] = Vector2.Lerp(dotCurrent[d], dotTarget[d], follow);
+                dots[d].position = panel.TransformPoint(dotCurrent[d]);
             }
 
             // When every picture is done the X is the thing to go to.
             if (finalX != null)
             {
                 bool xTurn = visibleSteps > 0 && reached >= visibleSteps;
-                finalX.rectTransform.localScale = finalBaseScale * (xTurn ? CurrentScale * pulse : 1f);
+                finalX.rectTransform.localScale = finalBaseScale * ((xTurn ? CurrentScale * pulse : 1f) * layoutFit);
                 finalX.color = Tinted(finalBaseColor, xTurn ? 1f : WaitingTint);
             }
 
-            UpdateHighlight(1f - Mathf.Exp(-HighlightFollow * Time.unscaledDeltaTime));
+            UpdateHighlight(follow);
         }
 
         static Color Tinted(Color color, float tint)
@@ -347,7 +520,10 @@ namespace CoolSchool.Pirates
             highlight.color = HighlightColor;
             go.SetActive(false);
 
-            if (stepIcons.Length > 0 && stepIcons[0] != null)
+            // Under the dots, which are under the pictures.
+            if (dots.Length > 0 && dots[0] != null)
+                rect.SetSiblingIndex(dots[0].transform.GetSiblingIndex());
+            else if (stepIcons.Length > 0 && stepIcons[0] != null)
                 rect.SetSiblingIndex(stepIcons[0].transform.GetSiblingIndex());
         }
 
@@ -370,9 +546,11 @@ namespace CoolSchool.Pirates
             rect.position = highlightPlaced ? Vector3.Lerp(rect.position, wanted, follow) : wanted;
             highlightPlaced = true;
 
-            float baseSize = Mathf.Max(target.rectTransform.rect.width, target.rectTransform.rect.height);
+            // As big around as the big picture (at its normal size, as it pulses too) times HighlightSize.
+            Vector3 targetScale = target == finalX ? finalBaseScale : iconBaseScale[current];
+            float baseSize = Mathf.Max(target.rectTransform.rect.width, target.rectTransform.rect.height) * targetScale.x * layoutFit;
             float pulse = 1f + Mathf.Sin(Time.time * PulseSpeed) * PulseAmount;
-            float size = baseSize * HighlightSize * pulse;
+            float size = baseSize * CurrentScale * HighlightSize * pulse;
             rect.sizeDelta = new Vector2(size, size);
 
             Color color = HighlightColor;

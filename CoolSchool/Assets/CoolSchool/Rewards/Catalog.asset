@@ -13,88 +13,927 @@ MonoBehaviour:
   m_Name: Catalog
   m_EditorClassIdentifier: Assembly-CSharp::CoolSchool.Rewards.RewardCatalog
   items:
+  - id: sword.foam
+    kind: 0
+    prefab: {fileID: 5371836728183691644, guid: 4fe3b6fc53375724cb3b55052fa41b44, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 1
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 349f2df27d1a846499a4196ebe2d512a, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: shield.basic
+    kind: 1
+    prefab: {fileID: 6507139061417640626, guid: 14d5a94c58e09c94bbe4bea30abccef6, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 1
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: c2e603c0fbf03004e9c642e97b144eda, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.racer_1
+    kind: 5
+    prefab: {fileID: 1497981545583403586, guid: b5a85d64f01c88c4c90874f650ad9b5f, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
+    starter: 1
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 71e79157cde49a14e8456aafecdbe449, type: 3}
+    cartPart: 1
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.horn_bell
+    kind: 5
+    prefab: {fileID: 6473940501079183932, guid: 30c52d319af0fdf4eab5c689d0b8f217, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 1
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 98024de395ca8d242b4a8733f8710533, type: 3}
+    cartPart: 5
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: race.horn_bell
   - id: sword.plastic
     kind: 0
     prefab: {fileID: 2346174602533196880, guid: bca922903d80e904abd5a9e5e9b2b607, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 69e945c290e1f1040be253776b331c07, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: hat.knight_helmet
     kind: 3
     prefab: {fileID: 579896903341717117, guid: 4fbb600ef1480d246a0fe7c3819b6479, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 58230b8709c39b34c965be6d4ae279d7, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: plush.dino
     kind: 4
     prefab: {fileID: 576831500808881760, guid: c1fb3cce51613414d9dc446f6f7d53af, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: d15dce8072fc7a940bb9251c9ff86d2c, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: cart.flag
     kind: 5
     prefab: {fileID: 4324879067095937195, guid: 11138c63af0c545459f47999d977c004, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 798f3b79d055d0e45b32fd67a0fbcae4, type: 3}
+    cartPart: 3
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: sword.wood
     kind: 0
     prefab: {fileID: 3185189667651922555, guid: 6b374ed581a1a724d957249c7d3e7854, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 713bc979f22e2524bac90bb8a7e28478, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: shield.round
     kind: 1
     prefab: {fileID: 3466557726058760119, guid: 018ac46aa02b90445bc455e3ce3af3af, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 75cbb2f7ed9ad6a4a8392ae250adb57c, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: cart.racer_2
     kind: 5
     prefab: {fileID: 6431105003458190973, guid: d8bb925d7e46e2340bf37173c0834366, type: 3}
     revealEuler: {x: 15, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: df0a0a4e2f8c7ec4b90572903f42df10, type: 3}
+    cartPart: 1
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: plush.parrot
     kind: 4
     prefab: {fileID: 9039543982116785190, guid: 03c6b6a13a8811f49bcf30e4e2f9e77f, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: b65a3517d6aa164489bbf89f9299580d, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: plush.dragon
+    kind: 4
+    prefab: {fileID: 7942454025782521558, guid: 05c1089a1b6799740adbb6a40f2ade7e, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 1
+    goldOf: 
+    icon: {fileID: 21300000, guid: 275ea187fcbc389489577cdddb0f93d8, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: plush.unicorn
     kind: 4
     prefab: {fileID: 342286626370472532, guid: 4cc2c406508a814468fcd83b7c77173a, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 359b49891ef45a74ca10db3040000d02, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: hat.cap
     kind: 3
     prefab: {fileID: 3523754109741742598, guid: 09febf92b31c7d54ab3e5504c0e5b2a3, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: e18edd2fb45b0c3429b41f1d524b82ee, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: cart.stickers
     kind: 5
-    prefab: {fileID: 7076254036061003176, guid: ca493500d205c1f468c334d7865e91cc, type: 3}
+    prefab: {fileID: 8835670619701792335, guid: ca493500d205c1f468c334d7865e91cc, type: 3}
     revealEuler: {x: 15, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 2b9831c647f10094389ebf4efdbada8d, type: 3}
+    cartPart: 3
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: sword.pirate
     kind: 0
     prefab: {fileID: 4845071059551229268, guid: 3087ae39d63cded47a57622195132c7f, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: e3cb9091e3d9cf24d9b4d6c8a19686a2, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: sword.foam_big
     kind: 0
     prefab: {fileID: 5293161329003066448, guid: 4d1ec1d1b0c07214e83480e49c98d0fd, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 351c614aca05be0479a33a95010575bd, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: plush.bear
     kind: 4
     prefab: {fileID: 6285028938098056976, guid: bbb1a5c01ffd5b34b84e6ee8d7e3f540, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 0ecd7ec4f46697546af4ea2a0f738bd5, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: cart.racer_3
     kind: 5
     prefab: {fileID: 5588319514320211083, guid: 41675f0548589e045ba5676a786dd5a0, type: 3}
     revealEuler: {x: 15, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 709418004435c0f4282f792d4fce1ee0, type: 3}
+    cartPart: 1
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: hat.pirate
     kind: 3
     prefab: {fileID: 6143756539287377912, guid: afce7dd8f017c9f4690b726aa021dd46, type: 3}
     revealEuler: {x: 0, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: daabdbdfcc404524682297daa0e92fd9, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
   - id: cart.gold
     kind: 5
-    prefab: {fileID: 1177772506791519980, guid: ed0e1acc3409c714797f49c8e5a20eaf, type: 3}
+    prefab: {fileID: 8287616009938567493, guid: ed0e1acc3409c714797f49c8e5a20eaf, type: 3}
     revealEuler: {x: 15, y: 0, z: 0}
     revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 35707e90656e68f4799e1341256c78db, type: 3}
+    cartPart: 2
+    paintColor: {r: 1, g: 0.78, b: 0.2, a: 1}
+    soundCue: 
+  - id: hat.crown
+    kind: 3
+    prefab: {fileID: 5658099891815096197, guid: e4079ecb4dda24549b06f585114cd4e7, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 793cc9d05fb81494083aee61f17355af, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: plush.lion
+    kind: 4
+    prefab: {fileID: 7749556069050274625, guid: 1995208b9d0d8cb46afee2b35fa92877, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: ee97c6a44ce60ff4a8ee5d4d3cf05ff7, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: sword.wand
+    kind: 0
+    prefab: {fileID: 6689761659562756101, guid: 150d196c4f1c11e42898d20fdc18b1bf, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: f4cd36526f522fb469b2ceddf1d068ba, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: hat.astronaut
+    kind: 3
+    prefab: {fileID: 7968446478911144427, guid: dbe916ce2e2f50f4da9d93e07b1e7ec0, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: b8a3be0758a54c54ca283e44e3b644cb, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: plush.rabbit
+    kind: 4
+    prefab: {fileID: 360341779907467151, guid: f210cb46118dc224fa87531038918be9, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 9bc19808130bf0740add483282ffda8e, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: shield.silver
+    kind: 1
+    prefab: {fileID: 4731683672243254581, guid: aa932996f3475e64585a92cfc038d7f1, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 5ff8e6ba82fbc2f4ea9c9c7c59f1be74, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: hat.wizard
+    kind: 3
+    prefab: {fileID: 185221493291818278, guid: 05472a8057378ab4695610b6e8c835d8, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 9489953c028622a498aee25440f5dbbd, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: plush.elephant
+    kind: 4
+    prefab: {fileID: 2231783851783008337, guid: 6830cdb02c6057a40889b83ff3c9128b, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 6fce468d58d004d4585392d388d96b12, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: sword.foam_4
+    kind: 0
+    prefab: {fileID: 423682794095069153, guid: 3504a5fbde5cb2e499f7366d26a97a66, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: b3954e6d9a55be749a07b13048457e49, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: hat.viking
+    kind: 3
+    prefab: {fileID: 5724173298609009512, guid: ac658bc21dec687478d7d3cb25ac54a2, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: db8a909dc48c7d14dafde11e632eae97, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: plush.duck
+    kind: 4
+    prefab: {fileID: 3650698360498758299, guid: 4f324f20ed15acc44bb7bc60a2716d07, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: ff4d6da8c195f8d44b24a45ff2ea6967, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: sword.staff
+    kind: 0
+    prefab: {fileID: 3034248540191603993, guid: 68164d4251a5277448b9feffcb496233, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 994efd8afd122c440aad88641f77bf42, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: hat.propeller
+    kind: 3
+    prefab: {fileID: 6255976952492134941, guid: a86157d5c06f98a4bad4f38e598c0682, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 6266c97f028df7d4789950a80922e045, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: plush.pig
+    kind: 4
+    prefab: {fileID: 1515374325625997551, guid: 88e6d9a386d3106478569faf7fc05e0c, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: d47963a306ac1654cb4bf9d8bd28a714, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: hat.fireman
+    kind: 3
+    prefab: {fileID: 3934227803381535511, guid: 104ab3f29a0acd04eb8b599573d481be, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 28878e8e06977fb4aa16810547aa3191, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: plush.monster
+    kind: 4
+    prefab: {fileID: 7607300592103945716, guid: 025dbe5384a02004481b89fddfdd6d28, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 3120f2501440b8441be3e8b8cccc9fe3, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: sword.plastic_3
+    kind: 0
+    prefab: {fileID: 640920234218315858, guid: 1f4dffa9275dff1448959e1c126e43c2, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 9f7b83383a72a944b977b1dd031dc69f, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: hat.cowboy
+    kind: 3
+    prefab: {fileID: 749092287219009735, guid: 7beaf6209d056a84f8a6739033b0a72e, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 4f4d27c0dd1f7cf4ab6aa377d3e4c360, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.paint_red
+    kind: 5
+    prefab: {fileID: 3369132874540728907, guid: 1ff97fa87fba4a6419c4e4536b291bde, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: e5cdadd216f6075439945818e6165007, type: 3}
+    cartPart: 2
+    paintColor: {r: 0.92, g: 0.16, b: 0.16, a: 1}
+    soundCue: 
+  - id: gold.sword.wood
+    kind: 0
+    prefab: {fileID: 3185189667651922555, guid: 6b374ed581a1a724d957249c7d3e7854, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: sword.wood
+    icon: {fileID: 21300000, guid: e603cb33a4f6abb42886718e1a0c0ed4, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.rocket
+    kind: 5
+    prefab: {fileID: 1574595803366268866, guid: 4624dff293434474292f4a26e82a3fa9, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: e5e21bf3efeb1944a854ff4f5284ebfe, type: 3}
+    cartPart: 1
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.horn_cow
+    kind: 5
+    prefab: {fileID: 3632059300643057060, guid: 2e454cfebd37ce94383461d9445853bc, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 1ee3aef9ae344d646b9288c59244ea81, type: 3}
+    cartPart: 5
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: race.horn_cow
+  - id: gold.plush.dino
+    kind: 4
+    prefab: {fileID: 576831500808881760, guid: c1fb3cce51613414d9dc446f6f7d53af, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: plush.dino
+    icon: {fileID: 21300000, guid: d89ec98a8e0246a4997896635b6118aa, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.eyes
+    kind: 5
+    prefab: {fileID: 774575889896630791, guid: 753c66e5e7c26924d9012d6d3958c4bb, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 978fe7d519dd69a4481620f5a79999bd, type: 3}
+    cartPart: 3
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.trail_rainbow
+    kind: 5
+    prefab: {fileID: 6638206603037962247, guid: 15a286577e9c2d345b2321d29fb14804, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 45e97bbd46547d84b9704efa3517d7b3, type: 3}
+    cartPart: 4
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: gold.hat.knight_helmet
+    kind: 3
+    prefab: {fileID: 579896903341717117, guid: 4fbb600ef1480d246a0fe7c3819b6479, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: hat.knight_helmet
+    icon: {fileID: 21300000, guid: eee0ce04da181574597403280ff5b295, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.firetruck
+    kind: 5
+    prefab: {fileID: 852596041225474629, guid: 76f48d97733214849afe26abf29a5ff4, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 32458b350ab8cb04b8aec5a465a46bff, type: 3}
+    cartPart: 1
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.paint_blue
+    kind: 5
+    prefab: {fileID: 3936579013813657506, guid: 18fcc917f9659274db8e6c5d47934cdf, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 921b540f0aa62a04996fdc90531a1e18, type: 3}
+    cartPart: 2
+    paintColor: {r: 0.16, g: 0.42, b: 0.96, a: 1}
+    soundCue: 
+  - id: gold.shield.round
+    kind: 1
+    prefab: {fileID: 3466557726058760119, guid: 018ac46aa02b90445bc455e3ce3af3af, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: shield.round
+    icon: {fileID: 21300000, guid: 07fea2e6042471a4abe984036daa5e9a, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.balloons
+    kind: 5
+    prefab: {fileID: 4319714868320112343, guid: a6768675943d4ea488fba64d68004019, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 8a58431278e9b3b4c9fd64492a6c1715, type: 3}
+    cartPart: 3
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.horn_dog
+    kind: 5
+    prefab: {fileID: 633582293965636601, guid: ba84019d236f148489176da1e2061972, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 6b518bd395033714d9f54ee384d5352f, type: 3}
+    cartPart: 5
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: race.horn_dog
+  - id: gold.plush.unicorn
+    kind: 4
+    prefab: {fileID: 342286626370472532, guid: 4cc2c406508a814468fcd83b7c77173a, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: plush.unicorn
+    icon: {fileID: 21300000, guid: 1f1a64b72ae1fc1459e2638becc299bb, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.wagon
+    kind: 5
+    prefab: {fileID: 3382962849635574763, guid: ebd8d6248de54364caa6dd499ed860ae, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 27d51fb17573e9c49a51d668df3cf052, type: 3}
+    cartPart: 1
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.trail_stars
+    kind: 5
+    prefab: {fileID: 1725518381836162497, guid: f35e9de15d720dc438968f91a2e106a6, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: bf02be6b7fd52ba4c910b6f724eb9d58, type: 3}
+    cartPart: 4
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: gold.sword.pirate
+    kind: 0
+    prefab: {fileID: 4845071059551229268, guid: 3087ae39d63cded47a57622195132c7f, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: sword.pirate
+    icon: {fileID: 21300000, guid: 8201a02301fb17f42992eebe52378922, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.paint_green
+    kind: 5
+    prefab: {fileID: 5677495347263767567, guid: 94d47376edae76342832d34385bda5a3, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 0672ac65c90295d4ca40437a807ab271, type: 3}
+    cartPart: 2
+    paintColor: {r: 0.22, g: 0.76, b: 0.3, a: 1}
+    soundCue: 
+  - id: cart.propeller
+    kind: 5
+    prefab: {fileID: 1266843905599218573, guid: d57e036dfab5f414abac60e1d6af12c8, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 4f4d3de06e4836949bc10964a25d1aaf, type: 3}
+    cartPart: 3
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: gold.hat.cap
+    kind: 3
+    prefab: {fileID: 3523754109741742598, guid: 09febf92b31c7d54ab3e5504c0e5b2a3, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: hat.cap
+    icon: {fileID: 21300000, guid: 9e6d62e25bac2064fa94c23c4562516f, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.horse
+    kind: 5
+    prefab: {fileID: 1137731235959344396, guid: 311f979c8a8d7164aba8fcb4327f3699, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: b77282a117067d1488fe82576c7a2f39, type: 3}
+    cartPart: 1
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.horn_cat
+    kind: 5
+    prefab: {fileID: 8801965278490252092, guid: 846f4aef450fcfb4989a25a1ae742986, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 355c3c369630e854f9ec17a7cd44c195, type: 3}
+    cartPart: 5
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: race.horn_cat
+  - id: gold.plush.bear
+    kind: 4
+    prefab: {fileID: 6285028938098056976, guid: bbb1a5c01ffd5b34b84e6ee8d7e3f540, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: plush.bear
+    icon: {fileID: 21300000, guid: f6cd7c016c5ba874d8c07d58da3ef1f3, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.trail_bubbles
+    kind: 5
+    prefab: {fileID: 2629564853352262118, guid: 64240386b65c40249abbdb0fa184124a, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 39309bef10b0c1246b8e44db5be299fa, type: 3}
+    cartPart: 4
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.paint_pink
+    kind: 5
+    prefab: {fileID: 2141096116235632630, guid: ab2cbea961bda814babb1137cc85ca4b, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 2f2e1f53898dfa744941a24e57e1453c, type: 3}
+    cartPart: 2
+    paintColor: {r: 1, g: 0.45, b: 0.72, a: 1}
+    soundCue: 
+  - id: gold.sword.plastic
+    kind: 0
+    prefab: {fileID: 2346174602533196880, guid: bca922903d80e904abd5a9e5e9b2b607, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: sword.plastic
+    icon: {fileID: 21300000, guid: d1222a8f532034744bc73379be4f097f, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.police
+    kind: 5
+    prefab: {fileID: 2511776836010234864, guid: 0bb46660bafa2344fa71392058d9f8d9, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 456adb2fec7606740a1b2bd99561b098, type: 3}
+    cartPart: 1
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.spoiler
+    kind: 5
+    prefab: {fileID: 7112615296124945335, guid: d91c82aa451282e4ca05e68359791575, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 2ddbcf0c383518645a10e2ddc867c83d, type: 3}
+    cartPart: 3
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: gold.hat.pirate
+    kind: 3
+    prefab: {fileID: 6143756539287377912, guid: afce7dd8f017c9f4690b726aa021dd46, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: hat.pirate
+    icon: {fileID: 21300000, guid: 64f42711ab13c7a419c0951485fcce2f, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.horn_elephant
+    kind: 5
+    prefab: {fileID: 2001964496758272380, guid: e482423fa90ab29419b7f5e664cf4c67, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: bb5674e5ad9577e4d9c9fbcf3b809937, type: 3}
+    cartPart: 5
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: race.horn_elephant
+  - id: cart.boat
+    kind: 5
+    prefab: {fileID: 3230322971046967244, guid: e9b03c65144bcc440b50d0a698b2c3b6, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: c42ee16ac5da07b41bf9be032009bb3a, type: 3}
+    cartPart: 1
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.paint_purple
+    kind: 5
+    prefab: {fileID: 8500418593771063366, guid: b0d9cdbbaf20d9a41ac630ff6f2ca454, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: ffe19a36212475d419a2f605cb9e8431, type: 3}
+    cartPart: 2
+    paintColor: {r: 0.62, g: 0.32, b: 0.92, a: 1}
+    soundCue: 
+  - id: gold.sword.foam_big
+    kind: 0
+    prefab: {fileID: 5293161329003066448, guid: 4d1ec1d1b0c07214e83480e49c98d0fd, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: sword.foam_big
+    icon: {fileID: 21300000, guid: d7302d6185b7dd048a50e085fcde4e6c, type: 3}
+    cartPart: 0
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.trail_sparkles
+    kind: 5
+    prefab: {fileID: 378196405903770022, guid: d5b79142f572f384096adee119ba1192, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 31f03efda8e82e041b74c65050d4c77e, type: 3}
+    cartPart: 4
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.trike
+    kind: 5
+    prefab: {fileID: 7622257193626071595, guid: 24c85bb8c71b0a54bacd87477f4fd008, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 99679c145e918d64a9b7b5a771c1edac, type: 3}
+    cartPart: 1
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 
+  - id: cart.horn_magic
+    kind: 5
+    prefab: {fileID: 3364370113568176801, guid: 250e9d3801e42504889a1d69c0b696a5, type: 3}
+    revealEuler: {x: 0, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 38e5c29cedceefe49a5ab641e2dffb2e, type: 3}
+    cartPart: 5
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: race.horn_magic
+  - id: cart.convertible
+    kind: 5
+    prefab: {fileID: 4070035630232650931, guid: c1bf9d378aef4784db6db968174b6c33, type: 3}
+    revealEuler: {x: 15, y: 0, z: 0}
+    revealScale: 1
+    starter: 0
+    earnedOnly: 0
+    goldOf: 
+    icon: {fileID: 21300000, guid: 1a3a2675ac378ab45a91d735e87a498d, type: 3}
+    cartPart: 1
+    paintColor: {r: 1, g: 1, b: 1, a: 1}
+    soundCue: 

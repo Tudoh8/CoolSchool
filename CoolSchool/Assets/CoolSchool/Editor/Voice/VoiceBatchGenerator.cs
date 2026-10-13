@@ -221,7 +221,10 @@ namespace CoolSchool.EditorTools
                         Debug.LogError("CoolSchool voice: the server rejected the text (HTTP 400). Skipping this line.");
                         return LineResult.Failed;
                     }
-                    Debug.LogError($"CoolSchool voice: server error HTTP {request.responseCode}. Stopping the batch.");
+                    // The server's own words say why (e.g. a 429 page says "400 per 1 day", the daily request cap); shortened.
+                    string reason = (request.downloadHandler.text ?? string.Empty).Trim();
+                    if (reason.Length > 300) reason = reason.Substring(0, 300) + "...";
+                    Debug.LogError($"CoolSchool voice: server error HTTP {request.responseCode} ({reason}). Stopping the batch.");
                     return LineResult.Fatal;
                 }
 

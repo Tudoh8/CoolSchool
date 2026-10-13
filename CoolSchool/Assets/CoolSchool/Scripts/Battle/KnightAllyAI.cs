@@ -22,6 +22,17 @@ namespace CoolSchool.Battle
         [SerializeField] float maxAttackInterval = 3f;
         [SerializeField] float hitPauseSeconds = 0.6f;
 
+        [Header("Help a friend (castle adventure)")]
+        [Tooltip("A pulsing blue '!' about 0.45 m above the head, shown while this knight calls for help. Optional.")]
+        [SerializeField] GameObject helpMarker;
+        [Tooltip("How fast a knight who calls for help backs away from the nearest goblin.")]
+        [SerializeField] float helpBackAwaySpeed = 1.2f;
+        [Tooltip("A goblin closer than this makes the knight back away.")]
+        [SerializeField] float helpBackAwayRadius = 4f;
+
+        const float HelpPulseSpeed = 7f;
+        const float HelpPulseAmount = 0.18f;
+
         NavMeshAgent agent;
         Hittable hittable;
         SwordFighter fighter;
@@ -30,6 +41,11 @@ namespace CoolSchool.Battle
         float nextAttackTime;
         float hitPauseUntil;
         float nextRepathTime;
+        Vector3 helpMarkerBaseScale = Vector3.one;
+        bool helpMarkerScaleCached;
+
+        /// <summary>True while this knight calls for help: no attacking, slowly backing away from the nearest goblin.</summary>
+        public bool IsCallingForHelp { get; private set; }
 
         bool AgentReady => agent != null && agent.isActiveAndEnabled && agent.isOnNavMesh;
 
@@ -73,9 +89,28 @@ namespace CoolSchool.Battle
             if (AgentReady) agent.ResetPath();
         }
 
+        /// <summary>
+        /// Shows or hides the blue "!" and, while on, stops this knight from attacking: he backs away slowly from the
+        /// nearest goblin until somebody helps. Works also while the brain is switched off (the marker then stands still).
+        /// </summary>
+        public void CallForHelp(bool on)
+        {
+            IsCallingForHelp = on;
+            if (helpMarker != null && helpMarker.activeSelf != on) helpMarker.SetActive(on);
+            if (!on && helpMarker != null && helpMarkerScaleCached) helpMarker.transform.localScale = helpMarkerBaseScale;
+            if (!on && AgentReady) agent.speed = moveSpeed;
+        }
+
         void Update()
         {
+            if (IsCallingForHelp) PulseHelpMarker();
             if (!AgentReady) return;
+
+            if (IsCallingForHelp)
+            {
+                BackAwayFromGoblins();
+                return;
+            }
 
             agent.speed = moveSpeed;
 
@@ -89,6 +124,54 @@ namespace CoolSchool.Battle
             Hittable foe = FindNearestOpponent();
             if (foe != null) Fight(foe);
             else FollowPlayer();
+        }
+
+        void PulseHelpMarker()
+        {
+            if (helpMarker == null) return;
+
+            if (!helpMarkerScaleCached)
+            {
+                helpMarkerScaleCached = true;
+                helpMarkerBaseScale = helpMarker.transform.localScale;
+            }
+            float pulse = 1f + Mathf.Sin(Time.time * HelpPulseSpeed) * HelpPulseAmount;
+            helpMarker.transform.localScale = helpMarkerBaseScale * pulse;
+        }
+
+        /// <summary>Calling for help: no swinging, a slow step away from the nearest goblin, or standing still when none is close.</summary>
+        void BackAwayFromGoblins()
+        {
+            agent.speed = helpBackAwaySpeed;
+            if (Time.time < hitPauseUntil)
+            {
+                agent.isStopped = true;
+                return;
+            }
+            agent.isStopped = false;
+
+            Hittable foe = FindNearestOpponent();
+            if (foe == null)
+            {
+                agent.ResetPath();
+                return;
+            }
+
+            float distance = Hittable.FlatDistance(transform.position, foe.transform.position);
+            if (distance > helpBackAwayRadius)
+            {
+                agent.ResetPath();
+                return;
+            }
+
+            if (Time.time < nextRepathTime) return;
+            nextRepathTime = Time.time + 0.3f;
+
+            Vector3 away = -Hittable.FlatDirection(transform.position, foe.transform.position);
+            if (away == Vector3.zero) away = -transform.forward;
+            Vector3 spot = transform.position + away * 2f;
+            if (NavMesh.SamplePosition(spot, out NavMeshHit hit, 1.5f, NavMesh.AllAreas))
+                agent.SetDestination(hit.position);
         }
 
         void Fight(Hittable foe)

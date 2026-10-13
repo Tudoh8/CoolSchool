@@ -546,7 +546,7 @@ namespace CoolSchool.Lessons
                 // Table x grows toward the left of the screen, so the row is mirrored.
                 float x = ((words.Count - 1) * 0.5f - i) * propSpacing;
                 prop.Place(stage.TablePoint(x, propZ), facing * Quaternion.Euler(0f, Random.Range(-15f, 15f), 0f), words[i].scale);
-                prop.Appear(i * PropAppearGapSeconds);
+                if (!stagingForPreview) prop.Appear(i * PropAppearGapSeconds);
 
                 toys.Add(prop);
                 props.Add(prop);

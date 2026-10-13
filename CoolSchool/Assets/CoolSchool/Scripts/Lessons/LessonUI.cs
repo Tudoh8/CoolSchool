@@ -19,12 +19,15 @@ namespace CoolSchool.Lessons
         [SerializeField] Sprite cardSprite;
         [Tooltip("Joystick zone, action button: hidden while the lesson runs.")]
         [SerializeField] GameObject[] gameplayHud;
-        [SerializeField] float cardSize = 330f;
-        [SerializeField] float cardGap = 90f;
-        [SerializeField] float bottomMargin = 50f;
+        // In a 1080 px high reference screen the cards fill the bottom 330 px (30%), so the toys on the table stay above them.
+        [SerializeField] float cardSize = 300f;
+        [SerializeField] float cardGap = 80f;
+        [SerializeField] float bottomMargin = 30f;
 
         const int CardSlots = 3;
         const int DigitFontSize = 210;
+        // Two digits (11 to 20) are narrower so they stay inside the round card.
+        const int TwoDigitFontSize = 170;
         const float AppearSeconds = 0.4f;
         const float WiggleSeconds = 0.55f;
         const float WiggleDegrees = 14f;
@@ -108,7 +111,7 @@ namespace CoolSchool.Lessons
 
                 card.Number = numbers[i];
                 ShowFace(card, letters != null ? letters[i] : null);
-                if (letters == null) card.Label.text = numbers[i].ToString();
+                if (letters == null) ShowNumberText(card, numbers[i]);
                 card.Rect.anchoredPosition = CardPosition(i, count);
                 card.Rect.localRotation = Quaternion.identity;
                 card.Face.color = CardColors[i];
@@ -348,6 +351,13 @@ namespace CoolSchool.Lessons
 
             float side = cardSize * GlyphFill;
             LetterGlyph.Build(card.Glyph, letter, side, side * GlyphDotFraction, Color.white, cardSprite);
+        }
+
+        /// <summary>The digits on a number card; two digits get a smaller font so they fit the round card.</summary>
+        static void ShowNumberText(Card card, int number)
+        {
+            card.Label.text = number.ToString();
+            card.Label.fontSize = number >= 10 ? TwoDigitFontSize : DigitFontSize;
         }
 
         /// <summary>An empty holder in the middle of the card where a letter's chalk dots go. It can fade as one.</summary>

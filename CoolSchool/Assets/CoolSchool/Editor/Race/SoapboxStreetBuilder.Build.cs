@@ -16,6 +16,7 @@ namespace CoolSchool.EditorTools
     internal static partial class SoapboxStreetBuilder
     {
         const string InviteGroup = "invite.race";
+        internal const string CartPickCameraSpotName = "CartPickCameraSpot";
 
         /// <summary>What Build needs from the rest of the scene.</summary>
         internal struct RaceInputs
@@ -64,9 +65,12 @@ namespace CoolSchool.EditorTools
             // ---- Carts and rivals ----
             Material gold = Mat("CartGold", new Color(1f, 0.78f, 0.2f), 0.7f, 0.8f);
             Transform carts = NewGroup("Carts", root);
-            CartParts playerCart = BuildCart("PlayerCart", 1, carts, gold);
-            CartParts rivalA = BuildCart("RivalCart_A", 0, carts, gold);
-            CartParts rivalB = BuildCart("RivalCart_B", 2, carts, gold);
+            CartPaintMaker.ClearCache();
+            ClearBodyCaches();
+            // Only the player's cart gets the trails; the rivals never use one.
+            CartParts playerCart = BuildCart("PlayerCart", 1, carts, gold, true, font);
+            CartParts rivalA = BuildCart("RivalCart_A", 0, carts, gold, false, font);
+            CartParts rivalB = BuildCart("RivalCart_B", 2, carts, gold, false, font);
             var rivals = new RivalCartAI[2];
             CartParts[] rivalCarts = { rivalA, rivalB };
             for (int i = 0; i < rivals.Length; i++)
@@ -77,6 +81,8 @@ namespace CoolSchool.EditorTools
                 SetObject(rivals[i], "driver", driver);
             }
             CreateCartPrefabs(gold);
+            CreateGaragePrefabs();
+            CreateBodyPrefabs();
 
             // ---- The player's helmet ----
             var playerHelmet = inputs.Player.gameObject.AddComponent<RaceHelmet>();
@@ -109,6 +115,11 @@ namespace CoolSchool.EditorTools
             // ---- HUD ----
             RaceHud hud = BuildHud(font);
 
+            // ---- Cart picker: the cards, and the camera spot in front of the player's cart looking back at it ----
+            CartPicker cartPicker = BuildCartPicker(font);
+            Transform cartPickCameraSpot = BuildCartPickCameraSpot(root, playerCart.Root.transform.position);
+            BuildPitLane(root);
+
             // ---- The race ----
             var raceObject = new GameObject("SoapboxRace");
             raceObject.transform.SetParent(root, false);
@@ -117,12 +128,31 @@ namespace CoolSchool.EditorTools
             var race = raceObject.AddComponent<SoapboxRace>();
             WireRace(race, layout, inputs, track, playerCart, playerHelmet, rivals, input, hud, announcer, chase, follow, finishArch);
 
+            // The cart picker. The riding buddy ("buddy") is left empty on purpose: the rewards setup builds the BuddyFollower AFTER
+            // the race (RewardsSetupBuilder.Setup runs last), so it does not exist yet. SoapboxRace finds it in the scene when
+            // the race begins, which also works when the buddy is built later or by hand.
+            SetObject(race, "cartPicker", cartPicker);
+            SetObject(race, "cartPickCameraSpot", cartPickCameraSpot);
+
             // ---- The zone ----
             Material ring = KnightsArenaBuilder.CreateGlowMaterial(MaterialFolder + "/RaceZoneRing.mat", new Color(1f, 0.3f, 0.25f), 0.4f);
             ActivityZone zone = KnightsArenaBuilder.CreateActivityZone("RaceZone", layout.Root, layout.ZonePosition, 2f, race, ring, RaceBeacon);
             AddToInviter(zone);
 
             Summarize(layout, counts);
+        }
+
+        /// <summary>
+        /// Front-left of the player's cart (the cart faces north), high enough to see over the rival in lane 0, looking back at the cart.
+        /// The aim point is a little below the cart, so the cart sits in the upper middle of the picture, above the cards.
+        /// </summary>
+        static Transform BuildCartPickCameraSpot(Transform parent, Vector3 cartPosition)
+        {
+            Vector3 position = cartPosition + new Vector3(-2.6f, 2.0f, 3.4f);
+            Vector3 aim = cartPosition + new Vector3(0f, -0.2f, 0f);
+            Transform spot = NewPoint(CartPickCameraSpotName, parent, position);
+            spot.rotation = Quaternion.LookRotation(aim - position, Vector3.up);
+            return spot;
         }
 
         static void WireRace(SoapboxRace race, StreetLayout layout, RaceInputs inputs, RaceTrack track, CartParts playerCart, RaceHelmet playerHelmet,

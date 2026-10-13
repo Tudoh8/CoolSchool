@@ -27,15 +27,15 @@ namespace CoolSchool.EditorTools
 
         // The panel (canvas units on a 1920x1080 reference, matched to the height like the touch UI).
         const float WindowWidth = 1300f;
-        const float WindowHeight = 1051f;
+        const float WindowHeight = 1068f;
         const float Margin = 70f;
         const float ContentWidth = WindowWidth - 2f * Margin;
         const int PanelSortingOrder = 1000;
 
         const float SliderX = 360f;
         const float SliderWidth = 640f;
-        const float SliderHeight = 84f;
-        const float HandleSize = 84f;
+        const float SliderHeight = 76f;
+        const float HandleSize = 76f;
         const float TrackHeight = 30f;
 
         static readonly Color DimColor = new Color(0f, 0f, 0f, 0.65f);
@@ -166,18 +166,23 @@ namespace CoolSchool.EditorTools
             Text nameHint = AddText(window, "NameHint", font, 30, MutedColor, TextAnchor.MiddleLeft, Margin + 590f, 162f, ContentWidth - 590f, 96f);
 
             // Difficulty
-            Text difficultyLabel = AddText(window, "DifficultyLabel", font, 40, TextColor, TextAnchor.MiddleLeft, Margin, 275f, ContentWidth, 50f);
+            Text difficultyLabel = AddText(window, "DifficultyLabel", font, 40, TextColor, TextAnchor.MiddleLeft, Margin, 268f, ContentWidth, 50f);
 
-            // Six rows, 96 px apart from y = 330, so the last one (and the caption under it) ends above the close button (top y = 931).
+            // Eight rows, 78 px apart from y = 318 (the sliders are 76 tall), so the last one ends above the close button (top y = 948).
+            // The one caption sits on the difficulty line next to its label, so it needs no room under the last row.
             var rows = new[]
             {
-                BuildLevelRow(window, sprites, font, 330f, ParentStrings.RowNumbers, "numbers", 5),
-                BuildLevelRow(window, sprites, font, 426f, ParentStrings.RowLetters, "letters", 5),
-                BuildLevelRow(window, sprites, font, 522f, ParentStrings.RowShop, ParentPanel.ShopSkill, 3),
-                BuildLevelRow(window, sprites, font, 618f, ParentStrings.RowPirates, "pirates", 3),
-                BuildLevelRow(window, sprites, font, 714f, ParentStrings.RowRace, "race", 3),
-                BuildLevelRow(window, sprites, font, 810f, ParentStrings.RowAliens, "aliens", 3, true),
+                BuildLevelRow(window, sprites, font, 318f, ParentStrings.RowNumbers, "numbers", CoolSchool.Lessons.NumberCurriculum.MaxLevel),
+                BuildLevelRow(window, sprites, font, 396f, ParentStrings.RowLetters, "letters", 5),
+                BuildLevelRow(window, sprites, font, 474f, ParentStrings.RowShop, ParentPanel.ShopSkill, 3),
+                BuildLevelRow(window, sprites, font, 552f, ParentStrings.RowPirates, "pirates", 3),
+                BuildLevelRow(window, sprites, font, 630f, ParentStrings.RowRace, "race", 3),
+                BuildLevelRow(window, sprites, font, 708f, ParentStrings.RowAliens, "aliens", 3),
+                BuildLevelRow(window, sprites, font, 786f, ParentStrings.RowCastle, "castle", 3),
+                BuildLevelRow(window, sprites, font, 864f, ParentStrings.RowHideSeek, "hideseek", 3),
             };
+            rows[0].Caption = AddText(window, "LevelCaption", font, 24, MutedColor, TextAnchor.MiddleLeft,
+                SliderX + 40f, 268f, WindowWidth - Margin - SliderX - 40f, 50f);
 
             // Close
             const float closeWidth = 460f;
@@ -226,6 +231,10 @@ namespace CoolSchool.EditorTools
             var parts = new RowParts { Skill = skill, LabelKey = labelKey, MaxLevel = maxLevel };
 
             parts.Label = AddText(window, skill + "Label", font, 44, TextColor, TextAnchor.MiddleLeft, Margin, y, SliderX - Margin - 20f, SliderHeight);
+            // A long label ("Verstoppertje", "Hide and seek") shrinks to stay on one line instead of wrapping into the next row.
+            parts.Label.resizeTextForBestFit = true;
+            parts.Label.resizeTextMinSize = 28;
+            parts.Label.resizeTextMaxSize = 44;
             parts.Slider = BuildSlider(window, sprites, skill + "Slider", SliderX, y, maxLevel);
             parts.Value = AddText(window, skill + "Value", font, 76, AccentColor, TextAnchor.MiddleCenter,
                 SliderX + SliderWidth + 20f, y, WindowWidth - Margin - (SliderX + SliderWidth + 20f), SliderHeight);

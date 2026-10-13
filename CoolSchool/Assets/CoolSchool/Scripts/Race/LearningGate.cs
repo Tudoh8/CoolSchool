@@ -57,6 +57,9 @@ namespace CoolSchool.Race
         /// <summary>The player's cart passed: gate, the lane it went through, and whether that lane was the right one.</summary>
         public event Action<LearningGate, int, bool> Passed;
 
+        /// <summary>The font of the boards (the podium digits borrow it), or null.</summary>
+        public Font GlyphFont => glyphs != null && glyphs.Length > 0 && glyphs[0] != null ? glyphs[0].font : null;
+
         public override bool Blocking => false;
 
         /// <summary>A gate covers the whole street.</summary>

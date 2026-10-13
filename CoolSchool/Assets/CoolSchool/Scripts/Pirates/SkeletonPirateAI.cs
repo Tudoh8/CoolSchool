@@ -95,6 +95,10 @@ namespace CoolSchool.Pirates
             bonePile = GetComponent<BonePile>();
             weapons = GetComponent<WeaponHolder>();
 
+            // Walk-through: a solid body would let skeletons shove the player away from what he has to do. Covers scenes
+            // built before the builder made the capsule a trigger.
+            foreach (Collider body in GetComponents<Collider>()) body.isTrigger = true;
+
             Animator animator = GetComponentInChildren<Animator>(true);
             if (animator != null && animator.transform != transform)
             {

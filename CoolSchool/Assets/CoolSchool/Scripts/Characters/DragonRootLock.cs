@@ -34,6 +34,7 @@ namespace CoolSchool.Characters
         [Tooltip("How fast the owning script moves the dragon on the ground, in m/s. 0: the walk plays at its own speed.")]
         [SerializeField] float walkSpeed;
 
+        float speedScale = 1f;
         Transform rootBone;
         Vector3 restLocalPosition;
 
@@ -42,6 +43,13 @@ namespace CoolSchool.Characters
         {
             get => walkSpeed;
             set => walkSpeed = Mathf.Max(0f, value);
+        }
+
+        /// <summary>Plays everything slower (below 1) or faster, e.g. a slow, sad idle. 1 is normal.</summary>
+        public float SpeedScale
+        {
+            get => speedScale;
+            set => speedScale = Mathf.Clamp(value, 0.1f, 3f);
         }
 
         /// <summary>
@@ -94,7 +102,7 @@ namespace CoolSchool.Characters
         {
             if (animator == null || animator.runtimeAnimatorController == null) return;
 
-            animator.speed = WalkingAnimatorSpeed();
+            animator.speed = WalkingAnimatorSpeed() * speedScale;
         }
 
         /// <summary>Slows or speeds up the Walk clip so its stride matches how fast the dragon really moves.</summary>

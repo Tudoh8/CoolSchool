@@ -36,6 +36,7 @@ namespace CoolSchool.Characters
         static readonly int DancingId = Animator.StringToHash("Dancing");
         static readonly int DanceVariantId = Animator.StringToHash("DanceVariant");
         static readonly int SittingId = Animator.StringToHash("Sitting");
+        static readonly int ToyPoseId = Animator.StringToHash("ToyPose");
 
         [SerializeField] Animator animator;
         [SerializeField] float speedDamping = 0.1f;
@@ -57,6 +58,9 @@ namespace CoolSchool.Characters
         /// <summary>While true the kid stands still in the animator even though the transform moves (riding a ship or a boat).</summary>
         public bool ForceIdle { get; set; }
 
+        /// <summary>When 0 or more, the animator gets this speed instead of the measured one (a goblin climbing a ladder runs on the spot).</summary>
+        public float SpeedOverride { get; set; } = -1f;
+
         void Awake()
         {
             if (animator == null) animator = GetComponentInChildren<Animator>();
@@ -76,6 +80,7 @@ namespace CoolSchool.Characters
             delta.y = 0f;
 
             float speed = Time.deltaTime > 0f && !ForceIdle ? delta.magnitude / Time.deltaTime : 0f;
+            if (SpeedOverride >= 0f && !ForceIdle) speed = SpeedOverride;
             animator.SetFloat(SpeedId, speed, speedDamping, Time.deltaTime);
 
             RefreshCache();
@@ -156,6 +161,20 @@ namespace CoolSchool.Characters
         {
             if (!HasParameter(SittingId)) return;
             animator.SetBool(SittingId, sitting);
+        }
+
+        /// <summary>
+        /// Plays a playground toy pose (sitting on a seat, climbing, hanging, crawling...) while it is not None, and goes back to
+        /// locomotion with None. Ignored when the controller has no "ToyPose" int. An int overload exists for callers that
+        /// only hold the number.
+        /// </summary>
+        public void SetToyPose(CoolSchool.Playground.ToyPose pose) => SetToyPose((int)pose);
+
+        /// <summary>The same as SetToyPose with the pose's number (CoolSchool.Playground.ToyPose).</summary>
+        public void SetToyPose(int pose)
+        {
+            if (!HasParameter(ToyPoseId)) return;
+            animator.SetInteger(ToyPoseId, pose);
         }
 
         void SetTrigger(int id)
