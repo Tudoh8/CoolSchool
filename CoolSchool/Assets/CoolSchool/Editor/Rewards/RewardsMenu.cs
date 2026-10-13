@@ -9,7 +9,7 @@ namespace CoolSchool.EditorTools
     public static class RewardsMenu
     {
         const string ResetMenu = "CoolSchool/Rewards/Reset Progress";
-        const string GiveStarsMenu = "CoolSchool/Rewards/Give 10 Stars (test)";
+        const string GiveStarsMenu = "CoolSchool/Rewards/Give 15 Stars (test)";
         const string UnlockAllMenu = "CoolSchool/Rewards/Unlock All (test)";
         const string NextPresentMenu = "CoolSchool/Rewards/Unlock Next Present (test)";
         const string GiveMedalMenu = "CoolSchool/Rewards/Give Medal (test)";
@@ -29,7 +29,7 @@ namespace CoolSchool.EditorTools
         {
             var player = Object.FindFirstObjectByType<PlayerController>();
             Vector3 position = player != null ? player.transform.position : Vector3.zero;
-            RewardSystem.AddStars(10, position);
+            RewardSystem.AddStars(15, position);
         }
 
         [MenuItem(GiveStarsMenu, true)]
@@ -61,6 +61,7 @@ namespace CoolSchool.EditorTools
                     added++;
                 }
                 if (!progress.unseenItems.Contains(item.id)) progress.unseenItems.Add(item.id);
+                if (item.kind == RewardKind.Cart && !progress.unseenCartItems.Contains(item.id)) progress.unseenCartItems.Add(item.id);
             }
             ProgressStore.Save();
             Debug.Log($"CoolSchool: unlocked {added} items (everything that is not a starter).");

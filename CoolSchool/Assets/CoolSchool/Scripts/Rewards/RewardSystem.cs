@@ -20,7 +20,7 @@ namespace CoolSchool.Rewards
     {
         [SerializeField] RewardCatalog catalog;
         [Tooltip("How many stars fill the jar. A full jar turns into a present.")]
-        [SerializeField] int jarCapacity = 10;
+        [SerializeField] int jarCapacity = 15;
         [SerializeField] StarJarHud hud;
         [SerializeField] PresentPopup popup;
 

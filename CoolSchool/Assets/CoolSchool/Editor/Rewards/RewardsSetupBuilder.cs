@@ -331,6 +331,7 @@ namespace CoolSchool.EditorTools
             var systemObject = new GameObject("RewardSystem");
             var system = systemObject.AddComponent<RewardSystem>();
             PlaygroundPrototypeBuilder.SetObject(system, "catalog", catalog);
+            PlaygroundPrototypeBuilder.SetInt(system, "jarCapacity", 15);
             PlaygroundPrototypeBuilder.SetObject(system, "hud", hud);
             PlaygroundPrototypeBuilder.SetObject(system, "popup", popup);
             PlaygroundPrototypeBuilder.SetObject(system, "tagGame", Object.FindFirstObjectByType<TagGame>());

@@ -135,6 +135,12 @@ namespace CoolSchool.EditorTools
             { "race.spinout", new[] { "spin", "skid", "tyre" } },
             { "race.cheer", new[] { "cheer", "crowd", "applause" } },
             { "race.brake", new[] { "brake", "skid", "squeak" } },
+            { "race.horn_bell", new[] { "bell", "chime", "ding" } },
+            { "race.horn_cow", new[] { "cow", "moo" } },
+            { "race.horn_dog", new[] { "dog", "bark" } },
+            { "race.horn_cat", new[] { "cat", "meow" } },
+            { "race.horn_elephant", new[] { "elephant", "trumpet" } },
+            { "race.horn_magic", new[] { "horn", "tone", "fanfare" } },
 
             // Hide and seek in the zoo park
             { "zoo.giggle", new[] { "giggle", "laugh", "chuckle" } },

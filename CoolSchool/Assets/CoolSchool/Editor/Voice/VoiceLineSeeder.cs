@@ -210,6 +210,7 @@ namespace CoolSchool.EditorTools
             // Toy room and equipment (contract Docs/specs/toy-room-and-equipment-contract.md): the swap question in the present popup.
             new Seed("reward.swap_sword.1", Speaker.Teacher, "Wil je je nieuwe zwaard gebruiken?", "Do you want to use your new sword?"),
             new Seed("reward.swap_shield.1", Speaker.Teacher, "Wil je je nieuwe schild gebruiken?", "Do you want to use your new shield?"),
+            new Seed("reward.swap_wand.1", Speaker.Teacher, "Wil je je nieuwe toverstaf gebruiken?", "Do you want to use your new magic wand?"),
             new Seed("reward.swap_hat.1", Speaker.Teacher, "Wil je hem meteen opzetten?", "Do you want to put it on right away?"),
             new Seed("reward.swap_buddy.1", Speaker.Teacher, "Mag je nieuwe knuffel met je mee?", "Can your new cuddly toy come along?"),
             new Seed("reward.swap_yes.1", Speaker.Teacher, "Goed gekozen!", "Good choice!"),
@@ -257,6 +258,24 @@ namespace CoolSchool.EditorTools
             new Seed("item.cart.racer_3.1", Speaker.Narrator, "Kar drie!", "Cart three!"),
             new Seed("item.hat.pirate.1", Speaker.Narrator, "De piratenhoed!", "The pirate hat!"),
             new Seed("item.cart.gold.1", Speaker.Narrator, "De gouden verf!", "The gold paint!"),
+            new Seed("item.hat.crown.1", Speaker.Narrator, "De kroon!", "The crown!"),
+            new Seed("item.plush.lion.1", Speaker.Narrator, "De leeuw!", "The lion!"),
+            new Seed("item.sword.wand.1", Speaker.Narrator, "Het toverstokje!", "The magic wand!"),
+            new Seed("item.hat.astronaut.1", Speaker.Narrator, "De astronautenhelm!", "The astronaut helmet!"),
+            new Seed("item.plush.rabbit.1", Speaker.Narrator, "Het konijn!", "The rabbit!"),
+            new Seed("item.shield.silver.1", Speaker.Narrator, "Het zilveren schild!", "The silver shield!"),
+            new Seed("item.hat.wizard.1", Speaker.Narrator, "De tovenaarshoed!", "The wizard hat!"),
+            new Seed("item.plush.elephant.1", Speaker.Narrator, "De olifant!", "The elephant!"),
+            new Seed("item.sword.foam_4.1", Speaker.Narrator, "Het rode schuimzwaard!", "The red foam sword!"),
+            new Seed("item.hat.viking.1", Speaker.Narrator, "De vikinghelm!", "The viking helmet!"),
+            new Seed("item.plush.duck.1", Speaker.Narrator, "De badeend!", "The rubber duck!"),
+            new Seed("item.sword.staff.1", Speaker.Narrator, "De tovenaarsstaf!", "The wizard staff!"),
+            new Seed("item.hat.propeller.1", Speaker.Narrator, "De propellerpet!", "The propeller cap!"),
+            new Seed("item.plush.pig.1", Speaker.Narrator, "Het varkentje!", "The piglet!"),
+            new Seed("item.hat.fireman.1", Speaker.Narrator, "De brandweerhelm!", "The fireman's helmet!"),
+            new Seed("item.plush.monster.1", Speaker.Narrator, "Het lieve monster!", "The friendly monster!"),
+            new Seed("item.sword.plastic_3.1", Speaker.Narrator, "Het ninjazwaard!", "The ninja sword!"),
+            new Seed("item.hat.cowboy.1", Speaker.Narrator, "De cowboyhoed!", "The cowboy hat!"),
 
             // The numbers lesson. Each number is its own group (number.3), so it can be said on its own.
             new Seed("number.1.1", Speaker.Teacher, "Eén", "One"),
@@ -372,6 +391,8 @@ namespace CoolSchool.EditorTools
                 ApplySeed(table, seed);
 
             foreach (Seed seed in NumberSeeds()) ApplySeed(table, seed);
+            foreach (Seed seed in GarageSeeds()) ApplySeed(table, seed);
+            foreach (Seed seed in BodySeeds()) ApplySeed(table, seed);
             foreach (Seed seed in ZooSeeds()) ApplySeed(table, seed);
 
             EditorUtility.SetDirty(table);

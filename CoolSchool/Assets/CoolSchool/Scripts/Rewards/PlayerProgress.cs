@@ -48,6 +48,15 @@ namespace CoolSchool.Rewards
         public bool raceHowtoHeard;
         public int raceCoinsTotal;
 
+        // The cart garage (contract Docs/specs/cart-garage-contract.md). cartExtrasOff above now holds every add-on he switched off
+        // (owned add-ons are on unless listed). The body is equippedCart.
+        public string cartPaint = "";        // an owned paint item id; "" = the body's own colours
+        public string cartTrail = "";        // an owned trail item id; "" = no trail
+        public string cartHorn = "";         // an owned horn item id; "" = the starter bell
+        public int cartNumber;               // the race number on the plates, 1 to 10; 0 = not chosen yet, which shows 4 (his age)
+        public List<string> unseenCartItems = new List<string>();   // cart items won and not yet seen in the cart picker (the race invite uses it)
+        public bool cartPaintMigrated;       // an old "gold paint switched on" has been turned into the paint choice (done once)
+
         // The child's name: lowercase letters a-z only, at most 12. Empty means not set. Set through ProgressStore.SetChildName.
         public string childName = "";
 

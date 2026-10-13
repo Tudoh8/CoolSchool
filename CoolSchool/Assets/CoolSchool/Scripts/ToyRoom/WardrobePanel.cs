@@ -36,9 +36,9 @@ namespace CoolSchool.ToyRoom
         [SerializeField] Sprite checkSprite;
         [SerializeField] Sprite emptySprite;
         [SerializeField] Sprite twinkleSprite;
-        [SerializeField] float cardSize = 150f;
-        [SerializeField] float cardSpacing = 12f;
-        [SerializeField] int cardsPerRow = 5;
+        [SerializeField] float cardSize = 124f;
+        [SerializeField] float cardSpacing = 10f;
+        [SerializeField] int cardsPerRow = 6;
 
         static readonly Color GoldRing = new Color(1f, 0.8f, 0.15f, 1f);
         static readonly Color TabNormal = new Color(0.85f, 0.88f, 1f, 0.9f);

@@ -65,6 +65,7 @@ Defaults chosen by the main agent (easy to change before building, so check thes
 | `shield.basic` | Shield | `SM_Wep_Shield_01` | **starter** (the default shield today) |
 | `cart.racer_1` | Cart | `SM_Veh_Soapbox_Racer_01` | **starter**, `CartReveal` euler |
 | the 17 presents | | | unchanged order and ids (`RewardCatalogSeeder.Seeds`) |
+| 18 more presents | | | added 2026-10-13 after `cart.gold`: `hat.crown`, `plush.lion`, `sword.wand` (`SM_Chr_Attach_Magician_Wand_01`, held like a sword), `hat.astronaut`, `plush.rabbit`, `shield.silver`, `hat.wizard`, `plush.elephant`, `sword.foam_4`, `hat.viking`, `plush.duck`, `sword.staff`, `hat.propeller`, `plush.pig`, `hat.fireman`, `plush.monster`, `sword.plastic_3`, `hat.cowboy` (voice `item.<id>`, the wand and staff ask `reward.swap_wand`) |
 | `gold.sword.wood` | Sword | as `sword.wood` | gold variant |
 | `gold.plush.dino` | PlushToy | as `plush.dino` | |
 | `gold.hat.knight_helmet` | Hat | as `hat.knight_helmet` | |
@@ -434,13 +435,15 @@ public class ToyShelf : MonoBehaviour          // one in the room, owns all slot
   - if `medals > medalsSeen`: `toyroom.medal`, the new medals pop in, then `MarkMedalsSeen()`.
   - It refreshes on `ProgressStore.Changed`.
 - **Layout** (the builder places slots on these walls; adjust to what fits):
-  - **West wall:** a weapon rack. Swords bottom row (starter + 4), gold swords top row (4). Shields beside it
-    (starter, round, gold round).
-  - **North wall, left:** plush shelf, two levels (dino, unicorn, bear, parrot; gold dino, unicorn, bear above).
+  - **West wall:** a weapon rack. Swords bottom row (starter + 8, in a zigzag so none hides the next), gold swords top row (4). Shields beside it
+    (starter, round, silver, gold round).
+  - **North wall, left:** plush shelf, two levels of seven at display size 0.38 (lower: dino, unicorn, bear, parrot, baby dragon, lion, rabbit;
+    upper: gold dino, unicorn, bear, elephant, duck, pig, monster).
     The **medal board** sits above it.
   - **North wall, right:** the **dress-up mirror** (a tall frame with a light-blue glossy quad; a Synty mirror prop
     if one exists), with the wardrobe zone in front of it.
-  - **East wall:** hat pegs (3 hats, 3 gold hats), and below them a low cart podium: 3 cart bodies plus the flag,
+  - **East wall:** hat pegs (3 hats, 3 gold hats) on the podium, and above it (1.2 to 2.3 m) the **hat board**: two rows of pegs
+    (4 + 3) with the 7 hats of the second round of presents (2026-10-13). The podium is a low cart podium: 3 cart bodies plus the flag,
     stickers and gold-paint-can minis.
 
 ```csharp
@@ -482,7 +485,7 @@ The zone is in front of the mirror (radius 0.9). Flow:
    - **Tabs:** four big tabs down the left edge of the panel, with icons by name: `Sword`, `Shield`, `Helmet`, and a
      heart or paw for the buddy (`Chat-Heart`, falling back to the dino's icon). The selected tab is larger and
      highlighted. It opens on the sword tab.
-   - **Cards:** a grid of item cards for the tab's slot (`catalog.ItemsFor(slot)`, 5 per row, 150 px cards). The
+   - **Cards:** a grid of item cards for the tab's slot (`catalog.ItemsFor(slot)`, 6 per row, 124 px cards since 2026-10-13: the fullest tab has 15 cards, three rows fit, room for 18). The
      hat and buddy tabs start with a "nothing" card (`X-Delete-Close-Error`, faded). An owned card shows the white
      icon; a locked card shows the black icon. The worn item has a gold ring and a small `Checkmark` badge. Unseen
      items twinkle.
@@ -601,7 +604,7 @@ the player's cart with racer_2 + flag).
 ## Done when
 
 - Compile-check OK. The scene is rebuilt, and the preview shots `toyroom_*` and `race_cart_picker` look right.
-- With **Reset Progress** then **Give 10 Stars (test)**: the plastic sword asks the swap question. Red cross keeps
+- With **Reset Progress** then **Give 15 Stars (test)**: the plastic sword asks the swap question. Red cross keeps
   the foam sword, and the plastic sword stands on the Toy Room rack, sparkling until he walks past it.
 - **Unlock All (test)**: the Toy Room is full. The wardrobe can put on every sword, shield, hat and buddy, and they
   show on the kid: the hat in free play, the knight helmet in the knights game, no hat in the race, the pirate cove

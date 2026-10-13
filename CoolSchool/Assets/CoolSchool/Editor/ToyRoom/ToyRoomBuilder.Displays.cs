@@ -9,8 +9,8 @@ using static CoolSchool.EditorTools.PlaygroundPrototypeBuilder;
 namespace CoolSchool.EditorTools
 {
     /// <summary>
-    /// The Toy Room's furniture: the stepped stands (a weapon rack on the west side, a hat and cart podium on the east side), the plush
-    /// shelf and the medal board on the north wall, the dress-up mirror, and the rug, beanbags and toy chest. Every catalog item gets a
+    /// The Toy Room's furniture: the stepped stands (a weapon rack on the west side, a hat and cart podium on the east side), the hat board
+    /// above the podium, the plush shelf and the medal board on the north wall, the dress-up mirror, and the rug, beanbags and toy chest. Every catalog item gets a
     /// ToyShelfSlot (the item itself is put there at run time by the ToyShelf, as a model or a black silhouette).
     /// The stands run along the side walls, because the camera looks north: a row of items along z stands one behind the other, but
     /// the stand's columns (steps) are side by side on the screen, so nothing hides anything.
@@ -26,11 +26,23 @@ namespace CoolSchool.EditorTools
         const float ShelfBaseHeight = 0.5f;
         const float ShelfUpperHeight = 1.15f;
         const float ShelfDepth = 0.5f;
-        const float ShelfMaxWidth = 3.1f;
+        const float ShelfMaxWidth = 3.4f;
+        const float PlushSize = 0.38f;
         const float BoardBottom = 1.75f;
         const float BoardHeight = 1.1f;
         const int MedalColumns = 5;
         const int MedalRows = 4;
+
+        // ---- Hat board (east wall, above the hat and cart podium) ----
+        const float HatBoardBottom = 1.2f;
+        const float HatBoardHeight = 1.1f;
+        const float HatBoardDepth = 0.05f;
+        const float HatPegLength = 0.42f;
+        const float HatPegRadius = 0.035f;
+        const float HatSize = 0.38f;
+        const float HatPegTopRow = 1.85f;
+        const float HatPegBottomRow = 1.4f;
+        const float HatRowSpacing = 0.65f;
 
         // ---- Mirror ----
         const float MirrorWidth = 1.5f;
@@ -65,6 +77,8 @@ namespace CoolSchool.EditorTools
             /// <summary>A peg under each item (hats), this tall.</summary>
             public float PegHeight;
             public float ZMin, ZMax;
+            /// <summary>Items stand alternately this far to either side of the column's middle, so a long row does not hide itself from the camera.</summary>
+            public float Zigzag;
         }
 
         /// <summary>The x of the mirror's middle: in the north-east, with the hat and cart stand to the south of it.</summary>
@@ -81,6 +95,7 @@ namespace CoolSchool.EditorTools
 
             BuildWeaponRack(stands, slotGroup, plan, silhouette, slots);
             BuildHatAndCartPodium(stands, slotGroup, plan, silhouette, slots);
+            BuildHatBoard(stands, slotGroup, plan, silhouette, slots);
             BuildPlushShelf(stands, slotGroup, plan, silhouette, slots, out float shelfCentreX, out float shelfWidth);
             MedalBoard board = BuildMedalBoard(root, plan, shelfCentreX, shelfWidth);
             BuildMirror(stands, plan);
@@ -106,7 +121,7 @@ namespace CoolSchool.EditorTools
 
         /// <summary>
         /// Three steps along the west wall, rising toward the wall: the plain swords (lowest, nearest the room), the gold swords, and the
-        /// shields against the wall. Swords stand upright.
+        /// shields against the wall. Swords stand upright. The nine plain swords stand in a zigzag, so none hides the next one.
         /// </summary>
         static void BuildWeaponRack(Transform stands, Transform slotGroup, Plan plan, Material silhouette, List<ToyShelfSlot> slots)
         {
@@ -117,11 +132,13 @@ namespace CoolSchool.EditorTools
             var columns = new[]
             {
                 new Column { Name = "Shields", X = wall + TierWidth * 0.5f, Height = 0.54f, Colour = new Color(0.72f, 0.58f, 0.95f), DisplaySize = 0.55f,
-                    Ids = new[] { "shield.basic", "shield.round", "gold.shield.round" } },
+                    Ids = new[] { "shield.basic", "shield.round", "shield.silver", "gold.shield.round" } },
                 new Column { Name = "GoldSwords", X = wall + TierWidth * 1.5f, Height = 0.36f, Colour = new Color(1f, 0.82f, 0.3f), DisplaySize = 0.8f,
                     Ids = new[] { "gold.sword.wood", "gold.sword.pirate", "gold.sword.plastic", "gold.sword.foam_big" } },
                 new Column { Name = "Swords", X = wall + TierWidth * 2.5f, Height = 0.18f, Colour = new Color(0.45f, 0.72f, 1f), DisplaySize = 0.8f,
-                    Ids = new[] { "sword.foam", "sword.plastic", "sword.wood", "sword.pirate", "sword.foam_big" } },
+                    Zigzag = 0.13f,
+                    Ids = new[] { "sword.foam", "sword.plastic", "sword.wood", "sword.pirate", "sword.foam_big",
+                        "sword.wand", "sword.foam_4", "sword.staff", "sword.plastic_3" } },
             };
             foreach (Column column in columns)
             {
@@ -135,7 +152,7 @@ namespace CoolSchool.EditorTools
 
         /// <summary>
         /// Four steps along the east wall, south of the mirror: a low podium with the three cart bodies and the flag, stickers and gold paint
-        /// as minis, and next to the wall the hats on pegs (plain, then gold).
+        /// as minis, and next to the wall the first hats on pegs (plain, then gold). The newer hats hang on the hat board above.
         /// </summary>
         static void BuildHatAndCartPodium(Transform stands, Transform slotGroup, Plan plan, Material silhouette, List<ToyShelfSlot> slots)
         {
@@ -186,15 +203,63 @@ namespace CoolSchool.EditorTools
                     post.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
                     y += column.PegHeight;
                 }
-                slots.Add(MakeSlot(slotGroup, column.Ids[i], new Vector3(column.X, y, zs[i]), column.DisplaySize, silhouette));
+                float x = column.X + (i % 2 == 0 ? -column.Zigzag : column.Zigzag);
+                slots.Add(MakeSlot(slotGroup, column.Ids[i], new Vector3(x, y, zs[i]), column.DisplaySize, silhouette));
+            }
+        }
+
+        // ----- Hat board (east wall) -------------------------------------------------------------
+
+        /// <summary>
+        /// A wooden board on the east wall above the hat and cart podium, with two rows of pegs sticking out into the room and a hat resting
+        /// on each peg (the seven newer hats). The hats face south, toward the follow camera; the lower row hangs between the upper ones.
+        /// </summary>
+        static void BuildHatBoard(Transform stands, Transform slotGroup, Plan plan, Material silhouette, List<ToyShelfSlot> slots)
+        {
+            string[] topRow = { "hat.crown", "hat.astronaut", "hat.wizard", "hat.viking" };
+            string[] bottomRow = { "hat.propeller", "hat.fireman", "hat.cowboy" };
+
+            float wall = plan.HalfX;
+            float zStart = -plan.HalfZ + 0.45f;
+            float[] topZ = Spread(topRow.Length, zStart, zStart + HatRowSpacing * topRow.Length, HatRowSpacing);
+            var bottomZ = new float[bottomRow.Length];
+            for (int i = 0; i < bottomZ.Length; i++) bottomZ[i] = (topZ[i] + topZ[i + 1]) * 0.5f;
+
+            float length = topZ[topZ.Length - 1] - topZ[0] + 0.8f;
+            float centreZ = (topZ[0] + topZ[topZ.Length - 1]) * 0.5f;
+            float centreY = HatBoardBottom + HatBoardHeight * 0.5f;
+
+            Material wood = ToyRoomAssets.Lit("ToyRoomHatBoard", new Color(0.78f, 0.55f, 0.32f), 0.25f);
+            Material trim = ToyRoomAssets.Lit("ToyRoomHatBoardTrim", new Color(1f, 0.78f, 0.2f), 0.7f, 0.4f);
+            Material peg = ToyRoomAssets.Lit("ToyRoomPeg_HatBoard", new Color(0.62f, 0.42f, 0.25f), 0.2f);
+
+            Transform group = NewGroup("HatBoard", stands);
+            Box("Trim", group, new Vector3(wall - 0.01f, centreY, centreZ), new Vector3(0.02f, HatBoardHeight + 0.12f, length + 0.12f), trim, false);
+            Box("Board", group, new Vector3(wall - HatBoardDepth * 0.5f, centreY, centreZ), new Vector3(HatBoardDepth, HatBoardHeight, length), wood, false);
+
+            // Pegs lie along x (the cylinder is 2 m tall, so half the length is its y scale); the hat rests on top of each, in its middle.
+            float pegX = wall - HatBoardDepth - HatPegLength * 0.5f;
+            for (int row = 0; row < 2; row++)
+            {
+                string[] ids = row == 0 ? topRow : bottomRow;
+                float[] zs = row == 0 ? topZ : bottomZ;
+                float pegY = row == 0 ? HatPegTopRow : HatPegBottomRow;
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    Transform post = Shape(PrimitiveType.Cylinder, "Peg_" + ids[i], group, new Vector3(pegX, pegY, zs[i]),
+                        new Vector3(HatPegRadius * 2f, HatPegLength * 0.5f, HatPegRadius * 2f), peg);
+                    post.localRotation = Quaternion.Euler(0f, 0f, 90f);
+                    post.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+                    slots.Add(MakeSlot(slotGroup, ids[i], new Vector3(pegX, pegY + HatPegRadius, zs[i]), HatSize, silhouette));
+                }
             }
         }
 
         // ----- Plush shelf (north wall, left) ----------------------------------------------------
 
         /// <summary>
-        /// A cabinet with an upper board against the north wall: four plush toys below, the three gold ones above. The right edge stays clear of
-        /// the mirror. Returns the middle and the width, for the medal board above it.
+        /// A cabinet with an upper board against the north wall: seven plush toys below (the baby dragon among them), the three gold ones and four newer ones above. The
+        /// right edge stays clear of the mirror. Returns the middle and the width, for the medal board above it.
         /// </summary>
         static void BuildPlushShelf(Transform stands, Transform slotGroup, Plan plan, Material silhouette, List<ToyShelfSlot> slots,
             out float centreX, out float width)
@@ -221,14 +286,14 @@ namespace CoolSchool.EditorTools
                 Box("PlushSide", stands, new Vector3(centreX + side * (width * 0.5f - 0.025f), FloorY + backHeight * 0.5f, centreZ),
                     new Vector3(0.05f, backHeight, ShelfDepth), wood, false);
 
-            string[] lower = { "plush.dino", "plush.unicorn", "plush.bear", "plush.parrot" };
-            string[] upper = { "gold.plush.dino", "gold.plush.unicorn", "gold.plush.bear" };
+            string[] lower = { "plush.dino", "plush.unicorn", "plush.bear", "plush.parrot", "plush.dragon", "plush.lion", "plush.rabbit" };
+            string[] upper = { "gold.plush.dino", "gold.plush.unicorn", "gold.plush.bear", "plush.elephant", "plush.duck", "plush.pig", "plush.monster" };
             float[] lowerX = Spread(lower.Length, left + 0.15f, left + width - 0.15f, 0.8f);
             float[] upperX = Spread(upper.Length, left + 0.15f, left + width - 0.15f, 0.8f);
             for (int i = 0; i < lower.Length; i++)
-                slots.Add(MakeSlot(slotGroup, lower[i], new Vector3(lowerX[i], FloorY + ShelfBaseHeight, centreZ), 0.5f, silhouette));
+                slots.Add(MakeSlot(slotGroup, lower[i], new Vector3(lowerX[i], FloorY + ShelfBaseHeight, centreZ), PlushSize, silhouette));
             for (int i = 0; i < upper.Length; i++)
-                slots.Add(MakeSlot(slotGroup, upper[i], new Vector3(upperX[i], FloorY + ShelfUpperHeight, centreZ), 0.5f, silhouette));
+                slots.Add(MakeSlot(slotGroup, upper[i], new Vector3(upperX[i], FloorY + ShelfUpperHeight, centreZ), PlushSize, silhouette));
         }
 
         // ----- Medal board ---------------------------------------------------------------------

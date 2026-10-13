@@ -138,6 +138,13 @@ race.ramp_whoosh	0.7			AR/Movement/Whoosh_Dodge_Heavy_Swish_Delay_Long_01_01.wav
 race.spinout	0.7			PM/Magic Spells and Dust/Magic Game Wacky Spell.wav | PM/Magic Spells and Dust/Magic Game Wacky Spell 2.wav
 race.cheer	0.9			PM/Magic Coins and Items/Magic Game Trophy.wav | PM/Fantasy Alerts and Notifications/Fantasy Achievement Notification.wav
 race.brake	0.35			FEEL/NiceVibrations/HapticSamples/SoundFX/CarScreech2.wav
+# The honk button's horns (cart garage). Long animal clips are cut to about 1.5 s at run time (Sfx.PlayShort). One clip each, so a horn always sounds the same.
+race.horn_bell	0.8	1.0	1.0	PM/Source Bonus/Store Bell or Chime 8 Single.wav
+race.horn_cow	0.9	1.0	1.0	POLY/SFX_Cow_Moo.ogg
+race.horn_dog	0.9	1.0	1.0	POLY/SFX_Dog_Bark_Sigle.ogg
+race.horn_cat	0.9	1.0	1.0	POLY/SFX_Cat_Meow.ogg
+race.horn_elephant	0.8	1.0	1.0	POLY/SFX_Elephant_Trumpeting_1.ogg
+race.horn_magic	0.8	1.0	1.0	PM/Fantasy Transitions/Fantasy App Game Horn Blow or Tone Whoosh.wav
 
 # ---- Ambience beds (looping, flat; start together with the area's music cue) ----
 ambience.playground	0.35	1.0	1.0	ENV/Ambient Loops/Birds Loop 01.wav

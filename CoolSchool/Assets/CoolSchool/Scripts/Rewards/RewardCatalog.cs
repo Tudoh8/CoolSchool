@@ -38,6 +38,15 @@ namespace CoolSchool.Rewards
             return result;
         }
 
+        /// <summary>All cart items that are this part of the cart, in catalog order (the cart picker's cards).</summary>
+        public List<RewardItem> ItemsOfPart(CartPart part)
+        {
+            var result = new List<RewardItem>();
+            foreach (RewardItem item in items)
+                if (item != null && !string.IsNullOrEmpty(item.id) && item.IsCartPart(part)) result.Add(item);
+            return result;
+        }
+
         public RewardItem Find(string id)
         {
             if (string.IsNullOrEmpty(id)) return null;

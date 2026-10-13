@@ -55,6 +55,21 @@ namespace CoolSchool.Rewards
             if (current.cartExtrasOff == null) current.cartExtrasOff = new List<string>();
             if (current.cartsTried == null) current.cartsTried = new List<string>();
             if (current.unseenItems == null) current.unseenItems = new List<string>();
+            if (current.unseenCartItems == null) current.unseenCartItems = new List<string>();
+            MigrateCartPaint(current);
+        }
+
+        /// <summary>
+        /// Old saves had gold paint as an on/off extra. Once: if no paint is chosen, gold is owned and was not switched off, gold becomes
+        /// the chosen paint. The flag stops it from coming back after he picks "no paint".
+        /// </summary>
+        static void MigrateCartPaint(PlayerProgress progress)
+        {
+            if (progress.cartPaintMigrated) return;
+
+            progress.cartPaintMigrated = true;
+            if (string.IsNullOrEmpty(progress.cartPaint) && progress.IsUnlocked(GoldPaintId) && !progress.cartExtrasOff.Contains(GoldPaintId))
+                progress.cartPaint = GoldPaintId;
         }
 
         public static void Save()
@@ -99,6 +114,7 @@ namespace CoolSchool.Rewards
             {
                 if (!progress.IsUnlocked(item.id)) progress.unlockedItems.Add(item.id);
                 if (!progress.unseenItems.Contains(item.id)) progress.unseenItems.Add(item.id);
+                if (item.kind == RewardKind.Cart) MarkCartItemUnseen(item.id);
             }
             Save();
         }
@@ -186,34 +202,93 @@ namespace CoolSchool.Rewards
             return progress.IsUnlocked(extraId) && !progress.cartExtrasOff.Contains(extraId);
         }
 
-        /// <summary>Stores the cart picker's choice, notes that the body and the extras that are on were tried, and saves.</summary>
-        public static void SetCart(string bodyId, bool flagOn, bool stickersOn, bool goldOn)
+        // ---- The cart garage ----
+
+        /// <summary>The horn that is owned from the start: the honk button always has a sound.</summary>
+        public const string StarterHornId = "cart.horn_bell";
+        /// <summary>The old gold paint, which used to be an on/off extra and is now one of the paints.</summary>
+        public const string GoldPaintId = "cart.gold";
+
+        /// <summary>Starters are always owned; everything else once it has been won.</summary>
+        static bool OwnsCartItem(PlayerProgress progress, string id)
+        {
+            return id == EquipSlots.StarterCartId || id == StarterHornId || progress.IsUnlocked(id);
+        }
+
+        /// <summary>The race number on the plates (1 to 10). He is four, so 4 shows until he has picked one.</summary>
+        public static int CartNumber()
+        {
+            int number = Current.cartNumber;
+            return number >= CartChoice.MinNumber && number <= CartChoice.MaxNumber ? number : CartChoice.DefaultNumber;
+        }
+
+        /// <summary>The horn that is chosen, resolved: a horn that is not owned (or none chosen) gives the starter bell.</summary>
+        public static string ChosenHornId()
         {
             PlayerProgress progress = Current;
-            progress.equippedCart = bodyId ?? "";
+            string chosen = progress.cartHorn;
+            return !string.IsNullOrEmpty(chosen) && OwnsCartItem(progress, chosen) ? chosen : StarterHornId;
+        }
 
-            SetExtra(progress, "cart.flag", flagOn);
-            SetExtra(progress, "cart.stickers", stickersOn);
-            SetExtra(progress, "cart.gold", goldOn);
+        /// <summary>
+        /// What his cart looks like now, resolved: the chosen body, and the paint, trail and horn only if they are owned (otherwise
+        /// the defaults), the add-ons he switched off, and his number. This is what the picker starts from and what the race shows.
+        /// </summary>
+        public static CartChoice LoadCartChoice()
+        {
+            PlayerProgress progress = Current;
+            var choice = new CartChoice
+            {
+                bodyId = ChosenCartId(),
+                paintId = !string.IsNullOrEmpty(progress.cartPaint) && OwnsCartItem(progress, progress.cartPaint) ? progress.cartPaint : "",
+                trailId = !string.IsNullOrEmpty(progress.cartTrail) && OwnsCartItem(progress, progress.cartTrail) ? progress.cartTrail : "",
+                hornId = ChosenHornId(),
+                number = CartNumber(),
+            };
+            foreach (string id in progress.cartExtrasOff) choice.addonsOff.Add(id);
+            return choice;
+        }
 
-            AddOnce(progress.cartsTried, bodyId);
+        /// <summary>
+        /// Stores the cart picker's choice and saves. Something that is not owned is never stored (the default is kept instead).
+        /// The body, paint, trail and horn are noted as tried.
+        /// </summary>
+        public static void SaveCartChoice(CartChoice choice)
+        {
+            if (choice == null) return;
+
+            PlayerProgress progress = Current;
+            progress.equippedCart = OwnsCartItem(progress, choice.bodyId) ? choice.bodyId : "";
+            progress.cartPaint = !string.IsNullOrEmpty(choice.paintId) && OwnsCartItem(progress, choice.paintId) ? choice.paintId : "";
+            progress.cartTrail = !string.IsNullOrEmpty(choice.trailId) && OwnsCartItem(progress, choice.trailId) ? choice.trailId : "";
+            string horn = !string.IsNullOrEmpty(choice.hornId) && OwnsCartItem(progress, choice.hornId) ? choice.hornId : StarterHornId;
+            progress.cartHorn = horn == StarterHornId ? "" : horn;
+            progress.cartNumber = Mathf.Clamp(choice.number, CartChoice.MinNumber, CartChoice.MaxNumber);
+            progress.cartPaintMigrated = true;
+
+            progress.cartExtrasOff = new List<string>(choice.addonsOff);
+
+            AddOnce(progress.cartsTried, progress.equippedCart);
+            AddOnce(progress.cartsTried, progress.cartPaint);
+            AddOnce(progress.cartsTried, progress.cartTrail);
+            AddOnce(progress.cartsTried, horn);
             Save();
         }
 
-        static void SetExtra(PlayerProgress progress, string extraId, bool on)
+        static void MarkCartItemUnseen(string id)
         {
-            // Only owned extras can be switched on or off; a locked one is left alone.
-            if (!progress.IsUnlocked(extraId)) return;
+            if (Current.unseenCartItems == null) Current.unseenCartItems = new List<string>();
+            AddOnce(Current.unseenCartItems, id);
+        }
 
-            if (on)
-            {
-                progress.cartExtrasOff.Remove(extraId);
-                AddOnce(progress.cartsTried, extraId);
-            }
-            else if (!progress.cartExtrasOff.Contains(extraId))
-            {
-                progress.cartExtrasOff.Add(extraId);
-            }
+        /// <summary>He has opened the cart picker, so every won cart item has been seen there. Saves only if something was new.</summary>
+        public static void MarkCartItemsSeen()
+        {
+            List<string> unseen = Current.unseenCartItems;
+            if (unseen == null || unseen.Count == 0) return;
+
+            unseen.Clear();
+            Save();
         }
 
         static void AddOnce(List<string> list, string id)

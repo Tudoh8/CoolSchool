@@ -46,6 +46,10 @@ namespace CoolSchool.Audio
 
         readonly List<AudioSource> pool = new List<AudioSource>();
         readonly Dictionary<string, float> lastPlayedTime = new Dictionary<string, float>();
+        // Sources whose sound PlayShort limited: when (unscaled time) each one is cut off.
+        readonly Dictionary<AudioSource, float> cutOffs = new Dictionary<AudioSource, float>();
+        readonly List<AudioSource> cutOffsDone = new List<AudioSource>();
+        const float CutOffFadeSeconds = 0.15f;
         readonly MusicChannel[] channels = new MusicChannel[2];
         readonly MusicChannel[] ambienceChannels = new MusicChannel[2];
         int nextPoolIndex;
@@ -102,6 +106,19 @@ namespace CoolSchool.Audio
         public static void Play(string cue, Vector3? position = null)
         {
             if (instance != null) instance.PlayCue(cue, position);
+        }
+
+        /// <summary>
+        /// Like Play, but a long clip is faded out and cut after about maxSeconds (the cart horns: a long moo or trumpet must not
+        /// pile up on the honk button).
+        /// </summary>
+        public static void PlayShort(string cue, float maxSeconds, Vector3? position = null)
+        {
+            if (instance == null) return;
+
+            AudioSource source = instance.PlayCue(cue, position);
+            if (source != null && source.clip != null && source.clip.length > maxSeconds + 0.05f)
+                instance.cutOffs[source] = Time.unscaledTime + Mathf.Max(0.2f, maxSeconds);
         }
 
         /// <summary>Starts looping music with a crossfade from whatever was playing.</summary>
@@ -175,6 +192,7 @@ namespace CoolSchool.Audio
             UpdateDuck();
             UpdateMusic();
             UpdateAmbience();
+            UpdateCutOffs();
         }
 
         AudioSource CreateSource(string sourceName, bool music)
@@ -192,22 +210,24 @@ namespace CoolSchool.Audio
 
         // ---- Sound effects ----
 
-        void PlayCue(string cue, Vector3? position)
+        /// <summary>Plays the cue and returns the source it plays on (null when nothing played).</summary>
+        AudioSource PlayCue(string cue, Vector3? position)
         {
-            if (string.IsNullOrEmpty(cue)) return;
+            if (string.IsNullOrEmpty(cue)) return null;
 
             SoundEntry entry = library != null ? library.Find(cue) : null;
             AudioClip clip = PickClip(entry);
             if (clip == null)
             {
                 ReportMissing(cue, entry != null);
-                return;
+                return null;
             }
 
-            if (lastPlayedTime.TryGetValue(cue, out float last) && Time.unscaledTime - last < entry.cooldown) return;
+            if (lastPlayedTime.TryGetValue(cue, out float last) && Time.unscaledTime - last < entry.cooldown) return null;
             lastPlayedTime[cue] = Time.unscaledTime;
 
             AudioSource source = NextSource();
+            cutOffs.Remove(source);
             bool is3D = entry.spatial && position.HasValue;
             if (is3D) source.transform.position = position.Value;
 
@@ -220,6 +240,35 @@ namespace CoolSchool.Audio
             source.minDistance = MinDistance;
             source.maxDistance = MaxDistance;
             source.Play();
+            return source;
+        }
+
+        /// <summary>Fades out and stops the sounds that PlayShort limited, in the last part of their time.</summary>
+        void UpdateCutOffs()
+        {
+            if (cutOffs.Count == 0) return;
+
+            cutOffsDone.Clear();
+            foreach (KeyValuePair<AudioSource, float> entry in cutOffs)
+            {
+                AudioSource source = entry.Key;
+                float left = entry.Value - Time.unscaledTime;
+                if (source == null || !source.isPlaying)
+                {
+                    cutOffsDone.Add(source);
+                }
+                else if (left <= 0f)
+                {
+                    source.Stop();
+                    cutOffsDone.Add(source);
+                }
+                else if (left < CutOffFadeSeconds)
+                {
+                    // The source's loudness was set when it started; only the fade-out is applied on top of it.
+                    source.volume = Mathf.Min(source.volume, source.volume * (left / CutOffFadeSeconds));
+                }
+            }
+            foreach (AudioSource done in cutOffsDone) cutOffs.Remove(done);
         }
 
         static AudioClip PickClip(SoundEntry entry)

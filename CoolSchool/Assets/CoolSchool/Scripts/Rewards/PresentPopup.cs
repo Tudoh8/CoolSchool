@@ -57,6 +57,7 @@ namespace CoolSchool.Rewards
         const float SwapPopSeconds = 0.4f;
         const float AnswerVoiceMaxSeconds = 3f;
         const float EmptySlotAlpha = 0.45f;
+        const float HornRevealSeconds = 1.5f;
 
         enum State
         {
@@ -227,6 +228,8 @@ namespace CoolSchool.Rewards
             {
                 revealImage.gameObject.SetActive(true);
                 Sfx.Play("reward.item_reveal");
+                // A horn honks once as it pops in.
+                if (item != null && item.IsCartPart(CartPart.Horn)) Sfx.PlayShort(item.soundCue, HornRevealSeconds);
                 yield return Pop(revealImage.rectTransform, RevealPopSeconds);
                 RewardVoice.Say(ItemVoice.GroupFor(item));
             }
@@ -258,7 +261,7 @@ namespace CoolSchool.Rewards
                 yield return Pop(swapPanel, SwapPopSeconds);
             }
 
-            string question = "reward.swap_" + SlotWord(slot);
+            string question = IsWand(item) ? "reward.swap_wand" : "reward.swap_" + SlotWord(slot);
             RewardVoice.Say(question);
             float nextNudge = Time.unscaledTime + swapNudgeSeconds;
             while (swapAnswer == SwapAnswer.None)
@@ -309,6 +312,12 @@ namespace CoolSchool.Rewards
                 currentIcon.color = new Color(1f, 1f, 1f, EmptySlotAlpha);
             }
             currentIcon.enabled = currentIcon.sprite != null;
+        }
+
+        /// <summary>The magic wand and the wizard staff sit in the sword slot, but "sword" would be the wrong word for them.</summary>
+        static bool IsWand(RewardItem item)
+        {
+            return item.id == "sword.wand" || item.id == "sword.staff";
         }
 
         static string SlotWord(EquipSlot slot)

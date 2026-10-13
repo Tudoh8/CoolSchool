@@ -65,9 +65,12 @@ namespace CoolSchool.EditorTools
             // ---- Carts and rivals ----
             Material gold = Mat("CartGold", new Color(1f, 0.78f, 0.2f), 0.7f, 0.8f);
             Transform carts = NewGroup("Carts", root);
-            CartParts playerCart = BuildCart("PlayerCart", 1, carts, gold);
-            CartParts rivalA = BuildCart("RivalCart_A", 0, carts, gold);
-            CartParts rivalB = BuildCart("RivalCart_B", 2, carts, gold);
+            CartPaintMaker.ClearCache();
+            ClearBodyCaches();
+            // Only the player's cart gets the trails; the rivals never use one.
+            CartParts playerCart = BuildCart("PlayerCart", 1, carts, gold, true, font);
+            CartParts rivalA = BuildCart("RivalCart_A", 0, carts, gold, false, font);
+            CartParts rivalB = BuildCart("RivalCart_B", 2, carts, gold, false, font);
             var rivals = new RivalCartAI[2];
             CartParts[] rivalCarts = { rivalA, rivalB };
             for (int i = 0; i < rivals.Length; i++)
@@ -78,6 +81,8 @@ namespace CoolSchool.EditorTools
                 SetObject(rivals[i], "driver", driver);
             }
             CreateCartPrefabs(gold);
+            CreateGaragePrefabs();
+            CreateBodyPrefabs();
 
             // ---- The player's helmet ----
             var playerHelmet = inputs.Player.gameObject.AddComponent<RaceHelmet>();
@@ -111,8 +116,9 @@ namespace CoolSchool.EditorTools
             RaceHud hud = BuildHud(font);
 
             // ---- Cart picker: the cards, and the camera spot in front of the player's cart looking back at it ----
-            CartPicker cartPicker = BuildCartPicker();
+            CartPicker cartPicker = BuildCartPicker(font);
             Transform cartPickCameraSpot = BuildCartPickCameraSpot(root, playerCart.Root.transform.position);
+            BuildPitLane(root);
 
             // ---- The race ----
             var raceObject = new GameObject("SoapboxRace");

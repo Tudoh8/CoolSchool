@@ -29,6 +29,10 @@ namespace CoolSchool.Race
         [SerializeField] Text targetText;
         [SerializeField] Image leftArrow;
         [SerializeField] Image rightArrow;
+        [Tooltip("The round honk button above the jump button. The only part of the HUD that takes touches. Must be inside the root.")]
+        [SerializeField] Button honkButton;
+        [Tooltip("The picture on the honk button: the icon of the horn he chose.")]
+        [SerializeField] Image honkIcon;
 
         static readonly Color GoldMedal = new Color(1f, 0.82f, 0.2f);
         static readonly Color SilverMedal = new Color(0.78f, 0.8f, 0.86f);
@@ -43,6 +47,7 @@ namespace CoolSchool.Race
         const float CoinFlightArc = 140f;
         const float FlyingCoinSize = 56f;
         const float ArrowPulseHertz = 0.8f;
+        const float HonkPunchSeconds = 0.25f;
 
         sealed class FlyingCoin
         {
@@ -68,19 +73,33 @@ namespace CoolSchool.Race
         Vector3 targetBaseScale = Vector3.one;
         int targetBaseFontSize;
         Vector3 countdownBaseScale = Vector3.one;
+        float honkPunchT = -1f;
+
+        /// <summary>He tapped the honk button. The race decides what happens (the cooldown, the sound).</summary>
+        public event System.Action Honk;
+
+        /// <summary>The honk button's rectangle, so the race input can ignore taps that start on it (they must not change lanes).</summary>
+        public RectTransform HonkRect => honkButton != null ? honkButton.transform as RectTransform : null;
 
         void Awake()
         {
+            if (honkButton != null) honkButton.onClick.AddListener(OnHonkClicked);
+
             if (coinCounter != null) coinBaseScale = coinCounter.localScale;
             if (placeBadge != null) placeBaseScale = placeBadge.rectTransform.localScale;
             if (targetBubble != null) targetBaseScale = targetBubble.localScale;
             if (targetText != null) targetBaseFontSize = targetText.fontSize;
             if (countdownText != null) countdownBaseScale = countdownText.rectTransform.localScale;
 
-            // The HUD never blocks a tap: the race reads taps on the whole screen itself.
+            // The HUD never blocks a tap: the race reads taps on the whole screen itself. Only the honk button takes touches.
             if (root != null && root != gameObject)
+            {
                 foreach (Graphic graphic in root.GetComponentsInChildren<Graphic>(true))
-                    graphic.raycastTarget = false;
+                {
+                    bool onHonk = honkButton != null && graphic.transform.IsChildOf(honkButton.transform);
+                    graphic.raycastTarget = onHonk && graphic == honkButton.targetGraphic;
+                }
+            }
 
             // The player's dot is drawn on top of the rivals'.
             if (progressDots != null && progressDots.Length > 0 && progressDots[0] != null) progressDots[0].SetAsLastSibling();
@@ -105,6 +124,21 @@ namespace CoolSchool.Race
             if (targetBubble != null) targetBubble.gameObject.SetActive(false);
             SetArrowsActive(false);
             RestoreScales();
+        }
+
+        /// <summary>Shows the horn he chose on the honk button.</summary>
+        public void SetHonkIcon(Sprite sprite)
+        {
+            if (honkIcon == null) return;
+
+            honkIcon.sprite = sprite;
+            honkIcon.enabled = sprite != null;
+        }
+
+        void OnHonkClicked()
+        {
+            honkPunchT = 0f;
+            Honk?.Invoke();
         }
 
         /// <summary>A big digit that pops in (3, 2, 1). Zero hides it.</summary>
@@ -254,6 +288,21 @@ namespace CoolSchool.Race
             if (coinCounter != null) UpdatePop(ref coinPopT, coinCounter, coinBaseScale, 1.25f, dt);
             if (placeBadge != null) UpdatePop(ref placePopT, placeBadge.rectTransform, placeBaseScale, 1.4f, dt);
             if (targetBubble != null) UpdatePop(ref targetPopT, targetBubble, targetBaseScale, 1.25f, dt);
+
+            // The honk button squashes when it is tapped.
+            if (honkPunchT >= 0f && honkButton != null)
+            {
+                honkPunchT += dt / HonkPunchSeconds;
+                if (honkPunchT >= 1f)
+                {
+                    honkPunchT = -1f;
+                    honkButton.transform.localScale = Vector3.one;
+                }
+                else
+                {
+                    honkButton.transform.localScale = Vector3.one * (1f - 0.18f * Mathf.Sin(honkPunchT * Mathf.PI));
+                }
+            }
         }
 
         static void UpdatePop(ref float time, RectTransform rect, Vector3 baseScale, float peak, float dt)
@@ -399,6 +448,8 @@ namespace CoolSchool.Race
             if (placeBadge != null) placeBadge.rectTransform.localScale = placeBaseScale;
             if (targetBubble != null) targetBubble.localScale = targetBaseScale;
             if (countdownText != null) countdownText.rectTransform.localScale = countdownBaseScale;
+            honkPunchT = -1f;
+            if (honkButton != null) honkButton.transform.localScale = Vector3.one;
         }
     }
 }

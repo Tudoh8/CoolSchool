@@ -33,6 +33,7 @@ namespace CoolSchool.Activities
         const float NavSampleDistance = 2f;
         // The trail to the Toy Room stops this far before its doorway.
         const float ToyRoomTrailStop = 1f;
+        const string RaceInviteGroup = "invite.race";
 
         PlayerController player;
         NavMeshPath trailPath;
@@ -43,6 +44,9 @@ namespace CoolSchool.Activities
         float trailStopDistance;
         // The number of presents opened when the Toy Room last invited him, so it invites once per present.
         int toyRoomInvitedAtPresent = -1;
+        // The same for the race: it invites once per present when there is something new for the cart.
+        int raceInvitedAtPresent = -1;
+        CoolSchool.ToyRoom.ToyShelf shelf;
         float trailEndTime;
         float nextTrailTime;
 
@@ -90,19 +94,49 @@ namespace CoolSchool.Activities
 
             if (zones == null || zones.Length == 0) return;
 
+            // Something new for the soapbox cart (a paint, a horn...): the race goes first, once per present.
+            int raceZone = RaceZoneWithNews();
+            if (raceZone >= 0)
+            {
+                raceInvitedAtPresent = ProgressStore.Current.presentsOpened;
+                InviteZone(raceZone);
+                return;
+            }
+
             for (int step = 1; step <= zones.Length; step++)
             {
                 int index = (lastInvited + step) % zones.Length;
                 if (zones[index] == null) continue;
 
-                lastInvited = index;
-                Sfx.Play("zone.invite_chime");
-                if (inviteGroups != null && index < inviteGroups.Length && !string.IsNullOrEmpty(inviteGroups[index]))
-                    VoicePlayer.Say(InviteGroupFor(inviteGroups[index]));
-
-                StartTrail(zones[index].transform.position, zones[index].Radius);
+                InviteZone(index);
                 return;
             }
+        }
+
+        void InviteZone(int index)
+        {
+            lastInvited = index;
+            Sfx.Play("zone.invite_chime");
+            if (inviteGroups != null && index < inviteGroups.Length && !string.IsNullOrEmpty(inviteGroups[index]))
+                VoicePlayer.Say(InviteGroupFor(inviteGroups[index]));
+
+            StartTrail(zones[index].transform.position, zones[index].Radius);
+        }
+
+        /// <summary>The race zone's index when he has won cart things he has not seen in the cart picker yet (and was not asked since the last present), else -1.</summary>
+        int RaceZoneWithNews()
+        {
+            if (!HasUnseenCartItems() || ProgressStore.Current.presentsOpened == raceInvitedAtPresent) return -1;
+
+            for (int i = 0; zones != null && inviteGroups != null && i < zones.Length && i < inviteGroups.Length; i++)
+                if (zones[i] != null && inviteGroups[i] == RaceInviteGroup) return i;
+            return -1;
+        }
+
+        static bool HasUnseenCartItems()
+        {
+            PlayerProgress progress = ProgressStore.Current;
+            return progress.unseenCartItems != null && progress.unseenCartItems.Count > 0;
         }
 
         /// <summary>True when there is a new toy or medal in the Toy Room and he has not been invited there since the last present.</summary>
@@ -110,8 +144,12 @@ namespace CoolSchool.Activities
         {
             if (toyRoomSpot == null) return false;
 
+            // Only things that stand on a shelf count: cart things without a slot (paints, horns...) are news at the race, not here.
+            if (shelf == null) shelf = FindAnyObjectByType<CoolSchool.ToyRoom.ToyShelf>();
+
             PlayerProgress progress = ProgressStore.Current;
-            bool news = (progress.unseenItems != null && progress.unseenItems.Count > 0) || progress.medals > progress.medalsSeen;
+            bool itemNews = shelf != null ? shelf.HasUnseenOnShelf(progress) : progress.unseenItems != null && progress.unseenItems.Count > 0;
+            bool news = itemNews || progress.medals > progress.medalsSeen;
             return news && progress.presentsOpened != toyRoomInvitedAtPresent;
         }
 
@@ -138,6 +176,9 @@ namespace CoolSchool.Activities
         {
             if (group == "invite.knights" && ProgressStore.Current.pendingPowerUp == PowerUps.GoldenSword)
                 return "invite.knights.golden";
+            // Something new for the cart: "You have something new for your cart! Are you coming to race?"
+            if (group == RaceInviteGroup && HasUnseenCartItems())
+                return "invite.race.new";
             return group;
         }
 

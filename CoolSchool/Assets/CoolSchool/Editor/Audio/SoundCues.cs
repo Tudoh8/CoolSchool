@@ -38,6 +38,8 @@ namespace CoolSchool.EditorTools
             // Soapbox race
             "race.lane", "race.jump", "race.land", "race.bonk", "race.splash", "race.coin", "race.gate_ding", "race.countdown_beep",
             "race.go_horn", "race.ramp_whoosh", "race.spinout", "race.cheer", "race.brake",
+            // The honk button's horns (the cart garage): one cue per horn item, named in the catalog seed's soundCue.
+            "race.horn_bell", "race.horn_cow", "race.horn_dog", "race.horn_cat", "race.horn_elephant", "race.horn_magic",
             // Hide and seek in the zoo park (the animal calls are zoo.call.<id>, one per ZooAnimalKind)
             "zoo.giggle", "zoo.patter", "zoo.found_pop", "zoo.peek", "zoo.shake", "zoo.surprise_pop", "zoo.gate", "zoo.pen_hop",
             "zoo.hide_in", "zoo.party",

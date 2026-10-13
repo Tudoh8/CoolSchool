@@ -95,6 +95,23 @@ namespace CoolSchool.ToyRoom
             if (medalBoard != null) medalBoard.Refresh(progress.medals, progress.medalsSeen);
         }
 
+        /// <summary>
+        /// True when something he has won and not looked at yet stands on one of this room's shelves. Cart things that have no slot
+        /// (the paints, trails, horns...) live in the race's cart picker, so they are not news here; the race invites him for those.
+        /// </summary>
+        public bool HasUnseenOnShelf(PlayerProgress progress)
+        {
+            if (progress == null || progress.unseenItems == null || progress.unseenItems.Count == 0) return false;
+            if (slots == null) return true;
+
+            foreach (string id in progress.unseenItems)
+            {
+                foreach (ToyShelfSlot slot in slots)
+                    if (slot != null && slot.ItemId == id) return true;
+            }
+            return false;
+        }
+
         void Update()
         {
             if (!Application.isPlaying) return;
@@ -158,7 +175,7 @@ namespace CoolSchool.ToyRoom
                 progress.toyRoomVisited = true;
                 ProgressStore.Save();
             }
-            else if (progress.unseenItems != null && progress.unseenItems.Count > 0)
+            else if (HasUnseenOnShelf(progress))
             {
                 VoicePlayer.Say("toyroom.new_item");
             }

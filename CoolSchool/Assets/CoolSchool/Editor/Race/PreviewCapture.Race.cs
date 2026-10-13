@@ -63,6 +63,8 @@ namespace CoolSchool.EditorTools
             picker.Shots.Add(new Shot { Name = "camera", Frame = CartPickerView });
             groups.Add(picker);
 
+            AddCartGarageGroups(groups);
+
             // The crossing animals on their sidewalk spots.
             var animals = new Group { Name = "race_animals", Stage = StageRaceAnimals };
             foreach (string kind in new[] { "cat", "dog", "hen", "rabbit" })
@@ -144,8 +146,7 @@ namespace CoolSchool.EditorTools
             GameObject playerCart = GameObject.Find("PlayerCart");
             if (playerCart == null) throw new InvalidOperationException("no PlayerCart");
             var looks = playerCart.GetComponent<CartLooks>();
-            looks.SetBody(1);
-            looks.SetExtras(true, false, false);
+            looks.Apply(RaceChoice(looks.BodyIdAt(1), "", new[] { CartLooks.FlagId }), false);
 
             int[] rivalBodies = { 0, 2 };
             string[] rivalNames = { "RivalCart_A", "RivalCart_B" };
@@ -155,8 +156,7 @@ namespace CoolSchool.EditorTools
                 if (cart == null) continue;
 
                 var rivalLooks = cart.GetComponent<CartLooks>();
-                rivalLooks.SetBody(rivalBodies[i]);
-                rivalLooks.SetExtras(false, false, false);
+                rivalLooks.Apply(RaceChoice(rivalLooks.BodyIdAt(rivalBodies[i])), false);
                 foreach (KidAnimator kid in cart.GetComponentsInChildren<KidAnimator>(true))
                 {
                     ActivateWithParents(kid.gameObject);
@@ -184,6 +184,8 @@ namespace CoolSchool.EditorTools
         /// <summary>The player in his cart, sitting, with a helmet; the two rivals sit and wear theirs.</summary>
         static void StageRaceSeated()
         {
+            // While the race runs, ActivityZone hides its glowing zone (the activity is current); the edit-mode shot has to do it by hand.
+            HideZoneVisuals();
             ActivateWithParents(GameObject.Find("RaceObjects"));
             GameObject player = GameObject.Find("Player");
             GameObject playerCart = GameObject.Find("PlayerCart");

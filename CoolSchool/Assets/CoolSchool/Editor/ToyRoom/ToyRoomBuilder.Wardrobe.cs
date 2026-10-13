@@ -244,7 +244,7 @@ namespace CoolSchool.EditorTools
             cardArea.anchorMin = cardArea.anchorMax = new Vector2(0f, 1f);
             cardArea.pivot = new Vector2(0f, 1f);
             cardArea.anchoredPosition = new Vector2(CardAreaLeft, -30f);
-            cardArea.sizeDelta = new Vector2(WindowWidth - CardAreaLeft - 12f, 340f);
+            cardArea.sizeDelta = new Vector2(WindowWidth - CardAreaLeft - 12f, 400f);
 
             Button done = BuildDoneButton(window, circle, check);
 

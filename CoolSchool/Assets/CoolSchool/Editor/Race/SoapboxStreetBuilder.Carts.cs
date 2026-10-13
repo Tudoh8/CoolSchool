@@ -4,6 +4,7 @@ using CoolSchool.Characters;
 using CoolSchool.Race;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using static CoolSchool.EditorTools.PlaygroundPrototypeBuilder;
 
 namespace CoolSchool.EditorTools
@@ -17,11 +18,40 @@ namespace CoolSchool.EditorTools
         const string StickersPrefabPath = RaceFolder + "/Prefabs/CS_Cart_Stickers.prefab";
         const string GoldPrefabPath = RaceFolder + "/Prefabs/CS_Cart_Gold.prefab";
 
-        static readonly PrefabRef[] RacerPrefabs =
+        /// <summary>One cart body: the catalog item id and the model it is made from.</summary>
+        internal readonly struct BodyDef
         {
-            Kids("SM_Veh_Soapbox_Racer_01"),
-            Kids("SM_Veh_Soapbox_Racer_02"),
-            Kids("SM_Veh_Soapbox_Racer_03"),
+            public readonly string Id;
+            public readonly PrefabRef Prefab;
+
+            public BodyDef(string id, PrefabRef prefab)
+            {
+                Id = id;
+                Prefab = prefab;
+            }
+        }
+
+        /// <summary>
+        /// Every cart body, in catalog order. Each cart gets all of them (only one is shown). Agent G2 adds the new bodies here (the id
+        /// must be the catalog id, for example "cart.rocket"); fitting, seats, add-on anchors, paint and the picker follow from this
+        /// list and from the catalog. The first body must stay racer 1: the reveal prefabs and the trail height are made from it.
+        /// </summary>
+        internal static readonly BodyDef[] BodyDefs =
+        {
+            new BodyDef("cart.racer_1", Kids("SM_Veh_Soapbox_Racer_01")),
+            new BodyDef("cart.racer_2", Kids("SM_Veh_Soapbox_Racer_02")),
+            new BodyDef("cart.racer_3", Kids("SM_Veh_Soapbox_Racer_03")),
+
+            // The new bodies of the garage (agent G2). How each is put together (length, hidden parts, wheel base, seat) is in
+            // SoapboxStreetBuilder.Bodies.cs (BodyStyles); the catalog order is the order here.
+            new BodyDef("cart.rocket", Kids("SM_Prop_Cardboard_Rocket_01")),
+            new BodyDef("cart.firetruck", new PrefabRef("SM_Veh_Firetruck_01", "PolygonTown")),
+            new BodyDef("cart.wagon", Kids("SM_Prop_Red_Wagon_01")),
+            new BodyDef("cart.horse", Kids("SM_Veh_Rocking_Horse_01")),
+            new BodyDef("cart.police", new PrefabRef("SM_Veh_Car_Police_01", "PolygonCity")),
+            new BodyDef("cart.boat", Kids("SM_Prop_Cardboard_Boat_01")),
+            new BodyDef("cart.trike", Kids("SM_Veh_Trike_03")),
+            new BodyDef("cart.convertible", new PrefabRef("SM_Veh_Convertable_01", "PolygonTown")),
         };
 
         static readonly PrefabRef[] RivalKidPrefabs =
@@ -64,10 +94,12 @@ namespace CoolSchool.EditorTools
         // ---- Carts ----
 
         /// <summary>
-        /// A cart root at the start line in a lane: CartController and CartLooks on the root, a "Model" child with the three racer
-        /// bodies (only the first shown, each 1.7 m long, nose north), the Seat under the model, an inactive flag and inactive stickers.
+        /// A cart root at the start line in a lane: CartController and CartLooks on the root, a "Model" child with every body of
+        /// <see cref="BodyDefs"/> (only the first shown, each 1.7 m long, nose north), the Seat and BuddySeat under the model, the two
+        /// number plates, the inactive add-ons (flag, stickers, eyes, balloons, propeller, spoiler) and, for the player's cart, the inactive
+        /// trails. CartLooks is wired with the bodies' seat points and anchors, the add-ons, the paints and the trails.
         /// </summary>
-        static CartParts BuildCart(string cartName, int lane, Transform parent, Material gold)
+        static CartParts BuildCart(string cartName, int lane, Transform parent, Material gold, bool withTrails, Font font)
         {
             var parts = new CartParts();
             var root = new GameObject(cartName);
@@ -78,40 +110,47 @@ namespace CoolSchool.EditorTools
             parts.Model = NewGroup("Model", root.transform);
             parts.Model.localPosition = Vector3.zero;
 
-            var bodies = new GameObject[RacerPrefabs.Length];
-            for (int i = 0; i < RacerPrefabs.Length; i++)
+            // Every body in BodyDefs, fitted and with its seat and anchor points (FitBody); only the first is shown.
+            var bodies = new List<BodyBuild>();
+            for (int i = 0; i < BodyDefs.Length; i++)
             {
-                GameObject prefab = LoadPrefab(RacerPrefabs[i]);
-                if (prefab == null) continue;
+                // A racer through PlaceBody, one of the new bodies through its recipe (SoapboxStreetBuilder.Bodies.cs); null when the model is missing.
+                GameObject body = PlaceBodyDef(BodyDefs[i], parts.Model, root.transform.position, out Bounds bounds, out Vector3 seatWorld);
+                if (body == null) continue;
 
-                GameObject body = PlaceBody(prefab, parts.Model, root.transform.position, $"racer {i + 1}", out Bounds bounds, out Vector3 seatWorld);
-                body.name = $"Racer_{i + 1:00}";
-                bodies[i] = body;
-                if (i == 0)
+                body.name = i < 3 ? $"Racer_{i + 1:00}" : "Body_" + BodyDefs[i].Id.Replace("cart.", "");
+                BodyFit fit = FitBody(BodyDefs[i].Id, body, bounds, seatWorld, root.transform.position);
+                ApplyBodyTuning(BodyDefs[i].Id, body, bounds, root.transform.position, fit);
+                bodies.Add(new BodyBuild { Id = BodyDefs[i].Id, Root = body, Fit = fit });
+                if (bodies.Count == 1)
                 {
                     parts.BodyBounds = bounds;
-                    parts.SeatLocal = root.transform.InverseTransformPoint(seatWorld);
+                    parts.SeatLocal = fit.Seat;
                 }
             }
 
-            if (bodies[0] == null)
+            if (bodies.Count == 0)
             {
                 Debug.LogWarning("CoolSchool race street: SM_Veh_Soapbox_Racer_01 is missing; the cart is an empty frame with a seat on the road.");
                 parts.BodyBounds = new Bounds(root.transform.position + Vector3.up * 0.3f, new Vector3(0.9f, 0.6f, CartLength));
                 parts.SeatLocal = new Vector3(0f, 0.3f, -0.15f);
             }
-            for (int i = 1; i < bodies.Length; i++)
-                if (bodies[i] != null) bodies[i].SetActive(false);
+            for (int i = 1; i < bodies.Count; i++)
+                bodies[i].Root.SetActive(false);
 
             parts.Seat = NewLocalPoint("Seat", parts.Model, parts.SeatLocal);
 
             // A riding plush buddy sits behind the kid's seat, on the same surface (the pivot of the buddy is its feet).
-            parts.BuddySeat = NewLocalPoint("BuddySeat", parts.Model, parts.SeatLocal + new Vector3(0f, 0.02f, -BuddySeatBehind));
+            Vector3 buddyLocal = bodies.Count > 0 ? bodies[0].Fit.BuddySeat : parts.SeatLocal + new Vector3(0f, 0.02f, -BuddySeatBehind);
+            parts.BuddySeat = NewLocalPoint("BuddySeat", parts.Model, buddyLocal);
 
-            GameObject flag = BuildCartFlag(parts);
-            GameObject stickers = BuildStickers(parts.Model, parts.BodyBounds, root.transform.position);
-            if (flag != null) flag.SetActive(false);
-            if (stickers != null) stickers.SetActive(false);
+            // The add-ons, the number plates and the trails, built once; CartLooks puts them on the body that is shown.
+            Vector3 rootWorld = root.transform.position;
+            List<AddonBuild> addons = BuildAddons(parts.Model, parts.BodyBounds, rootWorld);
+            Transform plateFront = BuildPlate(parts.Model, "PlateFront", false, font, out Text plateFrontText);
+            Transform plateBack = BuildPlate(parts.Model, "PlateBack", true, font, out Text plateBackText);
+            List<TrailBuild> trails = withTrails ? BuildTrails(root.transform, parts.BodyBounds.min.z - rootWorld.z) : new List<TrailBuild>();
+            List<CartLooks.PaintEntry> paints = BuildPaints(bodies, gold);
 
             parts.Controller = root.AddComponent<CartController>();
             SetObject(parts.Controller, "seat", parts.Seat);
@@ -120,10 +159,7 @@ namespace CoolSchool.EditorTools
             SetObjectArray(parts.Controller, "wheels", new Object[0]);
 
             parts.Looks = root.AddComponent<CartLooks>();
-            SetObjectArray(parts.Looks, "bodies", bodies);
-            SetObject(parts.Looks, "flag", flag);
-            SetObject(parts.Looks, "stickers", stickers);
-            SetObject(parts.Looks, "goldMaterial", gold);
+            WireLooks(parts.Looks, parts.Seat, parts.BuddySeat, bodies, addons, paints, trails, plateFront, plateBack, plateFrontText, plateBackText);
             return parts;
         }
 
@@ -316,23 +352,7 @@ namespace CoolSchool.EditorTools
             return atHigh;
         }
 
-        /// <summary>A thin pole at the back with the toy flag on top, ~0.9 m high. Returns the group (switched on; the caller hides it).</summary>
-        static GameObject BuildCartFlag(CartParts parts)
-        {
-            Bounds b = parts.BodyBounds;
-            Transform group = NewGroup("Flag", parts.Model);
-            Vector3 foot = new Vector3(b.center.x + b.size.x * 0.25f, b.min.y + b.size.y * 0.7f, b.min.z + 0.12f);
-            Material pole = Mat("RaceFlagPole", new Color(0.9f, 0.9f, 0.88f), 0.3f);
-            Prim(PrimitiveType.Cylinder, "Pole", group, group.InverseTransformPoint(foot + Vector3.up * 0.45f), new Vector3(0.025f, 0.45f, 0.025f),
-                Quaternion.identity, pole);
-            GameObject cloth = Place(FlagModelPrefab, group, 0f, Fit.Height, 0.4f, foot + Vector3.up * 0.7f, foot.y + 0.7f - 0.2f, false, false);
-            if (cloth == null)
-            {
-                Prim(PrimitiveType.Cube, "Cloth", group, group.InverseTransformPoint(foot + new Vector3(0.14f, 0.75f, 0f)), new Vector3(0.28f, 0.18f, 0.02f),
-                    Quaternion.identity, Mat("RaceFlagCloth", new Color(0.95f, 0.25f, 0.25f), 0.2f));
-            }
-            return group.gameObject;
-        }
+        // The flag (SoapboxStreetBuilder.Garage.cs: BuildCartFlag) and the other add-ons are built there.
 
         /// <summary>Two star stickers on each side of the body (sprites from the UI kit). Returns the group, or null without a star sprite.</summary>
         static GameObject BuildStickers(Transform parent, Bounds b, Vector3 rootWorld)
@@ -494,7 +514,7 @@ namespace CoolSchool.EditorTools
         /// <summary>CS_Cart_Stickers (racer 01 with the stickers) and CS_Cart_Gold (racer 01 in gold), rebuilt each time.</summary>
         static void CreateCartPrefabs(Material gold)
         {
-            GameObject body = LoadPrefab(RacerPrefabs[0]);
+            GameObject body = LoadPrefab(BodyDefs[0].Prefab);
             if (body == null)
             {
                 Debug.LogWarning("CoolSchool race street: racer 01 is missing, so the sticker and gold cart prefabs were not made.");

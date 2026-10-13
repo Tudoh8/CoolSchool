@@ -61,6 +61,8 @@ namespace CoolSchool.Race
         [SerializeField] Transform cartPickCameraSpot;
         [Tooltip("The plush buddy that rides in the cart. Optional: found in the scene when empty (the rewards setup builds it after the race).")]
         [SerializeField] BuddyFollower buddy;
+        [Tooltip("The reward catalog: the bodies and horns of the garage. Optional: the cart picker's catalog is used when empty.")]
+        [SerializeField] RewardCatalog catalog;
 
         /// <summary>Raised on the podium: how many stars he earned, and where (for the stars to fly from).</summary>
         public event System.Action<int, Vector3> RaceFinished;
@@ -102,11 +104,8 @@ namespace CoolSchool.Race
         bool announcerAtFinish;
         bool playerWins;
         bool buddyRiding;
-        // What the cart picker ended with (also kept while it is open, for the rivals' bodies).
-        int pickedBody;
-        bool pickedFlag;
-        bool pickedStickers;
-        bool pickedGold;
+        // What the cart picker ended with (also kept while it is open, so the rivals can keep clear of his body and number).
+        CartChoice pickedChoice;
         readonly List<CartController> finishOrder = new List<CartController>();
         CartController[] allCarts;
 
@@ -121,6 +120,7 @@ namespace CoolSchool.Race
             ResetRaceState();
             BuildCartList();
             Subscribe();
+            SubscribeHonk();
 
             phase = Phase.Boarding;
             flowRoutine = StartCoroutine(FlowRoutine());
@@ -133,6 +133,7 @@ namespace CoolSchool.Race
             phase = Phase.Idle;
 
             Unsubscribe();
+            UnsubscribeHonk();
             if (input != null) input.Active = false;
 
             // The picker may be open (the back button works there too) and the buddy may be in the cart.
@@ -270,14 +271,10 @@ namespace CoolSchool.Race
                 playerCart.ResetToStart(1);
             }
 
-            // The player's cart looks like he chose it (the store holds his choice); the rivals take the two other bodies.
-            int playerBody = 0;
-            if (playerLooks != null)
-            {
-                playerLooks.ApplyPlayerLooks(ProgressStore.Current);
-                playerBody = playerLooks.BodyIndex;
-            }
-            DressRivals(playerBody);
+            // The player's cart looks like he chose it (the store holds his choice); the rivals get random looks of their own.
+            pickedChoice = ProgressStore.LoadCartChoice();
+            if (playerLooks != null) playerLooks.Apply(pickedChoice, true);
+            RollRivalLooks();
 
             playerWins = Random.value < WinChanceByLevel[level - 1];
             for (int i = 0; rivals != null && i < rivals.Length; i++)
@@ -291,25 +288,60 @@ namespace CoolSchool.Race
             }
         }
 
-        /// <summary>The rivals take the two bodies the player does not use, with no extras.</summary>
-        void DressRivals(int playerBody)
-        {
-            int nextBody = 0;
-            for (int i = 0; rivals != null && i < rivals.Length; i++)
-            {
-                RivalCartAI rival = rivals[i];
-                if (rival == null) continue;
+        // The two rivals' looks (random, from everything in the garage whether he owns it or not) and the sound of each rival's horn.
+        CartChoice[] rivalChoices = new CartChoice[2];
+        string[] rivalHornCues = new string[2];
 
-                if (nextBody == playerBody) nextBody++;
-                var looks = rival.GetComponent<CartLooks>();
-                if (looks != null)
-                {
-                    looks.SetBody(nextBody);
-                    looks.SetExtras(false, false, false);
-                }
-                nextBody++;
+        /// <summary>Gives both rivals a new random look, different from his and from each other.</summary>
+        void RollRivalLooks()
+        {
+            if (rivals == null) return;
+
+            if (rivalChoices.Length < rivals.Length) rivalChoices = new CartChoice[rivals.Length];
+            if (rivalHornCues.Length < rivals.Length) rivalHornCues = new string[rivals.Length];
+            for (int i = 0; i < rivals.Length; i++) rivalChoices[i] = null;
+            for (int i = 0; i < rivals.Length; i++) RollRivalLook(i);
+        }
+
+        void RollRivalLook(int index)
+        {
+            RivalCartAI rival = rivals[index];
+            var looks = rival != null ? rival.GetComponent<CartLooks>() : null;
+            if (looks == null) return;
+
+            // Not his body or number, and not the other rival's.
+            var bodies = new HashSet<string>();
+            var numbers = new HashSet<int>();
+            if (pickedChoice != null)
+            {
+                bodies.Add(pickedChoice.bodyId);
+                numbers.Add(pickedChoice.number);
+            }
+            for (int other = 0; other < rivals.Length; other++)
+            {
+                if (other == index || rivalChoices[other] == null) continue;
+                bodies.Add(rivalChoices[other].bodyId);
+                numbers.Add(rivalChoices[other].number);
+            }
+
+            rivalChoices[index] = looks.RandomChoice(bodies, numbers);
+            looks.Apply(rivalChoices[index], false);
+            rivalHornCues[index] = RandomHornCue();
+        }
+
+        /// <summary>He changed his body or number in the picker: a rival that now looks like him gets a new look.</summary>
+        void KeepRivalsDifferent()
+        {
+            if (rivals == null || pickedChoice == null) return;
+
+            for (int i = 0; i < rivals.Length; i++)
+            {
+                CartChoice look = rivalChoices[i];
+                if (look != null && (look.bodyId == pickedChoice.bodyId || look.number == pickedChoice.number)) RollRivalLook(i);
             }
         }
+
+        RewardCatalog GarageCatalog => catalog != null ? catalog : (cartPicker != null ? cartPicker.Catalog : null);
 
         /// <summary>
         /// The cart picker: the camera glides to the front of his cart and he picks a body and extras (the real cart changes live).
@@ -320,24 +352,25 @@ namespace CoolSchool.Race
         {
             if (cartPicker == null || playerCart == null || playerLooks == null) yield break;
 
-            // The selection: what he chose last time, or a new body he has not tried yet.
+            // The selection: what he chose last time, or the newest body he has not tried yet.
             PlayerProgress progress = ProgressStore.Current;
-            int body = Mathf.Max(0, System.Array.IndexOf(CartLooks.BodyIds, ProgressStore.ChosenCartId()));
+            pickedChoice = ProgressStore.LoadCartChoice();
             bool isNew = false;
-            for (int i = CartLooks.BodyIds.Length - 1; i >= 1; i--)
+            RewardCatalog garage = GarageCatalog;
+            if (garage != null)
             {
-                string id = CartLooks.BodyIds[i];
-                if (progress.IsUnlocked(id) && !progress.cartsTried.Contains(id))
+                List<RewardItem> bodies = garage.ItemsOfPart(CartPart.Body);
+                for (int i = bodies.Count - 1; i >= 0; i--)
                 {
-                    body = i;
-                    isNew = true;
-                    break;
+                    string id = bodies[i].id;
+                    if (!bodies[i].starter && progress.IsUnlocked(id) && !progress.cartsTried.Contains(id) && playerLooks.HasBody(id))
+                    {
+                        pickedChoice.bodyId = id;
+                        isNew = true;
+                        break;
+                    }
                 }
             }
-            pickedBody = body;
-            pickedFlag = ProgressStore.CartExtraOn(CartLooks.FlagId);
-            pickedStickers = ProgressStore.CartExtraOn(CartLooks.StickersId);
-            pickedGold = ProgressStore.CartExtraOn(CartLooks.GoldId);
             ShowPickedLooks();
 
             // He stands still and watches the cart.
@@ -354,13 +387,10 @@ namespace CoolSchool.Race
             VoicePlayer.Say(isNew ? "race.cart_new" : "race.pick_cart");
 
             bool done = false;
-            cartPicker.Open(pickedBody, pickedFlag, pickedStickers, pickedGold,
-                (newBody, flag, stickers, gold) =>
+            cartPicker.Open(pickedChoice,
+                changed =>
                 {
-                    pickedBody = newBody;
-                    pickedFlag = flag;
-                    pickedStickers = stickers;
-                    pickedGold = gold;
+                    pickedChoice = changed;
                     ShowPickedLooks();
                     playerCart.Wobble(0.4f);
                 },
@@ -369,16 +399,18 @@ namespace CoolSchool.Race
             while (!done && cartPicker.IsOpen) yield return null;
 
             // The choice is remembered for the next race.
-            ProgressStore.SetCart(CartLooks.BodyIds[pickedBody], pickedFlag, pickedStickers, pickedGold);
+            ProgressStore.SaveCartChoice(pickedChoice);
+            UpdateHonkIcon();
             VoicePlayer.Say("race.cart_ready", true);
+            // The announcer says his number once: "There is number five!"
+            if (pickedChoice != null) VoicePlayer.Say("race.number." + pickedChoice.number);
         }
 
-        /// <summary>Puts the picker's choice on his real cart, and keeps the rivals on the other bodies.</summary>
+        /// <summary>Puts the picker's choice on his real cart (only what he owns), and gives a rival that looks like him a new look.</summary>
         void ShowPickedLooks()
         {
-            playerLooks.SetBody(pickedBody);
-            playerLooks.SetExtras(pickedFlag, pickedStickers, pickedGold);
-            DressRivals(pickedBody);
+            playerLooks.Apply(pickedChoice, true);
+            KeepRivalsDifferent();
         }
 
         /// <summary>The camera glides to the spot's pose over some seconds, easing in and out.</summary>

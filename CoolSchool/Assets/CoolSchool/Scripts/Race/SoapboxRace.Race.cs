@@ -130,6 +130,7 @@ namespace CoolSchool.Race
 
             UpdateGates();
             UpdateHud();
+            UpdateRivalHonks();
 
             if (arrowsOn && (elapsed > ArrowsGoneSeconds || laneChanges >= ArrowsGoneAfterLaneChanges))
             {
