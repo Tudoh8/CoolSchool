@@ -17,6 +17,8 @@ namespace CoolSchool.Rewards
         public float revealScale = 1f;
         [Tooltip("Owned from the start and never given in a present (the default sword, shield and cart).")]
         public bool starter;
+        [Tooltip("Won in an adventure and never given in a present (the baby dragon). Presents skip it.")]
+        public bool earnedOnly;
         [Tooltip("For a gold variant: the id of the item it is a gold copy of. Same model, painted gold at run time.")]
         public string goldOf = "";
         [Tooltip("A picture of the item, rendered by the editor (RewardIconRenderer). Locked items show it tinted black.")]

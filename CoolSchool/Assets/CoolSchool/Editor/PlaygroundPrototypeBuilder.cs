@@ -284,6 +284,18 @@ namespace CoolSchool.EditorTools
                     Imagination = imagination,
                 });
 
+                // After the lesson (the castle's card questions use its LessonUI and letter set) and before the rewards (the baby dragon's prefab).
+                ShowProgress("Building castle adventure", 0.976f);
+                CastleAdventureBuilder.Build(environment.Arena, new CastleAdventureBuilder.CastleInputs
+                {
+                    KidController = controller,
+                    KidsLayer = kidsLayer,
+                    Player = player.GetComponent<PlayerController>(),
+                    ActionButton = jumpButton,
+                    SwordIcon = FindSwordIcon(),
+                    Allies = allyKids.Select(k => k.GetComponent<KnightAllyAI>()).ToArray(),
+                });
+
                 ShowProgress("Building soapbox street", 0.977f);
                 SoapboxStreetBuilder.Build(environment.RaceStreet, new SoapboxStreetBuilder.RaceInputs
                 {
@@ -312,6 +324,7 @@ namespace CoolSchool.EditorTools
 
                 // After the rewards: the wardrobe needs the catalog, the buddy and the present popup (the picture menu sits below it).
                 ToyRoomBuilder.Build(environment.ToyRoom, new ToyRoomInputs { Player = player.GetComponent<PlayerController>() });
+
 
                 ColorGradingSetup.ApplyToProfile();
 

@@ -51,6 +51,12 @@ namespace CoolSchool.World
         /// <summary>0 = closed (down), 1 = fully raised.</summary>
         public float Openness => openness;
 
+        /// <summary>
+        /// While true the gate stays down (or lowers) whatever the distance or the running activity. The castle adventure
+        /// holds it shut until the child has said the password. Off by default, so free play is unchanged.
+        /// </summary>
+        public bool HoldClosed { get; set; }
+
         void Awake()
         {
             closedLocalPosition = transform.localPosition;
@@ -112,6 +118,7 @@ namespace CoolSchool.World
         /// <summary>Open when close or inside or playing, closed when far; in between, whatever it was doing.</summary>
         bool DecideWish(bool current)
         {
+            if (HoldClosed) return false;
             if (keepOpenWhileRunning != null && keepOpenWhileRunning.IsRunning) return true;
             if (player == null) return current;
 

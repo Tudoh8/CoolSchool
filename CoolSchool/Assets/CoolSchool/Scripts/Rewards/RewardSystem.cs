@@ -51,11 +51,52 @@ namespace CoolSchool.Rewards
         PlayerController player;
         int starsInFlight;
         bool presentRoutineRunning;
+        bool earnedRoutineRunning;
+        readonly System.Collections.Generic.List<RewardItem> earnedQueue = new System.Collections.Generic.List<RewardItem>();
 
         /// <summary>Flies stars from this spot in the world to the star jar, one after the other.</summary>
         public static void AddStars(int count, Vector3 worldPosition, bool announce = true)
         {
             if (instance != null) instance.GiveStars(count, worldPosition, announce);
+        }
+
+        /// <summary>
+        /// Gives an item that was earned in an adventure (the baby dragon), not won from the jar. It is unlocked and marked
+        /// as new at once and saved; the reveal popup with the swap question opens back in free play, like a present.
+        /// </summary>
+        public static void GiveEarnedItem(RewardItem item)
+        {
+            if (item == null || string.IsNullOrEmpty(item.id)) return;
+
+            PlayerProgress progress = ProgressStore.Current;
+            if (!progress.IsUnlocked(item.id)) progress.unlockedItems.Add(item.id);
+            if (!progress.unseenItems.Contains(item.id)) progress.unseenItems.Add(item.id);
+            ProgressStore.Save();
+
+            if (instance != null) instance.QueueEarnedReveal(item);
+        }
+
+        void QueueEarnedReveal(RewardItem item)
+        {
+            earnedQueue.Add(item);
+            if (!earnedRoutineRunning) StartCoroutine(EarnedRevealRoutine());
+        }
+
+        IEnumerator EarnedRevealRoutine()
+        {
+            earnedRoutineRunning = true;
+            while (earnedQueue.Count > 0)
+            {
+                // Back in free play, and not while a present from the jar is being opened.
+                yield return WaitForActivityToEnd();
+                while (presentRoutineRunning || (popup != null && popup.IsOpen)) yield return null;
+                yield return new WaitForSeconds(JarFullPauseSeconds);
+
+                RewardItem item = earnedQueue[0];
+                earnedQueue.RemoveAt(0);
+                yield return ShowPresent(item);
+            }
+            earnedRoutineRunning = false;
         }
 
         void OnEnable()
@@ -207,6 +248,8 @@ namespace CoolSchool.Rewards
                 yield break;
             }
 
+            // An earned item may be showing; wait so this present is not lost.
+            while (popup.IsOpen) yield return null;
             popup.Show(item);
             while (popup.IsOpen) yield return null;
         }

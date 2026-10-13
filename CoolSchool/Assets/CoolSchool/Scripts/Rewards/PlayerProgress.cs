@@ -68,6 +68,16 @@ namespace CoolSchool.Rewards
         public int lessonsSinceNewLetter;
         public string lastLessonSubject = "";
 
+        // The castle adventure: visits and wins so far (the castle grows with the wins), the last mission and number moment
+        // (so they rotate), the first letter of the baby dragon's name ("" = no baby dragon yet), and whether his name is on the flag.
+        public int castleVisits;
+        public int castleWins;
+        public string castleLastMission = "";
+        public string castleLastNumberMoment = "";
+        public string babyDragonLetter = "";
+        public bool castleNameFlagDone;
+
+
         // Hide and seek in the zoo park: the animal kinds (ZooAnimalKind ids) he has found at least once (their pens stay filled), and the rounds played.
         public List<string> zooAnimals = new List<string>();
         public int zooRounds;

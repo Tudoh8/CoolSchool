@@ -9,12 +9,12 @@ namespace CoolSchool.Rewards
     {
         public List<RewardItem> items = new List<RewardItem>();
 
-        /// <summary>The first item the child does not have yet (starters are skipped), or null when everything is unlocked.</summary>
+        /// <summary>The first item the child does not have yet (starters and earned-only items are skipped), or null when everything is unlocked.</summary>
         public RewardItem NextLocked(PlayerProgress progress)
         {
             foreach (RewardItem item in items)
             {
-                if (item == null || string.IsNullOrEmpty(item.id) || item.starter) continue;
+                if (item == null || string.IsNullOrEmpty(item.id) || item.starter || item.earnedOnly) continue;
                 if (progress == null || !progress.IsUnlocked(item.id)) return item;
             }
             return null;

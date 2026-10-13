@@ -98,8 +98,9 @@ namespace CoolSchool.EditorTools
         /// <summary>How far the ladder tops stick up above the wall, so the kid sees them from the camera side.</summary>
         const float LadderPoke = 0.65f;
         const float LadderLeanDegrees = 12f;
-        /// <summary>The glowing start spot is this far in front of the courtyard's back wall, behind the dragon's landing spot and the goblins' ladder landings.</summary>
-        const float CastleZoneBackOffset = 5.5f;
+        /// <summary>The glowing start spot is this far in front of (south of) the gate, outside the portcullis' 7 m open radius; never closer than the minimum.</summary>
+        const float ZoneGateDistance = 8.5f;
+        const float ZoneMinGateDistance = 7.2f;
         /// <summary>Where everyone cheers after the dragon flew away: this far inside the gate, so the front wall stays see-through.</summary>
         const float CelebrateGateOffset = 2.5f;
         /// <summary>No ladder gets wider than this (metres), whatever the model's proportions are.</summary>
@@ -114,21 +115,32 @@ namespace CoolSchool.EditorTools
             new PrefabRef("SM_Gen_Bld_Ladder_01", "PolygonGeneric"),
         };
 
-        static readonly PrefabRef[] OpponentPrefabs =
-        {
-            Kids("SM_Chr_Kid_Goblin_01"),
-            Kids("SM_Chr_Kid_Goblin_02"),
-            Kids("SM_Chr_Kid_Troll_01"),
-            Kids("SM_Chr_Kid_Goblin_01"),
-        };
+        static readonly PrefabRef GoblinClub = Kids("SM_Wep_Goblin_Club_01");
+        static readonly PrefabRef TrollClub = Kids("SM_Wep_Club_Inflatable_01");
+        /// <summary>The shield goblins carry: the first of these that exists.</summary>
+        static readonly PrefabRef[] GoblinShields = { Kids("SM_Wep_Shield_01"), Kids("SM_Wep_Shield_02"), Kids("SM_Wep_Shield_03") };
+        static readonly PrefabRef BabyGoblinPrefab = Kids("SM_Chr_Baby_Goblin_01");
+        /// <summary>When the baby goblin does not work with the Kid controller, the tiny goblin is a normal goblin model at this scale.</summary>
+        const float TinyGoblinFallbackScale = 0.6f;
 
-        static readonly PrefabRef[] OpponentClubs =
+        /// <summary>One member of the goblin pool: its model, club, whether it carries a shield and its kind (what KnightsGame hands out per wave).</summary>
+        readonly struct OpponentSpec
         {
-            Kids("SM_Wep_Goblin_Club_01"),
-            Kids("SM_Wep_Goblin_Club_01"),
-            Kids("SM_Wep_Club_Inflatable_01"),
-            Kids("SM_Wep_Goblin_Club_01"),
-        };
+            public readonly PrefabRef Model;
+            public readonly PrefabRef Club;
+            public readonly bool Shield;
+            public readonly GoblinKind Kind;
+            public readonly float ModelScale;
+
+            public OpponentSpec(PrefabRef model, PrefabRef club, bool shield, GoblinKind kind, float modelScale = 1f)
+            {
+                Model = model;
+                Club = club;
+                Shield = shield;
+                Kind = kind;
+                ModelScale = modelScale;
+            }
+        }
 
         /// <summary>
         /// Numbers from the castle step that the later steps need. The castle itself is described in world X/Z; the
@@ -177,6 +189,22 @@ namespace CoolSchool.EditorTools
             public float PortcullisLift;
 
             public readonly List<GameObject> ImaginationProps = new List<GameObject>();
+
+            // ----- Castle adventure measurements (CastleAdventureBuilder) -----
+
+            /// <summary>The z of the back wall's inner (courtyard side) face, and the measured height of the wall's top.</summary>
+            public float BackWallInnerZ;
+            public float BackWallTopY;
+
+            /// <summary>The north fence's z (the castle's north edge is a little inside it). The ride path stays inside it.</summary>
+            public float NorthFenceZ;
+
+            /// <summary>The four corner towers' world bounds in the order north-west, north-east, south-west, south-east, and the gate piece's.</summary>
+            public Bounds[] TowerBounds = new Bounds[4];
+            public Bounds GateBounds;
+
+            /// <summary>The static props of the castle adventure (made right after the castle; the living part uses them later).</summary>
+            internal CastleAdventureBuilder.PropLayout Props;
 
             public ArenaLayout(Vector3 axis)
             {
@@ -297,11 +325,14 @@ namespace CoolSchool.EditorTools
             layout.Courtyard = new Bounds((courtyardMin + courtyardMax) * 0.5f, courtyardMax - courtyardMin);
             layout.GatePosition = new Vector3(centreX, 0f, wallSouth);
             layout.BackWallOuterZ = wallNorth + panelHalfThickness;
+            layout.BackWallInnerZ = wallNorth - panelHalfThickness;
+            layout.NorthFenceZ = northFenceZ;
 
             // Nothing from the scatter steps may stand on the castle (plus a margin) or in the way up to the gate.
             ReservedAreas.Add(new Rect(west - 2f, south - 2f, width + 4f, depth + 4f));
             float approachWidth = gateSize.x + 2f;
-            ReservedAreas.Add(new Rect(centreX - approachWidth * 0.5f, south - 6f, approachWidth, 6f));
+            // 12 m deep: the castle zone, the password stands and the queen now stand in front of the gate.
+            ReservedAreas.Add(new Rect(centreX - approachWidth * 0.5f, south - 12f, approachWidth, 12f));
 
             // Corner towers: north-west, north-east, south-west, south-east.
             var towerSpots = new[]
@@ -319,6 +350,7 @@ namespace CoolSchool.EditorTools
                 towers[i].transform.rotation = southFacing;
                 AlignToBounds(towers[i], towerSpots[i].x, towerSpots[i].y, 0f, false);
                 FinishEnvironmentObject(towers[i]);
+                if (TryGetBounds(towers[i], out Bounds towerBounds)) layout.TowerBounds[i] = towerBounds;
             }
 
             // Front wall: panels on both sides of the gate. The gate's front is local +Z, so it turns to face the camera (south, -Z).
@@ -346,6 +378,7 @@ namespace CoolSchool.EditorTools
                     Object.DestroyImmediate(collider);
                 FinishEnvironmentObject(gate);
                 frontPieces.Add(gate);
+                if (TryGetBounds(gate, out Bounds gateWorldBounds)) layout.GateBounds = gateWorldBounds;
 
                 // The portcullis hangs in the arch; it rises when the kid comes near (CastlePortcullis).
                 GameObject portcullis = PlacePortcullis(layout, castleGroup, gate, southFacing);
@@ -356,7 +389,11 @@ namespace CoolSchool.EditorTools
             // Side walls (north to south between the towers) and the back wall (east to west).
             FillSpan(panelPrefab, castleGroup, new Vector3(wallWest, 0f, south + towerSize.z), new Vector3(wallWest, 0f, north - towerSize.z), panelLength, panelLongZ);
             FillSpan(panelPrefab, castleGroup, new Vector3(wallEast, 0f, south + towerSize.z), new Vector3(wallEast, 0f, north - towerSize.z), panelLength, panelLongZ);
-            FillSpan(panelPrefab, castleGroup, new Vector3(west + towerSize.x, 0f, wallNorth), new Vector3(east - towerSize.x, 0f, wallNorth), panelLength, panelLongZ);
+            List<GameObject> backPanels = FillSpan(panelPrefab, castleGroup, new Vector3(west + towerSize.x, 0f, wallNorth), new Vector3(east - towerSize.x, 0f, wallNorth), panelLength, panelLongZ);
+            float measuredTop = 0f;
+            foreach (GameObject backPanel in backPanels)
+                if (TryGetBounds(backPanel, out Bounds backBounds)) measuredTop = Mathf.Max(measuredTop, backBounds.max.y);
+            layout.BackWallTopY = measuredTop > 0.5f ? measuredTop : panelSize.y;
 
             // The front wall is see-through while the kid is inside: the camera must not pull in against it, so it goes on the
             // Ignore Raycast layer (colliders stay, so it still blocks walking and is still baked into the NavMesh).
@@ -373,6 +410,10 @@ namespace CoolSchool.EditorTools
             // The goblins' ladders against the back wall's outside, spread between the two north towers.
             float backSpan = (east - towerSize.x) - (west + towerSize.x);
             PlaceLadders(layout, propsGroup, centreX, backSpan, wallNorth, panelHalfThickness, panelSize.y);
+
+            // The castle adventure's static props (password stands, wall hole and blocks, tables, barrels, flag pole, growth tiers).
+            // None of them has a collider, so they cannot change the NavMesh baked after this.
+            CastleAdventureBuilder.BuildProps(layout);
             return layout;
         }
 
@@ -442,7 +483,7 @@ namespace CoolSchool.EditorTools
         }
 
         /// <summary>Stands a ladder model upright (its longest side up) and turns it so its width runs along X and its thin side along Z.</summary>
-        static void UprightLadder(GameObject model)
+        internal static void UprightLadder(GameObject model)
         {
             if (!TryGetBounds(model, out Bounds bounds)) return;
 
@@ -457,7 +498,7 @@ namespace CoolSchool.EditorTools
         }
 
         /// <summary>A plain ladder (two rails and rungs, 1 m wide, 3 m tall, upright and square to Z) for when no model loads.</summary>
-        static GameObject CreateBoxLadder(Transform parent)
+        internal static GameObject CreateBoxLadder(Transform parent)
         {
             var root = new GameObject("BoxLadder");
             root.transform.SetParent(parent, false);
@@ -682,17 +723,15 @@ namespace CoolSchool.EditorTools
             Transform center = NewPoint("ArenaCenter", points, new Vector3(courtyardX, 0f, layout.Courtyard.center.z + 1f));
             // After the dragon flew away the player and the knights run here, just inside the gate, and cheer facing the camera.
             // It must stay inside the courtyard, or the front wall would turn solid again.
-            Transform celebrateSpot = NewPoint("CelebrateSpot", points,
-                SnapToNavMesh(new Vector3(layout.GatePosition.x, 0f, layout.Courtyard.min.z + CelebrateGateOffset)));
+            Transform celebrateSpot = NewPoint("CelebrateSpot", points, SnapToNavMesh(CelebratePoint(layout)));
 
             var game = new GameObject("KnightsGame").AddComponent<KnightsGame>();
             game.transform.SetParent(arena, false);
 
-            // At the back of the courtyard, in line with the gate: the kid walks in through the gate and across the courtyard
-            // to the glowing spot, and that starts the battle. Never in front of the courtyard's middle.
+            // Outside the castle, in front of the gate and out of the portcullis' open radius: the adventure now starts at the
+            // gate (the queen meets him there, he says the password, and only then does the gate rise).
             Material ringMaterial = CreateGlowMaterial(ZoneRingMaterialPath, new Color(0.35f, 0.55f, 1f), 0.4f);
-            float zoneZ = Mathf.Max(layout.Courtyard.max.z - CastleZoneBackOffset, layout.Courtyard.center.z);
-            Vector3 zonePosition = new Vector3(layout.GatePosition.x, 0f, zoneZ);
+            Vector3 zonePosition = FindZonePosition(layout);
             ActivityZone castleZone = CreateActivityZone("CastleZone", arena, zonePosition, 2.0f, game, ringMaterial,
                 ActivityBeaconBuilder.KnightsBeacon);
 
@@ -742,14 +781,37 @@ namespace CoolSchool.EditorTools
             return ladders.ToArray();
         }
 
-        /// <summary>Logs an error when the baked NavMesh has no complete path from in front of the gate to the castle zone inside.</summary>
+        /// <summary>
+        /// The castle zone: ZoneGateDistance in front of the gate (south of it, outside the portcullis' 7 m open radius), snapped
+        /// to the NavMesh. Where the NavMesh has a hole there, it steps toward the gate until it finds ground, but never closer
+        /// than ZoneMinGateDistance.
+        /// </summary>
+        internal static Vector3 FindZonePosition(ArenaLayout layout)
+        {
+            for (float distance = ZoneGateDistance; distance >= ZoneMinGateDistance - 0.001f; distance -= 0.25f)
+            {
+                Vector3 wanted = new Vector3(layout.GatePosition.x, 0f, layout.GatePosition.z - distance);
+                if (NavMesh.SamplePosition(wanted, out NavMeshHit hit, 0.6f, NavMesh.AllAreas)) return hit.position;
+            }
+
+            Debug.LogWarning($"CoolSchool: no NavMesh found {ZoneMinGateDistance:0.0}-{ZoneGateDistance:0.0} m in front of the castle gate; the zone is snapped from further away.");
+            return SnapToNavMesh(new Vector3(layout.GatePosition.x, 0f, layout.GatePosition.z - ZoneGateDistance));
+        }
+
+        /// <summary>Where the player and the knights cheer after the dragon ride: just inside the gate, in line with it (not snapped yet).</summary>
+        internal static Vector3 CelebratePoint(ArenaLayout layout)
+        {
+            return new Vector3(layout.GatePosition.x, 0f, layout.Courtyard.min.z + CelebrateGateOffset);
+        }
+
+        /// <summary>Logs an error when the baked NavMesh has no complete path from the castle zone in front of the gate to the courtyard inside.</summary>
         static void WarnIfGateIsBlocked(ArenaLayout layout, Vector3 zonePosition)
         {
-            Vector3 outside = layout.GatePosition + Vector3.back * 4f;
-            if (!NavMesh.SamplePosition(outside, out NavMeshHit from, 3f, NavMesh.AllAreas)
-                || !NavMesh.SamplePosition(zonePosition, out NavMeshHit to, 3f, NavMesh.AllAreas))
+            Vector3 inside = new Vector3(layout.GatePosition.x, 0f, layout.Courtyard.min.z + 3f);
+            if (!NavMesh.SamplePosition(zonePosition, out NavMeshHit from, 3f, NavMesh.AllAreas)
+                || !NavMesh.SamplePosition(inside, out NavMeshHit to, 3f, NavMesh.AllAreas))
             {
-                Debug.LogError("CoolSchool: no NavMesh in front of the castle gate or at the castle zone.");
+                Debug.LogError("CoolSchool: no NavMesh in front of the castle gate or just inside it.");
                 return;
             }
 
@@ -910,32 +972,69 @@ namespace CoolSchool.EditorTools
 
         // ----- Opponents -----------------------------------------------------------------------
 
-        /// <summary>Four inactive goblin/troll kids with a club each, ready for KnightsGame to wake up in waves.</summary>
+        /// <summary>
+        /// Eight inactive goblins, ready for KnightsGame to wake up per wave and per kind: 4 Normal (three small goblins and
+        /// one with a club), 2 Shield (a club and a shield), 1 Big (the troll with the inflatable club) and 1 Tiny (the baby
+        /// goblin if it works with the Kid controller, else the small goblin at 60%). Each has a hidden ring of dizzy stars.
+        /// </summary>
         static BattleOpponentAI[] CreateOpponents(Transform arena, Vector3[] starts, ArenaInputs inputs, out WeaponHolder[] holders)
         {
             Transform group = NewGroup("Opponents", arena);
             Material telegraphMaterial = CreateEmissiveMaterial(TelegraphMaterialPath, new Color(1f, 0.35f, 0.1f));
+            Material dizzyMaterial = CastleAdventureBuilder.DizzyStarMaterial();
+            RuntimeAnimatorController controller = inputs.OpponentController != null ? inputs.OpponentController : inputs.KidController;
             var opponents = new List<BattleOpponentAI>();
             var holderList = new List<WeaponHolder>();
 
-            for (int i = 0; i < OpponentPrefabs.Length; i++)
+            PrefabRef goblin1 = Kids("SM_Chr_Kid_Goblin_01");
+            PrefabRef goblin2 = Kids("SM_Chr_Kid_Goblin_02");
+            PrefabRef troll = Kids("SM_Chr_Kid_Troll_01");
+            PrefabRef shield = CastleAdventureBuilder.FirstExisting(GoblinShields);
+
+            // The tiny one: the baby goblin only if its rig is humanoid (the Kid controller needs that).
+            bool babyWorks = CastleAdventureBuilder.IsHumanoidPrefab(BabyGoblinPrefab);
+            OpponentSpec tiny = babyWorks
+                ? new OpponentSpec(BabyGoblinPrefab, GoblinClub, false, GoblinKind.Tiny)
+                : new OpponentSpec(goblin1, GoblinClub, false, GoblinKind.Tiny, TinyGoblinFallbackScale);
+            CastleAdventureBuilder.TinyGoblinModel = babyWorks ? "SM_Chr_Baby_Goblin_01" : "SM_Chr_Kid_Goblin_01 scaled " + TinyGoblinFallbackScale;
+
+            var specs = new[]
             {
+                new OpponentSpec(goblin1, GoblinClub, false, GoblinKind.Normal),
+                new OpponentSpec(goblin1, GoblinClub, false, GoblinKind.Normal),
+                new OpponentSpec(goblin1, GoblinClub, false, GoblinKind.Normal),
+                new OpponentSpec(goblin2, GoblinClub, false, GoblinKind.Normal),
+                new OpponentSpec(goblin2, GoblinClub, true, GoblinKind.Shield),
+                new OpponentSpec(goblin2, GoblinClub, true, GoblinKind.Shield),
+                new OpponentSpec(troll, TrollClub, false, GoblinKind.Big),
+                tiny,
+            };
+
+            for (int i = 0; i < specs.Length; i++)
+            {
+                OpponentSpec spec = specs[i];
                 Vector3 position = SnapToNavMesh(starts[i % starts.Length]);
-                string kidName = OpponentPrefabs[i].Name.Replace("SM_Chr_", "");
-                GameObject root = CreateKid("Opponent_" + kidName + "_" + (i + 1), OpponentPrefabs[i],
-                    inputs.OpponentController != null ? inputs.OpponentController : inputs.KidController,
-                    position, out float height);
+                string kidName = spec.Model.Name.Replace("SM_Chr_", "");
+                GameObject root = CreateKid($"Opponent_{spec.Kind}_{kidName}_{i + 1}", spec.Model, controller, position, out float height);
                 root.transform.SetParent(group, true);
 
+                // A scaled-down stand-in for the baby goblin: only the model shrinks, the root keeps scale 1.
+                if (!Mathf.Approximately(spec.ModelScale, 1f) && root.transform.childCount > 0)
+                {
+                    root.transform.GetChild(0).localScale *= spec.ModelScale;
+                    height = TryGetBounds(root, out Bounds scaled) ? Mathf.Clamp(scaled.size.y, 0.4f, 1.8f) : height * spec.ModelScale;
+                }
+                bool small = spec.Kind == GoblinKind.Tiny;
+
                 var agent = root.AddComponent<NavMeshAgent>();
-                agent.radius = 0.3f;
+                agent.radius = small ? 0.2f : 0.3f;
                 agent.height = height;
                 agent.angularSpeed = 720f;
                 agent.acceleration = 12f;
                 agent.speed = 1.6f;
 
                 var capsule = root.AddComponent<CapsuleCollider>();
-                capsule.radius = 0.25f;
+                capsule.radius = small ? 0.18f : 0.25f;
                 capsule.height = height;
                 capsule.center = new Vector3(0f, height * 0.5f, 0f);
 
@@ -949,9 +1048,11 @@ namespace CoolSchool.EditorTools
 
                 var ai = root.AddComponent<BattleOpponentAI>();
                 SetObject(ai, "telegraph", CreateTelegraph(root.transform, height, telegraphMaterial));
+                SetEnum(ai, "kind", (int)spec.Kind);
+                SetObject(ai, "dizzyStars", CastleAdventureBuilder.CreateDizzyStars(root.transform, height, dizzyMaterial));
 
-                // The club goes in the sword slot; there is no shield.
-                holderList.Add(AddWeaponHolder(root, OpponentClubs[i], default));
+                // The club goes in the sword slot; only the shield goblins also carry a shield.
+                holderList.Add(AddWeaponHolder(root, spec.Club, spec.Shield ? shield : default));
 
                 SetLayerRecursive(root, inputs.KidsLayer);
                 root.SetActive(false);
@@ -963,7 +1064,7 @@ namespace CoolSchool.EditorTools
         }
 
         /// <summary>A little "!" (bar plus dot) above the head, hidden until the wind-up.</summary>
-        static GameObject CreateTelegraph(Transform kid, float height, Material material)
+        internal static GameObject CreateTelegraph(Transform kid, float height, Material material)
         {
             var root = new GameObject("Telegraph");
             root.transform.SetParent(kid, false);
@@ -1058,6 +1159,9 @@ namespace CoolSchool.EditorTools
             SetObject(boss, "fireWarning", warning);
             SetFloat(boss, "fireRange", FireRange);
             SetFloat(boss, "fireAngle", FireAngle);
+
+            // The seat for the dragon ride: on top of the back (a child of the spine bone, so it follows every animation).
+            SetObject(boss, "seat", CastleAdventureBuilder.CreateDragonSeat(model, root.transform));
 
             // Waiting high up behind the castle, facing the courtyard.
             root.transform.SetPositionAndRotation(entry.position, Quaternion.LookRotation(facing, Vector3.up));

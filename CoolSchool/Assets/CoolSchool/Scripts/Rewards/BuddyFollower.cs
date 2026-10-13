@@ -404,6 +404,14 @@ namespace CoolSchool.Rewards
             }
             if (item.IsGold) GoldPaint.Apply(instance);
 
+            // An animated buddy (the baby dragon) keeps its Animator and plays its Idle; our code moves it, not the clips.
+            foreach (Animator animator in instance.GetComponentsInChildren<Animator>(true))
+            {
+                animator.applyRootMotion = false;
+                animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+                CoolSchool.Characters.DragonRootLock.Ensure(animator, 0f);
+            }
+
             // Measure at the world origin without turning or scaling, so the bounds are the model's own.
             Vector3 oldPosition = transform.position;
             Quaternion oldRotation = transform.rotation;

@@ -121,6 +121,21 @@ namespace CoolSchool.EditorTools
             { "pirates.coin", new[] { "coin", "gold", "pickup" } },
             { "pirates.party", new[] { "party", "cheer", "pirate", "fanfare", "celebration" } },
 
+            // Castle adventure
+            { "castle.block_place", new[] { "block", "wood", "place", "thud" } },
+            { "castle.cookie_munch", new[] { "eat", "munch", "crunch", "chew" } },
+            { "castle.tummy_rumble", new[] { "rumble", "growl", "stomach", "belly" } },
+            { "castle.egg_crack", new[] { "crack", "egg", "shell", "break" } },
+            { "castle.baby_peep", new[] { "peep", "chirp", "squeak", "baby" } },
+            { "castle.barrel_wobble", new[] { "wobble", "wood", "knock" } },
+            { "castle.barrel_tip", new[] { "barrel", "fall", "wood", "thud" } },
+            { "castle.flag_pop", new[] { "pop", "reward", "flag", "whoosh" } },
+            { "castle.star_ping", new[] { "star", "ping", "collect", "coin", "sparkle" } },
+            { "castle.dizzy_stars", new[] { "dizzy", "stars", "bird", "tweet" } },
+            { "castle.troll_shrink", new[] { "shrink", "deflate", "magic", "slide" } },
+            { "castle.ride_whoosh", new[] { "whoosh", "wind", "wing", "fly" } },
+            { "castle.ladder_appear", new[] { "magic", "sparkle", "appear" } },
+
             // Soapbox race
             { "race.lane", new[] { "whoosh", "swish", "swipe" } },
             { "race.jump", new[] { "jump", "hop", "boing" } },
@@ -163,6 +178,7 @@ namespace CoolSchool.EditorTools
             { "zoo.call.crocodile", new[] { "crocodile", "croc", "hiss" } },
             { "zoo.call.flamingo", new[] { "flamingo", "bird", "honk" } },
             { "zoo.call.tiger", new[] { "tiger", "roar", "growl" } },
+
 
             // Music
             { "music.race", new[] { "race", "fast", "upbeat", "chase" } },

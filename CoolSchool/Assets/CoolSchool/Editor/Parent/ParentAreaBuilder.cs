@@ -168,7 +168,7 @@ namespace CoolSchool.EditorTools
             // Difficulty
             Text difficultyLabel = AddText(window, "DifficultyLabel", font, 40, TextColor, TextAnchor.MiddleLeft, Margin, 268f, ContentWidth, 50f);
 
-            // Seven rows, 78 px apart from y = 318 (the sliders are 76 tall), so the last one ends above the close button (top y = 948).
+            // Eight rows, 78 px apart from y = 318 (the sliders are 76 tall), so the last one ends above the close button (top y = 948).
             // The one caption sits on the difficulty line next to its label, so it needs no room under the last row.
             var rows = new[]
             {
@@ -178,7 +178,8 @@ namespace CoolSchool.EditorTools
                 BuildLevelRow(window, sprites, font, 552f, ParentStrings.RowPirates, "pirates", 3),
                 BuildLevelRow(window, sprites, font, 630f, ParentStrings.RowRace, "race", 3),
                 BuildLevelRow(window, sprites, font, 708f, ParentStrings.RowAliens, "aliens", 3),
-                BuildLevelRow(window, sprites, font, 786f, ParentStrings.RowHideSeek, "hideseek", 3),
+                BuildLevelRow(window, sprites, font, 786f, ParentStrings.RowCastle, "castle", 3),
+                BuildLevelRow(window, sprites, font, 864f, ParentStrings.RowHideSeek, "hideseek", 3),
             };
             rows[0].Caption = AddText(window, "LevelCaption", font, 24, MutedColor, TextAnchor.MiddleLeft,
                 SliderX + 40f, 268f, WindowWidth - Margin - SliderX - 40f, 50f);

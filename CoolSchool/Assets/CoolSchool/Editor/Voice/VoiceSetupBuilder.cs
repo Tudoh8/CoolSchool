@@ -92,10 +92,9 @@ namespace CoolSchool.EditorTools
                 return;
             }
 
-            Say(game.onBegan, cue, "knights.start");
+            // The castle adventure says its own start, dragon and victory lines in the flow (castle.* lines), so only the
+            // wave horn line is still wired to an event.
             UnityEventTools.AddPersistentListener(game.onWaveStarted, cue.SayWave);
-            Say(game.onDragonArrived, cue, "knights.dragon");
-            Say(game.onVictory, cue, "knights.victory");
             EditorUtility.SetDirty(game);
         }
 

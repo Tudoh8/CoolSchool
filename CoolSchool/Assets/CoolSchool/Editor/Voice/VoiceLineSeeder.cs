@@ -393,6 +393,7 @@ namespace CoolSchool.EditorTools
             foreach (Seed seed in NumberSeeds()) ApplySeed(table, seed);
             foreach (Seed seed in GarageSeeds()) ApplySeed(table, seed);
             foreach (Seed seed in BodySeeds()) ApplySeed(table, seed);
+            foreach (Seed seed in CastleSeeds()) ApplySeed(table, seed);
             foreach (Seed seed in ZooSeeds()) ApplySeed(table, seed);
 
             EditorUtility.SetDirty(table);

@@ -35,6 +35,10 @@ namespace CoolSchool.EditorTools
             "pirates.parrot", "pirates.map_tick", "pirates.dig", "pirates.chest_rise", "pirates.lock_open", "pirates.coin", "pirates.party",
             // Castle gate (the portcullis rising and landing)
             "castle.gate_rise", "castle.gate_drop",
+            // Castle adventure (the moments, the goblin kinds, the baby dragon, the ride)
+            "castle.block_place", "castle.cookie_munch", "castle.tummy_rumble", "castle.egg_crack", "castle.baby_peep",
+            "castle.barrel_wobble", "castle.barrel_tip", "castle.flag_pop", "castle.star_ping", "castle.dizzy_stars",
+            "castle.troll_shrink", "castle.ride_whoosh", "castle.ladder_appear",
             // Soapbox race
             "race.lane", "race.jump", "race.land", "race.bonk", "race.splash", "race.coin", "race.gate_ding", "race.countdown_beep",
             "race.go_horn", "race.ramp_whoosh", "race.spinout", "race.cheer", "race.brake",
