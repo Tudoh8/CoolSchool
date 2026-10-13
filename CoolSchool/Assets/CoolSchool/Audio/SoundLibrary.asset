@@ -911,3 +911,341 @@ MonoBehaviour:
     pitchRange: {x: 0.95, y: 1.05}
     spatial: 1
     cooldown: 0.05
+  - cue: castle.block_place
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: castle.cookie_munch
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: castle.tummy_rumble
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: castle.egg_crack
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: castle.baby_peep
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: castle.barrel_wobble
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: castle.barrel_tip
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: castle.flag_pop
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: castle.star_ping
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: castle.dizzy_stars
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: castle.troll_shrink
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: castle.ride_whoosh
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: castle.ladder_appear
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.giggle
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.patter
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.found_pop
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.peek
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.shake
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.surprise_pop
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.gate
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.pen_hop
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.hide_in
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.party
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.call.elephant
+    clips:
+    - {fileID: 8300000, guid: b35c1c3bd50044296bca679047b59c69, type: 3}
+    - {fileID: 8300000, guid: 7a306e42ceac44633878fcd02509d204, type: 3}
+    - {fileID: 8300000, guid: 842983cedf18245fbb682c015a71cedf, type: 3}
+    volume: 0.8
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.call.giraffe
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.call.monkey
+    clips:
+    - {fileID: 8300000, guid: 658cb6be8ecea465f8d45372a3c26ff5, type: 3}
+    volume: 0.7
+    pitchRange: {x: 1.35, y: 1.45}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.call.penguin
+    clips:
+    - {fileID: 8300000, guid: e213f073542414fcbbb5795da66a953a, type: 3}
+    volume: 0.8
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.call.hippo
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.call.lion
+    clips:
+    - {fileID: 8300000, guid: a63e9f3704ea34881a61eaaed67c4ccc, type: 3}
+    - {fileID: 8300000, guid: 2e77463d056f93647b1f400e5c8a0c56, type: 3}
+    volume: 0.7
+    pitchRange: {x: 1.25, y: 1.35}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.call.zebra
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.call.crocodile
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.call.flamingo
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: zoo.call.tiger
+    clips:
+    - {fileID: 8300000, guid: a63e9f3704ea34881a61eaaed67c4ccc, type: 3}
+    - {fileID: 8300000, guid: 2e77463d056f93647b1f400e5c8a0c56, type: 3}
+    volume: 0.7
+    pitchRange: {x: 1.25, y: 1.35}
+    spatial: 1
+    cooldown: 0.05
+  - cue: toys.slide_whoosh
+    clips:
+    - {fileID: 8300000, guid: c3b92b5182f109540b803bdbaa78ba4e, type: 3}
+    - {fileID: 8300000, guid: 1397ae1e2036f44a198d024510f7dee9, type: 3}
+    volume: 0.6
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: toys.swing_creak
+    clips:
+    - {fileID: 8300000, guid: 59bf3b7904827431991df5ce1ee54144, type: 3}
+    - {fileID: 8300000, guid: 49718c5d60d064941a159c4bd088eabf, type: 3}
+    - {fileID: 8300000, guid: 79da571c32ac14db983739bf85795e50, type: 3}
+    volume: 0.5
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: toys.spin
+    clips:
+    - {fileID: 8300000, guid: 87e74a119822c4334b36b051e3d259c5, type: 3}
+    - {fileID: 8300000, guid: 73efdfdac706e474aa6975021720f851, type: 3}
+    volume: 0.5
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: toys.spring_boing
+    clips:
+    - {fileID: 8300000, guid: 7fde4c9141938aa43bb4719fda47aad8, type: 3}
+    volume: 0.7
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: toys.climb_step
+    clips:
+    - {fileID: 8300000, guid: 4e72116c6eb914481b88f9771610f49d, type: 3}
+    volume: 0.5
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: toys.crawl
+    clips:
+    - {fileID: 8300000, guid: 0e1cdc7f6b06dd846bc02bdee92c0bea, type: 3}
+    volume: 0.4
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: toys.zip
+    clips:
+    - {fileID: 8300000, guid: 333ce8752b9daec43be8f4e629bbd9f3, type: 3}
+    - {fileID: 8300000, guid: 4559098c3750d437b8ed8ab629e0e692, type: 3}
+    volume: 0.7
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: toys.seesaw_thump
+    clips:
+    - {fileID: 8300000, guid: 4e72116c6eb914481b88f9771610f49d, type: 3}
+    volume: 0.7
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: toys.sticker_pop
+    clips:
+    - {fileID: 8300000, guid: 24fdaac9fcb7b415a9ae19f9f0bed1b4, type: 3}
+    - {fileID: 8300000, guid: 68ec471dea9bb4633909af0c18185a14, type: 3}
+    volume: 0.7
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: toys.sticker_stick
+    clips:
+    - {fileID: 8300000, guid: 357984fc32eaa4f90a2c17f08f97df07, type: 3}
+    volume: 0.7
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 1
+    cooldown: 0.05
+  - cue: music.zoo
+    clips: []
+    volume: 1
+    pitchRange: {x: 0.95, y: 1.05}
+    spatial: 0
+    cooldown: 0
+  - cue: ambience.zoo
+    clips:
+    - {fileID: 8300000, guid: 6748d9c9b5cbe4587840cc2e5bfe7a7c, type: 3}
+    volume: 0.3
+    pitchRange: {x: 1, y: 1}
+    spatial: 0
+    cooldown: 0
+  - cue: race.horn_bell
+    clips:
+    - {fileID: 8300000, guid: cc52685b417754455b2d5800fa83c96b, type: 3}
+    volume: 0.8
+    pitchRange: {x: 1, y: 1}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.horn_cow
+    clips:
+    - {fileID: 8300000, guid: c244c3141607649918f54beb8a706957, type: 3}
+    volume: 0.9
+    pitchRange: {x: 1, y: 1}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.horn_dog
+    clips:
+    - {fileID: 8300000, guid: 64f2394e24967461c83b283349e00581, type: 3}
+    volume: 0.9
+    pitchRange: {x: 1, y: 1}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.horn_cat
+    clips:
+    - {fileID: 8300000, guid: 695628755669c46ecac58b609405526c, type: 3}
+    volume: 0.9
+    pitchRange: {x: 1, y: 1}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.horn_elephant
+    clips:
+    - {fileID: 8300000, guid: b35c1c3bd50044296bca679047b59c69, type: 3}
+    volume: 0.8
+    pitchRange: {x: 1, y: 1}
+    spatial: 1
+    cooldown: 0.05
+  - cue: race.horn_magic
+    clips:
+    - {fileID: 8300000, guid: 2d9b53b0000784f2784eee2ee29e2ff7, type: 3}
+    volume: 0.8
+    pitchRange: {x: 1, y: 1}
+    spatial: 1
+    cooldown: 0.05

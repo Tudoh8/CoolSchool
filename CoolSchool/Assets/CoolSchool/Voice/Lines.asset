@@ -3534,3 +3534,1739 @@ MonoBehaviour:
     english: How many coins are there now?
     dutchClip: {fileID: 8300000, guid: 7323279357e466441ae4765ccccaf08c, type: 3}
     englishClip: {fileID: 0}
+  - key: reward.swap_wand.1
+    group: reward.swap_wand
+    speaker: 0
+    dutch: Wil je je nieuwe toverstaf gebruiken?
+    english: Do you want to use your new magic wand?
+    dutchClip: {fileID: 8300000, guid: 822b1eabcc701ba4192d7106e2733b66, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.hat.crown.1
+    group: item.hat.crown
+    speaker: 3
+    dutch: De kroon!
+    english: The crown!
+    dutchClip: {fileID: 8300000, guid: d1fe47dd02f4f1d468179e82bd2c8b47, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.plush.lion.1
+    group: item.plush.lion
+    speaker: 3
+    dutch: De leeuw!
+    english: The lion!
+    dutchClip: {fileID: 8300000, guid: dbb55edcdd5ad164b8140ebfde4047a7, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.sword.wand.1
+    group: item.sword.wand
+    speaker: 3
+    dutch: Het toverstokje!
+    english: The magic wand!
+    dutchClip: {fileID: 8300000, guid: 951c2f3932b05124daa2d0d2b3a248e3, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.hat.astronaut.1
+    group: item.hat.astronaut
+    speaker: 3
+    dutch: De astronautenhelm!
+    english: The astronaut helmet!
+    dutchClip: {fileID: 8300000, guid: e509abd527eebb547826fa281bb24e55, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.plush.rabbit.1
+    group: item.plush.rabbit
+    speaker: 3
+    dutch: Het konijn!
+    english: The rabbit!
+    dutchClip: {fileID: 8300000, guid: 373f0046240d48448a4a98d367115511, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.shield.silver.1
+    group: item.shield.silver
+    speaker: 3
+    dutch: Het zilveren schild!
+    english: The silver shield!
+    dutchClip: {fileID: 8300000, guid: c46ad6daba0e4e94f98acdb7efa37149, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.hat.wizard.1
+    group: item.hat.wizard
+    speaker: 3
+    dutch: De tovenaarshoed!
+    english: The wizard hat!
+    dutchClip: {fileID: 8300000, guid: 1770811925d23874b9fa5f4dbf3e57c0, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.plush.elephant.1
+    group: item.plush.elephant
+    speaker: 3
+    dutch: De olifant!
+    english: The elephant!
+    dutchClip: {fileID: 8300000, guid: b209ec01afb55614e824ba2d0ed9d436, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.sword.foam_4.1
+    group: item.sword.foam_4
+    speaker: 3
+    dutch: Het rode schuimzwaard!
+    english: The red foam sword!
+    dutchClip: {fileID: 8300000, guid: bbe64083434460d47bac38be63c6354e, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.hat.viking.1
+    group: item.hat.viking
+    speaker: 3
+    dutch: De vikinghelm!
+    english: The viking helmet!
+    dutchClip: {fileID: 8300000, guid: 73312bcf46df7914484da1debb145d5d, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.plush.duck.1
+    group: item.plush.duck
+    speaker: 3
+    dutch: De badeend!
+    english: The rubber duck!
+    dutchClip: {fileID: 8300000, guid: 0e1dfb342d627d146a53695addbf0e68, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.sword.staff.1
+    group: item.sword.staff
+    speaker: 3
+    dutch: De tovenaarsstaf!
+    english: The wizard staff!
+    dutchClip: {fileID: 8300000, guid: c22d98b986497964d82e05703b022942, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.hat.propeller.1
+    group: item.hat.propeller
+    speaker: 3
+    dutch: De propellerpet!
+    english: The propeller cap!
+    dutchClip: {fileID: 8300000, guid: a44232f6286846f45864a7429377cac1, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.plush.pig.1
+    group: item.plush.pig
+    speaker: 3
+    dutch: Het varkentje!
+    english: The piglet!
+    dutchClip: {fileID: 8300000, guid: e69a7fd22a097bf4fbbfbb19701c7840, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.hat.fireman.1
+    group: item.hat.fireman
+    speaker: 3
+    dutch: De brandweerhelm!
+    english: The fireman's helmet!
+    dutchClip: {fileID: 8300000, guid: 7786e19a6c07126429b580f79cf29ed3, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.plush.monster.1
+    group: item.plush.monster
+    speaker: 3
+    dutch: Het lieve monster!
+    english: The friendly monster!
+    dutchClip: {fileID: 8300000, guid: bb94deac358ec8448a0120e727ca27ed, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.sword.plastic_3.1
+    group: item.sword.plastic_3
+    speaker: 3
+    dutch: Het ninjazwaard!
+    english: The ninja sword!
+    dutchClip: {fileID: 8300000, guid: e059fe78a38c02e489b6a0771d8359c5, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.hat.cowboy.1
+    group: item.hat.cowboy
+    speaker: 3
+    dutch: De cowboyhoed!
+    english: The cowboy hat!
+    dutchClip: {fileID: 8300000, guid: 671965f7514cd8c4080bc147db955b23, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.whee.1
+    group: toys.whee
+    speaker: 1
+    dutch: Wiiieee!
+    english: Wheee!
+    dutchClip: {fileID: 8300000, guid: 1ae19e777caa04641bbda27dd2af2be4, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.whee.2
+    group: toys.whee
+    speaker: 1
+    dutch: Joepie!
+    english: Yippee!
+    dutchClip: {fileID: 8300000, guid: be37becf6e6d19a47bd9504fab2ea54a, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.whee.3
+    group: toys.whee
+    speaker: 1
+    dutch: Wat leuk!
+    english: This is fun!
+    dutchClip: {fileID: 8300000, guid: e80457f4df69eb642a2e5f8c248e67d0, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.whee.4
+    group: toys.whee
+    speaker: 1
+    dutch: Nog een keer!
+    english: One more time!
+    dutchClip: {fileID: 8300000, guid: 3e845af6212db1e409a190d742ace6f6, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.dizzy.1
+    group: toys.dizzy
+    speaker: 1
+    dutch: Ik ben duizelig!
+    english: I'm dizzy!
+    dutchClip: {fileID: 8300000, guid: 6490721ad03d7524ca371b22079b9816, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.dizzy.2
+    group: toys.dizzy
+    speaker: 1
+    dutch: Alles draait!
+    english: Everything is spinning!
+    dutchClip: {fileID: 8300000, guid: 9fc64b7a6773be64d8d9d4f1262f86d3, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.peekaboo.1
+    group: toys.peekaboo
+    speaker: 1
+    dutch: Kiekeboe!
+    english: Peekaboo!
+    dutchClip: {fileID: 8300000, guid: 88dbe7f86d9ceb444bde91a0523b22a2, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.top.1
+    group: toys.top
+    speaker: 1
+    dutch: Ik ben helemaal boven!
+    english: I'm all the way up!
+    dutchClip: {fileID: 8300000, guid: 4a3abf4ebfea3f44489bb925f73d6f59, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.top.2
+    group: toys.top
+    speaker: 1
+    dutch: Kijk eens hoe hoog!
+    english: Look how high I am!
+    dutchClip: {fileID: 8300000, guid: 2d64fc035dd20d7449f1cb0e111f8238, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.ahoy.1
+    group: toys.ahoy
+    speaker: 1
+    dutch: Ahoi! Land in zicht!
+    english: Ahoy! Land ho!
+    dutchClip: {fileID: 8300000, guid: c0471a6ed65dbb64495413709b8feda8, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.sticker.slide.1
+    group: toys.sticker.slide
+    speaker: 3
+    dutch: Een sticker van de glijbaan!
+    english: A slide sticker!
+    dutchClip: {fileID: 8300000, guid: 264bc05c95d71cb40be3162879cf3aaf, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.sticker.roundabout.1
+    group: toys.sticker.roundabout
+    speaker: 3
+    dutch: Een sticker van de draaimolen!
+    english: A roundabout sticker!
+    dutchClip: {fileID: 8300000, guid: b77f28b2faabdf64da20e0554e8e658a, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.sticker.swings.1
+    group: toys.sticker.swings
+    speaker: 3
+    dutch: Een sticker van de schommel!
+    english: A swing sticker!
+    dutchClip: {fileID: 8300000, guid: 1a26f5421e2156344bdee6004279a8b9, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.sticker.tunnel.1
+    group: toys.sticker.tunnel
+    speaker: 3
+    dutch: Een sticker van de tunnel!
+    english: A tunnel sticker!
+    dutchClip: {fileID: 8300000, guid: 22b61ff3cfb3a324ab631dce9c5c1fcb, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.sticker.monkey_bars.1
+    group: toys.sticker.monkey_bars
+    speaker: 3
+    dutch: Een sticker van het klimrek!
+    english: A monkey bars sticker!
+    dutchClip: {fileID: 8300000, guid: 6beae8cf49d139f4a8af8799a52a4f36, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.sticker.rocker.1
+    group: toys.sticker.rocker
+    speaker: 3
+    dutch: Een sticker van de wipkip!
+    english: A spring rider sticker!
+    dutchClip: {fileID: 8300000, guid: 82071c2f6cc0bd7409471f33167dcf78, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.sticker.ship.1
+    group: toys.sticker.ship
+    speaker: 3
+    dutch: Een sticker van het schip!
+    english: A ship sticker!
+    dutchClip: {fileID: 8300000, guid: 22f6f32ccc3f1e946add2e4b374db85f, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.sticker.seesaw.1
+    group: toys.sticker.seesaw
+    speaker: 3
+    dutch: Een sticker van de wip!
+    english: A seesaw sticker!
+    dutchClip: {fileID: 8300000, guid: 23c1a7523438a3e4a8007b4ed6811373, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.sticker.fort.1
+    group: toys.sticker.fort
+    speaker: 3
+    dutch: Een sticker van het fort!
+    english: A fort sticker!
+    dutchClip: {fileID: 8300000, guid: 478f51cc52d867a459f22a0a8e0eb96e, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.sticker.tyre_wall.1
+    group: toys.sticker.tyre_wall
+    speaker: 3
+    dutch: Een sticker van de bandenmuur!
+    english: A tyre wall sticker!
+    dutchClip: {fileID: 8300000, guid: e80052761927b9c43a6f5ff60e84b56d, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.sticker.track_ride.1
+    group: toys.sticker.track_ride
+    speaker: 3
+    dutch: Een sticker van de kabelbaan!
+    english: A zip line sticker!
+    dutchClip: {fileID: 8300000, guid: 438fc515a24429241a3ce82a732fee55, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.sticker_all.1
+    group: toys.sticker_all
+    speaker: 3
+    dutch: Alle speeltuinstickers! Wat knap van jou!
+    english: All the playground stickers! Well done!
+    dutchClip: {fileID: 8300000, guid: eb2289f0743e6de4db728e1c498167e6, type: 3}
+    englishClip: {fileID: 0}
+  - key: toys.board_intro.1
+    group: toys.board_intro
+    speaker: 3
+    dutch: Dit is je stickerbord. Speel met alles in de speeltuin, dan krijg je stickers!
+    english: This is your sticker board. Play with everything on the playground to
+      get stickers!
+    dutchClip: {fileID: 8300000, guid: 5c2837551ab743f41bf8c90d521c73d1, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.queen_hello.1
+    group: castle.queen_hello
+    speaker: 1
+    dutch: Hallo, ridder! Ik ben de koningin van het kasteel. Wat fijn dat je er
+      bent!
+    english: Hello, knight! I'm the queen of the castle. I'm so glad you're here!
+    dutchClip: {fileID: 8300000, guid: 7a892a25be0c7754f840ef3049b1ddea, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.mission.cake.1
+    group: castle.mission.cake
+    speaker: 1
+    dutch: Vanavond is er feest, met een grote taart! Maar de kobolden willen de
+      taart stelen. Help je ons?
+    english: Tonight there's a party with a big cake! But the goblins want to steal
+      the cake. Will you help us?
+    dutchClip: {fileID: 8300000, guid: 6a493541a7429fa47a56ce9eec3461c6, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.mission.crown.1
+    group: castle.mission.crown
+    speaker: 1
+    dutch: Mijn gouden kroon ligt klaar voor het feest. Maar de kobolden willen hem
+      pakken! Help je ons?
+    english: My golden crown is ready for the party. But the goblins want to grab
+      it! Will you help us?
+    dutchClip: {fileID: 8300000, guid: e142e2756798ba947b952e645ed33ef4, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.mission.egg.1
+    group: castle.mission.egg
+    speaker: 1
+    dutch: Kijk, we hebben een groot ei gevonden! De kobolden willen het hebben.
+      Pas jij erop?
+    english: Look, we found a big egg! The goblins want it. Will you look after it?
+    dutchClip: {fileID: 8300000, guid: 907171ae0020abb4b885f8ce35a2b9a5, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.mission.knight.1
+    group: castle.mission.knight
+    speaker: 1
+    dutch: Oh nee! Een ridder zit vast boven op de toren! En de kobolden komen eraan.
+      Help je ons?
+    english: Oh no! A knight is stuck on top of the tower! And the goblins are coming.
+      Will you help us?
+    dutchClip: {fileID: 8300000, guid: fb407802ed5029b4fa5cf812a9b8c5c5, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.tower_help.1
+    group: castle.tower_help
+    speaker: 1
+    dutch: Help! Ik zit vast!
+    english: Help! I'm stuck!
+    dutchClip: {fileID: 8300000, guid: 2dc9ac11d74c91f4980c13ad324df0ae, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.password.1
+    group: castle.password
+    speaker: 1
+    dutch: "Eerst het wachtwoord! Tik op het plaatje dat begint met\u2026"
+    english: "First the password! Tap the picture that starts with\u2026"
+    dutchClip: {fileID: 8300000, guid: d363d7f5dbc3e37418ff746e17813ce1, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.password_new.1
+    group: castle.password_new
+    speaker: 1
+    dutch: 'Dit is een nieuwe letter! Luister maar:'
+    english: 'This is a new letter! Listen:'
+    dutchClip: {fileID: 8300000, guid: a1836c26995144c4e853aa75b114017e, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.password_right.1
+    group: castle.password_right
+    speaker: 1
+    dutch: Goed zo, dat is het wachtwoord! De poort gaat open!
+    english: Well done, that's the password! The gate is opening!
+    dutchClip: {fileID: 8300000, guid: a13a1320a3ceb1943acd6a618055e97a, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.wall.1
+    group: castle.wall
+    speaker: 1
+    dutch: Oh nee, er zit een gat in de muur! Tik op de blokken, dan maken we het
+      dicht!
+    english: Oh no, there's a hole in the wall! Tap the blocks and we'll close it!
+    dutchClip: {fileID: 8300000, guid: 2276ca1800da3d346b64e63a10ba3447, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.wall_peek.1
+    group: castle.wall_peek
+    speaker: 2
+    dutch: Hihi! Ik kom zo naar binnen!
+    english: Hehe! I'm coming in!
+    dutchClip: {fileID: 8300000, guid: cddc58429679d384b806b9c64574992a, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.wall_hint.1
+    group: castle.wall_hint
+    speaker: 0
+    dutch: Tik op een blok!
+    english: Tap a block!
+    dutchClip: {fileID: 8300000, guid: 4b50857a441675d48913b912bf9e9674, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.wall_done.1
+    group: castle.wall_done
+    speaker: 2
+    dutch: "H\xE9! Het gat is dicht!"
+    english: Hey! The hole is closed!
+    dutchClip: {fileID: 8300000, guid: f9d025fea37d125489c4a70c4339a4e7, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.count.1
+    group: castle.count
+    speaker: 1
+    dutch: Kijk, daar op de muur! Hoeveel kobolden zie je?
+    english: Look, up on the wall! How many goblins do you see?
+    dutchClip: {fileID: 8300000, guid: 83fbc1296b3679140951f735e6a4b341, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.count_more.1
+    group: castle.count_more
+    speaker: 2
+    dutch: Ik ook! Ik doe ook mee!
+    english: Me too! I'm joining in!
+    dutchClip: {fileID: 8300000, guid: 9785ac7625bb692478b9b53ba4dce887, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.count_less.1
+    group: castle.count_less
+    speaker: 2
+    dutch: Oei, ik ben bang! Ik ga weg!
+    english: Eek, I'm scared! I'm leaving!
+    dutchClip: {fileID: 8300000, guid: eb042532c4179414192af850c16b5ddc, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.count_now.1
+    group: castle.count_now
+    speaker: 1
+    dutch: Hoeveel kobolden zijn er nu?
+    english: How many goblins are there now?
+    dutchClip: {fileID: 8300000, guid: d7a90e90e9a7f4342ae59678c88d1f77, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.jump_down.1
+    group: castle.jump_down
+    speaker: 2
+    dutch: Hop! Daar komen we!
+    english: Hop! Here we come!
+    dutchClip: {fileID: 8300000, guid: d95bafe8d21141f4a97f51caa170bcec, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.shield_goblin.1
+    group: castle.shield_goblin
+    speaker: 0
+    dutch: Die kobold heeft een schild! Wacht tot hij het laat zakken!
+    english: That goblin has a shield! Wait until he lowers it!
+    dutchClip: {fileID: 8300000, guid: bdd71b5c0b1cda74fbaf83e48c188b5c, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.dizzy.1
+    group: castle.dizzy
+    speaker: 2
+    dutch: Oei, ik zie sterretjes!
+    english: Whoa, I'm seeing stars!
+    dutchClip: {fileID: 8300000, guid: 59d0dca33d9a5c540bdb0254a39b4a12, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.troll.1
+    group: castle.troll
+    speaker: 2
+    dutch: Ik ben de grote trol! Hohoho!
+    english: I'm the big troll! Ho ho ho!
+    dutchClip: {fileID: 8300000, guid: 9666baac09ef48d42ac73a95656c92c8, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.barrel.1
+    group: castle.barrel
+    speaker: 2
+    dutch: Hihi, ik zit in de ton! Vind je mij?
+    english: Hehe, I'm in the barrel! Can you find me?
+    dutchClip: {fileID: 8300000, guid: 80e87d07ae9bb3a4499413a0fd31463a, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.barrel_out.1
+    group: castle.barrel_out
+    speaker: 2
+    dutch: Gevonden! Hihi!
+    english: You found me! Hehe!
+    dutchClip: {fileID: 8300000, guid: 280552c94f4f50a4497e4610f5e1a7b4, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.thief_grab.cake.1
+    group: castle.thief_grab.cake
+    speaker: 2
+    dutch: Hihi! Een stuk taart voor mij!
+    english: Hehe! A piece of cake for me!
+    dutchClip: {fileID: 8300000, guid: e5414b533241a8f42a7d749af81e6647, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.thief_grab.crown.1
+    group: castle.thief_grab.crown
+    speaker: 2
+    dutch: Hihi! Nu ben ik de koning!
+    english: Hehe! Now I'm the king!
+    dutchClip: {fileID: 8300000, guid: 77ef01dea6c4d104e9353bbbce66dd94, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.thief_grab.egg.1
+    group: castle.thief_grab.egg
+    speaker: 2
+    dutch: Hihi! Dat ei is van mij!
+    english: Hehe! That egg is mine!
+    dutchClip: {fileID: 8300000, guid: 6ae1ad9118fd82e4d828371afc51e6ba, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.thief_chase.1
+    group: castle.thief_chase
+    speaker: 1
+    dutch: Snel, vang die kobold!
+    english: Quick, catch that goblin!
+    dutchClip: {fileID: 8300000, guid: c17e9ed05f497b2459dca5e4e6da5294, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.loot_back.1
+    group: castle.loot_back
+    speaker: 1
+    dutch: Goed zo! Je hebt het teruggepakt!
+    english: Well done! You got it back!
+    dutchClip: {fileID: 8300000, guid: 80d877e603e140348bafaf06fe60eeaa, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.help_me.1
+    group: castle.help_me
+    speaker: 1
+    dutch: Help! Help mij!
+    english: Help! Help me!
+    dutchClip: {fileID: 8300000, guid: cf79b781494d1d747a7f52c9111b2459, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.help_me.2
+    group: castle.help_me
+    speaker: 1
+    dutch: Help! Ze zitten achter mij aan!
+    english: Help! They're chasing me!
+    dutchClip: {fileID: 8300000, guid: 7b9841162d7008f4abddb087c7dbd890, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.thanks.1
+    group: castle.thanks
+    speaker: 1
+    dutch: Dankjewel! Jij bent een echte ridder!
+    english: Thank you! You're a real knight!
+    dutchClip: {fileID: 8300000, guid: 2edb7df3bc684814285a96dc75842bbc, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.rescue.1
+    group: castle.rescue
+    speaker: 1
+    dutch: Nu de ridder op de toren! Loop naar de toren!
+    english: Now the knight on the tower! Walk to the tower!
+    dutchClip: {fileID: 8300000, guid: 12c4bf5e6961ef144bd74aced8b7f13e, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.rescue_down.1
+    group: castle.rescue_down
+    speaker: 1
+    dutch: Joepie, ik ben vrij! Dankjewel!
+    english: Yippee, I'm free! Thank you!
+    dutchClip: {fileID: 8300000, guid: 0bba092e5f62eba4cb46ac34b08f3923, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.dragon_arrives.1
+    group: castle.dragon_arrives
+    speaker: 1
+    dutch: Kijk! Een draak!
+    english: Look! A dragon!
+    dutchClip: {fileID: 8300000, guid: bab6b0fe240fe904aad1bac62d46955f, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.dragon_hungry.1
+    group: castle.dragon_hungry
+    speaker: 1
+    dutch: Wacht! Hoor je dat? Zijn buik rommelt! De draak heeft gewoon honger!
+    english: Wait! Do you hear that? Its tummy is rumbling! The dragon is just hungry!
+    dutchClip: {fileID: 8300000, guid: 0bd302aeb4edbc945a5b7f0951afe565, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.dragon_egg.1
+    group: castle.dragon_egg
+    speaker: 1
+    dutch: Wacht! De draak is verdrietig. Ze zoekt haar ei!
+    english: Wait! The dragon is sad. She's looking for her egg!
+    dutchClip: {fileID: 8300000, guid: b149cd5e12a1ac0458768e7618eef18d, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.cookies_want.2.1
+    group: castle.cookies_want.2
+    speaker: 2
+    dutch: Ik wil twee koekjes!
+    english: I want two cookies!
+    dutchClip: {fileID: 8300000, guid: d059bbe57f8c4204da1bf5bfc902e62b, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.cookies_want.3.1
+    group: castle.cookies_want.3
+    speaker: 2
+    dutch: Ik wil drie koekjes!
+    english: I want three cookies!
+    dutchClip: {fileID: 8300000, guid: 664640177b74b974fa7723287990a406, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.cookies_want.4.1
+    group: castle.cookies_want.4
+    speaker: 2
+    dutch: Ik wil vier koekjes!
+    english: I want four cookies!
+    dutchClip: {fileID: 8300000, guid: 847e9bba207befa4f9234c5c3f68ae1d, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.cookies_want.5.1
+    group: castle.cookies_want.5
+    speaker: 2
+    dutch: Ik wil vijf koekjes!
+    english: I want five cookies!
+    dutchClip: {fileID: 8300000, guid: a70f7c5797e17214386a3cfc146d5718, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.cookies_want.6.1
+    group: castle.cookies_want.6
+    speaker: 2
+    dutch: Ik wil zes koekjes!
+    english: I want six cookies!
+    dutchClip: {fileID: 8300000, guid: 99d90c687819041429bc21b61c7c56af, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.cookies_want.7.1
+    group: castle.cookies_want.7
+    speaker: 2
+    dutch: Ik wil zeven koekjes!
+    english: I want seven cookies!
+    dutchClip: {fileID: 8300000, guid: c645216b13ee07d47b565b0e5ebab4f8, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.cookies_want.8.1
+    group: castle.cookies_want.8
+    speaker: 2
+    dutch: Ik wil acht koekjes!
+    english: I want eight cookies!
+    dutchClip: {fileID: 8300000, guid: 1e3d090ceefb48248bb1a0f156d4c2cc, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.cookies_hint.1
+    group: castle.cookies_hint
+    speaker: 1
+    dutch: Tik op de koekjes. Is het genoeg? Tik dan op de knop!
+    english: Tap the cookies. Is it enough? Then tap the button!
+    dutchClip: {fileID: 8300000, guid: 144104b823cad4a48bfe991eb47b868f, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.cookies_more.1
+    group: castle.cookies_more
+    speaker: 2
+    dutch: Nog meer! Ik heb nog honger!
+    english: More! I'm still hungry!
+    dutchClip: {fileID: 8300000, guid: 74cd92a6466495a409c6dfec333c8637, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.cookies_too_many.1
+    group: castle.cookies_too_many
+    speaker: 2
+    dutch: Oei, dat zijn er te veel!
+    english: Oops, that's too many!
+    dutchClip: {fileID: 8300000, guid: ea38fd0f79bb81f4783cd1ce45d33c51, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.cookies_yum.1
+    group: castle.cookies_yum
+    speaker: 2
+    dutch: Mmm, lekker! Precies genoeg!
+    english: Mmm, yummy! Just right!
+    dutchClip: {fileID: 8300000, guid: 06f571d1afd906149a95b0d4d6a19205, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.cookie_big.1
+    group: castle.cookie_big
+    speaker: 1
+    dutch: Geef de draak dit grote koekje! Tik erop!
+    english: Give the dragon this big cookie! Tap it!
+    dutchClip: {fileID: 8300000, guid: 5475795b06c245c46b642ee501f3943a, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.egg_tap.1
+    group: castle.egg_tap
+    speaker: 1
+    dutch: Tik op het ei, dan brengen we het naar de draak!
+    english: Tap the egg and we'll bring it to the dragon!
+    dutchClip: {fileID: 8300000, guid: a9128f73e957c6d40a8202186932f09b, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.egg_hatch.1
+    group: castle.egg_hatch
+    speaker: 1
+    dutch: Kijk! Het ei gaat open!
+    english: Look! The egg is hatching!
+    dutchClip: {fileID: 8300000, guid: 926061f2a81f9a94284233eb287bf5e1, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_hello.1
+    group: castle.baby_hello
+    speaker: 4
+    dutch: Piep! Hallo mama!
+    english: Peep! Hello mummy!
+    dutchClip: {fileID: 8300000, guid: d4ec60207f97a1646a388f0a3585643b, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_name.1
+    group: castle.baby_name
+    speaker: 1
+    dutch: Het draakje heeft nog geen naam! Kies een letter. Met die klank begint
+      zijn naam!
+    english: The little dragon has no name yet! Pick a letter. Its name starts with
+      that sound!
+    dutchClip: {fileID: 8300000, guid: 144d2feea5d8a2c4eb01b0f8e528db17, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.m.1
+    group: castle.baby_named.m
+    speaker: 1
+    dutch: Het draakje heet Mimi!
+    english: The little dragon is called Mimi!
+    dutchClip: {fileID: 8300000, guid: 1f31f9c5972922f4aa7627af1f379346, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.r.1
+    group: castle.baby_named.r
+    speaker: 1
+    dutch: Het draakje heet Rocco!
+    english: The little dragon is called Rocco!
+    dutchClip: {fileID: 8300000, guid: 2939bac4e7085fc4f9953e9a0a420d73, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.s.1
+    group: castle.baby_named.s
+    speaker: 1
+    dutch: Het draakje heet Sproet!
+    english: The little dragon is called Sproet!
+    dutchClip: {fileID: 8300000, guid: 5df98e9418ab3b24b9eed3f052ab3ab4, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.v.1
+    group: castle.baby_named.v
+    speaker: 1
+    dutch: Het draakje heet Vonkie!
+    english: The little dragon is called Vonkie!
+    dutchClip: {fileID: 8300000, guid: fb19e1bd0706c96419ca0d95ec4b3f96, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.i.1
+    group: castle.baby_named.i
+    speaker: 1
+    dutch: Het draakje heet Ikkie!
+    english: The little dragon is called Ikkie!
+    dutchClip: {fileID: 8300000, guid: 689a27cfe48136a479581aa0805f4ff5, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.k.1
+    group: castle.baby_named.k
+    speaker: 1
+    dutch: Het draakje heet Kiki!
+    english: The little dragon is called Kiki!
+    dutchClip: {fileID: 8300000, guid: 827594c078e02454fb40c14806e584ca, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.a.1
+    group: castle.baby_named.a
+    speaker: 1
+    dutch: Het draakje heet Appie!
+    english: The little dragon is called Appie!
+    dutchClip: {fileID: 8300000, guid: 71fe4b07649539c43badc90a04c371a1, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.p.1
+    group: castle.baby_named.p
+    speaker: 1
+    dutch: Het draakje heet Pip!
+    english: The little dragon is called Pip!
+    dutchClip: {fileID: 8300000, guid: 4bb025e09e399c349850a1f4e7009ec3, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.n.1
+    group: castle.baby_named.n
+    speaker: 1
+    dutch: Het draakje heet Noekie!
+    english: The little dragon is called Noekie!
+    dutchClip: {fileID: 8300000, guid: 3609f7378b0bb8d4dbd2924f4c14837c, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.t.1
+    group: castle.baby_named.t
+    speaker: 1
+    dutch: Het draakje heet Tuut!
+    english: The little dragon is called Tuut!
+    dutchClip: {fileID: 8300000, guid: d0b159b953aeadd4497aa82ccd8f4587, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.e.1
+    group: castle.baby_named.e
+    speaker: 1
+    dutch: Het draakje heet Eddie!
+    english: The little dragon is called Eddie!
+    dutchClip: {fileID: 8300000, guid: eefa5606ec8ee064d908fb2c86881b72, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.b.1
+    group: castle.baby_named.b
+    speaker: 1
+    dutch: Het draakje heet Bolle!
+    english: The little dragon is called Bolle!
+    dutchClip: {fileID: 8300000, guid: 67a1d3cbd6e385440a42a934b8c60cd0, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.o.1
+    group: castle.baby_named.o
+    speaker: 1
+    dutch: Het draakje heet Okkie!
+    english: The little dragon is called Okkie!
+    dutchClip: {fileID: 8300000, guid: 56d6ec3dd54248345bd79b159ecfcfae, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.d.1
+    group: castle.baby_named.d
+    speaker: 1
+    dutch: Het draakje heet Dribbel!
+    english: The little dragon is called Dribbel!
+    dutchClip: {fileID: 8300000, guid: 4bb45d7d94a38ad47b4364ed2f427893, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.l.1
+    group: castle.baby_named.l
+    speaker: 1
+    dutch: Het draakje heet Lolly!
+    english: The little dragon is called Lolly!
+    dutchClip: {fileID: 8300000, guid: 77664a40c0559754a8c38a3514152ddb, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.h.1
+    group: castle.baby_named.h
+    speaker: 1
+    dutch: Het draakje heet Hikkie!
+    english: The little dragon is called Hikkie!
+    dutchClip: {fileID: 8300000, guid: 854c6d533c98fee459dd3a65f8e4b0d6, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.w.1
+    group: castle.baby_named.w
+    speaker: 1
+    dutch: Het draakje heet Wiebel!
+    english: The little dragon is called Wiebel!
+    dutchClip: {fileID: 8300000, guid: f4212431b03f6bb41978f963582d11b3, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.z.1
+    group: castle.baby_named.z
+    speaker: 1
+    dutch: Het draakje heet Zoef!
+    english: The little dragon is called Zoef!
+    dutchClip: {fileID: 8300000, guid: 61f09a139e2044449ac7ad11305d3622, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.j.1
+    group: castle.baby_named.j
+    speaker: 1
+    dutch: Het draakje heet Joppie!
+    english: The little dragon is called Joppie!
+    dutchClip: {fileID: 8300000, guid: eb26f3557f630c24e983514d079a7e94, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.g.1
+    group: castle.baby_named.g
+    speaker: 1
+    dutch: Het draakje heet Guus!
+    english: The little dragon is called Guus!
+    dutchClip: {fileID: 8300000, guid: d578c52f7c83334458ccaa85c754aaf2, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.f.1
+    group: castle.baby_named.f
+    speaker: 1
+    dutch: Het draakje heet Fikkie!
+    english: The little dragon is called Fikkie!
+    dutchClip: {fileID: 8300000, guid: 5a73d7ae18ce52c4e93acfedeb7db8f6, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_named.u.1
+    group: castle.baby_named.u
+    speaker: 1
+    dutch: Het draakje heet Ukkie!
+    english: The little dragon is called Ukkie!
+    dutchClip: {fileID: 8300000, guid: f2ed3803ade3f1e4eab82201f17a84f8, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.baby_buddy.1
+    group: castle.baby_buddy
+    speaker: 1
+    dutch: Het draakje wil met jou mee! Het is nu jouw vriendje!
+    english: The little dragon wants to come with you! Now it's your buddy!
+    dutchClip: {fileID: 8300000, guid: 7a9788cc2f929c0469f5dc0f0bb9a361, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.dragon_friend.1
+    group: castle.dragon_friend
+    speaker: 2
+    dutch: Dankjewel! Nu zijn we vrienden. Klim maar op mijn rug!
+    english: Thank you! Now we're friends. Climb onto my back!
+    dutchClip: {fileID: 8300000, guid: 5024e50a95aaf9c4b9790b63f541c732, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.ride_start.1
+    group: castle.ride_start
+    speaker: 1
+    dutch: Houd je goed vast! Tik op de knop voor confettivuur!
+    english: Hold on tight! Tap the button for confetti fire!
+    dutchClip: {fileID: 8300000, guid: cc735a841d095784e87d07e67a63877f, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.ride_land.1
+    group: castle.ride_land
+    speaker: 2
+    dutch: Daar zijn we weer!
+    english: Here we are again!
+    dutchClip: {fileID: 8300000, guid: bd0ab65adb694d946be65dc49a4c11c2, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.flag.1
+    group: castle.flag
+    speaker: 1
+    dutch: 'Voor jou, ridder: een vlag met jouw naam! Met welke letter begint jouw
+      naam?'
+    english: 'For you, knight: a flag with your name! Which letter does your name
+      start with?'
+    dutchClip: {fileID: 8300000, guid: 825c824115b66f6489cafa0da63db8c0, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.flag_done.1
+    group: castle.flag_done
+    speaker: 1
+    dutch: Kijk! Jouw naam op de vlag!
+    english: Look! Your name on the flag!
+    dutchClip: {fileID: 8300000, guid: 25a32dcd0bb77194d94302c247784b5f, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.grow.1
+    group: castle.grow
+    speaker: 1
+    dutch: 'En kijk: er staat een nieuwe vlag op het kasteel!'
+    english: 'And look: there''s a new flag on the castle!'
+    dutchClip: {fileID: 8300000, guid: 38bd792f5f107904e9946eebe72aceec, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.victory.1
+    group: castle.victory
+    speaker: 1
+    dutch: Hoera! Jullie hebben het kasteel gered! Feest!
+    english: Hooray! You saved the castle! Party time!
+    dutchClip: {fileID: 8300000, guid: 1afdaae9557b74c459dcfa01e462a3e2, type: 3}
+    englishClip: {fileID: 0}
+  - key: castle.dragon_bye.1
+    group: castle.dragon_bye
+    speaker: 2
+    dutch: Dag! Tot de volgende keer!
+    english: Bye! See you next time!
+    dutchClip: {fileID: 8300000, guid: 8eefd0dbf762efa4a88896c42e1a039c, type: 3}
+    englishClip: {fileID: 0}
+  - key: invite.zoo.1
+    group: invite.zoo
+    speaker: 0
+    dutch: Help! De dieren uit de dierentuin zijn ontsnapt! Kom je zoeken?
+    english: Help! The zoo animals have escaped! Will you come and look?
+    dutchClip: {fileID: 8300000, guid: f71b744313324544f8eaaab214cef4a1, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.start.1
+    group: zoo.start
+    speaker: 1
+    dutch: Help! Ik ben de dierenverzorger, en de dieren zijn ontsnapt!
+    english: Help! I'm the zookeeper, and the animals have escaped!
+    dutchClip: {fileID: 8300000, guid: ac02f18a03b2a284d8b8aafddf86d4a8, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.escaped.1
+    group: zoo.escaped
+    speaker: 1
+    dutch: Ze hebben zich verstopt in het park. Zoek jij mee?
+    english: They're hiding in the park. Will you help me look?
+    dutchClip: {fileID: 8300000, guid: 40deb770371e19c4697cea07ad673450, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.close_eyes.1
+    group: zoo.close_eyes
+    speaker: 1
+    dutch: Eerst ogen dicht en tellen! Tel je mee?
+    english: First close your eyes and count! Count with me?
+    dutchClip: {fileID: 8300000, guid: 62274846bc44b1c458247f3ad886c6d2, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.ready.1
+    group: zoo.ready
+    speaker: 1
+    dutch: Wie niet weg is, is gezien! We komen eraan!
+    english: Ready or not, here we come!
+    dutchClip: {fileID: 8300000, guid: 1ffd90ebcb3b50047a753aa8aa561136, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.found_new.1
+    group: zoo.found_new
+    speaker: 1
+    dutch: Een nieuw dier!
+    english: A new animal!
+    dutchClip: {fileID: 8300000, guid: 40402b228b3c9444e95b7d32d92d2083, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.found.elephant.1
+    group: zoo.found.elephant
+    speaker: 1
+    dutch: Gevonden! De olifant!
+    english: Found you! The elephant!
+    dutchClip: {fileID: 8300000, guid: 47660a0410b4f9a46acbb4700f78f6a3, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.found.giraffe.1
+    group: zoo.found.giraffe
+    speaker: 1
+    dutch: Gevonden! De giraf!
+    english: Found you! The giraffe!
+    dutchClip: {fileID: 8300000, guid: b38857ff3329ac7459bec3e50e2caf16, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.found.monkey.1
+    group: zoo.found.monkey
+    speaker: 1
+    dutch: Gevonden! De aap!
+    english: Found you! The monkey!
+    dutchClip: {fileID: 8300000, guid: aaa3f5bbc86d68f469d5bb7225d0dc59, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.found.penguin.1
+    group: zoo.found.penguin
+    speaker: 1
+    dutch: "Gevonden! De pingu\xEFn!"
+    english: Found you! The penguin!
+    dutchClip: {fileID: 8300000, guid: 583132e92d386584ca542032efd72c3f, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.found.hippo.1
+    group: zoo.found.hippo
+    speaker: 1
+    dutch: Gevonden! Het nijlpaard!
+    english: Found you! The hippo!
+    dutchClip: {fileID: 8300000, guid: 60b689c1cab2c3241bd6369e6b385e38, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.found.lion.1
+    group: zoo.found.lion
+    speaker: 1
+    dutch: Gevonden! De leeuw!
+    english: Found you! The lion!
+    dutchClip: {fileID: 8300000, guid: e613ea6284c220c40a54d25cb5428710, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.found.zebra.1
+    group: zoo.found.zebra
+    speaker: 1
+    dutch: Gevonden! De zebra!
+    english: Found you! The zebra!
+    dutchClip: {fileID: 8300000, guid: 3831de7b99814814b86c72876cb66e56, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.found.crocodile.1
+    group: zoo.found.crocodile
+    speaker: 1
+    dutch: Gevonden! De krokodil!
+    english: Found you! The crocodile!
+    dutchClip: {fileID: 8300000, guid: 62ecbca0ae67f1b4783d8680da901a3e, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.found.flamingo.1
+    group: zoo.found.flamingo
+    speaker: 1
+    dutch: Gevonden! De flamingo!
+    english: Found you! The flamingo!
+    dutchClip: {fileID: 8300000, guid: 6d3cb4c9937141c44b649cd3f421164b, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.found.tiger.1
+    group: zoo.found.tiger
+    speaker: 1
+    dutch: Gevonden! De tijger!
+    english: Found you! The tiger!
+    dutchClip: {fileID: 8300000, guid: 5d5cddee04d5a1640952fc8cf5a3985b, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.left.1.1
+    group: zoo.left.1
+    speaker: 1
+    dutch: "Nog \xE9\xE9n dier!"
+    english: One more animal!
+    dutchClip: {fileID: 8300000, guid: 3dd4faf58e918e745a64a518a9ebfc13, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.left.2.1
+    group: zoo.left.2
+    speaker: 1
+    dutch: Nog twee dieren!
+    english: Two more animals!
+    dutchClip: {fileID: 8300000, guid: 7e95a00d810a5a8409701fd224c15242, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.left.3.1
+    group: zoo.left.3
+    speaker: 1
+    dutch: Nog drie dieren!
+    english: Three more animals!
+    dutchClip: {fileID: 8300000, guid: c1f488e05234e54479a1b92f60c770f7, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.left.4.1
+    group: zoo.left.4
+    speaker: 1
+    dutch: Nog vier dieren!
+    english: Four more animals!
+    dutchClip: {fileID: 8300000, guid: 24d7141dc49954b40a90b3547c467a98, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.how_many_left.1
+    group: zoo.how_many_left
+    speaker: 1
+    dutch: Hoeveel dieren zijn er nog verstopt?
+    english: How many animals are still hiding?
+    dutchClip: {fileID: 8300000, guid: e5c7aee1d91ae6b479a623ac9b5738a7, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.count_silhouettes.1
+    group: zoo.count_silhouettes
+    speaker: 1
+    dutch: Tel de zwarte dieren maar!
+    english: Count the black animals!
+    dutchClip: {fileID: 8300000, guid: af320442481f70d4ba66e61557161dd1, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.right.1
+    group: zoo.right
+    speaker: 1
+    dutch: Goed zo!
+    english: Well done!
+    dutchClip: {fileID: 8300000, guid: ad97f2b22641f4d45b91133d80e0d14e, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.all_found.1
+    group: zoo.all_found
+    speaker: 1
+    dutch: Hoera! Alle dieren gevonden!
+    english: Hooray! We found all the animals!
+    dutchClip: {fileID: 8300000, guid: c8e6e9ca4d6aebd46b7067cac3daa404, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.surprise.1
+    group: zoo.surprise
+    speaker: 1
+    dutch: Oh! Dat is geen olifant!
+    english: Oh! That's no elephant!
+    dutchClip: {fileID: 8300000, guid: 740568ef13953634abe8a8ef6f16f293, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.surprise.2
+    group: zoo.surprise
+    speaker: 1
+    dutch: Hihi, verkeerd dier!
+    english: Hehe, wrong animal!
+    dutchClip: {fileID: 8300000, guid: c97e63e1b922f264aa9cf0259adc4991, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.surprise.3
+    group: zoo.surprise
+    speaker: 1
+    dutch: Hier niet! Zoek maar verder!
+    english: Not here! Keep looking!
+    dutchClip: {fileID: 8300000, guid: 3de5a36f7d1659443afa5ec689ed971c, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.clue.1
+    group: zoo.clue
+    speaker: 1
+    dutch: "Ik hoor een dier met de\u2026"
+    english: "I can hear an animal with the\u2026"
+    dutchClip: {fileID: 8300000, guid: d431940b5cb294c4884d456d00c69ca2, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.hint.hedge.1
+    group: zoo.hint.hedge
+    speaker: 1
+    dutch: Ik hoor iets achter de heg!
+    english: I can hear something behind the hedge!
+    dutchClip: {fileID: 8300000, guid: c121dc880cd443444964150f18d2a518, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.hint.tree.1
+    group: zoo.hint.tree
+    speaker: 1
+    dutch: Ik hoor iets achter de boom!
+    english: I can hear something behind the tree!
+    dutchClip: {fileID: 8300000, guid: e6607b30cbfa7784f8e8da5b98c90f91, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.hint.treetop.1
+    group: zoo.hint.treetop
+    speaker: 1
+    dutch: Ik hoor iets boven in de boom!
+    english: I can hear something up in the tree!
+    dutchClip: {fileID: 8300000, guid: 7edd05f0cebf60140b17c650d54681cb, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.hint.pond.1
+    group: zoo.hint.pond
+    speaker: 1
+    dutch: Ik hoor iets in de vijver!
+    english: I can hear something in the pond!
+    dutchClip: {fileID: 8300000, guid: 3189e5483e6c6574ab4204b92062033e, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.hint.bin.1
+    group: zoo.hint.bin
+    speaker: 1
+    dutch: Ik hoor iets in de prullenbak!
+    english: I can hear something in the bin!
+    dutchClip: {fileID: 8300000, guid: 96058a729d10f2243ad9139b7fa8397f, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.hint.tent.1
+    group: zoo.hint.tent
+    speaker: 1
+    dutch: Ik hoor iets in de tent!
+    english: I can hear something in the tent!
+    dutchClip: {fileID: 8300000, guid: 4761a8872684093419c053065cfcdf7c, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.hint.box.1
+    group: zoo.hint.box
+    speaker: 1
+    dutch: Ik hoor iets in de doos!
+    english: I can hear something in the box!
+    dutchClip: {fileID: 8300000, guid: db943263a9aae5a448057464ad6c943e, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.hint.bush.1
+    group: zoo.hint.bush
+    speaker: 1
+    dutch: Ik hoor iets achter de struik!
+    english: I can hear something behind the bush!
+    dutchClip: {fileID: 8300000, guid: 8e9035c9013a07742becd0888a4e7a1c, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.hint.house.1
+    group: zoo.hint.house
+    speaker: 1
+    dutch: Ik hoor iets in het huisje!
+    english: I can hear something in the little house!
+    dutchClip: {fileID: 8300000, guid: 87b283552ff3c5240859c5fed89c5df8, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.hint.leaves.1
+    group: zoo.hint.leaves
+    speaker: 1
+    dutch: Ik hoor iets onder de bladeren!
+    english: I can hear something under the leaves!
+    dutchClip: {fileID: 8300000, guid: c520d31a5ca6855409062e8d509c4f73, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.hint.table.1
+    group: zoo.hint.table
+    speaker: 1
+    dutch: Ik hoor iets onder de tafel!
+    english: I can hear something under the table!
+    dutchClip: {fileID: 8300000, guid: 3a32879e0bbfbdf4688ae835357ba459, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.hint.rock.1
+    group: zoo.hint.rock
+    speaker: 1
+    dutch: Ik hoor iets achter de steen!
+    english: I can hear something behind the rock!
+    dutchClip: {fileID: 8300000, guid: 63253b5fcf5ef254f9d6a1a2bdb8f4c4, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.shake.1
+    group: zoo.shake
+    speaker: 1
+    dutch: Kijk! Daar beweegt iets!
+    english: Look! Something's moving over there!
+    dutchClip: {fileID: 8300000, guid: ea147d087e16b554792903ca494a7978, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.trail.1
+    group: zoo.trail
+    speaker: 1
+    dutch: Volg de sterretjes!
+    english: Follow the little stars!
+    dutchClip: {fileID: 8300000, guid: 720999b014ee0ed4d995ef5be311ded2, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.your_turn.1
+    group: zoo.your_turn
+    speaker: 1
+    dutch: Nu ben jij aan de beurt! Loop naar een lichtje en verstop je!
+    english: Now it's your turn! Walk to a light and hide!
+    dutchClip: {fileID: 8300000, guid: c96e19de764289b41bbe381cbf9dc06b, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.not_yet.1
+    group: zoo.not_yet
+    speaker: 1
+    dutch: Ben je al verstopt? Ik tel nog even door!
+    english: Are you hidden yet? I'll keep counting!
+    dutchClip: {fileID: 8300000, guid: e252b956ea1d20a46af3209095485013, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.seek_start.1
+    group: zoo.seek_start
+    speaker: 1
+    dutch: Klaar of niet, ik kom!
+    english: Ready or not, here I come!
+    dutchClip: {fileID: 8300000, guid: 7606c7ba724097d48863cf0149c723e2, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.seek_wrong.1
+    group: zoo.seek_wrong
+    speaker: 1
+    dutch: "Zit je hier? Nee\u2026 jij bent het niet!"
+    english: "Are you here? No\u2026 that's not you!"
+    dutchClip: {fileID: 8300000, guid: 6976a412c8983e74cb3200d10cb98959, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.seek_wrong.2
+    group: zoo.seek_wrong
+    speaker: 1
+    dutch: Hier dan? Nee, niemand!
+    english: Here then? No, nobody!
+    dutchClip: {fileID: 8300000, guid: 4028c80c27155da468cb9efcfcf3e35e, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.seek_wrong.3
+    group: zoo.seek_wrong
+    speaker: 1
+    dutch: Hmm, hier ook niet! Waar ben je toch?
+    english: Hmm, not here either! Where are you?
+    dutchClip: {fileID: 8300000, guid: 8eb4d8fff7621a54493a134092e3f27f, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.seek_wrong.4
+    group: zoo.seek_wrong
+    speaker: 1
+    dutch: Oei, verkeerd! Wat ben jij goed verstopt!
+    english: Oops, wrong! You're hiding so well!
+    dutchClip: {fileID: 8300000, guid: 1c8a9f38aef64fe489db88393091760b, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.seek_close.1
+    group: zoo.seek_close
+    speaker: 1
+    dutch: "Hmmm\u2026 ik hoor iets\u2026"
+    english: "Hmmm\u2026 I can hear something\u2026"
+    dutchClip: {fileID: 8300000, guid: 26cae227b637bd847acc8a046aee6abc, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.seek_found.1
+    group: zoo.seek_found
+    speaker: 1
+    dutch: Gevonden! Hihi, wat een goede verstopplek!
+    english: Found you! Hehe, what a good hiding spot!
+    dutchClip: {fileID: 8300000, guid: a7d9b5afcbbb82340be3f3bd17c4bb43, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.seek_found.2
+    group: zoo.seek_found
+    speaker: 1
+    dutch: Boe! Gevonden! Daar zat je!
+    english: Boo! Found you! There you are!
+    dutchClip: {fileID: 8300000, guid: d076c64bbdb91de4fadec92bcde16048, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.back_home.1
+    group: zoo.back_home
+    speaker: 1
+    dutch: Breng de dieren terug naar de dierentuin!
+    english: Bring the animals back to the zoo!
+    dutchClip: {fileID: 8300000, guid: 274acc13eeab839428db6795f446eca8, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.where.elephant.1
+    group: zoo.where.elephant
+    speaker: 1
+    dutch: Waar zat de olifant?
+    english: Where was the elephant?
+    dutchClip: {fileID: 8300000, guid: 4edfcc24ade911647baad329b27bf6de, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.where.giraffe.1
+    group: zoo.where.giraffe
+    speaker: 1
+    dutch: Waar zat de giraf?
+    english: Where was the giraffe?
+    dutchClip: {fileID: 8300000, guid: 1ccb15b043d7f6c41ab1d4f63aeabb34, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.where.monkey.1
+    group: zoo.where.monkey
+    speaker: 1
+    dutch: Waar zat de aap?
+    english: Where was the monkey?
+    dutchClip: {fileID: 8300000, guid: de061eca22c6c914cbc808ec1fc4eafe, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.where.penguin.1
+    group: zoo.where.penguin
+    speaker: 1
+    dutch: "Waar zat de pingu\xEFn?"
+    english: Where was the penguin?
+    dutchClip: {fileID: 8300000, guid: c59dde7307feca543b5e882dbc556f48, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.where.hippo.1
+    group: zoo.where.hippo
+    speaker: 1
+    dutch: Waar zat het nijlpaard?
+    english: Where was the hippo?
+    dutchClip: {fileID: 8300000, guid: 43df7c2ea794afd48b5b1ea708669ed7, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.where.lion.1
+    group: zoo.where.lion
+    speaker: 1
+    dutch: Waar zat de leeuw?
+    english: Where was the lion?
+    dutchClip: {fileID: 8300000, guid: fd20f4fc8e347f84a9d81b83d0ad51a1, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.where.zebra.1
+    group: zoo.where.zebra
+    speaker: 1
+    dutch: Waar zat de zebra?
+    english: Where was the zebra?
+    dutchClip: {fileID: 8300000, guid: 17d31e31eadf9ee41852ad33f626186e, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.where.crocodile.1
+    group: zoo.where.crocodile
+    speaker: 1
+    dutch: Waar zat de krokodil?
+    english: Where was the crocodile?
+    dutchClip: {fileID: 8300000, guid: 3030ce6a1f02c924780ec095b178d65c, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.where.flamingo.1
+    group: zoo.where.flamingo
+    speaker: 1
+    dutch: Waar zat de flamingo?
+    english: Where was the flamingo?
+    dutchClip: {fileID: 8300000, guid: 118fe4dd60e252e459538c50dea041ab, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.where.tiger.1
+    group: zoo.where.tiger
+    speaker: 1
+    dutch: Waar zat de tijger?
+    english: Where was the tiger?
+    dutchClip: {fileID: 8300000, guid: 403e670f588e4cd488793bee20fd58da, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.spot.hedge.1
+    group: zoo.spot.hedge
+    speaker: 1
+    dutch: Achter de heg!
+    english: Behind the hedge!
+    dutchClip: {fileID: 8300000, guid: 10daa923510c29e4d87d755335b6f33b, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.spot.tree.1
+    group: zoo.spot.tree
+    speaker: 1
+    dutch: Achter de boom!
+    english: Behind the tree!
+    dutchClip: {fileID: 8300000, guid: fe43afa401307464eaa58ad38f23db51, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.spot.treetop.1
+    group: zoo.spot.treetop
+    speaker: 1
+    dutch: Boven in de boom!
+    english: Up in the tree!
+    dutchClip: {fileID: 8300000, guid: df10f66f2e78cbb4fa2746ead9649d90, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.spot.pond.1
+    group: zoo.spot.pond
+    speaker: 1
+    dutch: In de vijver!
+    english: In the pond!
+    dutchClip: {fileID: 8300000, guid: a9fa4dac71864b54eb0e210fc897af8c, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.spot.bin.1
+    group: zoo.spot.bin
+    speaker: 1
+    dutch: In de prullenbak!
+    english: In the bin!
+    dutchClip: {fileID: 8300000, guid: 6c3537c8a4ce6e447832979b7f603a83, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.spot.tent.1
+    group: zoo.spot.tent
+    speaker: 1
+    dutch: In de tent!
+    english: In the tent!
+    dutchClip: {fileID: 8300000, guid: 396b668119b19124bb6fc736347967e7, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.spot.box.1
+    group: zoo.spot.box
+    speaker: 1
+    dutch: In de doos!
+    english: In the box!
+    dutchClip: {fileID: 8300000, guid: e936f90ea29982949879d657368c6241, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.spot.bush.1
+    group: zoo.spot.bush
+    speaker: 1
+    dutch: Achter de struik!
+    english: Behind the bush!
+    dutchClip: {fileID: 8300000, guid: 9c38c236ca218764d9ac85188257b6ab, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.spot.house.1
+    group: zoo.spot.house
+    speaker: 1
+    dutch: In het huisje!
+    english: In the little house!
+    dutchClip: {fileID: 8300000, guid: d7410211128a301468a9130df483d814, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.spot.leaves.1
+    group: zoo.spot.leaves
+    speaker: 1
+    dutch: Onder de bladeren!
+    english: Under the leaves!
+    dutchClip: {fileID: 8300000, guid: 8c272a2ca861cb54a92d6015470268da, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.spot.table.1
+    group: zoo.spot.table
+    speaker: 1
+    dutch: Onder de tafel!
+    english: Under the table!
+    dutchClip: {fileID: 8300000, guid: 8719feb835b01be4c9a67300a550cc9f, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.spot.rock.1
+    group: zoo.spot.rock
+    speaker: 1
+    dutch: Achter de steen!
+    english: Behind the rock!
+    dutchClip: {fileID: 8300000, guid: 331fb689ee4569643816b8556c1f54fb, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.how_many_found.1
+    group: zoo.how_many_found
+    speaker: 1
+    dutch: Hoeveel dieren hebben we gevonden?
+    english: How many animals did we find?
+    dutchClip: {fileID: 8300000, guid: 8b7a89e92d9ccbe4e95fd02a9cbc1fd7, type: 3}
+    englishClip: {fileID: 0}
+  - key: zoo.victory.1
+    group: zoo.victory
+    speaker: 1
+    dutch: Alle dieren zijn weer thuis! Dank je wel, dierenvriend!
+    english: All the animals are home again! Thank you, animal friend!
+    dutchClip: {fileID: 8300000, guid: 89480ee5408da7c49aaefea0bdffd6e4, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.paint_red.1
+    group: item.cart.paint_red
+    speaker: 3
+    dutch: De rode verf!
+    english: The red paint!
+    dutchClip: {fileID: 8300000, guid: e73556015c56e0345bf1415c082cf5f8, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.paint_blue.1
+    group: item.cart.paint_blue
+    speaker: 3
+    dutch: De blauwe verf!
+    english: The blue paint!
+    dutchClip: {fileID: 8300000, guid: 013e9ea56e854044981c1d4be52aef21, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.paint_green.1
+    group: item.cart.paint_green
+    speaker: 3
+    dutch: De groene verf!
+    english: The green paint!
+    dutchClip: {fileID: 8300000, guid: f7d777980151d1145837bdeae8fd28dc, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.paint_pink.1
+    group: item.cart.paint_pink
+    speaker: 3
+    dutch: De roze verf!
+    english: The pink paint!
+    dutchClip: {fileID: 8300000, guid: d8b05d7f5c637d84d833231d9fbabc35, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.paint_purple.1
+    group: item.cart.paint_purple
+    speaker: 3
+    dutch: De paarse verf!
+    english: The purple paint!
+    dutchClip: {fileID: 8300000, guid: d4eebb81d68bd8b479a7d0ded0381db0, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.eyes.1
+    group: item.cart.eyes
+    speaker: 3
+    dutch: De wiebeloogjes!
+    english: The googly eyes!
+    dutchClip: {fileID: 8300000, guid: ed4118691188e0c42995e9db0ebf1fd2, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.balloons.1
+    group: item.cart.balloons
+    speaker: 3
+    dutch: De ballonnen!
+    english: The balloons!
+    dutchClip: {fileID: 8300000, guid: bca6b3ed6acd13f42a8eb3053c8ffa53, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.propeller.1
+    group: item.cart.propeller
+    speaker: 3
+    dutch: De propeller!
+    english: The propeller!
+    dutchClip: {fileID: 8300000, guid: 1e13a86667102f84f88048fa9564c7bd, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.spoiler.1
+    group: item.cart.spoiler
+    speaker: 3
+    dutch: De spoiler!
+    english: The spoiler!
+    dutchClip: {fileID: 8300000, guid: 6f07eb010c65f48459ed7cd00b86f1c2, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.trail_rainbow.1
+    group: item.cart.trail_rainbow
+    speaker: 3
+    dutch: Het regenboogspoor!
+    english: The rainbow trail!
+    dutchClip: {fileID: 8300000, guid: d09cdbbbafb28d647bef10bcfba06a0b, type: 3}
+    englishClip: {fileID: 0}
+  - key: item.cart.trail_stars.1
+    group: item.cart.trail_stars
+    speaker: 3
+    dutch: De sterretjes!
+    english: The little stars!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.trail_bubbles.1
+    group: item.cart.trail_bubbles
+    speaker: 3
+    dutch: De bellenblazer!
+    english: The bubble blower!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.trail_sparkles.1
+    group: item.cart.trail_sparkles
+    speaker: 3
+    dutch: De glitters!
+    english: The glitter!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.horn_bell.1
+    group: item.cart.horn_bell
+    speaker: 3
+    dutch: Het belletje!
+    english: The little bell!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.horn_cow.1
+    group: item.cart.horn_cow
+    speaker: 3
+    dutch: De koe! Boe!
+    english: The cow! Moo!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.horn_dog.1
+    group: item.cart.horn_dog
+    speaker: 3
+    dutch: De hond! Woef!
+    english: The dog! Woof!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.horn_cat.1
+    group: item.cart.horn_cat
+    speaker: 3
+    dutch: De poes! Miauw!
+    english: The cat! Meow!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.horn_elephant.1
+    group: item.cart.horn_elephant
+    speaker: 3
+    dutch: De olifant! Toet!
+    english: The elephant! Toot!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.horn_magic.1
+    group: item.cart.horn_magic
+    speaker: 3
+    dutch: De toverhoorn!
+    english: The magic horn!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.tab_body.1
+    group: race.tab_body
+    speaker: 6
+    dutch: Welke kar?
+    english: Which cart?
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.tab_paint.1
+    group: race.tab_paint
+    speaker: 6
+    dutch: Welke kleur?
+    english: Which colour?
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.tab_addon.1
+    group: race.tab_addon
+    speaker: 6
+    dutch: Wat zet je erop?
+    english: What do you put on it?
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.tab_trail.1
+    group: race.tab_trail
+    speaker: 6
+    dutch: Welk spoor?
+    english: Which trail?
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.tab_horn.1
+    group: race.tab_horn
+    speaker: 6
+    dutch: Welke toeter?
+    english: Which horn?
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.tab_number.1
+    group: race.tab_number
+    speaker: 6
+    dutch: Welk nummer?
+    english: Which number?
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: invite.race.new.1
+    group: invite.race.new
+    speaker: 0
+    dutch: Je hebt iets nieuws voor je kar! Kom je racen?
+    english: You have something new for your cart! Are you coming to race?
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.number.1.1
+    group: race.number.1
+    speaker: 6
+    dutch: "Daar is nummer \xE9\xE9n!"
+    english: There is number one!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.number.2.1
+    group: race.number.2
+    speaker: 6
+    dutch: Daar is nummer twee!
+    english: There is number two!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.number.3.1
+    group: race.number.3
+    speaker: 6
+    dutch: Daar is nummer drie!
+    english: There is number three!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.number.4.1
+    group: race.number.4
+    speaker: 6
+    dutch: Daar is nummer vier!
+    english: There is number four!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.number.5.1
+    group: race.number.5
+    speaker: 6
+    dutch: Daar is nummer vijf!
+    english: There is number five!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.number.6.1
+    group: race.number.6
+    speaker: 6
+    dutch: Daar is nummer zes!
+    english: There is number six!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.number.7.1
+    group: race.number.7
+    speaker: 6
+    dutch: Daar is nummer zeven!
+    english: There is number seven!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.number.8.1
+    group: race.number.8
+    speaker: 6
+    dutch: Daar is nummer acht!
+    english: There is number eight!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.number.9.1
+    group: race.number.9
+    speaker: 6
+    dutch: Daar is nummer negen!
+    english: There is number nine!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: race.number.10.1
+    group: race.number.10
+    speaker: 6
+    dutch: Daar is nummer tien!
+    english: There is number ten!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.rocket.1
+    group: item.cart.rocket
+    speaker: 3
+    dutch: De raket!
+    english: The rocket!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.firetruck.1
+    group: item.cart.firetruck
+    speaker: 3
+    dutch: De brandweerauto!
+    english: The fire truck!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.wagon.1
+    group: item.cart.wagon
+    speaker: 3
+    dutch: De bolderkar!
+    english: The wagon!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.horse.1
+    group: item.cart.horse
+    speaker: 3
+    dutch: Het hobbelpaard!
+    english: The rocking horse!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.police.1
+    group: item.cart.police
+    speaker: 3
+    dutch: De politieauto!
+    english: The police car!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.boat.1
+    group: item.cart.boat
+    speaker: 3
+    dutch: De bootkar!
+    english: The boat cart!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.trike.1
+    group: item.cart.trike
+    speaker: 3
+    dutch: De driewieler!
+    english: The tricycle!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
+  - key: item.cart.convertible.1
+    group: item.cart.convertible
+    speaker: 3
+    dutch: De open auto!
+    english: The open car!
+    dutchClip: {fileID: 0}
+    englishClip: {fileID: 0}
